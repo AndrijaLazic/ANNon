@@ -1,0 +1,14 @@
+● src
++---● app
+|   +--● detalji-placanja
+|   |  |--detalji-placanja.component.ts|.html
+|   |  +--● detalj-placanja-form
+|   |  |  |--detalj-placanja-form.component.ts|.html
+|   |  
+|   +--● shared
+|   |  |--detalj-placanja.service.ts
+|   |  |--detalj-placanja.model.ts
+|   |
+|   |--app.module.ts
+|
+|--index.html (cdn path for bootstrap & fa icons)

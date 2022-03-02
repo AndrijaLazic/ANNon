@@ -1,0 +1,28 @@
+<div class="jumbotron py-3">
+    <h1 class="display-4 text-center">REGISTRACIJA</h1>        
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <app-detalj-placanja-form></app-detalj-placanja-form>    
+    </div>
+    <div class="col-md-6">
+        <table class="table">
+            <thead class="thead-light">
+                <tr>
+                    <th>Vlasnik kartice</th>
+                    <th>Broj kartice</th>
+                    <th>Datum do kad vazi</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let pd of service.list">
+                    <td (click)="popuniformu(pd)">{{pd.ime_vlasnika_kartice}}</td>
+                    <td (click)="popuniformu(pd)">{{pd.broj_kartice}}</td>
+                    <td (click)="popuniformu(pd)">{{pd.datum_do_kad_vazi}}</td>
+                    <td><i class="far fa-trash-alt fa-lg text-danger" (click)="Delete(pd.idkartice)"></i></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

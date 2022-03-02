@@ -1,0 +1,28 @@
+<form novalidate autocomplete="off" #form="ngForm" (submit)="Potvrda(form)">
+    <input type="hidden" name="idkartice" [value]="service.formData.idkartice"/>
+    <div class="form-group">
+        <label>IME VLASNIKA KARTICE</label>
+        <input class="form-control form-control-lg" placeholder="IME_PREZIME" name="imeVlasnikaKartice" #imeVlasnikaKartice="ngModel" [(ngModel)]="service.formData.ime_vlasnika_kartice"
+         required [class.invalid]="imeVlasnikaKartice.invalid && imeVlasnikaKartice.touched">
+    </div>
+    <div class="form-group">
+        <label>Broj kartice</label>
+        <input class="form-control form-control-lg" placeholder="****************" name="broj_kartice" #broj_kartice="ngModel" [(ngModel)]="service.formData.broj_kartice"
+         required maxlength="16" minlength="16" [class.invalid]="broj_kartice.invalid && broj_kartice.touched">
+    </div>
+    <div class="form-row">
+        <div class="form-group">
+            <label>Sigurnosni kod</label>
+            <input type="password" class="form-control form-control-lg" placeholder="***" name="sigurnosni_kod" #sigurnosni_kod="ngModel" [(ngModel)]="service.formData.sigurnosni_kod"
+             required maxlength="3" minlength="3" [class.invalid]="sigurnosni_kod.invalid && sigurnosni_kod.touched">
+        </div>
+        <div class="form-group">
+            <label>Datum vazenja</label>
+            <input class="form-control form-control-lg" placeholder="MM/YY" name="datum_do_kad_vazi" #datum_do_kad_vazi="ngModel" [(ngModel)]="service.formData.datum_do_kad_vazi"
+             required maxlength="5" minlength="5" [class.invalid]="datum_do_kad_vazi.invalid && datum_do_kad_vazi.touched">
+        </div>
+    </div>
+    <div class="form-group">
+        <button class="btn btn-info btn-lg btn-block" type="submit" [disabled]="form.invalid">POTVRDA</button>
+    </div>
+</form>
