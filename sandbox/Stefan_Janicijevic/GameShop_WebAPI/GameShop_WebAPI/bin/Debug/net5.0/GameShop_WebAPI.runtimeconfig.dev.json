@@ -1,0 +1,8 @@
+{
+  "runtimeOptions": {
+    "additionalProbingPaths": [
+      "C:\\Users\\Tekalo\\.dotnet\\store\\|arch|\\|tfm|",
+      "C:\\Users\\Tekalo\\.nuget\\packages"
+    ]
+  }
+}

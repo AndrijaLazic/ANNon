@@ -1,0 +1,19 @@
+<table class="table table-striped text-center">
+  <thead>
+    <tr>
+        <th class="text-start">Name</th>
+        <th>Price</th>
+        <th>Options</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr *ngFor="let game of gamesList">
+          <td class="text-start">{{game.name}} </td>
+          <td>{{"$"+game.price}}</td>
+          <td class="text-center"><button class="btn btn-primary m-1" (click)="deleteGame(game.id)">Delete</button>
+          <button  class="btn btn-primary m-1">Show more...</button></td>
+      </tr>
+
+  </tbody>
+</table>
+
