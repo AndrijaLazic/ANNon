@@ -1,0 +1,23 @@
+<ul>
+    <table border="1">
+        <tr>
+            <th>id</th>
+            <th>naziv</th>
+            <th>kolicina</th>
+            <th>merna jedinica</th>
+            <th colspan="2">changes</th>
+        </tr>
+        <tr *ngFor="let dataItem of listaProizvoda">
+            <td>{{dataItem.id}}</td>
+            <td>{{dataItem.naziv}}</td>
+            <td>{{dataItem.kolicina}}</td>
+            <td>{{dataItem.mernaJedinica}}</td>
+            <td><button (click)="editClicked(dataItem)">edit</button></td>
+            <td><button (click)="deleteProduct(dataItem)" >delete</button></td>
+        </tr>
+    </table>
+    <button (click)="addClicked()">add</button>
+    <div >
+        <app-edit-product *ngIf="clickedEdit||clickedAdd" [proizvod]="toEdit"></app-edit-product>
+    </div>
+</ul>

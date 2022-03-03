@@ -1,0 +1,7 @@
+
+    naziv:<input [(ngModel)]="proizvod.naziv" type="text"><br>
+    kolicina:<input [(ngModel)]="proizvod.kolicina" type="text"><br>
+    merna jedinica:<input [(ngModel)]="proizvod.mernaJedinica" type="text"><br>
+    <button (click)="addProduct()" *ngIf="proizvod.id==0">Dodaj</button>
+    <button (click)="editProduct()" *ngIf="proizvod.id!=0">Izmeni</button>
+
