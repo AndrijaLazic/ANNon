@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "XS3KPuTBx2h0CEx0oBIVDl07nDN0ydYry/iQUX8bXCsmOT8ryMWm77lqYtXbhH2iacQxCJnmnGownCySuCfiFg==",
+  "dgSpecHash": "mMleinBkNOeiuUdEl8+oZnxQCrvaqUwkGQK9xCRI7MowuU5VHPmJb2xw/Z7rprMK2XQUJcPE2PIa2y6t10cGuw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\kebab\\OneDrive\\Desktop\\Andrija Lazic 53 2019\\Projekat2\\Projekat2\\Projekat2.csproj",
+  "projectFilePath": "C:\\Users\\kebab\\OneDrive\\Desktop\\Projekat SoftIn\\annon\\sandbox\\Andrija Lazic 53 2019\\Projekat2\\Projekat2\\Projekat2.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\kebab\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\kebab\\.nuget\\packages\\messagepack\\2.1.152\\messagepack.2.1.152.nupkg.sha512",
