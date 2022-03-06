@@ -6,6 +6,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using Projekat.Data;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Projekat.Controllers
 {
@@ -34,7 +36,8 @@ namespace Projekat.Controllers
             {
                 return BadRequest("korisnik sa datim username-om vec postoji");
             }
-            
+            if (!emailValidation(zahtev.Email))
+                return BadRequest("Unesite ispravnu email adresu");
             korisnik = _context.Korisnici.Where(x => x.Email.Equals(zahtev.Email)).FirstOrDefault();
 
             if (korisnik != null)
@@ -57,7 +60,23 @@ namespace Projekat.Controllers
             return Ok("Uspesna registracija");
         }
 
-        
+        [HttpPost("login")]
+        public async Task<ActionResult<string>> Login(LoginDTO zahtev)
+        {
+            var korisnik = _context.Korisnici.Where(x => x.Username.Equals(zahtev.Username)).FirstOrDefault();
+            if (korisnik == null)
+            {
+                return BadRequest("Korisnik sa datim username-om ne postoji");
+            }
+            if (!VerifyPasswordHash(zahtev.Password, korisnik.PasswordHash, korisnik.PasswordSalt))
+            {
+                return BadRequest("Pogresna sifra");
+            }
+
+            string token = CreateToken(korisnik);
+            return Ok(token);
+
+        }
 
 
         private string CreateToken(Korisnik korisnik)
@@ -66,7 +85,7 @@ namespace Projekat.Controllers
 
             List<Claim> claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name,korisnik.Username)
+                new Claim("username",korisnik.Username)
             };
 
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
@@ -82,7 +101,63 @@ namespace Projekat.Controllers
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
             return jwt;
         }
+        /*
+        [HttpPost("index")]
+        public async Task<ActionResult<string>> validacija(LoginDTO login)
+        {
+            string? name = ValidateToken(login.Username);
+            if (name == null)
+                return BadRequest("Los token/ ne postoji");
 
+            return Ok("Sve ok " + name);
+
+        }
+        */
+        private string? ValidateToken(string token)
+        {
+            if (token == null)
+                return null;
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(configuration.GetSection("AppSettings:Token").Value.ToString());
+
+
+
+            try
+            {
+                tokenHandler.ValidateToken(token, new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+
+                    ClockSkew = TimeSpan.Zero
+                },
+                out SecurityToken validatedToken);
+
+                var jwtToken = (JwtSecurityToken)validatedToken;
+
+                var userName = (jwtToken.Claims.First(x => x.Type == "username").Value);
+
+                return userName.ToString();
+            }
+            catch
+            {
+                return null;
+            }
+
+        }
+        private bool emailValidation(string email)
+        {
+            bool valid = false;
+            Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
+
+            if ((regex.Match(email)).Success)
+                valid = true;
+
+            return valid;
+        }
         private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
             using (var hmac = new HMACSHA512())
