@@ -1,9 +1,13 @@
+using Projekat.Clients;
 using Projekat.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddHttpClient<MachineLearningClient>();
+
 
 
 
