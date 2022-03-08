@@ -1,0 +1,21 @@
+
+<ngb-accordion #acc="ngbAccordion" >
+    <ngb-panel title="Unesite CSV fajl:">
+      <ng-template ngbPanelContent>
+        <p>Unesite fajl koji zelite:</p>
+
+        <input class="aa" type="file" (change)="onFileChange($event)" multiple="false" />
+
+        <table class="table table-striped">
+            <tbody>
+                <tr *ngFor="let row of data">
+                    <td *ngFor="let cell of row">
+                        {{cell}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+      </ng-template>
+    </ngb-panel>
+
+  </ngb-accordion>
