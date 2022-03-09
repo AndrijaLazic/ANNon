@@ -1,0 +1,29 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="text-center">
+                    <h1>Login</h1><hr>
+                    
+                </div>
+                <form novalidate #form="ngForm" (submit)="onSubmit(form)">
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Username</label>
+                        <input type="text" class="form-control" id="exampleInputPassword1" name="username" #username="ngModel" [(ngModel)]="service.formData.username">
+                      </div>
+                    
+                    <div class="mb-3">
+                      <label class="form-label">Password</label>
+                      <input type="password" class="form-control" id="exampleInputPassword1" name="password" #password="ngModel" [(ngModel)]="service.formData.password" >
+                    </div>
+                    
+                    
+                    <button type="submit" class="btn btn-primary">Login</button>
+                  </form>
+                  Don't have an account?<a routerLink="/signup">Sign up</a>
+            </div>
+        </div>
+    </div>
+</div>
+
