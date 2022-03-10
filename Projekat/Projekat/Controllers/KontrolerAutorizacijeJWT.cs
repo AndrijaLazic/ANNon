@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Projekat.Modeli;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -7,7 +6,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using Projekat.Data;
 using System.Text;
-using System.Text.RegularExpressions;
+using MySqlConnector;
 
 namespace Projekat.Controllers
 {
@@ -16,10 +15,10 @@ namespace Projekat.Controllers
     public class KontrolerAutorizacije : ControllerBase
     {
         private readonly MySqlDbContext _context;
-        
+
         private readonly IConfiguration configuration;
 
-        public KontrolerAutorizacije(IConfiguration configuration,MySqlDbContext context)
+        public KontrolerAutorizacije(IConfiguration configuration, MySqlDbContext context)
         {
             this.configuration = configuration;
             _context = context;
@@ -30,34 +29,38 @@ namespace Projekat.Controllers
         [HttpPost("registacija")]
         public async Task<ActionResult<Korisnik>> Registracija(KorisnikRegistracijaDTO zahtev)
         {
-            Korisnik korisnik = _context.Korisnici.Where(x => x.Username.Equals(zahtev.Username)).FirstOrDefault();
-            
-            if(korisnik != null)
+            if (ModelState.IsValid)
             {
-                return BadRequest("korisnik sa datim username-om vec postoji");
+                try
+                {
+                    Korisnik korisnik;
+                    CreatePasswordHash(zahtev.Password, out byte[] passwordHash, out byte[] passwordSalt);
+                    korisnik = new Korisnik();
+                    korisnik.Username = zahtev.Username;
+                    korisnik.Email = zahtev.Email;
+                    korisnik.PasswordHash = passwordHash;
+                    korisnik.PasswordSalt = passwordSalt;
+
+
+                    _context.Korisnici.Add(korisnik);
+                    await _context.SaveChangesAsync();
+                    
+
+                    return Ok("Uspesna registracija");
+                }
+                catch (Exception ex)
+                {
+
+                    if (ex.InnerException.Message.Contains("IX_Korisnici_Email"))
+                        return BadRequest("Email je vec povezan sa drugim nalogom");
+
+                    if (ex.InnerException.Message.Contains("IX_Korisnici_Username"))
+                        return BadRequest("Vec postoji korisnik sa datim username-om");
+
+
+                }
             }
-            if (!emailValidation(zahtev.Email))
-                return BadRequest("Unesite ispravnu email adresu");
-            korisnik = _context.Korisnici.Where(x => x.Email.Equals(zahtev.Email)).FirstOrDefault();
-
-            if (korisnik != null)
-            {
-                return BadRequest("korisnik sa datim Email-om vec postoji");
-            }
-
-
-            CreatePasswordHash(zahtev.Password, out byte[] passwordHash, out byte[] passwordSalt);
-            korisnik = new Korisnik();
-            korisnik.Username = zahtev.Username;
-            korisnik.Email= zahtev.Email;
-            korisnik.PasswordHash = passwordHash;
-            korisnik.PasswordSalt = passwordSalt;
-
-            _context.Korisnici.Add(korisnik);
-            await _context.SaveChangesAsync();
-            Console.WriteLine(korisnik);
-
-            return Ok("Uspesna registracija");
+            return BadRequest("Neuspesna registracija");
         }
 
         [HttpPost("login")]
@@ -81,7 +84,7 @@ namespace Projekat.Controllers
 
         private string CreateToken(Korisnik korisnik)
         {
-           
+
 
             List<Claim> claims = new List<Claim>
             {
@@ -148,16 +151,7 @@ namespace Projekat.Controllers
             }
 
         }
-        private bool emailValidation(string email)
-        {
-            bool valid = false;
-            Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
 
-            if ((regex.Match(email)).Success)
-                valid = true;
-
-            return valid;
-        }
         private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
             using (var hmac = new HMACSHA512())

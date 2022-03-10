@@ -1,26 +1,23 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
-
+using System.ComponentModel.DataAnnotations.Schema;
 namespace Projekat.Modeli
 {
-    [Index(nameof(Email), nameof(Username), IsUnique =true)]
+    [Index(nameof(Email), IsUnique = true)]
+    [Index(nameof(Username), IsUnique = true)]
+
     public class Korisnik
     {
         public int ID { get; set; }
 
-        [Required(ErrorMessage ="Nije uneto ime")]
-        [StringLength(maximumLength:30)]
+
+        [StringLength(maximumLength: 20)]
         public string Username { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Nije unet Email")]
-        [StringLength(maximumLength: 100)]
-        [EmailAddress]
+        [StringLength(maximumLength: 50)]
         public string Email { get; set; } = string.Empty;
-
-
-        [Required(ErrorMessage = "Nije uneta sifra")]
         public byte[] PasswordHash { get; set; }
-        [Required(ErrorMessage = "Nije uneta sifra")]
+
         public byte[] PasswordSalt { get; set; }
 
 
