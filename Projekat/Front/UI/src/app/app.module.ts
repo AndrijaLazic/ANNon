@@ -22,6 +22,7 @@ import { HttpClientModule } from '@angular/common/http';
     RegisterParentComponent,
     RegisterComponent,
     PocetnastranaComponent
+
   ],
   imports: [
     BrowserModule,
@@ -30,6 +31,7 @@ import { HttpClientModule } from '@angular/common/http';
     MdbCollapseModule,
     FormsModule,
     HttpClientModule
+   
     
   ],
   providers: [],

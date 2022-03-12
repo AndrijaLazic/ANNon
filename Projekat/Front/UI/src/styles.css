@@ -12,3 +12,6 @@
     height: 100vh;
   }
 
+  input.invalid{
+      border-color:red;
+  }

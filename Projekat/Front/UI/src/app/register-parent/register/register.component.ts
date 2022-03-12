@@ -11,6 +11,8 @@ export class RegisterComponent implements OnInit {
 
   constructor(public service:RegisterServiceService) { }
 
+
+
   ngOnInit(): void {
   }
   onSubmit1(form:NgForm){
@@ -19,7 +21,7 @@ export class RegisterComponent implements OnInit {
 
       },
       err=>{
-        console.log(err);
+        console.log(err['error']);
       }
     )
   }
