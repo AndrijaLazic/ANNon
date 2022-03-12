@@ -11,8 +11,8 @@ using Projekat.Data;
 namespace Projekat.Migrations
 {
     [DbContext(typeof(MySqlDbContext))]
-    [Migration("20220310074933_PocetnaMigracija")]
-    partial class PocetnaMigracija
+    [Migration("20220311235636_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -31,6 +31,13 @@ namespace Projekat.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
+
+                    b.Property<bool>("EmailPotvrdjen")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("EmailToken")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<byte[]>("PasswordHash")
                         .IsRequired()

@@ -1,6 +1,6 @@
 using Projekat.Clients;
 using Projekat.Data;
-
+using Projekat.Modeli;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.

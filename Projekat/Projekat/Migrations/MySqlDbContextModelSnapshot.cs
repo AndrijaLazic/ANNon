@@ -30,6 +30,13 @@ namespace Projekat.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
+                    b.Property<bool>("EmailPotvrdjen")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("EmailToken")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<byte[]>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("longblob");

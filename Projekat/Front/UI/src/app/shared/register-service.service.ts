@@ -8,7 +8,7 @@ export class RegisterServiceService {
 
   constructor(private http:HttpClient) { }
   formdata:RegisterModel=new RegisterModel();
-  readonly conStr='https://localhost:7286/api/KontrolerAutorizacije/registacija';
+  readonly conStr='https://localhost:7286/api/KontrolerAutorizacije/registracija';
   postFunkcija()
   {
     return this.http.post(this.conStr,this.formdata);

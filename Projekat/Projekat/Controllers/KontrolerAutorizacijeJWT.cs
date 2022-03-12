@@ -7,6 +7,9 @@ using System.Security.Cryptography;
 using Projekat.Data;
 using System.Text;
 using MySqlConnector;
+using MailKit;
+using MailKit.Net.Smtp;
+using MimeKit;
 
 namespace Projekat.Controllers
 {
@@ -26,7 +29,7 @@ namespace Projekat.Controllers
 
 
 
-        [HttpPost("registacija")]
+        [HttpPost("registracija")]
         public async Task<ActionResult<Korisnik>> Registracija(KorisnikRegistracijaDTO zahtev)
         {
             if (ModelState.IsValid)
@@ -40,12 +43,14 @@ namespace Projekat.Controllers
                     korisnik.Email = zahtev.Email;
                     korisnik.PasswordHash = passwordHash;
                     korisnik.PasswordSalt = passwordSalt;
-
+                    string EmailToken = CreateToken(korisnik, int.Parse(configuration.GetSection("AppSettings:TrajanjeEmailTokenaUMinutima").Value.ToString()));
+                    korisnik.EmailToken = EmailToken;
 
                     _context.Korisnici.Add(korisnik);
                     await _context.SaveChangesAsync();
                     
 
+                    EmailKontroler.PosaljiEmail("Kliknite na link za potvrdu registracije:https:youtube.com", "Potvrda registracije", zahtev.Email, configuration);
                     return Ok("Uspesna registracija");
                 }
                 catch (Exception ex)
@@ -76,16 +81,14 @@ namespace Projekat.Controllers
                 return BadRequest("Pogresna sifra");
             }
 
-            string token = CreateToken(korisnik);
+            string token = CreateToken(korisnik, int.Parse(configuration.GetSection("AppSettings:TrajanjeTokenaUMinutima").Value.ToString()));
             return Ok(token);
 
         }
 
-
-        private string CreateToken(Korisnik korisnik)
+        
+        private string CreateToken(Korisnik korisnik,int trajanjeUMinutima)
         {
-
-
             List<Claim> claims = new List<Claim>
             {
                 new Claim("username",korisnik.Username)
@@ -97,7 +100,7 @@ namespace Projekat.Controllers
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
             var token = new JwtSecurityToken(
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(int.Parse(configuration.GetSection("AppSettings:TrajanjeTokenaUMinutima").Value.ToString())),
+                expires: DateTime.Now.AddMinutes(trajanjeUMinutima),
                 signingCredentials: creds
                 );
 
@@ -170,6 +173,9 @@ namespace Projekat.Controllers
                 return computedHash.SequenceEqual(passwordHash);
             }
         }
+
+
+       
 
     }
 }
