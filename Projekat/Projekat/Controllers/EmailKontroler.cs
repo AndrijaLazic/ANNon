@@ -4,7 +4,8 @@ using Projekat.Data;
 using MailKit;
 using MailKit.Net.Smtp;
 using MimeKit;
-
+using Projekat.Modeli;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace Projekat.Controllers
 {
@@ -21,6 +22,36 @@ namespace Projekat.Controllers
             this.configuration = configuration;
             _context = context;
         }
+
+        [HttpGet("{EmailToken}")]
+        public async Task<IActionResult> PotvrdiEmail(string EmailToken)
+        {
+            
+
+
+            if (KontrolerAutorizacije.ValidateToken(EmailToken, this.configuration) != null)
+            {
+                try
+                {
+                    var handler = new JwtSecurityTokenHandler();
+                    var token = handler.ReadJwtToken(EmailToken);
+                    string username=token.Claims.First(claim => claim.Type == "username").Value;
+
+                    Korisnik korisnik=_context.Korisnici.Where(x => x.Username.Equals(username)).FirstOrDefault();
+                    korisnik.EmailPotvrdjen = true;
+                    await _context.SaveChangesAsync();
+                    return Ok("Uspesno verifikovana Email adresa za korisnika " + korisnik.Username);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest("Email nije verifikovan");
+                }
+            }
+
+            return BadRequest("Email token nije validan");
+        }
+
+
 
 
 

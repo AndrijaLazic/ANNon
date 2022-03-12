@@ -50,7 +50,7 @@ namespace Projekat.Controllers
                     await _context.SaveChangesAsync();
                     
 
-                    EmailKontroler.PosaljiEmail("Kliknite na link za potvrdu registracije:https:youtube.com", "Potvrda registracije", zahtev.Email, configuration);
+                    EmailKontroler.PosaljiEmail("Kliknite na link za potvrdu registracije:https://localhost:7286/api/EmailKontroler/"+ EmailToken, "Potvrda registracije", zahtev.Email, configuration);
                     return Ok("Uspesna registracija");
                 }
                 catch (Exception ex)
@@ -119,13 +119,13 @@ namespace Projekat.Controllers
 
         }
         */
-        private string? ValidateToken(string token)
+        public static string? ValidateToken(string token,IConfiguration konfiguracija)
         {
             if (token == null)
                 return null;
 
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(configuration.GetSection("AppSettings:Token").Value.ToString());
+            var key = Encoding.ASCII.GetBytes(konfiguracija.GetSection("AppSettings:Token").Value.ToString());
 
 
 
