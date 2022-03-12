@@ -4,7 +4,7 @@
       <ng-template ngbPanelContent>
         <p>Unesite fajl koji zelite:</p>
 
-        <input class="aa" type="file" (change)="onFileChange($event)" multiple="false" />
+        <input class="aa" type="file" accept=".csv" (change)="onFileChange($event)" multiple="false" />
 
         <table class="table table-striped">
             <tbody>

@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { HttpClient, HttpEventType, HttpRequest, JsonpClientBackend } from '@angular/common/http';
+import { Component, OnInit,Output, EventEmitter  } from '@angular/core';
 import * as XLSX from 'xlsx';
+
 
 
 @Component({
@@ -9,8 +11,15 @@ import * as XLSX from 'xlsx';
 })
 export class ExcelsheetComponent implements OnInit {
 
+  public progress: number;
+  public message: string;
+  @Output() public onUploadFinished = new EventEmitter();
+
   data: [][];
-  constructor() { }
+  constructor(private http:HttpClient) { }
+
+  readonly baseURL='http://localhost:'
+
 
   ngOnInit(): void {
   }
@@ -29,14 +38,29 @@ export class ExcelsheetComponent implements OnInit {
 
       const ws: XLSX.WorkSheet=wb.Sheets[wsname];
 
-      console.log(ws);
-
+      
+      
       this.data=(XLSX.utils.sheet_to_json(ws,{header: 1}));
-
-      console.log(this.data);
+      var aaa=JSON.stringify(this.data);
+      console.log(aaa);
+      console.log(aaa[5]);
     };
 
     reader.readAsBinaryString(target.files[0]);
+
+    this.http.post(this.baseURL,JSON.stringify(this.data), {reportProgress: true, observe: 'events'})
+      .subscribe(event => {
+        if (event.type === HttpEventType.UploadProgress)
+          this.progress = Math.round(100 * event.loaded / event.total);
+        else if (event.type === HttpEventType.Response) {
+          this.message = 'Upload success.';
+          this.onUploadFinished.emit(event.body);
+          
+        }
+      });
+
+    
+    
 
   }
 
