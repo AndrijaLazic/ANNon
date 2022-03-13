@@ -20,5 +20,12 @@ namespace Projekat.Clients
             Console.WriteLine(k.ToString());
             return Ok(k);
         }
+
+        [HttpPost]
+        public async Task<ActionResult> getData(string data)
+        {
+            string msg = await _iCustomClient.sendData(data);
+            return Ok("uspesno prosledjeno pythonu " + msg);
+        }
     }
 }

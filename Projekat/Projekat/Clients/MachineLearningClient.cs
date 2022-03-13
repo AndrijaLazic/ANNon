@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System.Net.Http.Headers;
+using System.Text;
 
 namespace Projekat.Clients
 {
@@ -34,6 +35,17 @@ namespace Projekat.Clients
                 // Deserialize the JSON into the C# List<Movie> object and return
                 return content;///JsonConvert.DeserializeObject<List<String>>(content);
             }
+        }
+
+        public async Task<string> sendData(string data)
+        { 
+            var content = new StringContent(data,Encoding.UTF8, "application/json");
+            content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            _client.DefaultRequestHeaders.Accept.Add(MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+            HttpResponseMessage response = await _client.PostAsync(_client.BaseAddress, content);
+
+            return response.ToString();
         }
     }
 }
