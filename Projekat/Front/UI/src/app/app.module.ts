@@ -12,6 +12,8 @@ import { RegisterParentComponent } from './register-parent/register-parent.compo
 import { RegisterComponent } from './register-parent/register/register.component';
 import { PocetnastranaComponent } from './pocetnastrana/pocetnastrana.component';
 import { HttpClientModule } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -30,7 +32,9 @@ import { HttpClientModule } from '@angular/common/http';
     NgbModule,
     MdbCollapseModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot()
    
     
   ],

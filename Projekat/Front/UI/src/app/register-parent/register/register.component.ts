@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 import { RegisterServiceService } from 'src/app/shared/register-service.service';
 
 @Component({
@@ -9,7 +10,7 @@ import { RegisterServiceService } from 'src/app/shared/register-service.service'
 })
 export class RegisterComponent implements OnInit {
 
-  constructor(public service:RegisterServiceService) { }
+  constructor(public service:RegisterServiceService,private toastr:ToastrService) { }
 
 
 
@@ -18,10 +19,10 @@ export class RegisterComponent implements OnInit {
   onSubmit1(form:NgForm){
     this.service.postFunkcija().subscribe(
       res=>{
-
+        
       },
       err=>{
-        console.log(err['error']);
+        this.toastr.error(err['error'],"ERROR")
       }
     )
   }

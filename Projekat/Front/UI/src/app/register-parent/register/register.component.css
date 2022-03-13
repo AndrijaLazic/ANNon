@@ -1,3 +1,15 @@
 .alert p{
     color: red;
 }
+.alert{
+    margin: 0px;
+    padding: 0px;
+}
+.alert alert-danger{
+    margin: 0px;
+    padding: 0px;
+}
+#blok{
+    margin:auto;
+    
+}
