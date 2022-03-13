@@ -15,7 +15,8 @@ export class ExcelsheetComponent implements OnInit {
   public message: string;
   @Output() public onUploadFinished = new EventEmitter();
 
-  data: [][];
+  vrednost: any;
+  data: any[][];
   constructor(private http:HttpClient) { }
 
   readonly baseURL='http://localhost:'
@@ -41,13 +42,19 @@ export class ExcelsheetComponent implements OnInit {
       
       
       this.data=(XLSX.utils.sheet_to_json(ws,{header: 1}));
-      var aaa=JSON.stringify(this.data);
-      console.log(aaa);
-      console.log(aaa[5]);
+      
     };
 
     reader.readAsBinaryString(target.files[0]);
 
+    
+
+    
+  
+
+    }
+  
+  posalji(){
     this.http.post(this.baseURL,JSON.stringify(this.data), {reportProgress: true, observe: 'events'})
       .subscribe(event => {
         if (event.type === HttpEventType.UploadProgress)
@@ -58,10 +65,18 @@ export class ExcelsheetComponent implements OnInit {
           
         }
       });
+  }
 
-    
-    
-
+  izmena(row,cell){
+    console.log(row+" "+cell);
+    this.vrednost = (<HTMLInputElement>document.getElementById(row+","+cell)).value;
+    let isnum = /^\d.+$/.test(this.vrednost);
+    if(isnum)
+    this.data[row][cell]=parseFloat(this.vrednost);
+    else
+      this.data[row][cell]=this.vrednost;
+    //this.onFileChange;
+    console.log(this.data);
   }
 
 }
