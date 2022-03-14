@@ -8,14 +8,21 @@
 
         <table class="table table-striped">
             <tbody>
-                <tr *ngFor="let row of data;index as i">
-                    <td *ngFor="let cell of row;index as j">
-                        <input id="{{i}},{{j}}" type="text" value="{{data[i][j]}}">
+                  <th *ngFor="let item of data[0]">{{item}}</th>
+                <tr *ngFor="let row of data | paginate: 
+                { itemsPerPage: 40, currentPage: p } ;index as i">
+                    <td *ngFor="let cell of row;index as j ">
+                        <input id="{{i}},{{j}}" type="text" value="{{cell}}">
+                        
                         <button type="button" class="btn btn-primary" (click)="izmena(i,j)">Change</button>
                     </td>
                 </tr>
+                
             </tbody>
+            
         </table>
+        <pagination-controls (pageChange)="p = $event" class="float-right"></pagination-controls>
+        
       </ng-template>
     </ngb-panel>
 

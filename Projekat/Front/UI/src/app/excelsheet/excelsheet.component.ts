@@ -1,7 +1,11 @@
 import { HttpClient, HttpEventType, HttpRequest, JsonpClientBackend } from '@angular/common/http';
-import { Component, OnInit,Output, EventEmitter  } from '@angular/core';
+import { Component, OnInit,Output, EventEmitter, NgModule  } from '@angular/core';
 import * as XLSX from 'xlsx';
+import {NgxPaginationModule} from 'ngx-pagination';
 
+NgModule({
+  imports: [ NgxPaginationModule ]
+})
 
 
 @Component({
@@ -11,13 +15,15 @@ import * as XLSX from 'xlsx';
 })
 export class ExcelsheetComponent implements OnInit {
 
+  p:any=[];
   public progress: number;
   public message: string;
   @Output() public onUploadFinished = new EventEmitter();
 
   vrednost: any;
   data: any[][];
-  constructor(private http:HttpClient) { }
+  constructor(private http:HttpClient) {
+   }
 
   readonly baseURL='http://localhost:'
 
@@ -68,13 +74,28 @@ export class ExcelsheetComponent implements OnInit {
   }
 
   izmena(row,cell){
-    console.log(row+" "+cell);
+    if(this.p==0)
+      console.log(row+" "+cell);
+    else
+      console.log(row+40*(this.p-1)+" "+cell);
     this.vrednost = (<HTMLInputElement>document.getElementById(row+","+cell)).value;
     let isnum = /^\d.+$/.test(this.vrednost);
-    if(isnum)
-    this.data[row][cell]=parseFloat(this.vrednost);
+    if(this.p==0)
+    {
+      if(isnum)
+        this.data[row][cell]=parseFloat(this.vrednost);
+      else
+        this.data[row][cell]=this.vrednost;
+    }
     else
-      this.data[row][cell]=this.vrednost;
+    {
+      if(isnum)
+        this.data[row+40*(this.p-1)][cell]=parseFloat(this.vrednost);
+      else
+        this.data[row+40*(this.p-1)][cell]=this.vrednost;
+    }
+    
+    
     //this.onFileChange;
     console.log(this.data);
   }

@@ -1,3 +1,4 @@
+import {NgxPaginationModule} from 'ngx-pagination';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import{FormsModule} from "@angular/forms";
@@ -12,6 +13,8 @@ import { RegisterParentComponent } from './register-parent/register-parent.compo
 import { RegisterComponent } from './register-parent/register/register.component';
 import { PocetnastranaComponent } from './pocetnastrana/pocetnastrana.component';
 import { HttpClientModule } from '@angular/common/http';
+import { PaginationComponent } from './excelsheet/pagination/pagination.component';
+
 
 @NgModule({
   declarations: [
@@ -21,7 +24,8 @@ import { HttpClientModule } from '@angular/common/http';
     LoginComponent,
     RegisterParentComponent,
     RegisterComponent,
-    PocetnastranaComponent
+    PocetnastranaComponent,
+    PaginationComponent
 
   ],
   imports: [
@@ -30,7 +34,8 @@ import { HttpClientModule } from '@angular/common/http';
     NgbModule,
     MdbCollapseModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    NgxPaginationModule
    
     
   ],
