@@ -2,6 +2,7 @@ import { HttpClient, HttpEventType, HttpRequest, JsonpClientBackend } from '@ang
 import { Component, OnInit,Output, EventEmitter, NgModule  } from '@angular/core';
 import * as XLSX from 'xlsx';
 import {NgxPaginationModule} from 'ngx-pagination';
+import { ToastrService } from 'ngx-toastr';
 
 NgModule({
   imports: [ NgxPaginationModule ]
@@ -22,7 +23,7 @@ export class ExcelsheetComponent implements OnInit {
 
   vrednost: any;
   data: any[][];
-  constructor(private http:HttpClient) {
+  constructor(private http:HttpClient,private toastr:ToastrService) {
    }
 
   readonly baseURL='http://localhost:'
@@ -59,19 +60,6 @@ export class ExcelsheetComponent implements OnInit {
   
 
     }
-  
-  posalji(){
-    this.http.post(this.baseURL,JSON.stringify(this.data), {reportProgress: true, observe: 'events'})
-      .subscribe(event => {
-        if (event.type === HttpEventType.UploadProgress)
-          this.progress = Math.round(100 * event.loaded / event.total);
-        else if (event.type === HttpEventType.Response) {
-          this.message = 'Upload success.';
-          this.onUploadFinished.emit(event.body);
-          
-        }
-      });
-  }
 
   izmena(row,cell){
     if(this.p==0)
@@ -96,8 +84,29 @@ export class ExcelsheetComponent implements OnInit {
     }
     
     
-    //this.onFileChange;
     console.log(this.data);
+  }
+  convertJson()
+  {
+    const keys = this.data[0];
+    const values=this.data.slice(1);
+    const objects=values.map(array =>{
+      const object={};
+      keys.forEach((key,i)=>object[key]=array[i]);
+
+      return object;
+    });
+    console.log(JSON.stringify(objects));
+    this.http.post(this.baseURL,JSON.stringify(objects))
+      .subscribe(
+        res=>{
+
+        },
+        err=>{
+          this.toastr.error(err['error'],"ERROR")
+        }
+        
+      );
   }
 
 }
