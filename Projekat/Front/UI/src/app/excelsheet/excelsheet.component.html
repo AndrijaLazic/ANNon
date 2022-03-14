@@ -8,7 +8,9 @@
 
         <table class="table table-striped">
             <tbody>
+                <tr >
                   <th *ngFor="let item of data[0]">{{item}}</th>
+                </tr>
                 <tr *ngFor="let row of data | paginate: 
                 { itemsPerPage: 40, currentPage: p } ;index as i">
                     <td *ngFor="let cell of row;index as j ">

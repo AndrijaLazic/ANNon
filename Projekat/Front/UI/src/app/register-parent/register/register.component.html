@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" id="blok">
     <div class="row">
         <div class="col-md-6">
             <div class="card">
@@ -12,19 +12,19 @@
                         <label class="form-label">Username*</label>
                         <input type="text" class="form-control" name="username" #username="ngModel" [(ngModel)]="service.formdata.username" 
                          placeholder="example:user123" pattern="^[a-zA-Z][a-zA-Z0-9]*" required [class.invalid]="username.touched && username.invalid" minlength="5" maxlength="15">
-                         <div *ngIf="username.invalid && username.dirty"
+                         <div *ngIf="username.invalid && username.touched"
                               class="alert">
 
-                            <p *ngIf="username.errors?.['required']">
+                            <p class="alert alert-danger" *ngIf="username.errors?.['required']">
                               Username is required.
                             </p>
-                            <p *ngIf="username.errors?.['pattern']">
+                            <p class="alert alert-danger" *ngIf="username.errors?.['pattern']">
                               Username can not start with numbers!
                             </p>
-                            <p *ngIf="username.errors?.['minlength']">
+                            <p class="alert alert-danger" *ngIf="username.errors?.['minlength']">
                               Username must contain at least 5 characters.
                             </p>
-                            <p *ngIf="username.errors?.['maxlength']">
+                            <p class="alert alert-danger" *ngIf="username.errors?.['maxlength']">
                               Username can not contain more than 15 characters.
                             </p>
 
@@ -38,11 +38,11 @@
                       <div *ngIf="email.invalid && email.touched"
                          class="alert">
 
-                       <p *ngIf="email.errors?.['required']">
+                       <p class="alert alert-danger" *ngIf="email.errors?.['required']">
                          Email is required!
                        </p>
-                       <p *ngIf="email.errors?.['pattern']">
-                         It's not properly email!
+                       <p class="alert alert-danger" *ngIf="email.errors?.['pattern']">
+                         It's not proper email!
                        </p>
 
                      </div>
@@ -55,10 +55,10 @@
                       <div *ngIf="password.invalid && password.touched"
                          class="alert">
 
-                       <p *ngIf="password.errors?.['required']">
+                       <p class="alert alert-danger" *ngIf="password.errors?.['required']">
                          Password is required!
                        </p>
-                       <p *ngIf="password.errors?.['minlength']">
+                       <p class="alert alert-danger" *ngIf="password.errors?.['minlength']">
                          Password must contains at least 5 characters!
                        </p>
 

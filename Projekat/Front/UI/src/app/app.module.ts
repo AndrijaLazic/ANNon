@@ -15,6 +15,8 @@ import { PocetnastranaComponent } from './pocetnastrana/pocetnastrana.component'
 import { HttpClientModule } from '@angular/common/http';
 import { PaginationComponent } from './excelsheet/pagination/pagination.component';
 
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -35,7 +37,9 @@ import { PaginationComponent } from './excelsheet/pagination/pagination.componen
     MdbCollapseModule,
     FormsModule,
     HttpClientModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot()
    
     
   ],

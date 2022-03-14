@@ -42,10 +42,10 @@ namespace Projekat.Clients
             var content = new StringContent(data,Encoding.UTF8, "application/json");
             content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
             _client.DefaultRequestHeaders.Accept.Add(MediaTypeWithQualityHeaderValue.Parse("application/json"));
-
-            HttpResponseMessage response = await _client.PostAsync(_client.BaseAddress, content);
-
-            return response.ToString();
+            
+            HttpResponseMessage response = await _client.PostAsync(_client.BaseAddress+"send", content);
+            var result = await response.Content.ReadAsStringAsync();
+            return result.ToString();
         }
     }
 }

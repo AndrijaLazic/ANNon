@@ -5,6 +5,7 @@ from fastapi import FastAPI
 import uvicorn
 import json
 import requests
+from fastapi import Body
 #vazno!!!!!!
 #pokretanje aplikacije komanda
 #uvicorn MachineLearning:app --reload
@@ -17,7 +18,8 @@ def mainPage():
     return "radi api"
 
 
-@app.post("/")
-def postMethod(data):
-    res = requests.post("https://localhost:7286/api/MachineLearning")
-    return "poslato " + res
+@app.post('/send')
+async def update_item(
+        payload: dict = Body(...)
+):
+    return payload

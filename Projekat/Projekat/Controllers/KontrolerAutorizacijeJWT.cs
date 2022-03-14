@@ -76,9 +76,13 @@ namespace Projekat.Controllers
             {
                 return BadRequest("Korisnik sa datim username-om ne postoji");
             }
-            if (!VerifyPasswordHash(zahtev.Password, korisnik.PasswordHash, korisnik.PasswordSalt))
+            else if (!VerifyPasswordHash(zahtev.Password, korisnik.PasswordHash, korisnik.PasswordSalt))
             {
                 return BadRequest("Pogresna sifra");
+            }
+            else if(korisnik.EmailPotvrdjen==false)
+            {
+                return BadRequest("Email nije potvrdjen,proverite svoju email adresu");
             }
 
             string token = CreateToken(korisnik, int.Parse(configuration.GetSection("AppSettings:TrajanjeTokenaUMinutima").Value.ToString()));

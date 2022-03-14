@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 import { LoginServiceService } from 'src/app/shared/login-service.service';
 
 @Component({
@@ -9,7 +10,7 @@ import { LoginServiceService } from 'src/app/shared/login-service.service';
 })
 export class LoginComponent implements OnInit {
 
-  constructor(public service:LoginServiceService) { }
+  constructor(public service:LoginServiceService,private toastr:ToastrService) { }
 
   ngOnInit(): void {
   }
@@ -20,7 +21,7 @@ export class LoginComponent implements OnInit {
 
       },
       err=>{
-        console.log(err);
+        this.toastr.error(err['error'],"ERROR")
       }
     );
   }

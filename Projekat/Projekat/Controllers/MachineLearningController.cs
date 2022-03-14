@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Projekat.Clients
 {
@@ -21,9 +23,10 @@ namespace Projekat.Clients
             return Ok(k);
         }
 
-        [HttpPost]
+        [HttpPost("send")]
         public async Task<ActionResult> getData(string data)
         {
+            //JObject json = JObject.Parse(data);
             string msg = await _iCustomClient.sendData(data);
             return Ok("uspesno prosledjeno pythonu " + msg);
         }
