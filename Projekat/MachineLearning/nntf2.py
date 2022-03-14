@@ -12,7 +12,7 @@ data = pd.read_csv("titanic/train.csv")
 
 data = data[['Survived', 'Pclass', 'Sex', 'Age', 'Fare']]
 
-data.dropna() #todo: metode za upravljanje sa na vrednostima
+data.dropna() #todo: metode za upravljanje sa nedostajucim vrednostima
 target = data.pop('Survived')
 
 categorical_feature_names = ['Pclass','Sex']
@@ -94,3 +94,24 @@ print(preprocesssed_result)
 
 
 #building the model
+
+preprocessor = tf.keras.Model(inputs, preprocesssed_result)
+#preprocessor(dict(data.iloc[:1]))
+
+#neural network
+
+network = tf.keras.Sequential([
+  tf.keras.layers.Dense(10, activation='relu'),
+  tf.keras.layers.Dense(10, activation='relu'),
+  tf.keras.layers.Dense(1)
+])
+
+x = preprocessor(inputs)
+result = network(x)
+model = tf.keras.Model(inputs, result)
+
+model.compile(optimizer='adam',
+                loss=tf.keras.losses.BinaryCrossentropy(from_logits=True),
+                metrics=['accuracy'])
+
+history = model.fit(dict(data), target, epochs=10, batch_size=8)
