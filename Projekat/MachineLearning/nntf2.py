@@ -6,6 +6,7 @@ import seaborn as sns
 import tensorflow as tf
 import matplotlib.pyplot as plot
 import matplotlib
+import baza
 
 data = pd.read_csv("titanic/train.csv")
 #data.head()
@@ -119,3 +120,8 @@ model.compile(optimizer='adam',
                 metrics=['accuracy'])
 
 history = model.fit(dict(data), target, epochs=20, batch_size=8)
+
+#cuva model u bazu i ucitava ga opet
+id= baza.saveModel(model)
+model=baza.loadModelById(id)
+model.fit(dict(data), target, epochs=1, batch_size=8)
