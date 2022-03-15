@@ -2,7 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-
+using System.Text;
+using Projekat.Modeli;
 namespace Projekat.Clients
 {
     [Route("api/[controller]")]
@@ -22,13 +23,15 @@ namespace Projekat.Clients
             Console.WriteLine(k.ToString());
             return Ok(k);
         }
-
+        
         [HttpPost("send")]
-        public async Task<ActionResult> getData(string data)
+        public async Task<ActionResult<DataModelView>> getData(DataModelView model)
         {
-            //JObject json = JObject.Parse(data);
-            string msg = await _iCustomClient.sendData(data);
-            return Ok("uspesno prosledjeno pythonu " + msg);
+            
+            
+
+            string msg = await _iCustomClient.sendData(model);
+            return Ok("Uspesno poslato na back " + model.Payload);
         }
     }
 }

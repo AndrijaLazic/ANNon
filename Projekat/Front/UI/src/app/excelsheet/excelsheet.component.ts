@@ -4,6 +4,12 @@ import * as XLSX from 'xlsx';
 import {NgxPaginationModule} from 'ngx-pagination';
 import { ToastrService } from 'ngx-toastr';
 
+
+export class DataModel
+{
+    payload:string="";
+}
+
 NgModule({
   imports: [ NgxPaginationModule ]
 })
@@ -14,9 +20,11 @@ NgModule({
   templateUrl: './excelsheet.component.html',
   styleUrls: ['./excelsheet.component.css']
 })
+
 export class ExcelsheetComponent implements OnInit {
 
   p:any=[];
+
   public progress: number;
   public message: string;
   @Output() public onUploadFinished = new EventEmitter();
@@ -26,7 +34,7 @@ export class ExcelsheetComponent implements OnInit {
   constructor(private http:HttpClient,private toastr:ToastrService) {
    }
 
-  readonly baseURL='http://localhost:'
+  readonly baseURL='https://localhost:7286/';
 
 
   ngOnInit(): void {
@@ -86,6 +94,7 @@ export class ExcelsheetComponent implements OnInit {
     
     console.log(this.data);
   }
+  model:DataModel  = new DataModel();
   convertJson()
   {
     const keys = this.data[0];
@@ -96,16 +105,17 @@ export class ExcelsheetComponent implements OnInit {
 
       return object;
     });
+    
+    console.log(typeof(objects.toString()))
     console.log(JSON.stringify(objects));
-    this.http.post(this.baseURL,JSON.stringify(objects))
+    this.model.payload = JSON.stringify(objects);
+    this.http.post<string>(this.baseURL+"api/MachineLearning/send",{"payload":this.model.payload})
       .subscribe(
         res=>{
-
+           
         },
-        err=>{
-          this.toastr.error(err['error'],"ERROR")
-        }
-        
+        err=>{}
+       
       );
   }
 

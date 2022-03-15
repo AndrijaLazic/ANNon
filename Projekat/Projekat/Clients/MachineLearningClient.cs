@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using System.Text;
-
+using Projekat.Modeli;
 namespace Projekat.Clients
 {
     public class MachineLearningClient
@@ -37,15 +37,15 @@ namespace Projekat.Clients
             }
         }
 
-        public async Task<string> sendData(string data)
+        public async Task<string> sendData(DataModelView model)
         { 
-            var content = new StringContent(data,Encoding.UTF8, "application/json");
+            var content = new StringContent(model.Payload,Encoding.UTF8, "application/json");
             content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
             _client.DefaultRequestHeaders.Accept.Add(MediaTypeWithQualityHeaderValue.Parse("application/json"));
             
             HttpResponseMessage response = await _client.PostAsync(_client.BaseAddress+"send", content);
             var result = await response.Content.ReadAsStringAsync();
-            return result.ToString();
+            return result;
         }
     }
 }
