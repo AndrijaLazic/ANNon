@@ -10,14 +10,18 @@ import matplotlib
 data = pd.read_csv("titanic/train.csv")
 #data.head()
 
-data = data[['Survived', 'Pclass', 'Sex', 'Age', 'Fare']]
-
-data.dropna() #todo: metode za upravljanje sa nedostajucim vrednostima
-target = data.pop('Survived')
-
 categorical_feature_names = ['Pclass','Sex']
 numeric_feature_names = ['Fare', 'Age']
 predicted_feature_name = ['Survived']
+
+def preprocess_dataframe(data, categorical_feature_names, numeric_feature_names, predicted_feature_name):
+    all_features_names = categorical_feature_names + numeric_feature_names + predicted_feature_name
+    data = data[all_features_names]
+    data = data.dropna()
+    target = data.pop(predicted_feature_name[0])
+    return (data, target)
+
+(data, target) = preprocess_dataframe(data, categorical_feature_names, numeric_feature_names, predicted_feature_name)
 
 #plot.show()
 
@@ -48,7 +52,7 @@ def create_normalizer(numeric_feature_names, data):
     numeric_features = data[numeric_feature_names]
     
     normalizer = tf.keras.layers.Normalization(axis=-1)
-    normalizer.adapt(stack_dict(dict(numeric_features)))  
+    normalizer.adapt(stack_dict(dict(numeric_features)))
     return normalizer
 
 def normalize_numeric_input(numeric_feature_names, inputs, normalizer):
@@ -114,4 +118,4 @@ model.compile(optimizer='adam',
                 loss=tf.keras.losses.BinaryCrossentropy(from_logits=True),
                 metrics=['accuracy'])
 
-history = model.fit(dict(data), target, epochs=10, batch_size=8)
+history = model.fit(dict(data), target, epochs=20, batch_size=8)
