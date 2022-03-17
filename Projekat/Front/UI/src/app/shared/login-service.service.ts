@@ -1,18 +1,37 @@
 import { Injectable } from '@angular/core';
 import { LoginModel } from './login-model.model';
-import{HttpClient} from '@angular/common/http'
+import{HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http'
+import { Observable } from 'rxjs';
+import { CookieService } from 'ngx-cookie-service';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
+const jwtHelper=new JwtHelperService();
 @Injectable({
   providedIn: 'root'
 })
 export class LoginServiceService {
 
-  constructor(private http:HttpClient) { }
+  constructor(private http:HttpClient,private cookie:CookieService) { }
   formData:LoginModel=new LoginModel();
   readonly conStr='https://localhost:7286/api/KontrolerAutorizacije/login';
-  postFunkcija()
+  postFunkcija():Observable<any>
   {
-    console.log(this.formData);
-    return this.http.post(this.conStr,this.formData);
+    return this.http.post<any>(this.conStr,this.formData);
+  }
+  isLoggeidin():boolean
+  {
+    if(this.cookie.get('token'))
+    {
+      var token=this.cookie.get('token');
+      if(jwtHelper.isTokenExpired(token))
+      {
+        return false;
+      }
+      else
+      {
+        return true;
+      }
+    }
+    return false;
   }
 }
