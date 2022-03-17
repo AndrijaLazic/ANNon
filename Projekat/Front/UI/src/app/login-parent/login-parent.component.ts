@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-login-parent',
@@ -7,9 +9,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LoginParentComponent implements OnInit {
 
-  constructor() { }
+  constructor(private cookie:CookieService,private route:Router) { }
 
   ngOnInit(): void {
+  }
+
+  Delete(){
+    this.cookie.delete('token');
+    this.route.navigate(['pocetna'])
   }
 
 }
