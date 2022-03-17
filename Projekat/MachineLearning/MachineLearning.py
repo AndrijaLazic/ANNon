@@ -20,7 +20,8 @@ def mainPage():
 
 @app.post('/send')
 async def update_item(
-        payload: list = Body(...)
+        payload: dict = Body(...)
 ):
+   return payload
+
     
-    return "Poslato"

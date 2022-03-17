@@ -4,6 +4,10 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Text;
 using Projekat.Modeli;
+using System.Net.Http.Headers;
+using Microsoft.CodeAnalysis.RulesetToEditorconfig;
+using ChoETL;
+
 namespace Projekat.Clients
 {
     [Route("api/[controller]")]
@@ -23,15 +27,26 @@ namespace Projekat.Clients
             Console.WriteLine(k.ToString());
             return Ok(k);
         }
-        
-        [HttpPost("send")]
-        public async Task<ActionResult<DataModelView>> getData(DataModelView model)
+        [HttpPost("uploadFile"),DisableRequestSizeLimit]
+        public async Task<IActionResult> UploadFile(IFormFile file)
         {
-            
-            
+            if (file.Length > 0)
+            {   
+                DataModel dataModel = new DataModel();
+                dataModel.FileName = file.Name;
+                dataModel.file = file;
 
-            string msg = await _iCustomClient.sendData(model);
-            return Ok("Uspesno poslato na back " + model.Payload);
+                var jsonObject = JsonConvert.SerializeObject(dataModel);
+
+                var answer = await _iCustomClient.sendData(jsonObject);
+                
+                return Ok("Uspesno uploadovan file!" + answer);
+            }
+            else
+                return BadRequest("Fajl ne postoji");
+
         }
+       
+      
     }
 }
