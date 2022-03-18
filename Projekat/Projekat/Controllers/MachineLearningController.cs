@@ -10,6 +10,19 @@ using ChoETL;
 
 namespace Projekat.Clients
 {
+
+    public static class FormFileExtensions
+    {
+        public static async Task<byte[]> GetBytes(this IFormFile formFile)
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                await formFile.CopyToAsync(memoryStream);
+                return memoryStream.ToArray();
+            }
+        }
+    }
+
     [Route("api/[controller]")]
     [ApiController]
     public class MachineLearningController : ControllerBase
@@ -33,8 +46,10 @@ namespace Projekat.Clients
             if (file.Length > 0)
             {   
                 DataModel dataModel = new DataModel();
-                dataModel.FileName = file.Name;
-                dataModel.file = file;
+                dataModel.FileName = file.FileName;
+                var bytes = await file.GetBytes();
+                var hexString = Convert.ToBase64String(bytes);
+                dataModel.file = hexString;
 
                 var jsonObject = JsonConvert.SerializeObject(dataModel);
 
