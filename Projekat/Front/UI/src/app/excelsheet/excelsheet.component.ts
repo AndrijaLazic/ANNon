@@ -7,7 +7,8 @@ import { ToastrService } from 'ngx-toastr';
 
 export class DataModel
 {
-    payload:string="";
+    fajl:object;
+    fileName:string="";
 }
 
 NgModule({
@@ -31,6 +32,7 @@ export class ExcelsheetComponent implements OnInit {
 
   vrednost: any;
   data: any[][];
+  fajl: any;
   constructor(private http:HttpClient,private toastr:ToastrService) {
    }
 
@@ -42,7 +44,9 @@ export class ExcelsheetComponent implements OnInit {
   onFileChange(evt: any){
     const target :DataTransfer = <DataTransfer>(evt.target);
     if (target.files.length!==1) throw new Error('Ne moze se koristiti vise fajlova');
-
+    console.log(target.files[0].name);
+    console.log(typeof(target.files[0]));
+    this.fajl=target.files[0];
     const reader: FileReader = new FileReader();
 
     reader.onload=(e: any) =>{
@@ -95,8 +99,9 @@ export class ExcelsheetComponent implements OnInit {
     console.log(this.data);
   }
   model:DataModel  = new DataModel();
-  convertJson()
+  posaljiFajl()
   {
+    /*
     const keys = this.data[0];
     const values=this.data.slice(1);
     const objects=values.map(array =>{
@@ -110,6 +115,19 @@ export class ExcelsheetComponent implements OnInit {
     console.log(JSON.stringify(objects));
     this.model.payload = JSON.stringify(objects);
     this.http.post<string>(this.baseURL+"api/MachineLearning/send",{"payload":this.model.payload})
+      .subscribe(
+        res=>{
+           
+        },
+        err=>{}
+       
+      );
+      */
+      /*const formData = new FormData();
+      formData.append(this.fajl, this.fajl.name);*/
+      this.model.fajl=this.fajl;
+      this.model.fileName=this.fajl.name;
+      this.http.post<string>(this.baseURL+"api/MachineLearning/send",this.model)
       .subscribe(
         res=>{
            
