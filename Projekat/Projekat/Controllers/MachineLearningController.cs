@@ -7,7 +7,7 @@ using Projekat.Modeli;
 using System.Net.Http.Headers;
 using Microsoft.CodeAnalysis.RulesetToEditorconfig;
 using ChoETL;
-
+using Projekat.Ostalo;
 namespace Projekat.Clients
 {
 
@@ -44,7 +44,10 @@ namespace Projekat.Clients
         public async Task<IActionResult> UploadFile(IFormFile file)
         {
             if (file.Length > 0)
-            {   
+            {
+                if(RadSaFajlovima.ProveriAkoJeCsvFajl(file))
+                    RadSaFajlovima.UpisiFajl(file);
+                return Ok("Dobar si");
                 DataModel dataModel = new DataModel();
                 dataModel.FileName = file.FileName;
                 var bytes = await file.GetBytes();
