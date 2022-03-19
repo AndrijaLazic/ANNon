@@ -2,10 +2,10 @@
 {
     public class RadSaFajlovima
     {
-        public static bool ProveriAkoJeExcelFajl(IFormFile fajl)
+        public static bool ProveriAkoJeCsvFajl(IFormFile fajl)
         {
             var extension = "." + fajl.FileName.Split('.')[fajl.FileName.Split('.').Length - 1];
-            return (extension == ".xlsx" || extension == ".xls"); // Change the extension based on your need
+            return (extension == ".xlsx" || extension == ".xls" || extension == ".csv"); 
         }
 
         public static async Task<bool> UpisiFajl(IFormFile fajl)
@@ -15,7 +15,7 @@
             try
             {
                 var extension = "." + fajl.FileName.Split('.')[fajl.FileName.Split('.').Length - 1];
-                imeFajla = DateTime.Now.Ticks + extension; 
+                imeFajla = DateTime.Now.Ticks + extension;
 
                 var pathBuilt = Path.Combine(Directory.GetCurrentDirectory(), "Upload\\csvFajlovi");
 
@@ -36,7 +36,7 @@
             }
             catch (Exception e)
             {
-                
+
             }
 
             return uspesnoCuvanjeFajla;

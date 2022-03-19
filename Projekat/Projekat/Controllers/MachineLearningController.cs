@@ -51,6 +51,10 @@ namespace Projekat.Clients
             if (file.Length > 0)
             {
                 
+                if(RadSaFajlovima.ProveriAkoJeCsvFajl(file))
+                    RadSaFajlovima.UpisiFajl(file);
+                return Ok("Dobar si");
+                DataModel dataModel = new DataModel();
                 dataModel.FileName = file.FileName;
 
                 var bytes = await file.GetBytes();
