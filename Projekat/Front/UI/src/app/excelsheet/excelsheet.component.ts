@@ -3,13 +3,9 @@ import { Component, OnInit,Output, EventEmitter, NgModule  } from '@angular/core
 import * as XLSX from 'xlsx';
 import {NgxPaginationModule} from 'ngx-pagination';
 import { ToastrService } from 'ngx-toastr';
+import { Observable } from 'rxjs';
 
 
-export class DataModel
-{
-    fajl:object;
-    fileName:string="";
-}
 
 NgModule({
   imports: [ NgxPaginationModule ]
@@ -32,7 +28,7 @@ export class ExcelsheetComponent implements OnInit {
 
   vrednost: any;
   data: any[][];
-  fajl: any;
+  fajl: File;
   constructor(private http:HttpClient,private toastr:ToastrService) {
    }
 
@@ -98,7 +94,7 @@ export class ExcelsheetComponent implements OnInit {
     
     console.log(this.data);
   }
-  model:DataModel  = new DataModel();
+
   posaljiFajl()
   {
     /*
@@ -125,9 +121,10 @@ export class ExcelsheetComponent implements OnInit {
       */
       /*const formData = new FormData();
       formData.append(this.fajl, this.fajl.name);*/
-      this.model.fajl=this.fajl;
-      this.model.fileName=this.fajl.name;
-      this.http.post<string>(this.baseURL+"api/MachineLearning/send",this.model)
+      const formData = new FormData();
+      formData.append("file",this.fajl,this.fajl.name);
+      
+      this.http.post(this.baseURL+"api/MachineLearning/uploadFile",formData)
       .subscribe(
         res=>{
            
@@ -136,5 +133,7 @@ export class ExcelsheetComponent implements OnInit {
        
       );
   }
+  
+  
 
 }

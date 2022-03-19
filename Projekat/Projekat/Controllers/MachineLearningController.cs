@@ -44,45 +44,46 @@ namespace Projekat.Clients
 
 
 
-        private DataModel dataModel = new DataModel();
-        [HttpPost("uploadFile"),DisableRequestSizeLimit]
-        public async Task<IActionResult> UploadFile(IFormFile file)
-        {
-            if (file.Length > 0)
-            {
-                
-                if(RadSaFajlovima.ProveriAkoJeCsvFajl(file))
-                    RadSaFajlovima.UpisiFajl(file);
-                return Ok("Dobar si");
-                DataModel dataModel = new DataModel();
-                dataModel.FileName = file.FileName;
-
-                var bytes = await file.GetBytes();
-                var hexString = Convert.ToBase64String(bytes);
-                dataModel.file = hexString;
-                bool success = await RadSaFajlovima.UpisiFajl(file);
-
-                return Ok(dataModel.file);
-            }
-            else
-                return BadRequest("Fajl ne postoji");
-
-        }
         
-        [HttpGet("getStatistic")]
-        public async Task<ActionResult<String>> getStatistic()
+        [HttpPost("uploadFile"), DisableRequestSizeLimit]
+        public async Task<IActionResult> UploadFile()
         {
-            var jsonObject = JsonConvert.SerializeObject(dataModel);
-            var answer = await _iCustomClient.sendData(jsonObject);
-            if (answer != "")
+            try
             {
+                //error ukoliko se vise filova ucitava
+                var file = Request.Form.Files[0];
 
-                return Ok(answer);
+
+                if (file.Length > 0)
+                {
+
+                    if (RadSaFajlovima.ProveriAkoJeCsvFajl(file))
+                        RadSaFajlovima.UpisiFajl(file);
+
+                    DataModel dataModel = new DataModel();
+
+                    dataModel.FileName = file.FileName;
+                    var bytes = await file.GetBytes();
+                    var hexString = Convert.ToBase64String(bytes);
+                    dataModel.file = hexString;
+
+                    var jsonObject = JsonConvert.SerializeObject(dataModel);
+                    dataModel.Statistic = await _iCustomClient.sendData(jsonObject);
+                    return Ok(dataModel);
+                }
+                else
+                    return BadRequest("Fajl ne postoji");
             }
-
-            return BadRequest();
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            
+           
         }
-
+        //mora drugi nacin za dobijanje statistike ne moze globalna promenljiva
+        
+        
         [HttpPost("parametars")]
         public async Task<IActionResult> getParametars(ParametarsModel param_model)
         {
