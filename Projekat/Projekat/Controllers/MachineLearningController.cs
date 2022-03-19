@@ -7,6 +7,7 @@ using Projekat.Modeli;
 using System.Net.Http.Headers;
 using Microsoft.CodeAnalysis.RulesetToEditorconfig;
 using ChoETL;
+using Projekat.Ostalo;
 
 namespace Projekat.Clients
 {
@@ -40,28 +41,58 @@ namespace Projekat.Clients
             Console.WriteLine(k.ToString());
             return Ok(k);
         }
+
+
+
+        private DataModel dataModel = new DataModel();
         [HttpPost("uploadFile"),DisableRequestSizeLimit]
         public async Task<IActionResult> UploadFile(IFormFile file)
         {
             if (file.Length > 0)
-            {   
-                DataModel dataModel = new DataModel();
+            {
+                
                 dataModel.FileName = file.FileName;
+
                 var bytes = await file.GetBytes();
                 var hexString = Convert.ToBase64String(bytes);
                 dataModel.file = hexString;
+                bool success = await RadSaFajlovima.UpisiFajl(file);
 
-                var jsonObject = JsonConvert.SerializeObject(dataModel);
-
-                var answer = await _iCustomClient.sendData(jsonObject);
-                
-                return Ok("Uspesno uploadovan file!" + answer);
+                return Ok(dataModel.file);
             }
             else
                 return BadRequest("Fajl ne postoji");
 
         }
-       
-      
+        
+        [HttpGet("getStatistic")]
+        public async Task<ActionResult<String>> getStatistic()
+        {
+            var jsonObject = JsonConvert.SerializeObject(dataModel);
+            var answer = await _iCustomClient.sendData(jsonObject);
+            if (answer != "")
+            {
+
+                return Ok(answer);
+            }
+
+            return BadRequest();
+        }
+
+        [HttpPost("parametars")]
+        public async Task<IActionResult> getParametars(ParametarsModel param_model)
+        {
+            var json = JsonConvert.SerializeObject(param_model);  
+            var answer = await _iCustomClient.sendParametars(json);
+            if (this.Response.StatusCode != 200)
+                return BadRequest("Greska pri prosledjivanju parametara!");
+
+            return Ok("Uspesno prosledjeni parametri");    
+
+
+
+
+        }
+
     }
 }

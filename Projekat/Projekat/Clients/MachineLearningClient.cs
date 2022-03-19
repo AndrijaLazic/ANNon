@@ -43,5 +43,15 @@ namespace Projekat.Clients
             var result = await response.Content.ReadAsStringAsync();
             return result;
         }
+
+        public async Task<string> sendParametars(string json_model)
+        {
+            var content = new StringContent(json_model, Encoding.UTF8, "application/json");
+            HttpResponseMessage httpResponse = await _client.PostAsync(_client.BaseAddress + "param", content);
+            var result = await httpResponse.Content.ReadAsStringAsync();
+
+            return result;
+        }
+        
     }
 }
