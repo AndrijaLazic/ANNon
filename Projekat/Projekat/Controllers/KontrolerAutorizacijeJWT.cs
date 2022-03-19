@@ -51,7 +51,15 @@ namespace Projekat.Controllers
                     
 
                     EmailKontroler.PosaljiEmail("Kliknite na link za potvrdu registracije:https://localhost:7286/api/EmailKontroler/"+ EmailToken, "Potvrda registracije", zahtev.Email, configuration);
-                    return Ok("Uspesna registracija");
+                    
+                    return Ok(new
+                    {
+                        success = true,
+                        data = new
+                        {
+                            message= "Uspesna registracija"
+                        }
+                    });
                 }
                 catch (Exception ex)
                 {
