@@ -50,7 +50,7 @@ namespace Projekat.Controllers
                     await _context.SaveChangesAsync();
                     
 
-                    EmailKontroler.PosaljiEmail("Kliknite na link za potvrdu registracije:https://localhost:7286/api/EmailKontroler/"+ EmailToken, "Potvrda registracije", zahtev.Email, configuration);
+                    EmailKontroler.PosaljiEmail("Kliknite na link za potvrdu registracije:http://localhost:4200/verifikacija?token=" + EmailToken, "Potvrda registracije", zahtev.Email, configuration);
                     
                     return Ok(new
                     {

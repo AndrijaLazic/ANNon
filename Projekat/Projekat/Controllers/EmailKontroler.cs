@@ -26,8 +26,8 @@ namespace Projekat.Controllers
         [HttpGet("{EmailToken}")]
         public async Task<IActionResult> PotvrdiEmail(string EmailToken)
         {
-            
 
+            
 
             if (KontrolerAutorizacije.ValidateToken(EmailToken, this.configuration) != null)
             {
@@ -40,7 +40,15 @@ namespace Projekat.Controllers
                     Korisnik korisnik=_context.Korisnici.Where(x => x.Username.Equals(username)).FirstOrDefault();
                     korisnik.EmailPotvrdjen = true;
                     await _context.SaveChangesAsync();
-                    return Ok("Uspesno verifikovana Email adresa za korisnika " + korisnik.Username);
+                    //return Ok("Uspesno verifikovana Email adresa za korisnika " + korisnik.Username);
+                    return Ok(new
+                    {
+                        success = true,
+                        data = new
+                        {
+                            message = "Uspesno verifikovana Email adresa za korisnika " + korisnik.Username
+                        }
+                    });
                 }
                 catch (Exception ex)
                 {

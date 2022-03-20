@@ -3,7 +3,10 @@ import { RouterModule, Routes } from '@angular/router';
 import { LoginParentComponent } from './login-parent/login-parent.component';
 import { LoginComponent } from './login-parent/login/login.component';
 import { PocetnastranaComponent } from './pocetnastrana/pocetnastrana.component';
+import { VerifikacijaComponent } from './proba/verifikacija/verifikacija.component';
+import { RegisterParentComponent } from './register-parent/register-parent.component';
 import { RegisterComponent } from './register-parent/register/register.component';
+import { AuthRegisterGuard } from './shared/auth-register.guard';
 import { AuthGuard } from './shared/auth.guard';
 import { NotAuthGuard } from './shared/not-auth.guard';
 
@@ -22,6 +25,12 @@ const routes: Routes = [
   },
   {
     path:'success-login',component:LoginParentComponent,canActivate:[AuthGuard]
+  },
+  {
+    path:'success-register',component:RegisterParentComponent,canActivate:[AuthRegisterGuard]
+  },
+  {
+    path:'verifikacija',component:VerifikacijaComponent,canActivate:[AuthRegisterGuard]
   }
 ];
 

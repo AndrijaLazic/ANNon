@@ -17,6 +17,7 @@ import { PaginationComponent } from './excelsheet/pagination/pagination.componen
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
+import { VerifikacijaComponent } from './proba/verifikacija/verifikacija.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { ToastrModule } from 'ngx-toastr';
     RegisterParentComponent,
     RegisterComponent,
     PocetnastranaComponent,
-    PaginationComponent
+    PaginationComponent,
+    VerifikacijaComponent
 
   ],
   imports: [
