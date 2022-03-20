@@ -29,6 +29,8 @@ export class ExcelsheetComponent implements OnInit {
   vrednost: any;
   data: any[][];
   fajl: File;
+  checkedList:any[];
+  statistika: String="";
   constructor(private http:HttpClient,private toastr:ToastrService) {
    }
 
@@ -127,12 +129,18 @@ export class ExcelsheetComponent implements OnInit {
       this.http.post(this.baseURL+"api/MachineLearning/uploadFile",formData)
       .subscribe(
         res=>{
-           
+           this.uzmiStatistiku();
         },
         err=>{}
        
       );
   }
+  uzmiStatistiku(){
+    this.http.get(this.baseURL+"")
+    .toPromise()
+    .then(res=>this.statistika= res as String);
+  }
+
   
   
 
