@@ -120,7 +120,6 @@ model.compile(optimizer='adam',
                 metrics=['accuracy'])
 
 history = model.fit(dict(data), target, epochs=20, batch_size=8)
-
 #cuva model u bazu i ucitava ga opet
 id= baza.saveModel(model)
 model=baza.loadModelById(id)
