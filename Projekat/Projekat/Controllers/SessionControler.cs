@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Session;
 using System.Text;
 using Projekat.Ostalo;
+using System.Data;
+
 namespace Projekat.Controllers
 {
     [Route("api/[controller]")]
@@ -15,7 +17,10 @@ namespace Projekat.Controllers
         {
             try
             {
-                string pom = (RadSaFajlovima.UcitajFajl("637833769309922112",0,0)).Rows[100][0].ToString();
+                string pom = (RadSaFajlovima.UcitajFajl("637833769309922112",20,1)).Rows.Count.ToString();
+                foreach(DataRow red in (RadSaFajlovima.UcitajFajl("637833769309922112", 20, 1)).Rows){
+                    Console.WriteLine(red[0]);
+                }
                 if (!string.IsNullOrEmpty(pom))
                 {
                     return Ok(pom);

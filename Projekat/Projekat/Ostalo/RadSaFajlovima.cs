@@ -94,7 +94,7 @@ namespace Projekat.Ostalo
 
                 while (csv.Read())
                 {
-                    if (trenutniRed<=poslednjiRed && trenutniRed>=pocetniRed)
+                    if (trenutniRed<poslednjiRed && trenutniRed>=pocetniRed)
                     {
                         records.Add(csv.GetRecord<dynamic>());
                     }

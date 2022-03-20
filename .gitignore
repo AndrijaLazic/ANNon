@@ -1,5 +1,5 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
-
+Projekat/Projekat/Upload/*
 # Compiled output
 /dist
 /tmp
