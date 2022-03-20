@@ -11,8 +11,7 @@
                 <tr >
                   <th *ngFor="let item of data[0]">{{item}}</th>
                 </tr>
-                <tr *ngFor="let row of data | paginate: 
-                { itemsPerPage: 40, currentPage: p } ;index as i">
+                <tr *ngFor="let row of data |slice:1:50;index as i">
                     <td *ngFor="let cell of row;index as j ">
                         <input id="{{i}},{{j}}" type="text" value="{{cell}}">
                         
@@ -23,7 +22,8 @@
             </tbody>
             
         </table>
-        <pagination-controls (pageChange)="p = $event" class="float-right"></pagination-controls>
+        <!-- | paginate: { itemsPerPage: 40, currentPage: p } -->
+        <!--<pagination-controls (pageChange)="p = $event" class="float-right"></pagination-controls>-->
         
       </ng-template>
     </ngb-panel>
