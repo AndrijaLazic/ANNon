@@ -1,9 +1,11 @@
 import base64
-from fastapi import FastAPI
+from typing_extensions import Self
+from fastapi import FastAPI, Request
 from fastapi import Body
 import statistics
 import pandas as pd
 from pydantic import BaseModel
+from io import StringIO
 
 import statistics as stats
 #vazno!!!!!!
@@ -11,9 +13,16 @@ import statistics as stats
 #uvicorn MachineLearning:app --reload
 
 class UploadedFile(BaseModel):
-    filename:str
-    file:dict
+    FileName:str
+    file:str
 
+class FileWithStatistic:
+    FileName:str
+    Statistic:dict
+
+    def __init__(self,fileModel,statistic) -> None:
+        self.FileName=fileModel.FileName
+        self.Statistic=statistic
  
 app=FastAPI()
 
@@ -24,15 +33,21 @@ def mainPage():
 
 @app.post('/send')
 async def update_item(
-        payload: dict=Body(...)
+        model:UploadedFile
 ):
-    csvString=payload["file"]
+    csvString=model.file
     base64_bytes = csvString.encode('utf-8')
-    with open(payload["FileName"], 'wb') as file_to_save:
+    with open(model.FileName, 'wb') as file_to_save:
         decoded_file_data = base64.decodebytes(base64_bytes)
         file_to_save.write(decoded_file_data)
-    df=pd.read_csv(payload["FileName"])
-    jsonString=stats.getStats(df)
-    #return json.loads(str(payload).replace("\'","\""))
-    return jsonString
+    df=pd.read_csv(model.FileName)
+    Statistic=stats.getStats(df)
+    return Statistic
+
+@app.post('/param')
+async def update_item(
+        request:Request
+):   
+    result= await request.json()
+    return dict(result)
     
