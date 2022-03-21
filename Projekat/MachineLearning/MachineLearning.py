@@ -1,5 +1,4 @@
 import base64
-from typing_extensions import Self
 from fastapi import FastAPI, Request
 from fastapi import Body
 import statistics

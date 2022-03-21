@@ -5,6 +5,12 @@ import {NgxPaginationModule} from 'ngx-pagination';
 import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
 
+export class DataModel
+{
+  fileName:string="";
+  file:string="";
+  statistic:string="";
+}
 
 
 NgModule({
@@ -30,8 +36,10 @@ export class ExcelsheetComponent implements OnInit {
   data: any[][];
   fajl: File;
   checkedList:any[];
-  statistika: String="";
+  sent:boolean = false;
+  model:DataModel;
   constructor(private http:HttpClient,private toastr:ToastrService) {
+    this.model = new DataModel();
    }
 
   readonly baseURL='https://localhost:7286/';
@@ -129,17 +137,14 @@ export class ExcelsheetComponent implements OnInit {
       this.http.post(this.baseURL+"api/MachineLearning/uploadFile",formData)
       .subscribe(
         res=>{
-           this.uzmiStatistiku();
+           this.sent = true;
+           this.model = res as DataModel;
         },
         err=>{}
        
       );
   }
-  uzmiStatistiku(){
-    this.http.get(this.baseURL+"")
-    .toPromise()
-    .then(res=>this.statistika= res as String);
-  }
+  uzmiStatistiku(){     if(this.sent)       console.log(JSON.parse(this.model.statistic));        }
 
   
   

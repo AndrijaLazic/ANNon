@@ -68,7 +68,9 @@ namespace Projekat.Clients
                     dataModel.file = hexString;
 
                     var jsonObject = JsonConvert.SerializeObject(dataModel);
-                    dataModel.Statistic = await _iCustomClient.sendData(jsonObject);
+                    
+                    var answer = await _iCustomClient.sendData(jsonObject);
+                    dataModel.Statistic = JsonConvert.DeserializeObject<String>(answer);
                     return Ok(dataModel);
                 }
                 else
