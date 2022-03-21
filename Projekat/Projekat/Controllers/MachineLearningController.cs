@@ -46,32 +46,49 @@ namespace Projekat.Clients
 
         
         [HttpPost("uploadFile"), DisableRequestSizeLimit]
-        public async Task<IActionResult> UploadFile()
+        public async Task<IActionResult> UploadFile([FromForm]IFormFile uploadedFile)
         {
             try
             {
-                //error ukoliko se vise filova ucitava
-                var file = Request.Form.Files[0];
-
-
-                if (file.Length > 0)
+                
+                if (uploadedFile.Length > 0)
                 {
+                    /*
+                    var bytes = await uploadedFile.GetBytes();
+                    var hexString = Convert.ToBase64String(bytes);
+                    FileDTO sendFile = new FileDTO
+                    {
+                        FileName = uploadedFile.FileName,
+                        file = uploadedFile
+                    };
+                    //var jsonToSend = JsonConvert.SerializeObject(sendFile);
 
+
+
+
+
+                    var file = sendFile.file;
                     if (RadSaFajlovima.ProveriAkoJeCsvFajl(file))
-                        RadSaFajlovima.UpisiFajl(file);
-
-                    DataModel dataModel = new DataModel();
+                       await RadSaFajlovima.UpisiFajl(file);
+                    /*
+                   
 
                     dataModel.FileName = file.FileName;
-                    var bytes = await file.GetBytes();
-                    var hexString = Convert.ToBase64String(bytes);
+                   
                     dataModel.file = hexString;
-
-                    var jsonObject = JsonConvert.SerializeObject(dataModel);
-                    
+                    */
+                    var bytes = await uploadedFile.GetBytes();
+                    var hexString = Convert.ToBase64String(bytes);
+                    DataModel dataModel = new DataModel();
+                    dataModel.FileName = uploadedFile.FileName;
+                    dataModel.file = hexString;
+                    var jsonObject = JsonConvert.SerializeObject(dataModel); 
+                    if (RadSaFajlovima.ProveriAkoJeCsvFajl(uploadedFile))
+                        await RadSaFajlovima.UpisiFajl(uploadedFile);
                     var answer = await _iCustomClient.sendData(jsonObject);
-                    dataModel.Statistic = JsonConvert.DeserializeObject<String>(answer);
-                    return Ok(dataModel);
+                    
+                    string statistic = JsonConvert.DeserializeObject<String>(answer);
+                    return Ok(statistic);
                 }
                 else
                     return BadRequest("Fajl ne postoji");
@@ -83,7 +100,7 @@ namespace Projekat.Clients
             
            
         }
-        //mora drugi nacin za dobijanje statistike ne moze globalna promenljiva
+        
         
         
         [HttpPost("parametars")]

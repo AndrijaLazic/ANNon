@@ -1,4 +1,4 @@
-import { HttpClient, HttpEventType, HttpRequest, JsonpClientBackend } from '@angular/common/http';
+import { HttpClient, HttpEventType, HttpHeaders, HttpRequest, JsonpClientBackend } from '@angular/common/http';
 import { Component, OnInit,Output, EventEmitter, NgModule  } from '@angular/core';
 import * as XLSX from 'xlsx';
 import {NgxPaginationModule} from 'ngx-pagination';
@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 export class DataModel
 {
   fileName:string="";
-  file:string="";
+  file:File;
   statistic:string="";
 }
 
@@ -73,8 +73,6 @@ export class ExcelsheetComponent implements OnInit {
     reader.readAsBinaryString(target.files[0]);
 
     
-
-    
   
 
     }
@@ -104,7 +102,6 @@ export class ExcelsheetComponent implements OnInit {
     
     console.log(this.data);
   }
-
   posaljiFajl()
   {
     /*
@@ -132,7 +129,7 @@ export class ExcelsheetComponent implements OnInit {
       /*const formData = new FormData();
       formData.append(this.fajl, this.fajl.name);*/
       const formData = new FormData();
-      formData.append("file",this.fajl,this.fajl.name);
+      formData.append("uploadedFile",this.fajl);
       
       this.http.post(this.baseURL+"api/MachineLearning/uploadFile",formData)
       .subscribe(
