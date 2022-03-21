@@ -44,9 +44,29 @@ async def update_item(
     return Statistic
 
 @app.post('/param')
-async def update_item(
+async def post_params(
         request:Request
 ):   
+    HOST = "127.0.0.1"
+    PORT = 65432  
+    #server = mreza, nova nit
+
     result= await request.json()
+    #poziv funkcije treniranja u novoj niti
+    #napraviti dataframe i proslediti ga neuronskoj mrezi i ostale parametre
+    nit=threading.Thread(target=stats.getStats,args=(pd.DataFrame(data=[[1,2,3],[2,3,4]], columns=["kol","kol2","kol34"]),))
+    nit.start()
+
+    # #klijent = kontroler
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.connect((HOST, PORT))
+        s.sendall(b"Hello, world")
+
+        while True:              
+            #prima podatke i salje ih sse
+            data=s.recv(1024)
+            if not data:
+                break
+            print(f"Received {data!r}")
     return dict(result)
     
