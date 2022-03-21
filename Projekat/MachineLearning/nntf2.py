@@ -8,13 +8,6 @@ import matplotlib.pyplot as plot
 import matplotlib
 import baza
 
-data = pd.read_csv("titanic/train.csv")
-#data.head()
-
-categorical_feature_names = ['Pclass','Sex']
-numeric_feature_names = ['Fare', 'Age']
-predicted_feature_name = ['Survived']
-
 def preprocess_dataframe(data, categorical_feature_names, numeric_feature_names, predicted_feature_name):
     all_features_names = categorical_feature_names + numeric_feature_names + predicted_feature_name
     data = data[all_features_names]
@@ -22,11 +15,6 @@ def preprocess_dataframe(data, categorical_feature_names, numeric_feature_names,
     target = data.pop(predicted_feature_name[0])
     return (data, target)
 
-(data, target) = preprocess_dataframe(data, categorical_feature_names, numeric_feature_names, predicted_feature_name)
-
-#plot.show()
-
-#preprocessing numerical features
 
 def create_dict_of_tensors(data, categorical_feature_names):
      inputs = {}
@@ -41,7 +29,6 @@ def create_dict_of_tensors(data, categorical_feature_names):
           inputs[name] = tf.keras.Input(shape=(), name=name, dtype=dtype)
      return inputs
 
-inputs = create_dict_of_tensors(data, categorical_feature_names)
 
 def stack_dict(inputs, fun=tf.stack):
     values = []
@@ -65,61 +52,64 @@ def normalize_numeric_input(numeric_feature_names, inputs, normalizer):
     numeric_normalized = normalizer(numeric_inputs) 
     return numeric_normalized
 
-normalizer = create_normalizer(numeric_feature_names, data)
-numeric_normalized = normalize_numeric_input(numeric_feature_names, inputs, normalizer)
-print(numeric_normalized)
 
-preprocessed = []
-preprocessed.append(numeric_normalized)
-
-#preprocessing categorical features
-
-def one_hot_encode_categorical_features(categorical_feature_names, data, inputs):
-    one_hot = []
+def encode_categorical_features(categorical_feature_names, data, inputs, encoding):
+    encoding_col = []
     for name in categorical_feature_names:
       value = sorted(set(data[name]))
 
       if type(value[0]) is str:
-        lookup = tf.keras.layers.StringLookup(vocabulary=value, output_mode='one_hot')
+        lookup = tf.keras.layers.StringLookup(vocabulary=value, output_mode=encoding)
       else:
-        lookup = tf.keras.layers.IntegerLookup(vocabulary=value, output_mode='one_hot')
+        lookup = tf.keras.layers.IntegerLookup(vocabulary=value, output_mode=encoding)
 
       x = inputs[name][:, tf.newaxis]
       x = lookup(x)
-      one_hot.append(x)
-    return one_hot
+      encoding_col.append(x)
+    return encoding_col
 
 
-one_hot = one_hot_encode_categorical_features(categorical_feature_names, data, inputs)
-preprocessed = preprocessed + one_hot
-print(preprocessed)
+def get_model(data, numeric_feature_names, categorical_feature_names, label, encoding, number_of_layers, number_of_nodes, activation_func):
+  (data, target) = preprocess_dataframe(data, categorical_feature_names, numeric_feature_names, label)
+  inputs = create_dict_of_tensors(data, categorical_feature_names)
+  #preprocessing categorical features
+  encoding_col = encode_categorical_features(categorical_feature_names, data, inputs, encoding)
+  preprocessed = []
+  preprocessed = preprocessed + encoding_col
 
-preprocesssed_result = tf.concat(preprocessed, axis=-1)
-print(preprocesssed_result)
+  preprocesssed_result = tf.concat(preprocessed, axis=-1)
+  
+  preprocessor = tf.keras.Model(inputs, preprocesssed_result)
+  #building the model
+  network = tf.keras.Sequential()
+  
+  for _ in range(number_of_layers):
+    network.add(tf.keras.layers.Dense(number_of_nodes, activation=activation_func))
+  network.add(tf.keras.layers.Dense(1))
+
+  x = preprocessor(inputs)
+  result = network(x)
+  model = tf.keras.Model(inputs, result)
+
+  model.compile(optimizer='adam',
+                  loss=tf.keras.losses.BinaryCrossentropy(from_logits=True),
+                  metrics=['accuracy'])
+  history = model.fit(dict(data), target, epochs=20, batch_size=8)
+  return model
 
 
-#building the model
+dataset_name = "titanic/train.csv" #ucitati sa fronta
 
-preprocessor = tf.keras.Model(inputs, preprocesssed_result)
-#preprocessor(dict(data.iloc[:1]))
+data = pd.read_csv(dataset_name)
+#data.head()
 
-#neural network
+categorical_feature_names = ['Pclass','Sex']
+numeric_feature_names = ['Fare', 'Age']
+predicted_feature_name = ['Survived']
 
-network = tf.keras.Sequential([
-  tf.keras.layers.Dense(10, activation='relu'),
-  tf.keras.layers.Dense(10, activation='relu'),
-  tf.keras.layers.Dense(1)
-])
+target = data["Survived"]
+model = get_model(data, numeric_feature_names, categorical_feature_names, predicted_feature_name, 'one_hot', 2, 10, "relu")
 
-x = preprocessor(inputs)
-result = network(x)
-model = tf.keras.Model(inputs, result)
-
-model.compile(optimizer='adam',
-                loss=tf.keras.losses.BinaryCrossentropy(from_logits=True),
-                metrics=['accuracy'])
-
-history = model.fit(dict(data), target, epochs=20, batch_size=8)
 #cuva model u bazu i ucitava ga opet
 id= baza.saveModel(model)
 model=baza.loadModelById(id)
