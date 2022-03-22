@@ -53,42 +53,25 @@ namespace Projekat.Clients
                 
                 if (uploadedFile.Length > 0)
                 {
-                    /*
-                    var bytes = await uploadedFile.GetBytes();
-                    var hexString = Convert.ToBase64String(bytes);
-                    FileDTO sendFile = new FileDTO
-                    {
-                        FileName = uploadedFile.FileName,
-                        file = uploadedFile
-                    };
-                    //var jsonToSend = JsonConvert.SerializeObject(sendFile);
-
-
-
-
-
-                    var file = sendFile.file;
-                    if (RadSaFajlovima.ProveriAkoJeCsvFajl(file))
-                       await RadSaFajlovima.UpisiFajl(file);
-                    /*
-                   
-
-                    dataModel.FileName = file.FileName;
-                   
-                    dataModel.file = hexString;
-                    */
-                    var bytes = await uploadedFile.GetBytes();
-                    var hexString = Convert.ToBase64String(bytes);
-                    DataModel dataModel = new DataModel();
-                    dataModel.FileName = uploadedFile.FileName;
-                    dataModel.file = hexString;
-                    var jsonObject = JsonConvert.SerializeObject(dataModel); 
                     if (RadSaFajlovima.ProveriAkoJeCsvFajl(uploadedFile))
-                        await RadSaFajlovima.UpisiFajl(uploadedFile);
-                    var answer = await _iCustomClient.sendData(jsonObject);
+                    {
+                        if (await RadSaFajlovima.UpisiFajl(uploadedFile))
+                        {
+                            var pathBuilt = Path.Combine(Directory.GetCurrentDirectory(), "Upload\\csvFajlovi\\" + uploadedFile.FileName);
+                            DataModel dataModel = new DataModel();
+                            dataModel.FileName = uploadedFile.FileName;
+                            dataModel.Putanja = pathBuilt;
+                            var jsonObject = JsonConvert.SerializeObject(dataModel);
+                            var answer = await _iCustomClient.sendData(jsonObject);
+
+                            string statistic = JsonConvert.DeserializeObject<String>(answer);
+
+                            return Ok(statistic);
+                        }
+                        return BadRequest("Greska pri upisivanju fajla");
+                    }
+                    return BadRequest("Fajl nije csv");
                     
-                    string statistic = JsonConvert.DeserializeObject<String>(answer);
-                    return Ok(statistic);
                 }
                 else
                     return BadRequest("Fajl ne postoji");

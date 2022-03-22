@@ -23,7 +23,7 @@ namespace Projekat.Ostalo
             try
             {
                 var extension = "." + fajl.FileName.Split('.')[fajl.FileName.Split('.').Length - 1];
-                imeFajla = DateTime.Now.Ticks + extension;
+                imeFajla = fajl.FileName;
 
                 var pathBuilt = Path.Combine(Directory.GetCurrentDirectory(), "Upload\\csvFajlovi");
 
@@ -32,8 +32,7 @@ namespace Projekat.Ostalo
                     Directory.CreateDirectory(pathBuilt);
                 }
 
-                var path = Path.Combine(Directory.GetCurrentDirectory(), "Upload\\csvFajlovi",
-                   imeFajla);
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "Upload\\csvFajlovi",imeFajla);
 
                 using (var stream = new FileStream(path, FileMode.Create))
                 {

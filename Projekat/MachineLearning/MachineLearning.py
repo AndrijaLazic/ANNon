@@ -1,4 +1,6 @@
 import base64
+import socket
+import threading
 from fastapi import FastAPI, Request
 from fastapi import Body
 import statistics
@@ -13,7 +15,7 @@ import statistics as stats
 
 class UploadedFile(BaseModel):
     FileName:str
-    file:str
+    Putanja:str
 
 class FileWithStatistic:
     FileName:str
@@ -34,13 +36,8 @@ def mainPage():
 async def update_item(
         model:UploadedFile
 ):
-    csvString=model.file
-    base64_bytes = csvString.encode('utf-8')
-    with open(model.FileName, 'wb') as file_to_save:
-        decoded_file_data = base64.decodebytes(base64_bytes)
-        file_to_save.write(decoded_file_data)
-    df=pd.read_csv(model.FileName)
-    Statistic=stats.getStats(df)
+    fajl = pd.read_csv (model.Putanja)
+    Statistic=stats.getStats(fajl)
     return Statistic
 
 @app.post('/param')
