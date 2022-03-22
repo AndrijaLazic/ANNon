@@ -1,6 +1,36 @@
 table{
+    position: absolute;
+    width: 1059px;
+    height: 600px;
+    left: 190px;
+    top: 330px;
     overflow-y:scroll;
-    height:400px;
-    width: 700px;
     display:block;
+
+
+    background: rgba(196, 196, 196, 0.7);
  }
+ #input{
+    position: absolute;
+    width: 250px;
+    height: 100px;
+    left: 556px;
+    top: 219px;
+    
+    background: #C4C4C4;
+    border: 3px solid #000000;
+    box-sizing: border-box;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+ }
+ #next{
+   position: absolute;
+   width: 140px;
+   height: 842px;
+   left: 1300px;
+   top: 109px;
+   font-size: 50px;
+   background: rgba(196, 196, 196, 0.25);
+ }
+ table, th, td {
+   border: 1px solid black;
+}

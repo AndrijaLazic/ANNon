@@ -1,11 +1,9 @@
-
-<ngb-accordion #acc="ngbAccordion" >
-    <ngb-panel title="Unesite CSV fajl:">
-      <ng-template ngbPanelContent>
+        <div  id="input">
         <p>Unesite fajl koji zelite:</p>
 
-        <input class="aa" type="file" accept=".csv" (change)="onFileChange($event)" multiple="false" />
-        <button (click)="posaljiFajl()">click!</button>
+        <input type="file" accept=".csv" (change)="onFileChange($event)" multiple="false" />
+      </div>
+        <button id="next" (click)="posaljiFajl()">></button>
         <table class="table table-striped">
             <tbody>
                 <tr >
@@ -24,16 +22,13 @@
             </tbody>
             
         </table>
-        <p>Izaberite kolone za testiranje: </p>
+        <!--<p>Izaberite kolone za testiranje: </p>
         <ul id="checkbox-items">
           <li *ngFor="let item of data[0];index as i">
             <input type="checkbox" id="{{i}}">{{item}}
           </li>
         </ul>
-        <button type="button" class="btn btn-primary">Submit</button>
+        <button type="button" class="btn btn-primary">Submit</button> -->
         <!-- | paginate: { itemsPerPage: 40, currentPage: p } -->
         <!--<pagination-controls (pageChange)="p = $event" class="float-right"></pagination-controls>-->
         
-      </ng-template>
-    </ngb-panel>
-  </ngb-accordion>
