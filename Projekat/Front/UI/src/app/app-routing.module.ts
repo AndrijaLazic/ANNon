@@ -9,6 +9,7 @@ import { RegisterComponent } from './register-parent/register/register.component
 import { AuthRegisterGuard } from './shared/auth-register.guard';
 import { AuthGuard } from './shared/auth.guard';
 import { NotAuthGuard } from './shared/not-auth.guard';
+import { StatisticComponent } from './statistic/statistic.component';
 
 const routes: Routes = [
   {
@@ -31,6 +32,9 @@ const routes: Routes = [
   },
   {
     path:'verifikacija',component:VerifikacijaComponent,canActivate:[AuthRegisterGuard]
+  },
+  {
+    path:'statistic',component:StatisticComponent
   }
 ];
 

@@ -4,6 +4,7 @@ import * as XLSX from 'xlsx';
 import {NgxPaginationModule} from 'ngx-pagination';
 import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 export class DataModel
 {
@@ -148,7 +149,7 @@ export class ExcelsheetComponent implements OnInit {
   checkedList:any[];
   sent:boolean = false;
   model:DataModel;
-  constructor(private http:HttpClient,private toastr:ToastrService) {
+  constructor(private http:HttpClient,private toastr:ToastrService,private route:Router) {
     this.model = new DataModel();
    }
 
@@ -245,10 +246,14 @@ export class ExcelsheetComponent implements OnInit {
         res=>{
            this.sent = true;
            this.model = res as DataModel;
+           
         },
-        err=>{}
+        err=>{
+          
+        }
        
       );
+      this.route.navigate(['./statistic']);
   }
   uzmiStatistiku(){     if(this.sent)       console.log(JSON.parse(this.model.statistic));        }
 
