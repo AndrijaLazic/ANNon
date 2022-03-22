@@ -1,1 +1,10 @@
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+
+<div id="odabir">
+    <label for="cars">Izaberite kolonu:</label>
+
+    <select (change)="selectChangeHandler($event)" name="columns" id="columns" >
+    <option *ngFor="let column of kolone" value="{{column}}">{{column}}</option>
+    
+    </select>
+</div>
+<div [innerHTML]="htmlStr"></div>

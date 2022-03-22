@@ -5,7 +5,7 @@ import {NgxPaginationModule} from 'ngx-pagination';
 import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
-
+import {SharedService} from "../shared-statistic/shared.service";
 export class DataModel
 {
   fileName:string="";
@@ -149,7 +149,8 @@ export class ExcelsheetComponent implements OnInit {
   checkedList:any[];
   sent:boolean = false;
   model:DataModel;
-  constructor(private http:HttpClient,private toastr:ToastrService,private route:Router) {
+  kolone:any[];
+  constructor(private http:HttpClient,private toastr:ToastrService,private route:Router,private shared: SharedService ) {
     this.model = new DataModel();
    }
 
@@ -254,6 +255,9 @@ export class ExcelsheetComponent implements OnInit {
        
       );
       this.route.navigate(['./statistic']);
+      this.kolone=this.data[0];
+      console.log(this.kolone);
+      this.shared.setMessage(this.podaci.numericke_kolone,this.podaci.kategoricke_kolone,this.kolone);
   }
   uzmiStatistiku(){     if(this.sent)       console.log(JSON.parse(this.model.statistic));        }
 
