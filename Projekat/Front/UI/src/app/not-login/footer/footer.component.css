@@ -1,0 +1,12 @@
+header{
+    position: fixed;
+    background-color:#C4C4C4;
+    bottom:0%;
+    width: 100%;
+    height: 70px;
+  
+}
+.copyright{
+    text-align: center;
+    padding-top: 20px;
+}
