@@ -11,7 +11,7 @@ import baza
 def preprocess_dataframe(data, categorical_feature_names, numeric_feature_names, predicted_feature_name):
     all_features_names = categorical_feature_names + numeric_feature_names + predicted_feature_name
     data = data[all_features_names]
-    data = data.dropna()
+    data = data.dropna() #todo - izabrati nacin upravljanja nedostajucim vrednostima
     target = data.pop(predicted_feature_name[0])
     return (data, target)
 
@@ -73,8 +73,12 @@ def get_model(data, numeric_feature_names, categorical_feature_names, label, enc
   (data, target) = preprocess_dataframe(data, categorical_feature_names, numeric_feature_names, label)
   inputs = create_dict_of_tensors(data, categorical_feature_names)
   #preprocessing categorical features
-  encoding_col = encode_categorical_features(categorical_feature_names, data, inputs, encoding)
+  normalizer = create_normalizer(numeric_feature_names, data)
+  numeric_normalized = normalize_numeric_input(numeric_feature_names, inputs, normalizer)
   preprocessed = []
+  preprocessed.append(numeric_normalized)
+  #print(numeric_normalized)
+  encoding_col = encode_categorical_features(categorical_feature_names, data, inputs, encoding)
   preprocessed = preprocessed + encoding_col
 
   preprocesssed_result = tf.concat(preprocessed, axis=-1)
@@ -94,7 +98,7 @@ def get_model(data, numeric_feature_names, categorical_feature_names, label, enc
   model.compile(optimizer='adam',
                   loss=tf.keras.losses.BinaryCrossentropy(from_logits=True),
                   metrics=['accuracy'])
-  history = model.fit(dict(data), target, epochs=20, batch_size=8)
+  #history = model.fit(dict(data), target, epochs=20, batch_size=8)
   return model
 
 
@@ -107,10 +111,19 @@ categorical_feature_names = ['Pclass','Sex']
 numeric_feature_names = ['Fare', 'Age']
 predicted_feature_name = ['Survived']
 
-target = data["Survived"]
+
 model = get_model(data, numeric_feature_names, categorical_feature_names, predicted_feature_name, 'one_hot', 2, 10, "relu")
 
+# diamonds = pd.read_csv("diamonds/diamonds.csv")
+# diamonds.head()
+
+# categorical_feature_names = ['cut','color']
+# numeric_feature_names = ['x', 'y', 'z', 'carat']
+# predicted_feature_name = ['price']
+
+# model = get_model(diamonds, numeric_feature_names, categorical_feature_names, predicted_feature_name, 'one_hot', 2, 10, "relu")
+
 #cuva model u bazu i ucitava ga opet
-id= baza.saveModel(model)
-model=baza.loadModelById(id)
-model.fit(dict(data), target, epochs=1, batch_size=8)
+# id= baza.saveModel(model)
+# model=baza.loadModelById(id)
+# model.fit(dict(data), target, epochs=1, batch_size=8)
