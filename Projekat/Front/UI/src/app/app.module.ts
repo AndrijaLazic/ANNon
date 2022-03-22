@@ -20,6 +20,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { VerifikacijaComponent } from './proba/verifikacija/verifikacija.component';
 import { HeaderComponent } from './not-login/header/header.component';
 import { FooterComponent } from './not-login/footer/footer.component';
+import { StatisticComponent } from './statistic/statistic.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { FooterComponent } from './not-login/footer/footer.component';
     PaginationComponent,
     VerifikacijaComponent,
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
+    StatisticComponent
 
   ],
   imports: [
