@@ -7,9 +7,8 @@
 
 
 body{
-    position: absolute;
-    width: 1440px;
-    height: 1024px;
+    min-width: 100%;
+    height: 100%;
     left: 0px;
     top: 0px;
     background: url('./e6553da20abc6b8cd20b644ec9522f6c.jpg');

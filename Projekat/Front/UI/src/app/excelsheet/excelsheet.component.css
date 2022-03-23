@@ -1,8 +1,10 @@
 table{
     position: absolute;
-    width: 1059px;
-    height: 600px;
-    left: 190px;
+    width: auto;
+    max-width: 1059px;
+    height: auto;
+    max-height: 600px;
+    left: 150px;
     top: 330px;
     overflow-y:scroll;
     display:block;
@@ -14,8 +16,6 @@ table{
     position: absolute;
     width: 250px;
     height: 100px;
-    left: 556px;
-    top: 219px;
     
     background: #C4C4C4;
     border: 3px solid #000000;
@@ -24,10 +24,10 @@ table{
  }
  #next{
    position: absolute;
-   width: 140px;
+   width: 100px;
    height: 842px;
-   left: 1300px;
-   top: 109px;
+   right: 0;
+
    font-size: 50px;
    background: rgba(196, 196, 196, 0.25);
  }

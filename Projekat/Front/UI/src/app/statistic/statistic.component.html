@@ -1,10 +1,12 @@
-
-<div id="odabir">
-    <label for="cars">Izaberite kolonu:</label>
-
-    <select (change)="selectChangeHandler($event)" name="columns" id="columns" >
-    <option *ngFor="let column of kolone" value="{{column}}">{{column}}</option>
+<app-header></app-header>
+<button id="previous" (click)="previous()"><</button>
+<p id="labela"><b>Izaberite kolonu:</b></p>
+<div class="btn-group-vertical">
     
-    </select>
+    <button (click)="selectChangeHandler($event)" *ngFor="let column of kolone" value="{{column}}" >{{column}}</button>
 </div>
-<div [innerHTML]="htmlStr"></div>
+<div id="statistika" [innerHTML]="htmlStr"></div>
+
+
+
+<app-footer></app-footer>

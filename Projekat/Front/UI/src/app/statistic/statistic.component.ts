@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {SharedService} from "../shared-statistic/shared.service";
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-statistic',
   templateUrl: './statistic.component.html',
@@ -10,7 +11,7 @@ export class StatisticComponent implements OnInit {
   kategorijski:object;
   kolone:any[];
   htmlStr:string;
-  constructor(private shared: SharedService) { }
+  constructor(private shared: SharedService,private route:Router) { }
 
   ngOnInit(): void {
     this.numericki=this.shared.getNumericke();
@@ -32,11 +33,11 @@ export class StatisticComponent implements OnInit {
       if(this.vrednost==this.numericki[i]['ime_kolone'])
       {
         this.htmlStr='';
-        this.htmlStr+='Ime kolone: '+this.numericki[i]['ime_kolone']+'<br>Broj praznih polja: '+this.numericki[i]['broj_praznih_polja']+'<br>Prosek: '
+        this.htmlStr+='<b>Broj praznih polja: '+this.numericki[i]['broj_praznih_polja']+'<br>Prosek: '
         +this.numericki[i]['prosek']+'<br>Standardna devijacija: ' +this.numericki[i]['standardna_devijacija']+'<br>Minimum: '
         +this.numericki[i]['minimum']+'<br>Prvi kvartal: ' +this.numericki[i]['prvi_kvartal']+'<br>Drugi kvartal: '
         +this.numericki[i]['drugi_kvartal']+'<br>Treci kvartal: ' +this.numericki[i]['treci_kvartal']+'<br>Maximum: '
-        +this.numericki[i]['maximum']+'<br>Broj autlajera: ' +this.numericki[i]['broj_autlajera'];
+        +this.numericki[i]['maximum']+'<br>Broj autlajera: ' +this.numericki[i]['broj_autlajera']+'</b>';
       }
 
     }
@@ -45,13 +46,17 @@ export class StatisticComponent implements OnInit {
       if(this.vrednost==this.kategorijski[i]['ime_kolone'])
       {
         this.htmlStr='';
-        this.htmlStr+='Ime kolone: '+this.kategorijski[i]['ime_kolone']+'<br>Broj praznih polja: '+this.kategorijski[i]['broj_praznih_polja']+'<br>Broj jedinstvenih polja: '
+        this.htmlStr+='<b>Broj praznih polja: '+this.kategorijski[i]['broj_praznih_polja']+'<br>Broj jedinstvenih polja: '
         +this.kategorijski[i]['broj_jedinstvenih_polja']+'<br>Najcesca vrednost: ' +this.kategorijski[i]['najcesca_vrednost']+'<br>Najveci broj ponavljanja: '
-        +this.kategorijski[i]['najveci_broj_ponavljanja'];
+        +this.kategorijski[i]['najveci_broj_ponavljanja']+'</b>';
       }
     }
 
     
+  }
+  previous()
+  {
+    this.route.navigate(['./pocetna']);
   }
 
 }

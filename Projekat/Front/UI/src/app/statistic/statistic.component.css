@@ -1,0 +1,46 @@
+.btn-group-vertical{
+    position: absolute;
+    width: 200px;
+    height: auto;
+    max-height: 300px;
+    left: 121px;
+    top: 280px;
+
+    background: rgba(196, 196, 196, 0.7);
+    border: 1px solid #000000;
+    box-sizing: border-box;
+
+    overflow-y:scroll;
+    display:block;
+}
+button{
+    width: 180px;
+    height: 50px;
+    background: rgba(196, 196, 196, 0.7);
+    border: 1px solid #000000;
+    box-sizing: border-box;
+}
+#statistika{
+    position: absolute;
+    width: 231px;
+    height: 602px;
+    left: 440px;
+    top: 286px;
+    
+}
+button:focus{
+    background-color: aqua;
+}
+#labela{
+    position: absolute;
+    left: 121px;
+    top: 230px;
+}
+#previous{
+    position: absolute;
+    width: 100px;
+    height: 842px;
+    font-size: 50px;
+
+    background: rgba(196, 196, 196, 0.25);
+}
