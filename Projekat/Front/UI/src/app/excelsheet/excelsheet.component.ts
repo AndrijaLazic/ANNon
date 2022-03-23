@@ -6,6 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import {SharedService} from "../shared-statistic/shared.service";
+import { v4 as uuidv4 } from 'uuid';
 export class DataModel
 {
   fileName:string="";
@@ -212,6 +213,10 @@ export class ExcelsheetComponent implements OnInit {
     
     console.log(this.data);
   }
+  setSession()
+  {
+    sessionStorage.setItem('userId',uuidv4());
+  }
   posaljiFajl()
   {
     /*
@@ -239,17 +244,17 @@ export class ExcelsheetComponent implements OnInit {
       /*const formData = new FormData();
       formData.append(this.fajl, this.fajl.name);*/
       const formData = new FormData();
+      this.setSession();
       formData.append("uploadedFile",this.fajl);
-      
+      formData.append("userId",sessionStorage.getItem('userId'));/*DA SE POSALJE ID KORISNIKA ZAJEDNO SA FAJLOM*/
       this.http.post(this.baseURL+"api/MachineLearning/uploadFile",formData)
       .subscribe(
         res=>{
            this.sent = true;
            this.model = res as DataModel;
-           
         },
         err=>{
-          
+         
         }
        
       );
