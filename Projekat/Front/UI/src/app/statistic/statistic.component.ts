@@ -7,48 +7,47 @@ import { Router } from '@angular/router';
   styleUrls: ['./statistic.component.css']
 })
 export class StatisticComponent implements OnInit {
-  numericki:object;
-  kategorijski:object;
+  statistika:object;
   kolone:any[];
   htmlStr:string;
   constructor(private shared: SharedService,private route:Router) { }
 
   ngOnInit(): void {
-    this.numericki=this.shared.getNumericke();
-    this.kategorijski=this.shared.getKategorijske();
+    this.statistika=this.shared.getStatistic();
     this.kolone=this.shared.getKolone();
   }
-  /*ispis()
+  ispis()
   {
-    console.log(this.numericki[0]['ime_kolone']);
-    console.log(this.kategorijski);
+    console.log(this.statistika['numericke_kategorije'][0]['ime_kolone']);
     console.log(this.kolone);
-  }*/
+  }
   vrednost: any;
+  
   selectChangeHandler (event: any) {
     //update the ui
+    
     this.vrednost = event.target.value;
-    for(let i=0;i<Object.keys(this.numericki).length;i++)
+    for(let i=0;i<Object.keys(this.statistika['numericke_kolone']).length;i++)
     {
-      if(this.vrednost==this.numericki[i]['ime_kolone'])
+      if(this.vrednost==this.statistika['numericke_kolone'][i]['ime_kolone'])
       {
         this.htmlStr='';
-        this.htmlStr+='<b>Broj praznih polja: '+this.numericki[i]['broj_praznih_polja']+'<br>Prosek: '
-        +this.numericki[i]['prosek']+'<br>Standardna devijacija: ' +this.numericki[i]['standardna_devijacija']+'<br>Minimum: '
-        +this.numericki[i]['minimum']+'<br>Prvi kvartal: ' +this.numericki[i]['prvi_kvartal']+'<br>Drugi kvartal: '
-        +this.numericki[i]['drugi_kvartal']+'<br>Treci kvartal: ' +this.numericki[i]['treci_kvartal']+'<br>Maximum: '
-        +this.numericki[i]['maximum']+'<br>Broj autlajera: ' +this.numericki[i]['broj_autlajera']+'</b>';
+        this.htmlStr+='<b>Broj praznih polja: '+this.statistika['numericke_kolone'][i]['broj_praznih_polja']+'<br>Prosek: '
+        +this.statistika['numericke_kolone'][i]['prosek']+'<br>Standardna devijacija: ' +this.statistika['numericke_kolone'][i]['standardna_devijacija']+'<br>Minimum: '
+        +this.statistika['numericke_kolone'][i]['minimum']+'<br>Prvi kvartal: ' +this.statistika['numericke_kolone'][i]['prvi_kvartal']+'<br>Drugi kvartal: '
+        +this.statistika['numericke_kolone'][i]['drugi_kvartal']+'<br>Treci kvartal: ' +this.statistika['numericke_kolone'][i]['treci_kvartal']+'<br>Maximum: '
+        +this.statistika['numericke_kolone'][i]['maximum']+'<br>Broj autlajera: ' +this.statistika['numericke_kolone'][i]['broj_autlajera']+'</b>';
       }
 
     }
-    for(let i=0;i<Object.keys(this.kategorijski).length;i++)
+    for(let i=0;i<Object.keys(this.statistika['kategoricke_kolone']).length;i++)
     {
-      if(this.vrednost==this.kategorijski[i]['ime_kolone'])
+      if(this.vrednost==this.statistika['kategoricke_kolone'][i]['ime_kolone'])
       {
         this.htmlStr='';
-        this.htmlStr+='<b>Broj praznih polja: '+this.kategorijski[i]['broj_praznih_polja']+'<br>Broj jedinstvenih polja: '
-        +this.kategorijski[i]['broj_jedinstvenih_polja']+'<br>Najcesca vrednost: ' +this.kategorijski[i]['najcesca_vrednost']+'<br>Najveci broj ponavljanja: '
-        +this.kategorijski[i]['najveci_broj_ponavljanja']+'</b>';
+        this.htmlStr+='<b>Broj praznih polja: '+this.statistika['kategoricke_kolone'][i]['broj_praznih_polja']+'<br>Broj jedinstvenih polja: '
+        +this.statistika['kategoricke_kolone'][i]['broj_jedinstvenih_polja']+'<br>Najcesca vrednost: ' +this.statistika['kategoricke_kolone'][i]['najcesca_vrednost']+'<br>Najveci broj ponavljanja: '
+        +this.statistika['kategoricke_kolone'][i]['najveci_broj_ponavljanja']+'</b>';
       }
     }
 

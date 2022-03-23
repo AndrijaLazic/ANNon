@@ -4,20 +4,15 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class SharedService {
-  numericki:object;
-  kategorijski:object;
+  statistika:object;
   kolone:any[];
   constructor() { }
-  setMessage(num,kat,kolone){
-    this.numericki=num;
-    this.kategorijski=kat;
+  setMessage(stat,kolone){
+    this.statistika=stat;
     this.kolone=kolone;
   }
-  getNumericke(){
-    return this.numericki;
-  }
-  getKategorijske(){
-    return this.kategorijski;
+  getStatistic(){
+    return this.statistika;
   }
   getKolone(){
     return this.kolone;

@@ -28,7 +28,7 @@ NgModule({
 export class ExcelsheetComponent implements OnInit {
 
   p:any=[];
-  podaci={
+  /*podaci={
     "numericke_kolone": [
         {
             "ime_kolone": "carat",
@@ -138,7 +138,7 @@ export class ExcelsheetComponent implements OnInit {
             "najveci_broj_ponavljanja": 13065
         }
     ]
-};
+}; */
   public progress: number;
   public message: string;
   @Output() public onUploadFinished = new EventEmitter();
@@ -165,7 +165,6 @@ export class ExcelsheetComponent implements OnInit {
 
     this.fajl=target.files[0];
     const reader: FileReader = new FileReader();
-
     reader.onload=(e: any) =>{
       const bstr: string = e.target.result;
 
@@ -254,12 +253,18 @@ export class ExcelsheetComponent implements OnInit {
         }
        
       );
+      
+  }
+  uzmiStatistiku(){     
+    
+    if(this.sent)
+    {
       this.route.navigate(['./statistic']);
       this.kolone=this.data[0];
       console.log(this.kolone);
-      this.shared.setMessage(this.podaci.numericke_kolone,this.podaci.kategoricke_kolone,this.kolone);
-  }
-  uzmiStatistiku(){     if(this.sent)       console.log(JSON.parse(this.model.statistic));        }
+      this.shared.setMessage(JSON.parse(this.model.statistic),this.kolone);
+    }             
+   }
 
   
   
