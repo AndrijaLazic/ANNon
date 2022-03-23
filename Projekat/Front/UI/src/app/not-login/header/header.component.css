@@ -1,7 +1,15 @@
+body
+{
+    margin: 0;
+    padding:0 ;
+}
 header{
-    padding: 12px 0;
     background-color: #C4C4C4;
-
+}
+.header
+{
+    height: 75px;
+    width: 100%;
 }
 .menu{
     margin-top: 20px;
@@ -16,7 +24,7 @@ header{
     top:0px;
     left:0px;
 }
-h3{
+.logo-text{
     position:absolute ;
     top:19px;
     left:126px;
@@ -41,7 +49,7 @@ h3{
 .menu ul li a:hover{
     color:rgb(185, 63, 63);
 }
-@media only screen and (max-width: 999px) {
+@media only screen and (max-width: 991px) {
     header{
         padding:25px;
     }

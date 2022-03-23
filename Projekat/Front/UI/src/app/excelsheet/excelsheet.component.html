@@ -1,18 +1,21 @@
+        <div class="container-fluid content d-flex justify-content-center">
+        <div class="center w-50 h-25 d-flex justify-content-center">
         <div  id="input">
         <p>Unesite fajl koji zelite:</p>
 
         <input type="file" accept=".csv" (change)="onFileChange($event)" multiple="false" />
       </div>
-        <button id="next" (click)="posaljiFajl()">></button>
-        <table class="table table-striped">
+        <button class="navigator next" (click)="posaljiFajl()">></button>
+      
+        <table class="table table-striped d-flex justify-content-center">
             <tbody>
                 <tr >
-                  <th *ngFor="let item of data[0]"  >{{item}}</th>
+                  <th *ngFor="let item of data[0]" class="header-cell" >{{item}}</th>
                   
                 </tr>
                 <tr *ngFor="let row of data |slice:1:50;index as i">
                     <td *ngFor="let cell of row;index as j ">
-                        <input id="{{i}},{{j}}" style="border:0" type="text" value="{{cell}}">
+                        <input id="{{i}},{{j}}" style="border:0" class="data-cell" type="text" value="{{cell}}">
                     </td>
                       <td><button type="button" class="btn btn-primary">Change</button></td>
                       <td><button type="button" class="btn btn-primary ">Delete</button></td>
@@ -22,6 +25,8 @@
             </tbody>
             
         </table>
+      </div>
+      </div>
         <!--<p>Izaberite kolone za testiranje: </p>
         <ul id="checkbox-items">
           <li *ngFor="let item of data[0];index as i">

@@ -1,0 +1,23 @@
+.navigator
+ {
+   position: absolute;
+   border: 0;
+   width: 100px;
+   height: calc(100vh - 70px - 75px);
+   opacity: 0.2;
+   font-size: 50px;
+   background: rgba(196, 196, 196);
+ }
+ .next{
+   right: 0;
+ }
+ .navigator:hover
+ {
+   background: rgba(196, 196, 196);
+   opacity: 0.7;
+   transition: 0.4s;
+ }
+ .previous
+ {
+     left: 0;
+ }
