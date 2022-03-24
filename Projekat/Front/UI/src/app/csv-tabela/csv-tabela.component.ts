@@ -29,6 +29,7 @@ export class CsvTabelaComponent implements OnInit {
   sent:boolean = false;
   public progress: number;
   public message: string;
+  fajl:File;
   model:DataModel;
   @Output() public onUploadFinished = new EventEmitter();
 
@@ -54,6 +55,7 @@ export class CsvTabelaComponent implements OnInit {
     if (fileList && fileList?.length > 0) 
     {
       var file = fileList[0];
+      this.fajl=file;
       var parseResult : ParseResult = this.papa.parse(file,{
         header: true,
         skipEmptyLines:true,
@@ -107,8 +109,7 @@ export class CsvTabelaComponent implements OnInit {
   posaljiFajl()
   {
       const formData = new FormData();
-      let file = new File([this.gridApi.getDataAsCsv()],"BRZI JGE.csv" ,{type: 'application/vnd.ms-excel'});
-      formData.append("uploadedFile",file);
+      formData.append("uploadedFile",this.fajl);
       
       this.http.post(this.baseURL+"api/MachineLearning/uploadFile",formData)
       .subscribe(

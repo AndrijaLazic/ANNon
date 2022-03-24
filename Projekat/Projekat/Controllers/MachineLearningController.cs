@@ -48,7 +48,6 @@ namespace Projekat.Clients
         [HttpPost("uploadFile"), DisableRequestSizeLimit]
         public async Task<IActionResult> UploadFile([FromForm]IFormFile uploadedFile)
         {
-            
             try
             {
                 
