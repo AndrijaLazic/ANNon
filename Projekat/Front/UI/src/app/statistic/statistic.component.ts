@@ -1,41 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import {SharedService} from "../shared-statistic/shared.service";
 import { Router } from '@angular/router';
-import { HttpClient, HttpParams } from '@angular/common/http';
 @Component({
   selector: 'app-statistic',
   templateUrl: './statistic.component.html',
   styleUrls: ['./statistic.component.css']
 })
 export class StatisticComponent implements OnInit {
-  statistika:Object;
+  statistika:object;
   kolone:any[];
   htmlStr:string;
-  constructor(private shared: SharedService,private route:Router,private http:HttpClient) { }
+  constructor(private shared: SharedService,private route:Router) { }
 
   ngOnInit(): void {
-    this.getStatistic();
+    this.statistika=this.shared.getStatistic();
+    this.kolone=this.shared.getKolone();
   }
-  readonly baseURL='https://localhost:7286/';
-  getStatistic()
-  {
-    //POGLEDAJ ZA LOCAL STORAGE DA BUDE VIDLJIVA
-    const params = new HttpParams()
-    .set('userID', "4ff412f7-5ca2-41f4-90c9-162544aa291b");
-    console.log(params.get("userID"));
-    this.http.get(this.baseURL+"api/MachineLearning/getStatistic",{params:params}).subscribe(
-      res=>{
-        this.statistika = res as Object;
-        console.log(this.statistika);
-      },
-      err=>{
-       
-      }
-    );
-
-    
-  }
-
   ispis()
   {
     console.log(this.statistika['numericke_kategorije'][0]['ime_kolone']);

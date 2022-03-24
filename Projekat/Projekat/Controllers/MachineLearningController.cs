@@ -8,7 +8,6 @@ using System.Net.Http.Headers;
 using Microsoft.CodeAnalysis.RulesetToEditorconfig;
 using ChoETL;
 using Projekat.Ostalo;
-using Projekat.Data;
 
 namespace Projekat.Clients
 {
@@ -30,12 +29,9 @@ namespace Projekat.Clients
     public class MachineLearningController : ControllerBase
     {
         private readonly MachineLearningClient _iCustomClient;
-        private readonly MySqlDbContext _context;
-
-        public MachineLearningController(MachineLearningClient iCustomClient,MySqlDbContext context)
+        public MachineLearningController(MachineLearningClient iCustomClient)
         {
             _iCustomClient = iCustomClient;
-            _context = context;
         }
 
         [HttpGet("mean")]
@@ -50,7 +46,7 @@ namespace Projekat.Clients
 
         
         [HttpPost("uploadFile"), DisableRequestSizeLimit]
-        public async Task<IActionResult> UploadFile([FromForm]IFormFile uploadedFile,[FromForm]string userID)
+        public async Task<IActionResult> UploadFile([FromForm]IFormFile uploadedFile)
         {
             
             try
@@ -63,15 +59,15 @@ namespace Projekat.Clients
                         if (await RadSaFajlovima.UpisiFajl(uploadedFile))
                         {
                             var pathBuilt = Path.Combine(Directory.GetCurrentDirectory(), "Upload\\csvFajlovi\\" + uploadedFile.FileName);
-                            DataModel dataModel = new DataModel
-                            {
-                                userID = userID,
-                                FileName = uploadedFile.FileName,
-                                Putanja = pathBuilt
-                            };
-                            _context.Files.Add(dataModel);
-                            await _context.SaveChangesAsync(); 
-                            return Ok(true);
+                            DataModel dataModel = new DataModel();
+                            dataModel.FileName = uploadedFile.FileName;
+                            dataModel.Putanja = pathBuilt;
+                            var jsonObject = JsonConvert.SerializeObject(dataModel);
+                            var answer = await _iCustomClient.sendData(jsonObject);
+
+                            string statistic = JsonConvert.DeserializeObject<String>(answer);
+
+                            return Ok(statistic);
                         }
                         return BadRequest("Greska pri upisivanju fajla");
                     }
@@ -89,21 +85,7 @@ namespace Projekat.Clients
            
         }
         
-        [HttpGet("getStatistic")]
-        public async Task<IActionResult> getStatistic(string userID)
-        {
-            DataModel model = _context.Files.Where(x => x.userID.Equals(userID)).FirstOrDefault();
-            if(model != null)
-            {
-                var jsonObject = JsonConvert.SerializeObject(model);
-                var answer = await _iCustomClient.sendData(jsonObject);
-                string statistic = JsonConvert.DeserializeObject<string>(answer);
-                return Ok(statistic);
-
-            }
-
-            return BadRequest();
-        }
+        
         
         [HttpPost("parametars")]
         public async Task<IActionResult> getParametars(ParametarsModel param_model)
@@ -114,6 +96,9 @@ namespace Projekat.Clients
                 return BadRequest("Greska pri prosledjivanju parametara!");
 
             return Ok("Uspesno prosledjeni parametri");    
+
+
+
 
         }
 
