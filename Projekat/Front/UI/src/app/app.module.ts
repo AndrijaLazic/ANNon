@@ -21,8 +21,7 @@ import { VerifikacijaComponent } from './proba/verifikacija/verifikacija.compone
 import { HeaderComponent } from './not-login/header/header.component';
 import { FooterComponent } from './not-login/footer/footer.component';
 import { StatisticComponent } from './statistic/statistic.component';
-import { CsvTabelaComponent } from './csv-tabela/csv-tabela.component';
-import { AgGridModule } from 'ag-grid-angular';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -36,8 +35,7 @@ import { AgGridModule } from 'ag-grid-angular';
     VerifikacijaComponent,
     HeaderComponent,
     FooterComponent,
-    StatisticComponent,
-    CsvTabelaComponent
+    StatisticComponent
 
   ],
   imports: [
@@ -49,8 +47,7 @@ import { AgGridModule } from 'ag-grid-angular';
     HttpClientModule,
     NgxPaginationModule,
     BrowserAnimationsModule,
-    ToastrModule.forRoot(),
-    AgGridModule.withComponents([CsvTabelaComponent])
+    ToastrModule.forRoot()
    
     
   ],
