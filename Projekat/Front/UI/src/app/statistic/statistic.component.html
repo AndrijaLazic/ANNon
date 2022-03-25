@@ -1,13 +1,26 @@
 <app-header></app-header>
 <div class="container content">
 <button class="navigator previous" (click)="previous()"><</button>
-<p id="labela"><b>Izaberite kolonu:</b></p>
+<!--<p id="labela"><b>Izaberite kolonu:</b></p>
 <div class="btn-group-vertical">
     
     <button (click)="selectChangeHandler($event)" *ngFor="let column of kolone" value="{{column}}" >{{column}}</button>
 </div>
 <div id="statistika" [innerHTML]="htmlStr"></div>
 
-</div> 
+</div> -->
+
+    <table >
+        <tbody>
+            <tr>
+                <th *ngFor="let item of kolone" class="header-cell" >{{item}}</th>
+            </tr>
+            <tr >
+                <td *ngFor="let item of stats" [innerHTML]="item"></td>
+            </tr>
+    </tbody>
+    </table>
+
+
 
 <app-footer></app-footer>

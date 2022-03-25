@@ -67,3 +67,29 @@ button:focus{
   opacity: 0.7;
   transition: 0.4s;
 }
+table{
+    position: absolute;
+    
+    max-width: 800px;
+    left: 200px;
+    height: auto;
+    max-height: 400px;
+    top: 330px;
+    overflow-y:scroll;
+    overflow-x: scroll;
+    display: block;
+    
+
+
+    background: rgba(196, 196, 196, 0.7);
+    
+ }
+ th,td{
+     height: 50px;
+     width: 300px;
+ }
+ td{
+     font-size: 10px;
+
+     
+ }
