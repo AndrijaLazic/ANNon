@@ -7,6 +7,7 @@ namespace Projekat.Data
     {
         public MySqlDbContext(DbContextOptions<MySqlDbContext> options):base(options)   {}
         public DbSet<Korisnik> Korisnici { get; set; }
+        public DbSet<DataModel> Files { get; set; }
 
 
     }

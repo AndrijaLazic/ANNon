@@ -11,7 +11,7 @@ using Projekat.Data;
 namespace Projekat.Migrations
 {
     [DbContext(typeof(MySqlDbContext))]
-    [Migration("20220312174825_InitialCreate")]
+    [Migration("20220325163256_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,6 +20,24 @@ namespace Projekat.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "6.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
+
+            modelBuilder.Entity("Projekat.Modeli.DataModel", b =>
+                {
+                    b.Property<string>("userID")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Putanja")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("userID");
+
+                    b.ToTable("Files");
+                });
 
             modelBuilder.Entity("Projekat.Modeli.Korisnik", b =>
                 {

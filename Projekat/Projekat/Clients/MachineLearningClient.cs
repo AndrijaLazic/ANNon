@@ -7,12 +7,15 @@ namespace Projekat.Clients
     public class MachineLearningClient
     {
         private readonly HttpClient _client;
+        private readonly IConfiguration _configuration;
 
         // Constructor
-        public MachineLearningClient(HttpClient client)
+        public MachineLearningClient(HttpClient client,IConfiguration configuration)
         {
+            _configuration = configuration;
+            string uri = configuration.GetSection("ML_Server_Config:host").Value.ToString() + ":" + configuration.GetSection("ML_Server_Config:port").Value.ToString() + "/";
             _client = client;
-            _client.BaseAddress = new Uri("http://127.0.0.1:8000/");
+            _client.BaseAddress = new Uri(uri);
             _client.Timeout = new TimeSpan(0, 0, 30);
             _client.DefaultRequestHeaders.Clear();
         }

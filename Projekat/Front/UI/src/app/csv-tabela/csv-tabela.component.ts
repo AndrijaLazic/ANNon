@@ -5,6 +5,7 @@ import { ColDef,GridApi,GridReadyEvent,CellValueChangedEvent } from 'ag-grid-com
 import { AgGridModule } from 'ag-grid-angular';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
+import { v4 as uuidv4 } from 'uuid';
 import {SharedService} from "../shared-statistic/shared.service";
 
 export class DataModel
@@ -106,17 +107,24 @@ export class CsvTabelaComponent implements OnInit {
   public skiniFajl(){
     this.gridApi.exportDataAsCsv();
   }
+  setSession()
+  {
+    sessionStorage.setItem('userId',uuidv4());
+  }
   posaljiFajl()
   {
+      this.setSession();
       const formData = new FormData();
       let file = new File([this.gridApi.getDataAsCsv()],this.imeFajla ,{type: 'application/vnd.ms-excel'});
       formData.append("uploadedFile",file);
-      
+      formData.append("userID",sessionStorage.getItem("userId"));
       this.http.post(this.baseURL+"api/MachineLearning/uploadFile",formData)
       .subscribe(
         res=>{
            this.sent = true;
            this.model = res as DataModel;
+           if(this.sent)
+              this.route.navigate(["./statistic"]);
            
         },
         err=>{
