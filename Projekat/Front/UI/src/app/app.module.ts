@@ -1,5 +1,5 @@
 import {NgxPaginationModule} from 'ngx-pagination';
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import{FormsModule} from "@angular/forms";
 import { AppRoutingModule } from './app-routing.module';
@@ -23,6 +23,7 @@ import { FooterComponent } from './not-login/footer/footer.component';
 import { StatisticComponent } from './statistic/statistic.component';
 import { CsvTabelaComponent } from './csv-tabela/csv-tabela.component';
 import { AgGridModule } from 'ag-grid-angular';
+import { NgxSpinnerModule } from "ngx-spinner";
 @NgModule({
   declarations: [
     AppComponent,
@@ -50,11 +51,13 @@ import { AgGridModule } from 'ag-grid-angular';
     NgxPaginationModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
-    AgGridModule.withComponents([CsvTabelaComponent])
+    AgGridModule.withComponents([CsvTabelaComponent]),
+    NgxSpinnerModule
    
     
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule { }
