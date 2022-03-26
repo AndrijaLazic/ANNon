@@ -32,7 +32,8 @@
     <br>
     <ag-grid-angular style="height: 520px;" class="ag-theme-alpine-dark" [rowData]="RedoviPodaci"
       [columnDefs]="KoloneDef" [pagination]="true" [paginationPageSize]="brojElemenataNaStrani"
-      [rowSelection]="rowSelection" [animateRows]="true" (gridReady)="onGridReady($event)">
+      [rowSelection]="rowSelection" [animateRows]="true" (gridReady)="onGridReady($event)"
+      (gridColumnsChanged)="onGridColumnsChanged($event)">
     </ag-grid-angular>
   </div>
 </div>

@@ -1,7 +1,7 @@
 import { HttpClient, HttpEventType, HttpHeaders, HttpRequest, JsonpClientBackend } from '@angular/common/http';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Papa, ParseResult } from 'ngx-papaparse';
-import { ColDef,GridApi,GridReadyEvent,CellValueChangedEvent, ComponentStateChangedEvent } from 'ag-grid-community';
+import { ColDef,GridApi,GridReadyEvent,CellValueChangedEvent, ComponentStateChangedEvent, GridColumnsChangedEvent } from 'ag-grid-community';
 import { AgGridModule } from 'ag-grid-angular';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
@@ -48,7 +48,9 @@ export class CsvTabelaComponent implements OnInit {
   KoloneDef: ColDef[] = [];
   RedoviPodaci:any = [];
 
-
+  onGridColumnsChanged(event: GridColumnsChangedEvent){
+    this.spinner.hide("Spiner1");
+}
   onGridReady(params: GridReadyEvent) {
     this.gridApi = params.api;
     this.spinner.hide("Spiner1");
@@ -58,7 +60,7 @@ export class CsvTabelaComponent implements OnInit {
   }
   onFileSelected(event:Event)
   {
-    this.spinner.show("Spiner1");
+    
 
     // setTimeout(() => {
     //   /** spinner ends after 5 seconds */
@@ -69,6 +71,7 @@ export class CsvTabelaComponent implements OnInit {
     
     if (fileList && fileList?.length > 0) 
     {
+      this.spinner.show("Spiner1")
       var file = fileList[0];
       this.imeFajla=file.name;
       var parseResult : ParseResult = this.papa.parse(file,{
@@ -127,7 +130,7 @@ export class CsvTabelaComponent implements OnInit {
   }
   posaljiFajl()
   {
-      this.spinner.show();
+      this.spinner.show("Spiner2");
       this.setSession();
       const formData = new FormData();
       let file = new File([this.gridApi.getDataAsCsv()],this.imeFajla ,{type: 'application/vnd.ms-excel'});
