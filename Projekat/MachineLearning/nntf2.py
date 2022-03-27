@@ -1,3 +1,5 @@
+import warnings
+warnings.filterwarnings('ignore')
 from re import X
 import matplotlib
 import numpy as np 
@@ -68,8 +70,26 @@ def encode_categorical_features(categorical_feature_names, data, inputs, encodin
       encoding_col.append(x)
     return encoding_col
 
+def determine_variable_types(data, label):
+    nunique = data.nunique()
+    dtypes = data.dtypes
+    # nunique.drop(label, inplace=True, axis=1)
+    # dtypes.drop(label, inplace=True, axis=1)
+    categorical = []
+    numerical = []
+    dnu = dict(nunique)
+    dnu.pop(label[0], None)
+    for key in dnu:
+        if nunique[key] <= 20:
+            categorical.append(key)
+        elif (dtypes[key] != object):
+            numerical.append(key)
+    
+    return (categorical, numerical)
 
-def get_model(data, numeric_feature_names, categorical_feature_names, label, encoding, number_of_layers, number_of_nodes, activation_func):
+
+def get_model(data, label, encoding, number_of_layers, number_of_nodes, activation_functions, loss_fuc):
+  categorical_feature_names, numeric_feature_names = determine_variable_types(data, label)
   (data, target) = preprocess_dataframe(data, categorical_feature_names, numeric_feature_names, label)
   inputs = create_dict_of_tensors(data, categorical_feature_names)
   #preprocessing categorical features
@@ -87,8 +107,8 @@ def get_model(data, numeric_feature_names, categorical_feature_names, label, enc
   #building the model
   network = tf.keras.Sequential()
   
-  for _ in range(number_of_layers):
-    network.add(tf.keras.layers.Dense(number_of_nodes, activation=activation_func))
+  for i in range(number_of_layers):
+    network.add(tf.keras.layers.Dense(units=number_of_nodes[i], kernel_initializer='normal', activation=activation_functions[i]))
   network.add(tf.keras.layers.Dense(1))
 
   x = preprocessor(inputs)
@@ -96,32 +116,32 @@ def get_model(data, numeric_feature_names, categorical_feature_names, label, enc
   model = tf.keras.Model(inputs, result)
 
   model.compile(optimizer='adam',
-                  loss=tf.keras.losses.BinaryCrossentropy(from_logits=True),
+                  loss=loss_fuc,
                   metrics=['accuracy'])
   #history = model.fit(dict(data), target, epochs=20, batch_size=8)
-  return model
+  return (model, target, data)
 
+#dataset_name = "CarPricesData/CarPircesData.csv"
 
-dataset_name = "titanic/train.csv" #ucitati sa fronta
-
-data = pd.read_csv(dataset_name)
+#dataset_name = "titanic/train.csv"
+#data = pd.read_csv(dataset_name)
+#predicted_feature_name = ['Survived']
 #data.head()
+# categorical_feature_names = ['Pclass','Sex']
+# numeric_feature_names = ['Fare', 'Age']
 
-categorical_feature_names = ['Pclass','Sex']
-numeric_feature_names = ['Fare', 'Age']
-predicted_feature_name = ['Survived']
+default_classification_loss = tf.keras.losses.BinaryCrossentropy(from_logits=True)
+default_regression_loss = 'mean_squared_error'
+#model = get_model(data, predicted_feature_name, 'one_hot', 2, 10, "relu", classification_loss)
 
-
-model = get_model(data, numeric_feature_names, categorical_feature_names, predicted_feature_name, 'one_hot', 2, 10, "relu")
-
-# diamonds = pd.read_csv("diamonds/diamonds.csv")
-# diamonds.head()
+diamonds = pd.read_csv("diamonds/diamonds.csv")
 
 # categorical_feature_names = ['cut','color']
 # numeric_feature_names = ['x', 'y', 'z', 'carat']
-# predicted_feature_name = ['price']
+predicted_feature_name = ['price']
 
-# model = get_model(diamonds, numeric_feature_names, categorical_feature_names, predicted_feature_name, 'one_hot', 2, 10, "relu")
+model, target, data = get_model(diamonds, predicted_feature_name, 'one_hot', 2, [10, 10], ['relu', 'relu'], default_regression_loss)
+history = model.fit(dict(data), target, epochs=20, batch_size=8)
 
 #cuva model u bazu i ucitava ga opet
 # id= baza.saveModel(model)
