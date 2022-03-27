@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Builder;
 using Projekat.Clients;
 using Projekat.Data;
 using Projekat.Modeli;
@@ -51,6 +52,7 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+app.UseWebSockets();
 app.UseRouting();
 
 app.MapControllers();

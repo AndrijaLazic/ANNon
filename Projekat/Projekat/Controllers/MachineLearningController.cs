@@ -121,20 +121,7 @@ namespace Projekat.Clients
 
         }
 
-        [HttpGet("result")]
-        public async Task Get()
-        {
-            
-            //dobijanje informacija iz pythona
-
-            Response.Headers.Add("Content-Type", "text/event-stream");
-
-            string message = "data:" + "" + "\n\n";
-            byte[] messageBytes = Encoding.ASCII.GetBytes(message);
-
-            await Response.Body.WriteAsync(messageBytes, 0, messageBytes.Length);  
-            await Response.Body.FlushAsync();
-        }
+        
 
     }
 }

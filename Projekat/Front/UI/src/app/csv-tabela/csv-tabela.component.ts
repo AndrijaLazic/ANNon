@@ -1,7 +1,7 @@
 import { HttpClient, HttpEventType, HttpHeaders, HttpRequest, JsonpClientBackend } from '@angular/common/http';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Papa, ParseResult } from 'ngx-papaparse';
-import { ColDef,GridApi,GridReadyEvent,CellValueChangedEvent } from 'ag-grid-community';
+import { ColDef,GridApi,GridReadyEvent,CellValueChangedEvent, ComponentStateChangedEvent, GridColumnsChangedEvent } from 'ag-grid-community';
 import { AgGridModule } from 'ag-grid-angular';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
@@ -9,6 +9,7 @@ import { v4 as uuidv4 } from 'uuid';
 import {SharedService} from "../shared-statistic/shared.service";
 
 import { default as Konfiguracija } from '../../../KonfiguracioniFajl.json';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 export class DataModel
 {
@@ -35,28 +36,42 @@ export class CsvTabelaComponent implements OnInit {
   public imeFajla:string;
   model:DataModel;
   @Output() public onUploadFinished = new EventEmitter();
-
-  constructor(private papa:Papa,private http:HttpClient,private toastr:ToastrService,private route:Router,private shared: SharedService 
+  
+  
+  constructor(private spinner:NgxSpinnerService,private papa:Papa,private http:HttpClient,private toastr:ToastrService,private route:Router,private shared: SharedService 
     ) {
       this.model = new DataModel();
+      
      }
   
   readonly baseURL=Konfiguracija.KonfiguracijaServera.osnovniURL
   KoloneDef: ColDef[] = [];
   RedoviPodaci:any = [];
 
-
+  onGridColumnsChanged(event: GridColumnsChangedEvent){
+    this.spinner.hide("Spiner1");
+}
   onGridReady(params: GridReadyEvent) {
     this.gridApi = params.api;
+    this.spinner.hide("Spiner1");
   }
-
+  onComponentStateChanged(event: ComponentStateChangedEvent){
+    this.spinner.hide("Spiner1");
+  }
   onFileSelected(event:Event)
   {
+    
+
+    // setTimeout(() => {
+    //   /** spinner ends after 5 seconds */
+    //   this.spinner.hide();
+    // }, 5000);
     const element = event.currentTarget as HTMLInputElement;
     let fileList: FileList | null = element.files;
     
     if (fileList && fileList?.length > 0) 
     {
+      this.spinner.show("Spiner1")
       var file = fileList[0];
       this.imeFajla=file.name;
       var parseResult : ParseResult = this.papa.parse(file,{
@@ -115,6 +130,7 @@ export class CsvTabelaComponent implements OnInit {
   }
   posaljiFajl()
   {
+      this.spinner.show("Spiner2");
       this.setSession();
       const formData = new FormData();
       let file = new File([this.gridApi.getDataAsCsv()],this.imeFajla ,{type: 'application/vnd.ms-excel'});

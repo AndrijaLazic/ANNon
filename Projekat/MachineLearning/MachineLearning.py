@@ -1,17 +1,9 @@
-import asyncio
-import base64
-import socket
-import threading
-from fastapi import FastAPI, Request
+from typing import List
+from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect
 from fastapi import Body
-import statistics
+import statistics as stats
 import pandas as pd
 from pydantic import BaseModel
-from io import StringIO
-from sse_starlette.sse import EventSourceResponse
-from fastapi.middleware.cors import CORSMiddleware
-import CustomCallback
-import nntf2
 
 import statistics as stats
 #vazno!!!!!!
@@ -39,15 +31,27 @@ class Parameters(BaseModel):
     NeuronNumver:int
     ActivationFunction:str
  
-app=FastAPI()
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+class ConnectionManager:
+    def __init__(self):
+        self.active_connections: List[WebSocket] = []
+
+    async def connect(self, websocket: WebSocket):
+        await websocket.accept()
+        self.active_connections.append(websocket)
+
+    def disconnect(self, websocket: WebSocket):
+        self.active_connections.remove(websocket)
+
+    async def broadcast(self, message: str):
+        for connection in self.active_connections:
+            await connection.send_text(message)
+    
+
+
+
+manager = ConnectionManager()
+app=FastAPI()
 
 @app.get("/")
 def mainPage():
@@ -62,40 +66,12 @@ async def update_item(
     Statistic=stats.getStats(fajl)
     return Statistic
 
-@app.post('/param')
-async def post_params(
-        model:Parameters
-):   
-    #ovde se salju parametri i koristice logGenerator=odnosno nn kao 
-    event_generator = logGenerator(model)
-    return EventSourceResponse(event_generator)
-
-async def logGenerator(model):
-    HOST = "127.0.0.1"
-    PORT = 65432  
-    #server = mreza, nova nit
-    # data=pd.read_csv(model.FilePath)
-    # numerics = ['int16', 'int32', 'int64', 'float16', 'float32', 'float64']
-    # numeric_columns = data.select_dtypes(include=numerics).columns.values.tolist()
-    # categorical_columns=data.select_dtypes(include=["object"]).columns.values.tolist()
-    # print(type(numeric_columns))
-    # print(categorical_columns)
-    # print([data.columns[-1]])
-
-    #pravljenje modela i pozivanje njegovoh treniranja
-
-    # nnmodel=nntf2.get_model(data,numeric_columns,categorical_columns,[data.columns[1]],"multi_hot",2,10,"relu")
-    # nit=threading.Thread(target=nnmodel.fit,args={"x":dict(data),"y":data[-1],"epochs":20,"batch_size":8,"callbacks":[CustomCallback(HOST,PORT)]}) #poziv funkcije treniranja
-    # nit.start()
-
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        s.connect((HOST, PORT))
-        s.sendall(b"Hello, world")
-
-        while True:              
-            #prima podatke i salje ih sse
-            data=s.recv(1024)
-            if not data:
-                break
-            print(f"Received {data!r}")
-            yield data
+@app.websocket("/test/{client_id}")
+async def websocket_endpoint(websocket: WebSocket, client_id: str):
+    await manager.connect(websocket)
+    try:
+        while True:
+            data = await websocket.receive_text()
+            await websocket.send_text(data)
+    except WebSocketDisconnect:
+        manager.disconnect(websocket)
