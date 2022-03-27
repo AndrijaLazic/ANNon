@@ -1,0 +1,25 @@
+<mat-form-field appearance="fill">
+  <mat-label>Favorite food</mat-label>
+  <mat-select [(value)]="SelektovanaVrednost">
+    <mat-option value="3">
+      br3
+    </mat-option>
+    <mat-option value="2">
+        br2
+      </mat-option>
+      <mat-option value="1">
+      br1
+    </mat-option >
+  </mat-select>
+</mat-form-field>
+<!-- {{SelektovanaVrednost}} -->
+<br><br><br>
+<label>Izaberi grad</label>
+<angular2-multiselect id="MultiselectUlaznihVrednosti" [data]="dropdownList" [(ngModel)]="selectedItems" 
+    [settings]="dropdownSettings" 
+    (onSelect)="onItemSelect($event)" 
+    (onDeSelect)="OnItemDeSelect($event)"
+    (onSelectAll)="onSelectAll($event)"
+    (onDeSelectAll)="onDeSelectAll($event)"
+    >
+</angular2-multiselect>

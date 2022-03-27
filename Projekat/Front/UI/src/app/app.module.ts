@@ -14,6 +14,9 @@ import { RegisterComponent } from './register-parent/register/register.component
 import { PocetnastranaComponent } from './pocetnastrana/pocetnastrana.component';
 import { HttpClientModule } from '@angular/common/http';
 import { PaginationComponent } from './excelsheet/pagination/pagination.component';
+import { MatSelectModule } from '@angular/material/select';
+import { AngularMultiSelectModule } from 'angular2-multiselect-dropdown';
+
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
@@ -25,6 +28,7 @@ import { CsvTabelaComponent } from './csv-tabela/csv-tabela.component';
 import { AgGridModule } from 'ag-grid-angular';
 import { NgxSpinnerModule } from "ngx-spinner";
 import { TreningComponent } from './trening/trening.component';
+import { IzborParametaraComponent } from './izbor-parametara/izbor-parametara.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -40,8 +44,9 @@ import { TreningComponent } from './trening/trening.component';
     FooterComponent,
     StatisticComponent,
     CsvTabelaComponent,
-    TreningComponent
-
+    TreningComponent,
+    IzborParametaraComponent
+    
   ],
   imports: [
     BrowserModule,
@@ -54,9 +59,9 @@ import { TreningComponent } from './trening/trening.component';
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
     AgGridModule.withComponents([CsvTabelaComponent]),
-    NgxSpinnerModule
-   
-    
+    NgxSpinnerModule,
+    MatSelectModule,
+    AngularMultiSelectModule
   ],
   providers: [],
   bootstrap: [AppComponent],
