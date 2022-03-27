@@ -24,6 +24,7 @@ import { StatisticComponent } from './statistic/statistic.component';
 import { CsvTabelaComponent } from './csv-tabela/csv-tabela.component';
 import { AgGridModule } from 'ag-grid-angular';
 import { NgxSpinnerModule } from "ngx-spinner";
+import { TreningComponent } from './trening/trening.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -38,7 +39,8 @@ import { NgxSpinnerModule } from "ngx-spinner";
     HeaderComponent,
     FooterComponent,
     StatisticComponent,
-    CsvTabelaComponent
+    CsvTabelaComponent,
+    TreningComponent
 
   ],
   imports: [

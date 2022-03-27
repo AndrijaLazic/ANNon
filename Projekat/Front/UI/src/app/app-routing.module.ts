@@ -10,6 +10,7 @@ import { AuthRegisterGuard } from './shared/auth-register.guard';
 import { AuthGuard } from './shared/auth.guard';
 import { NotAuthGuard } from './shared/not-auth.guard';
 import { StatisticComponent } from './statistic/statistic.component';
+import { TreningComponent } from './trening/trening.component';
 
 const routes: Routes = [
   {
@@ -35,6 +36,9 @@ const routes: Routes = [
   },
   {
     path:'statistic',component:StatisticComponent
+  },
+  {
+    path:'training',component:TreningComponent
   }
 ];
 
