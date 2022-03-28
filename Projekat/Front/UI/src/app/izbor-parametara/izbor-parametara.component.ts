@@ -17,13 +17,16 @@ export class IzborParametaraComponent implements OnInit {
   dropdownSettings = {};
 
 
+  dropdownList2 = [];
   izlaznaKolona;
   dropdownSettings2={};
 
+  pom(){
+    console.log(this.listaKolona);
+  }
 
 
-    ngOnInit(){
-      this.dropdownList = [
+  listaKolona = [
                             {"id":1,"itemName":"India"},
                             {"id":2,"itemName":"Singapore"},
                             {"id":3,"itemName":"Australia"},
@@ -35,57 +38,111 @@ export class IzborParametaraComponent implements OnInit {
                             {"id":9,"itemName":"Italy"},
                             {"id":10,"itemName":"Sweden"}
                           ];
-      this.selectedItems = [
-                              {"id":2,"itemName":"Singapore"},
-                              {"id":3,"itemName":"Australia"},
-                              {"id":4,"itemName":"Canada"},
-                              {"id":5,"itemName":"South Korea"}
-                          ];
+
+    ngOnInit(){
+      this.loadDataSet1();
+      this.loadDataSet2();                       
+    } 
+
+    // sortirajListuKolona(){
+    //   this.listaKolona.sort(function (a, b) {
+    //     return a.id - b.id;
+    //   });
+    // }
+
+    loadDataSet1() {
       this.dropdownSettings = { 
-                                singleSelection: false, 
-                                text:"Select Countries",
-                                selectAllText:'Select All',
-                                unSelectAllText:'UnSelect All',
-                                enableSearchFilter: true,
-                                classes:"myclass custom-class",
-                                badgeShowLimit:"3"
-                                
-                              };
-                              
-      this.dropdownSettings2 = { 
-                                singleSelection: true, 
-                                text:"Select Countries",
-                                selectAllText:'Select All',
-                                unSelectAllText:'UnSelect All',
-                                enableSearchFilter: true,
-                                classes:"myclass custom-class",
-                                badgeShowLimit:"3"
-                                
-                              };                        
-    }
+        singleSelection: false, 
+        text:"Select Countries",
+        selectAllText:'Select All',
+        unSelectAllText:'UnSelect All',
+        enableSearchFilter: true,
+        classes:"myclass custom-class",
+        badgeShowLimit:"3",
+        limitSelection: this.listaKolona.length-1
+        
+      };
+
+      // this.sortirajListuKolona();
+      this.dropdownList = [];
+      for (let i = 0; i < this.listaKolona.length; ++i) {
+        if(this.izlaznaKolona){
+          if(this.izlaznaKolona[0]){
+            if(this.listaKolona[i].id==this.izlaznaKolona[0].id){
+              continue;
+            }
+          }
+        }
+            
+        this.dropdownList.push(this.listaKolona[i]);
+      }
+  }
+  loadDataSet2() {
+    this.dropdownSettings2 = { 
+      singleSelection: true, 
+      text:"Select Countries",
+      selectAllText:'Select All',
+      unSelectAllText:'UnSelect All',
+      enableSearchFilter: true,
+      classes:"myclass custom-class",
+      showCheckbox:false
+
+      
+    };
+      this.dropdownList2 = [];
+      // this.sortirajListuKolona();
+
+      for (let i = 0; i < this.listaKolona.length; ++i) {
+        var stanje=true;
+        for (let j = 0; j < this.selectedItems.length; ++j){
+          if(this.selectedItems[j].id==this.listaKolona[i].id){
+            stanje=false;
+            break;
+          }
+        }
+        if(stanje)
+          this.dropdownList2.push(this.listaKolona[i]);
+      }
+  }
+
+    // brisanjeElementaIzListe(item:any){
+    //   this.listaKolona.forEach((element,index)=>{
+    //     if(element.id==item.id) this.listaKolona.splice(index,1);
+    //   });
+    // }
 
     onItemSelect(item:any){
-        console.log(item);
-        console.log(this.selectedItems);
+        
+        
+        this.loadDataSet2();
     }
     OnItemDeSelect(item:any){
-        console.log(item);
-        console.log(this.selectedItems);
+        
+        this.loadDataSet2();
     }
+
     onSelectAll(items: any){
-        console.log(items);
+        
+        this.loadDataSet2();
     }
     onDeSelectAll(items: any){
-        console.log(items);
+        
+        this.loadDataSet2();
     }
     
 
     onItemSelect2(item:any){
-      console.log(item);
-      console.log(this.izlaznaKolona);
+      
+      this.loadDataSet1();
     }
     OnItemDeSelect2(item:any){
-        console.log(item);
+
+        this.loadDataSet1();
     }
 
+
+
+
+
+    
 }

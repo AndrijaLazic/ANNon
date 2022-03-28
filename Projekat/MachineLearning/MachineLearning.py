@@ -73,9 +73,15 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str):
     try:
         while True:
             data = await websocket.receive_text()
+            #todo
             await websocket.send_text(data)
     except WebSocketDisconnect:
         manager.disconnect(websocket)
 
 
-
+@app.post("/publish/epoch/end")
+async def post_data(request:Request):
+    #u model.fit treba staviti parametar callbacks=[keras.callbacks.RemoteMonitor(root="http://localhost:8000",path="/publish/epoch/end",send_as_json=False)]
+    print("uslo")
+    result=await request.form()
+    return result
