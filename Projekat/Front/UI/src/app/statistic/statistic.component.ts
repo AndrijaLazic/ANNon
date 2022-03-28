@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ElementRef } from '@angular/core';
 import {SharedService} from "../shared-statistic/shared.service";
 import { Router } from '@angular/router';
+import Chart from 'chart.js/auto';
 @Component({
   selector: 'app-statistic',
   templateUrl: './statistic.component.html',
@@ -10,119 +11,224 @@ export class StatisticComponent implements OnInit {
   kolone=new Array();
   stats=new Array();
   strStat:string;
-  constructor(private shared: SharedService,private route:Router) { }
+  myChart=new Array();
+  constructor(private shared: SharedService,private route:Router,private elementRef: ElementRef) { }
 
   statistika={
     "numericke_kolone": [
         {
-            "ime_kolone": "carat",
+            "ime_kolone": "PassengerId",
             "broj_praznih_polja": 0.0,
-            "prosek": 0.7979397478679852,
-            "standardna_devijacija": 0.47401124440538067,
-            "minimum": 0.2,
-            "prvi_kvartal": 0.4,
-            "drugi_kvartal": 0.7,
-            "treci_kvartal": 1.04,
-            "maximum": 5.01,
-            "broj_autlajera": 439
+            "prosek": 446.0,
+            "standardna_devijacija": 257.3538420152301,
+            "minimum": 1.0,
+            "prvi_kvartal": 223.5,
+            "drugi_kvartal": 446.0,
+            "treci_kvartal": 668.5,
+            "maximum": 891.0,
+            "broj_autlajera": 0,
+            "column_chart_data": {
+                "(0.11, 128.143]": 128,
+                "(763.857, 891.0]": 128,
+                "(128.143, 255.286]": 127,
+                "(255.286, 382.429]": 127,
+                "(382.429, 509.571]": 127,
+                "(509.571, 636.714]": 127,
+                "(636.714, 763.857]": 127
+            }
         },
         {
-            "ime_kolone": "depth",
+            "ime_kolone": "Survived",
             "broj_praznih_polja": 0.0,
-            "prosek": 61.74940489432624,
-            "standardna_devijacija": 1.4326213188337733,
-            "minimum": 43.0,
-            "prvi_kvartal": 61.0,
-            "drugi_kvartal": 61.8,
-            "treci_kvartal": 62.5,
-            "maximum": 79.0,
-            "broj_autlajera": 685
-        },
-        {
-            "ime_kolone": "table",
-            "broj_praznih_polja": 0.0,
-            "prosek": 57.45718390804603,
-            "standardna_devijacija": 2.234490562820938,
-            "minimum": 43.0,
-            "prvi_kvartal": 56.0,
-            "drugi_kvartal": 57.0,
-            "treci_kvartal": 59.0,
-            "maximum": 95.0,
-            "broj_autlajera": 336
-        },
-        {
-            "ime_kolone": "price",
-            "broj_praznih_polja": 0.0,
-            "prosek": 3932.799721913237,
-            "standardna_devijacija": 3989.4397381463023,
-            "minimum": 326.0,
-            "prvi_kvartal": 950.0,
-            "drugi_kvartal": 2401.0,
-            "treci_kvartal": 5324.25,
-            "maximum": 18823.0,
-            "broj_autlajera": 1206
-        },
-        {
-            "ime_kolone": "x",
-            "broj_praznih_polja": 0.0,
-            "prosek": 5.731157211716609,
-            "standardna_devijacija": 1.1217607467924422,
+            "prosek": 0.3838383838383838,
+            "standardna_devijacija": 0.4865924542648575,
             "minimum": 0.0,
-            "prvi_kvartal": 4.71,
-            "drugi_kvartal": 5.7,
-            "treci_kvartal": 6.54,
-            "maximum": 10.74,
-            "broj_autlajera": 43
+            "prvi_kvartal": 0.0,
+            "drugi_kvartal": 0.0,
+            "treci_kvartal": 1.0,
+            "maximum": 1.0,
+            "broj_autlajera": 0,
+            "column_chart_data": {
+                "(-0.001, 0.143]": 549,
+                "(0.857, 1.0]": 342
+            }
         },
         {
-            "ime_kolone": "y",
+            "ime_kolone": "Pclass",
             "broj_praznih_polja": 0.0,
-            "prosek": 5.734525954764462,
-            "standardna_devijacija": 1.1421346741235396,
-            "minimum": 0.0,
-            "prvi_kvartal": 4.72,
-            "drugi_kvartal": 5.71,
-            "treci_kvartal": 6.54,
-            "maximum": 58.9,
-            "broj_autlajera": 34
+            "prosek": 2.308641975308642,
+            "standardna_devijacija": 0.836071240977049,
+            "minimum": 1.0,
+            "prvi_kvartal": 2.0,
+            "drugi_kvartal": 3.0,
+            "treci_kvartal": 3.0,
+            "maximum": 3.0,
+            "broj_autlajera": 0,
+            "column_chart_data": {
+                "(2.714, 3.0]": 491,
+                "(0.998, 1.286]": 216,
+                "(1.857, 2.143]": 184
+            }
         },
         {
-            "ime_kolone": "z",
+            "ime_kolone": "Age",
+            "broj_praznih_polja": 177.0,
+            "prosek": 29.69911764705882,
+            "standardna_devijacija": 14.526497332334042,
+            "minimum": 0.42,
+            "prvi_kvartal": 20.125,
+            "drugi_kvartal": 28.0,
+            "treci_kvartal": 38.0,
+            "maximum": 80.0,
+            "broj_autlajera": 0,
+            "column_chart_data": {
+                "(23.157, 34.526]": 233,
+                "(11.789, 23.157]": 178,
+                "nan": 177,
+                "(34.526, 45.894]": 134,
+                "(45.894, 57.263]": 68,
+                "(0.34, 11.789]": 68,
+                "(57.263, 68.631]": 26,
+                "(68.631, 80.0]": 7
+            }
+        },
+        {
+            "ime_kolone": "SibSp",
             "broj_praznih_polja": 0.0,
-            "prosek": 3.5387337782723316,
-            "standardna_devijacija": 0.7056988469499964,
+            "prosek": 0.5230078563411896,
+            "standardna_devijacija": 1.1027434322934317,
             "minimum": 0.0,
-            "prvi_kvartal": 2.91,
-            "drugi_kvartal": 3.53,
-            "treci_kvartal": 4.04,
-            "maximum": 31.8,
-            "broj_autlajera": 55
+            "prvi_kvartal": 0.0,
+            "drugi_kvartal": 0.0,
+            "treci_kvartal": 1.0,
+            "maximum": 8.0,
+            "broj_autlajera": 30,
+            "column_chart_data": {
+                "(-0.008, 1.143]": 817,
+                "(1.143, 2.286]": 28,
+                "(3.429, 4.571]": 18,
+                "(2.286, 3.429]": 16,
+                "(6.857, 8.0]": 7,
+                "(4.571, 5.714]": 5
+            }
+        },
+        {
+            "ime_kolone": "Parch",
+            "broj_praznih_polja": 0.0,
+            "prosek": 0.38159371492704824,
+            "standardna_devijacija": 0.8060572211299483,
+            "minimum": 0.0,
+            "prvi_kvartal": 0.0,
+            "drugi_kvartal": 0.0,
+            "treci_kvartal": 0.0,
+            "maximum": 6.0,
+            "broj_autlajera": 15,
+            "column_chart_data": {
+                "(-0.006, 0.857]": 678,
+                "(0.857, 1.714]": 118,
+                "(1.714, 2.571]": 80,
+                "(4.286, 5.143]": 5,
+                "(2.571, 3.429]": 5,
+                "(3.429, 4.286]": 4,
+                "(5.143, 6.0]": 1
+            }
+        },
+        {
+            "ime_kolone": "Fare",
+            "broj_praznih_polja": 0.0,
+            "prosek": 32.204207968574636,
+            "standardna_devijacija": 49.6934285971809,
+            "minimum": 0.0,
+            "prvi_kvartal": 7.9104,
+            "drugi_kvartal": 14.4542,
+            "treci_kvartal": 31.0,
+            "maximum": 512.3292,
+            "broj_autlajera": 20,
+            "column_chart_data": {
+                "(-0.512, 73.19]": 789,
+                "(73.19, 146.38]": 71,
+                "(146.38, 219.57]": 15,
+                "(219.57, 292.76]": 13,
+                "(439.139, 512.329]": 3
+            }
         }
     ],
     "kategoricke_kolone": [
         {
-            "ime_kolone": "cut",
+            "ime_kolone": "Name",
             "broj_praznih_polja": 0,
-            "broj_jedinstvenih_polja": 5,
-            "najcesca_vrednost": "Ideal",
-            "najveci_broj_ponavljanja": 21551
+            "broj_jedinstvenih_polja": 891,
+            "najcesca_vrednost": "Braund, Mr. Owen Harris",
+            "najveci_broj_ponavljanja": 1,
+            "column_chart_data": {
+                "Braund, Mr. Owen Harris": 1,
+                "Boulos, Mr. Hanna": 1,
+                "Frolicher-Stehli, Mr. Maxmillian": 1,
+                "Gilinski, Mr. Eliezer": 1,
+                "Murdlin, Mr. Joseph": 1,
+                "Rintamaki, Mr. Matti": 1,
+                "others(885)": 885
+            }
         },
         {
-            "ime_kolone": "color",
+            "ime_kolone": "Sex",
             "broj_praznih_polja": 0,
-            "broj_jedinstvenih_polja": 7,
-            "najcesca_vrednost": "G",
-            "najveci_broj_ponavljanja": 11292
+            "broj_jedinstvenih_polja": 2,
+            "najcesca_vrednost": "male",
+            "najveci_broj_ponavljanja": 577,
+            "column_chart_data": {
+                "male": 577,
+                "female": 314
+            }
         },
         {
-            "ime_kolone": "clarity",
+            "ime_kolone": "Ticket",
             "broj_praznih_polja": 0,
-            "broj_jedinstvenih_polja": 8,
-            "najcesca_vrednost": "SI1",
-            "najveci_broj_ponavljanja": 13065
+            "broj_jedinstvenih_polja": 681,
+            "najcesca_vrednost": "347082",
+            "najveci_broj_ponavljanja": 7,
+            "column_chart_data": {
+                "347082": 7,
+                "CA. 2343": 7,
+                "1601": 7,
+                "3101295": 6,
+                "CA 2144": 6,
+                "347088": 6,
+                "others(675)": 852
+            }
+        },
+        {
+            "ime_kolone": "Cabin",
+            "broj_praznih_polja": 687,
+            "broj_jedinstvenih_polja": 147,
+            "najcesca_vrednost": "B96 B98",
+            "najveci_broj_ponavljanja": 4,
+            "column_chart_data": {
+                "B96 B98": 4,
+                "G6": 4,
+                "C23 C25 C27": 4,
+                "C22 C26": 3,
+                "F33": 3,
+                "F2": 3,
+                "others(141)": 870
+            }
+        },
+        {
+            "ime_kolone": "Embarked",
+            "broj_praznih_polja": 2,
+            "broj_jedinstvenih_polja": 3,
+            "najcesca_vrednost": "S",
+            "najveci_broj_ponavljanja": 644,
+            "column_chart_data": {
+                "S": 644,
+                "C": 168,
+                "Q": 77
+            }
         }
     ]
-}; 
+};
+    canvas: any;
+    ctx: any;
   ngOnInit(): void {
     for(let i=0;i<Object.keys(this.statistika['numericke_kolone']).length;i++)
     {
@@ -132,8 +238,50 @@ export class StatisticComponent implements OnInit {
     {
       this.kolone.push(this.statistika['kategoricke_kolone'][i]['ime_kolone']);
     }
-    console.log(this.kolone);
+    /*console.log(typeof(this.kolone));
+    console.log(Object.keys(this.statistika['numericke_kolone'][0]['column_chart_data']));
+    console.log(typeof(Object.values(this.statistika['numericke_kolone'][0]['column_chart_data'])));*/
+    /*
+    this.myChart.push(new Chart("myChart", {
+        type: 'bar',
+        data: {
+            labels: Object.keys(this.statistika['kategoricke_kolone'][0]['column_chart_data']) ,
+            datasets: [{
+                label: '# of Votes',
+                data: Object.values(this.statistika['kategoricke_kolone'][0]['column_chart_data']),
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    })
+    );
 
+    this.myChart.push(new Chart("myChart2", {
+        type: 'bar',
+        data: {
+            labels: Object.keys(this.statistika['kategoricke_kolone'][1]['column_chart_data']) ,
+            datasets: [{
+                label: '# of Votes',
+                data: Object.values(this.statistika['kategoricke_kolone'][1]['column_chart_data']),
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    })
+    );
+    console.log(this.myChart);*/
+    
+   
     this.selectChangeHandler();
   }
   
@@ -150,6 +298,10 @@ export class StatisticComponent implements OnInit {
 
       for(let i=0;i<Object.keys(this.statistika['numericke_kolone']).length;i++)
       {
+        if(this.kolone[j]!=this.statistika['numericke_kolone'][i]['ime_kolone'])
+        {
+            this.myChart[j].destroy();
+        }
         if(this.kolone[j]==this.statistika['numericke_kolone'][i]['ime_kolone'])
         {
           this.strStat='';
@@ -159,11 +311,35 @@ export class StatisticComponent implements OnInit {
           +this.statistika['numericke_kolone'][i]['drugi_kvartal']+'<br>Treci kvartal: ' +this.statistika['numericke_kolone'][i]['treci_kvartal']+'<br>Maximum: '
           +this.statistika['numericke_kolone'][i]['maximum']+'<br>Broj autlajera: ' +this.statistika['numericke_kolone'][i]['broj_autlajera'];
           this.stats.push(this.strStat);
+
+          //chart
+          this.myChart.push(new Chart(this.kolone[j], {
+            type: 'bar',
+            data: {
+                labels: Object.keys(this.statistika['numericke_kolone'][i]['column_chart_data']) ,
+                datasets: [{
+                    label: '# of Votes',
+                    data: Object.values(this.statistika['numericke_kolone'][i]['column_chart_data']),
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        })
+        );
         }
 
       }
       for(let i=0;i<Object.keys(this.statistika['kategoricke_kolone']).length;i++)
       {
+        if(this.kolone[j]!=this.statistika['kategoricke_kolone'][i]['ime_kolone'])
+        {
+            this.myChart[j].destroy();
+        }
         if(this.kolone[j]==this.statistika['kategoricke_kolone'][i]['ime_kolone'])
         {
           this.strStat='';
@@ -171,10 +347,30 @@ export class StatisticComponent implements OnInit {
           +this.statistika['kategoricke_kolone'][i]['broj_jedinstvenih_polja']+'<br>Najcesca vrednost: ' +this.statistika['kategoricke_kolone'][i]['najcesca_vrednost']+'<br>Najveci broj ponavljanja: '
           +this.statistika['kategoricke_kolone'][i]['najveci_broj_ponavljanja'];
           this.stats.push(this.strStat);
+
+          //graf
+          this.myChart.push(new Chart(this.kolone[j], {
+            type: 'bar',
+            data: {
+                labels: Object.keys(this.statistika['kategoricke_kolone'][i]['column_chart_data']) ,
+                datasets: [{
+                    label: '# of Votes',
+                    data: Object.values(this.statistika['kategoricke_kolone'][i]['column_chart_data']),
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        })
+        );
         }
       }
     }
-    console.log(this.stats);
+    console.log(this.myChart);
 
     
   }

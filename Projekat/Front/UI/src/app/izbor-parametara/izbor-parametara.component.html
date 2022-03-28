@@ -22,15 +22,16 @@
     (onDeSelect)="OnItemDeSelect($event)"
     (onSelectAll)="onSelectAll($event)"
     (onDeSelectAll)="onDeSelectAll($event)"
-    
     >
 </angular2-multiselect>
 
 
 <label>Izaberi izlaznu kolonu</label>
-<angular2-multiselect id="MultiselectIzlazneKolone" [data]="dropdownList" [(ngModel)]="izlaznaKolona" 
+<angular2-multiselect id="MultiselectIzlazneKolone" [data]="dropdownList2" [(ngModel)]="izlaznaKolona" 
     [settings]="dropdownSettings2" 
     (onSelect)="onItemSelect2($event)" 
     (onDeSelect)="OnItemDeSelect2($event)"
     >
 </angular2-multiselect>
+
+<button (click)="pom()"></button>

@@ -6,6 +6,7 @@ import statistics as stats
 import pandas as pd
 from pydantic import BaseModel
 
+
 import statistics as stats
 #vazno!!!!!!
 #pokretanje aplikacije komanda

@@ -15,7 +15,7 @@ namespace Projekat.Clients
         public MachineLearningClient(HttpClient client,IConfiguration configuration)
         {
             _configuration = configuration;
-             uri = configuration.GetSection("ML_Server_Config:host").Value.ToString() + ":" + configuration.GetSection("ML_Server_Config:port").Value.ToString() + "/";
+             uri =configuration.GetSection("ML_Server_Config:http") + configuration.GetSection("ML_Server_Config:host").Value.ToString() + ":" + configuration.GetSection("ML_Server_Config:port").Value.ToString() + "/";
             _client = client;
             _client.BaseAddress = new Uri(uri);
             _client.Timeout = new TimeSpan(0, 0, 30);
@@ -64,11 +64,11 @@ namespace Projekat.Clients
             using (var socket = new ClientWebSocket())
             {
                 try
-                {
-                    string uri = _configuration.GetSection("ML_Server_Config:host").Value.ToString() + ":" + _configuration.GetSection("ML_Server_Config:port").Value.ToString() + "/";
-                    await socket.ConnectAsync(new Uri("ws:" + uri + "/test"), CancellationToken.None);
+                { 
+                    await socket.ConnectAsync(new Uri("ws://127.0.0.1:8000/test/"+userID), CancellationToken.None);
                     await Send(socket, userID);
-                    await Recieve(socket);
+                    var res = await Recieve(socket);
+                    return res.ToString();
 
                 }
                 catch (Exception ex)
@@ -77,7 +77,7 @@ namespace Projekat.Clients
                     return ex.Message;
 
                 }
-                return "greska";
+                
             }
         }
         private static async Task Send(ClientWebSocket socket, string userID)
@@ -85,12 +85,13 @@ namespace Projekat.Clients
             await socket.SendAsync(Encoding.UTF8.GetBytes(userID), WebSocketMessageType.Text, true, CancellationToken.None);
         }
 
-        private static async Task Recieve(ClientWebSocket socket)
+        private static async Task<WebSocketReceiveResult> Recieve(ClientWebSocket socket)
         {
             var buffer = new ArraySegment<byte>(new byte[1024 * 4]);
+            WebSocketReceiveResult result;
             do
             {
-                WebSocketReceiveResult result;
+                
 
                 using (var ms = new MemoryStream())
                 {
@@ -104,9 +105,11 @@ namespace Projekat.Clients
                         break;
 
                     ms.Seek(0, SeekOrigin.Begin);
-                    //ovde mora da se sada pozove konekcija na server koji komunicira sa frontendom valjda
+                    
                 }
             } while (true);
+
+            return result;
 
 
         }

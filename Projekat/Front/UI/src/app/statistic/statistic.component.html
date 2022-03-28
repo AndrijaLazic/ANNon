@@ -15,11 +15,18 @@
             <tr>
                 <th *ngFor="let item of kolone" class="header-cell" >{{item}}</th>
             </tr>
+            
             <tr >
                 <td *ngFor="let item of stats" [innerHTML]="item"></td>
             </tr>
     </tbody>
     </table>
+
+            <div id="divChart">
+                <canvas id="Pclass"></canvas>
+            </div>
+
+    
 
 
 

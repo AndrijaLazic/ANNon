@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { ChartModel } from 'ag-grid-community';
 import{webSocket} from 'rxjs/webSocket'
+
+
 @Component({
   selector: 'app-trening',
   templateUrl: './trening.component.html',
@@ -8,9 +11,14 @@ import{webSocket} from 'rxjs/webSocket'
 export class TreningComponent implements OnInit {
   message='poruka';
   subject=webSocket('https://localhost:7286/');
-  constructor() { }
+  constructor() { 
+    
+  }
+
+
 
   ngOnInit(): void {
+    
   }
   SendtoBack()
   {
@@ -20,3 +28,9 @@ export class TreningComponent implements OnInit {
   }
 
 }
+
+
+
+
+
+
