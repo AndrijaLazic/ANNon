@@ -29,6 +29,7 @@ import { AgGridModule } from 'ag-grid-angular';
 import { NgxSpinnerModule } from "ngx-spinner";
 import { TreningComponent } from './trening/trening.component';
 import { IzborParametaraComponent } from './izbor-parametara/izbor-parametara.component';
+import { SignalRServiceComponent } from './signal-rservice/signal-rservice.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -45,7 +46,8 @@ import { IzborParametaraComponent } from './izbor-parametara/izbor-parametara.co
     StatisticComponent,
     CsvTabelaComponent,
     TreningComponent,
-    IzborParametaraComponent
+    IzborParametaraComponent,
+    SignalRServiceComponent
     
   ],
   imports: [

@@ -2,6 +2,11 @@ using Microsoft.AspNetCore.Builder;
 using Projekat.Clients;
 using Projekat.Data;
 using Projekat.Modeli;
+using Projekat.SignalRCommunication.Hubs;
+using WebSocketSharp.Server;
+
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -14,6 +19,9 @@ builder.Services.AddHttpClient<MachineLearningClient>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+//konfigurisanje SignalR
+builder.Services.AddSignalR();
 
 //BAZA mySql
 var KonekcioniStringZaMySql = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -28,12 +36,13 @@ builder.Services.AddDbContext<MySqlDbContext>(options =>
 var myAllowSpecificOrigins = "_myAllowSpecificOrigins";
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: myAllowSpecificOrigins,
+    options.AddPolicy("CorsPolicy",
         builder =>
         {
             builder.WithOrigins("http://localhost:4200")
             .AllowAnyMethod()
-            .AllowAnyHeader();
+            .AllowAnyHeader()
+            .AllowCredentials();
         });
 });
 
@@ -49,12 +58,14 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
-app.UseAuthorization();
-app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
-app.UseWebSockets();
 app.UseRouting();
+app.UseAuthorization();
+app.UseCors("CorsPolicy");
 
-app.MapControllers();
+
+app.UseEndpoints(endpoints => {
+    app.MapControllers();
+    endpoints.MapHub<EpochHub>("/hub");
+});
 
 app.Run();
