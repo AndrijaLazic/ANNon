@@ -10,9 +10,18 @@ export class IzborParametaraComponent implements OnInit {
 
   constructor() { }
   public SelektovanaVrednost;
+
+
   dropdownList = [];
   selectedItems = [];
   dropdownSettings = {};
+
+
+  izlaznaKolona;
+  dropdownSettings2={};
+
+
+
     ngOnInit(){
       this.dropdownList = [
                             {"id":1,"itemName":"India"},
@@ -41,22 +50,42 @@ export class IzborParametaraComponent implements OnInit {
                                 classes:"myclass custom-class",
                                 badgeShowLimit:"3"
                                 
-                              };            
-  }
+                              };
+                              
+      this.dropdownSettings2 = { 
+                                singleSelection: true, 
+                                text:"Select Countries",
+                                selectAllText:'Select All',
+                                unSelectAllText:'UnSelect All',
+                                enableSearchFilter: true,
+                                classes:"myclass custom-class",
+                                badgeShowLimit:"3"
+                                
+                              };                        
+    }
 
-  onItemSelect(item:any){
-    console.log(item);
-    console.log(this.selectedItems);
-}
-OnItemDeSelect(item:any){
-    console.log(item);
-    console.log(this.selectedItems);
-}
-onSelectAll(items: any){
-    console.log(items);
-}
-onDeSelectAll(items: any){
-    console.log(items);
-}
+    onItemSelect(item:any){
+        console.log(item);
+        console.log(this.selectedItems);
+    }
+    OnItemDeSelect(item:any){
+        console.log(item);
+        console.log(this.selectedItems);
+    }
+    onSelectAll(items: any){
+        console.log(items);
+    }
+    onDeSelectAll(items: any){
+        console.log(items);
+    }
+    
+
+    onItemSelect2(item:any){
+      console.log(item);
+      console.log(this.izlaznaKolona);
+    }
+    OnItemDeSelect2(item:any){
+        console.log(item);
+    }
 
 }
