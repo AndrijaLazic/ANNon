@@ -1,73 +1,40 @@
-import socket
-from tensorflow import keras
+import requests
+import tensorflow as tf
+from tensorflow.python.platform import tf_logging as logging
+import numpy as np
+import json
 
 
-class CustomCallback(keras.callbacks.Callback):
-    def __init__(self, host, port) -> None:
-        super().__init__()
-        self.host=host
-        self.port=port
-        self.socket=None
-        self.conn=None
-        self.addr=None
-
-    def on_train_begin(self, logs=None):
-        self.socket=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.socket.bind((self.host, self.port))
-        self.socket.listen()
-        self.conn, self.addr = self.socket.accept()
-        print(f"Connected by {self.addr}")
-        print("Starting training;")
-
-    def on_train_end(self, logs=None):
-        self.conn.close()
-        self.socket.close()
-        print("Stop training;")
-
-    def on_epoch_begin(self, epoch, logs=None):
-        keys = list(logs.keys())
-        print("Start epoch {} of training; got log keys: {}".format(epoch, keys))
+class CustomCallback(tf.keras.callbacks.RemoteMonitor):
+    def __init__(self,root,path,send_as_json,to_send) -> None:
+        super().__init__(root=root,path=path,send_as_json=send_as_json)
+        self.to_send=to_send
 
     def on_epoch_end(self, epoch, logs=None):
-        keys = list(logs.keys())
-        print("End epoch {} of training; got log keys: {}".format(epoch, keys))
+        if requests is None:
+            raise ImportError('RemoteMonitor requires the `requests` library.')
+        logs = logs or {}
+        send = {}
+        send['epoch'] = epoch
+        send["to_send"]=self.to_send
+        for k, v in logs.items():
+            # np.ndarray and np.generic are not scalar types
+            # therefore we must unwrap their scalar values and
+            # pass to the json-serializable dict 'send'
+            if isinstance(v, (np.ndarray, np.generic)):
+                send[k] = v.item()
+            else:
+                send[k] = v
+        try:
+            if self.send_as_json:
+                r=requests.post(self.root + self.path, json=send, headers=self.headers)
 
-    def on_test_begin(self, logs=None):
-        keys = list(logs.keys())
-        print("Start testing; got log keys: {}".format(keys))
+            else:
+                r=requests.post(
+                    self.root + self.path, {self.field: json.dumps(send)},
+                    headers=self.headers)
+                print(r.status_code)
+        except:
+            print("doslo je do greske prilikom post metode")
 
-    def on_test_end(self, logs=None):
-        keys = list(logs.keys())
-        print("Stop testing; got log keys: {}".format(keys))
 
-    def on_predict_begin(self, logs=None):
-        keys = list(logs.keys())
-        print("Start predicting; got log keys: {}".format(keys))
-
-    def on_predict_end(self, logs=None):
-        keys = list(logs.keys())
-        print("Stop predicting; got log keys: {}".format(keys))
-
-    def on_train_batch_begin(self, batch, logs=None):
-        keys = list(logs.keys())
-        print("...Training: start of batch {}; got log keys: {}".format(batch, keys))
-
-    def on_train_batch_end(self, batch, logs=None):
-        keys = list(logs.keys())
-        print("...Training: end of batch {}; got log keys: {}".format(batch, keys))
-
-    def on_test_batch_begin(self, batch, logs=None):
-        keys = list(logs.keys())
-        print("...Evaluating: start of batch {}; got log keys: {}".format(batch, keys))
-
-    def on_test_batch_end(self, batch, logs=None):
-        keys = list(logs.keys())
-        print("...Evaluating: end of batch {}; got log keys: {}".format(batch, keys))
-
-    def on_predict_batch_begin(self, batch, logs=None):
-        keys = list(logs.keys())
-        print("...Predicting: start of batch {}; got log keys: {}".format(batch, keys))
-
-    def on_predict_batch_end(self, batch, logs=None):
-        keys = list(logs.keys())
-        print("...Predicting: end of batch {}; got log keys: {}".format(batch, keys))
