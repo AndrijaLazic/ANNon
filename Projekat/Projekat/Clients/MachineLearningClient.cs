@@ -85,14 +85,14 @@ namespace Projekat.Clients
             await socket.SendAsync(Encoding.UTF8.GetBytes(userID), WebSocketMessageType.Text, true, CancellationToken.None);
         }
 
-        private static async Task<WebSocketReceiveResult> Recieve(ClientWebSocket socket)
+        private static async Task<int> Recieve(ClientWebSocket socket)
         {
             var buffer = new ArraySegment<byte>(new byte[1024 * 4]);
-            WebSocketReceiveResult result;
+            //SKINI DO WHILE PETLJU I NAPRAVI JE U FJI KOJU ZOVES KAKO BI UZEO REZULTAT NORMALNO I KONEKCIJA DA BI OSTALA OTVORENA STALNO
             do
             {
-                
-
+                //prima samo jednu poruku, omoguci stalno da radi
+                WebSocketReceiveResult result;
                 using (var ms = new MemoryStream())
                 {
                     do
@@ -101,15 +101,15 @@ namespace Projekat.Clients
                         ms.Write(buffer.Array, buffer.Offset, result.Count);
                     } while (!result.EndOfMessage);
 
-                    if (result.MessageType == WebSocketMessageType.Close)
-                        break;
-
+                    
                     ms.Seek(0, SeekOrigin.Begin);
                     
                 }
+                //POGLEDAJ KAKO DA SE VRATI REZULTAT
+                return result.Count;
             } while (true);
 
-            return result;
+            
 
 
         }

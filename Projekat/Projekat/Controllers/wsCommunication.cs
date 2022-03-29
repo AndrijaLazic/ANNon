@@ -24,27 +24,26 @@ namespace Projekat.Controllers
            _configuration = configuration;
             _client = client;
             _hub = hub;
-          
+            
                 
         }
         
-        [HttpGet("wsrequest")]
-        public async Task<IActionResult> Get()
+        [HttpPost("{connectionID}")]
+        public void Post(string connectionID,string message)
         {
-            return Ok();
+            _hub.Clients.Client(connectionID).SendAsync("sendResults", message);
+        }
+        //NEKA VRSTA MIDDLEWARE-A KOJA SPAJA SIGNALR 
+        [HttpPost("user")]
+        public async Task<IActionResult> getUserID(string userID, string connectionID)
+        {
+            if(userID.IsNullOrEmpty())
+                return BadRequest();
 
-            //var res = await _client.WsServerConnect(userID);
-            //return Ok(res);
-            /*
-            if(HttpContext.WebSockets.IsWebSocketRequest)
-            {
-                using var webSocket = await HttpContext.WebSockets.AcceptWebSocketAsync();
-                _client.WsServerConnect(userID);
-                
-            }
-            else
-                HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
-            */
+            var ans = await _client.WsServerConnect(userID);
+
+            await _hub.Clients.Client(connectionID).SendAsync("sendResults", ans);
+            return Ok();
         }
         
        

@@ -1,3 +1,4 @@
+from types import ClassMethodDescriptorType
 from typing import Dict, List
 from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect
 from fastapi.responses import HTMLResponse
@@ -126,7 +127,8 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str):
             
             #sledeci poziv radi
             #await sync_to_async(fja)(client_id)
-            await manager.send_text(client_id,"radi")
+            print(client_id)
+            await manager.send_text(client_id,"radisdadasd")
     except WebSocketDisconnect:
         manager.disconnect(client_id)
 
