@@ -11,7 +11,7 @@ export class StatisticComponent implements OnInit {
   kolone=new Array();
   stats=new Array();
   strStat:string;
-  myChart=new Array();
+  myChart;
   constructor(private shared: SharedService,private route:Router,private elementRef: ElementRef) { }
 
   statistika={
@@ -28,7 +28,7 @@ export class StatisticComponent implements OnInit {
             "maximum": 891.0,
             "broj_autlajera": 0,
             "column_chart_data": {
-                "(0.11, 128.143]": 128,
+                "(0.11, 128.143]": 300,
                 "(763.857, 891.0]": 128,
                 "(128.143, 255.286]": 127,
                 "(255.286, 382.429]": 127,
@@ -238,36 +238,14 @@ export class StatisticComponent implements OnInit {
     {
       this.kolone.push(this.statistika['kategoricke_kolone'][i]['ime_kolone']);
     }
-    /*console.log(typeof(this.kolone));
-    console.log(Object.keys(this.statistika['numericke_kolone'][0]['column_chart_data']));
-    console.log(typeof(Object.values(this.statistika['numericke_kolone'][0]['column_chart_data'])));*/
-    /*
-    this.myChart.push(new Chart("myChart", {
-        type: 'bar',
-        data: {
-            labels: Object.keys(this.statistika['kategoricke_kolone'][0]['column_chart_data']) ,
-            datasets: [{
-                label: '# of Votes',
-                data: Object.values(this.statistika['kategoricke_kolone'][0]['column_chart_data']),
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
-    })
-    );
 
-    this.myChart.push(new Chart("myChart2", {
+    this.myChart=new Chart("myChart", {
         type: 'bar',
         data: {
-            labels: Object.keys(this.statistika['kategoricke_kolone'][1]['column_chart_data']) ,
+            labels: Object.keys(this.statistika['numericke_kolone'][0]['column_chart_data']) ,
             datasets: [{
-                label: '# of Votes',
-                data: Object.values(this.statistika['kategoricke_kolone'][1]['column_chart_data']),
+                label: '',
+                data: Object.values(this.statistika['numericke_kolone'][0]['column_chart_data']),
             }]
         },
         options: {
@@ -278,9 +256,7 @@ export class StatisticComponent implements OnInit {
             }
         }
     })
-    );
-    console.log(this.myChart);*/
-    
+    ;
    
     this.selectChangeHandler();
   }
@@ -298,10 +274,6 @@ export class StatisticComponent implements OnInit {
 
       for(let i=0;i<Object.keys(this.statistika['numericke_kolone']).length;i++)
       {
-        if(this.kolone[j]!=this.statistika['numericke_kolone'][i]['ime_kolone'])
-        {
-            this.myChart[j].destroy();
-        }
         if(this.kolone[j]==this.statistika['numericke_kolone'][i]['ime_kolone'])
         {
           this.strStat='';
@@ -311,35 +283,11 @@ export class StatisticComponent implements OnInit {
           +this.statistika['numericke_kolone'][i]['drugi_kvartal']+'<br>Treci kvartal: ' +this.statistika['numericke_kolone'][i]['treci_kvartal']+'<br>Maximum: '
           +this.statistika['numericke_kolone'][i]['maximum']+'<br>Broj autlajera: ' +this.statistika['numericke_kolone'][i]['broj_autlajera'];
           this.stats.push(this.strStat);
-
-          //chart
-          this.myChart.push(new Chart(this.kolone[j], {
-            type: 'bar',
-            data: {
-                labels: Object.keys(this.statistika['numericke_kolone'][i]['column_chart_data']) ,
-                datasets: [{
-                    label: '# of Votes',
-                    data: Object.values(this.statistika['numericke_kolone'][i]['column_chart_data']),
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        })
-        );
         }
 
       }
       for(let i=0;i<Object.keys(this.statistika['kategoricke_kolone']).length;i++)
       {
-        if(this.kolone[j]!=this.statistika['kategoricke_kolone'][i]['ime_kolone'])
-        {
-            this.myChart[j].destroy();
-        }
         if(this.kolone[j]==this.statistika['kategoricke_kolone'][i]['ime_kolone'])
         {
           this.strStat='';
@@ -347,14 +295,59 @@ export class StatisticComponent implements OnInit {
           +this.statistika['kategoricke_kolone'][i]['broj_jedinstvenih_polja']+'<br>Najcesca vrednost: ' +this.statistika['kategoricke_kolone'][i]['najcesca_vrednost']+'<br>Najveci broj ponavljanja: '
           +this.statistika['kategoricke_kolone'][i]['najveci_broj_ponavljanja'];
           this.stats.push(this.strStat);
+        }
+      }
+    }
+    console.log(this.myChart);
 
+    
+  }
+  iscrtajGraf(event:any){
+    
+    this.vrednost = event.target.value;
+
+    for(let i=0;i<Object.keys(this.statistika['numericke_kolone']).length;i++)
+      {
+        if(this.vrednost==this.statistika['numericke_kolone'][i]['ime_kolone'])
+        {
+            this.myChart.destroy();
           //graf
-          this.myChart.push(new Chart(this.kolone[j], {
+          this.myChart=new Chart("myChart", {
+            type: 'bar',
+            data: {
+                labels: Object.keys(this.statistika['numericke_kolone'][i]['column_chart_data']) ,
+                datasets: [{
+                    label: '',
+                    data: Object.values(this.statistika['numericke_kolone'][i]['column_chart_data']),
+                }]
+            },
+            options: {
+                scales: {
+                    
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        })
+        ;
+        }
+      }
+
+
+
+    for(let i=0;i<Object.keys(this.statistika['kategoricke_kolone']).length;i++)
+      {
+        if(this.vrednost==this.statistika['kategoricke_kolone'][i]['ime_kolone'])
+        {
+            this.myChart.destroy();
+          //graf
+          this.myChart=new Chart("myChart", {
             type: 'bar',
             data: {
                 labels: Object.keys(this.statistika['kategoricke_kolone'][i]['column_chart_data']) ,
                 datasets: [{
-                    label: '# of Votes',
+                    label: '',
                     data: Object.values(this.statistika['kategoricke_kolone'][i]['column_chart_data']),
                 }]
             },
@@ -366,13 +359,10 @@ export class StatisticComponent implements OnInit {
                 }
             }
         })
-        );
+        ;
         }
       }
-    }
-    console.log(this.myChart);
 
-    
   }
   previous()
   {
