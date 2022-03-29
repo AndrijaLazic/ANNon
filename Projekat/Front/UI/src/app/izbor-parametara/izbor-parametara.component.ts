@@ -10,8 +10,8 @@ export class IzborParametaraComponent implements OnInit {
 
   constructor() { }
   public SelektovanaVrednost;
-
-
+  trenutniBrojSkrivenihSlojeva=0;
+  listaSlojeva=[];
   dropdownList = [];
   selectedItems = [];
   dropdownSettings = {};
@@ -40,6 +40,7 @@ export class IzborParametaraComponent implements OnInit {
                           ];
 
     ngOnInit(){
+      
       this.loadDataSet1();
       this.loadDataSet2();                       
     } 
@@ -140,8 +141,30 @@ export class IzborParametaraComponent implements OnInit {
         this.loadDataSet1();
     }
 
+    change(value: any): void {
+      let myContainer = <HTMLElement>document.getElementById('TreciRed');
+        
+      if(value>this.trenutniBrojSkrivenihSlojeva){
+        this.trenutniBrojSkrivenihSlojeva=value;
+        this.listaSlojeva.push(1)
 
-
+        myContainer.innerHTML = myContainer.innerHTML+"<div class='col-md-auto' id='BrojNeuronaSloja'> "+
+        "<label>Izaberi broj neurona</label> "+
+        "<ngx-number-spinner "+
+            "[value]='0' "+
+            "(change)='change($event)' "+
+            "[min]='0' "+
+            "[max]='5'> "+
+        "</ngx-number-spinner> "+
+      "</div> ";
+      }
+      else{
+        this.trenutniBrojSkrivenihSlojeva=value;
+        this.listaSlojeva.splice(this.listaSlojeva.length-1, 1);
+        
+      }
+      console.log(this.listaSlojeva);
+    }
 
 
     

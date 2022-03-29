@@ -1,37 +1,61 @@
-<mat-form-field appearance="fill">
-  <mat-label>Tip enkodiranja</mat-label>
-  <mat-select [(value)]="SelektovanaVrednost">
-    <mat-option value="one_hot">
-        one hot
-    </mat-option>
-    <mat-option value="multi_hot">
-        multi hot
-      </mat-option>
-      <mat-option value="count">
-        count
-    </mat-option >
-  </mat-select>
-</mat-form-field>
-<!-- {{SelektovanaVrednost}} -->
-<br><br><br>
 
-<label>Izaberi ulazne kolone</label>
-<angular2-multiselect id="MultiselectUlaznihKolona" [data]="dropdownList" [(ngModel)]="selectedItems" 
-    [settings]="dropdownSettings" 
-    (onSelect)="onItemSelect($event)" 
-    (onDeSelect)="OnItemDeSelect($event)"
-    (onSelectAll)="onSelectAll($event)"
-    (onDeSelectAll)="onDeSelectAll($event)"
-    >
-</angular2-multiselect>
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-auto">
+      <mat-form-field appearance="fill" id="TipEnkodiranjaSelektor">
+        <mat-label>Tip enkodiranja</mat-label>
+        <mat-select [(value)]="SelektovanaVrednost" id="TipEnkodiranjaSelektor2">
+          <mat-option value="one_hot">
+              one hot
+          </mat-option>
+          <mat-option value="multi_hot">
+              multi hot
+            </mat-option>
+            <mat-option value="count">
+              count
+          </mat-option >
+        </mat-select>
+      </mat-form-field>
+      <!-- {{SelektovanaVrednost}} -->
+    </div>
+
+    <div class="col-md-auto">
+      <label>Izaberi ulazne kolone</label>
+      <angular2-multiselect id="MultiselectUlaznihKolona" [data]="dropdownList" [(ngModel)]="selectedItems" 
+          [settings]="dropdownSettings" 
+          (onSelect)="onItemSelect($event)" 
+          (onDeSelect)="OnItemDeSelect($event)"
+          (onSelectAll)="onSelectAll($event)"
+          (onDeSelectAll)="onDeSelectAll($event)"
+          >
+      </angular2-multiselect>
+    </div>
+    <div class="col-md-auto">
+      <label>Izaberi izlaznu kolonu</label>
+      <angular2-multiselect id="MultiselectIzlazneKolone" [data]="dropdownList2" [(ngModel)]="izlaznaKolona" 
+          [settings]="dropdownSettings2" 
+          (onSelect)="onItemSelect2($event)" 
+          (onDeSelect)="OnItemDeSelect2($event)"
+          >
+      </angular2-multiselect>
+    </div>
+    
+  </div>
+  <div class="row">
+    <div class="col-md-auto" id="BrojSkrivenihSlojevaSelektor">
+      <label>Izaberi broj skrivenih slojeva</label>
+      <ngx-number-spinner
+          [value]="0"
+          (change)="change($event)"
+          [min]="0"
+          [max]="5">
+      </ngx-number-spinner>
+    </div>
+  </div>
+
+  <div class="row justify-content-center" id="TreciRed">
 
 
-<label>Izaberi izlaznu kolonu</label>
-<angular2-multiselect id="MultiselectIzlazneKolone" [data]="dropdownList2" [(ngModel)]="izlaznaKolona" 
-    [settings]="dropdownSettings2" 
-    (onSelect)="onItemSelect2($event)" 
-    (onDeSelect)="OnItemDeSelect2($event)"
-    >
-</angular2-multiselect>
+  </div>
+</div>
 
-<button (click)="pom()"></button>

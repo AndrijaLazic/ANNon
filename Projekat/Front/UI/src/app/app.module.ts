@@ -30,6 +30,7 @@ import { NgxSpinnerModule } from "ngx-spinner";
 import { TreningComponent } from './trening/trening.component';
 import { IzborParametaraComponent } from './izbor-parametara/izbor-parametara.component';
 import { SignalRServiceComponent } from './signal-rservice/signal-rservice.component';
+import { NgxNumberSpinnerModule } from 'ngx-number-spinner';
 @NgModule({
   declarations: [
     AppComponent,
@@ -63,7 +64,8 @@ import { SignalRServiceComponent } from './signal-rservice/signal-rservice.compo
     AgGridModule.withComponents([CsvTabelaComponent]),
     NgxSpinnerModule,
     MatSelectModule,
-    AngularMultiSelectModule
+    AngularMultiSelectModule,
+    NgxNumberSpinnerModule
   ],
   providers: [],
   bootstrap: [AppComponent],

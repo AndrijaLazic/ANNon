@@ -34,6 +34,7 @@
     "mdb-angular-ui-kit": "^2.0.0",
     "ngx": "^2.3.0",
     "ngx-cookie-service": "^13.1.2",
+    "ngx-number-spinner": "^2.2.1",
     "ngx-pagination": "^5.1.1",
     "ngx-papaparse": "^5.0.0",
     "ngx-spinner": "^13.1.1",
