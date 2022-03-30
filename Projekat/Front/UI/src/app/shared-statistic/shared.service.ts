@@ -7,9 +7,8 @@ export class SharedService {
   statistika:object;
   kolone:any[];
   constructor() { }
-  setMessage(stat,kolone){
+  setMessage(stat){
     this.statistika=stat;
-    this.kolone=kolone;
   }
   getStatistic(){
     return this.statistika;
