@@ -29,8 +29,9 @@ import { AgGridModule } from 'ag-grid-angular';
 import { NgxSpinnerModule } from "ngx-spinner";
 import { TreningComponent } from './trening/trening.component';
 import { IzborParametaraComponent } from './izbor-parametara/izbor-parametara.component';
-import { SignalRServiceComponent } from './signal-rservice/signal-rservice.component';
 import { NgxNumberSpinnerModule } from 'ngx-number-spinner';
+import { ChartModel } from 'ag-grid-community';
+import { NgChartsModule } from 'ng2-charts';
 @NgModule({
   declarations: [
     AppComponent,
@@ -47,8 +48,7 @@ import { NgxNumberSpinnerModule } from 'ngx-number-spinner';
     StatisticComponent,
     CsvTabelaComponent,
     TreningComponent,
-    IzborParametaraComponent,
-    SignalRServiceComponent
+    IzborParametaraComponent
     
   ],
   imports: [
@@ -65,7 +65,8 @@ import { NgxNumberSpinnerModule } from 'ngx-number-spinner';
     NgxSpinnerModule,
     MatSelectModule,
     AngularMultiSelectModule,
-    NgxNumberSpinnerModule
+    NgxNumberSpinnerModule,
+    NgChartsModule
   ],
   providers: [],
   bootstrap: [AppComponent],
