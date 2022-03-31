@@ -15,8 +15,8 @@ export class StatisticComponent implements OnInit {
   strStat:string;
   myChart;
   constructor(private shared: SharedService,private route:Router,private elementRef: ElementRef) { }
-    //statistika:Object;
-  statistika={
+    statistika:Object;
+  /*statistika={
     "numericke_kolone": [
         {
             "ime_kolone": "PassengerId",
@@ -228,10 +228,10 @@ export class StatisticComponent implements OnInit {
             }
         }
     ]
-};
+};*/
   ngOnInit(): void {
 
-    //this.statistika=this.shared.getStatistic();
+    this.statistika=this.shared.getStatistic();
     for(let i=0;i<Object.keys(this.statistika['numericke_kolone']).length;i++)
     {
       this.kolone.push(this.statistika['numericke_kolone'][i]['ime_kolone']);
