@@ -40,14 +40,7 @@ button:focus{
   transition: 0.4s;
 }
 table{
-    position: relative;
-    float:left;
-    top:60px;
     
-    max-width: 40%;
-    left: 100px;
-    height: auto;
-    max-height: 400px;
     overflow-y:scroll;
     overflow-x: scroll;
     display: block;
@@ -66,10 +59,84 @@ table{
 
      
  }
+
  #divChart{
-    position:relative;
-    float: right;
-    top:60px;
-    width:40%;
-    height:40%;
+    background-color: white;
+    width: 434px;
  }
+
+
+ section {
+  display: table;
+}
+
+.example-label {
+  display: table-cell;
+  font-size: 14px;
+  margin-left: 8px;
+  min-width: 120px;
+}
+
+.example-button-row {
+  display: table-cell;
+  width: 490px;
+}
+
+.example-button-row .mat-button-base {
+  margin: 8px 8px 8px 0;
+}
+
+.example-flex-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.example-button-container {
+  display: flex;
+  justify-content: center;
+  width: 120px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+section {
+    display: table;
+  }
+  
+  .example-label {
+    display: table-cell;
+    font-size: 14px;
+    margin-left: 8px;
+    min-width: 120px;
+  }
+  
+  .example-button-row {
+    display: table-cell;
+    width: 490px;
+  }
+  
+  .example-button-row .mat-button-base {
+    margin: 8px 8px 8px 0;
+  }
+  
+  .example-flex-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  
+  .example-button-container {
+    display: flex;
+    justify-content: center;
+    width: 120px;
+  }

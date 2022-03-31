@@ -133,6 +133,7 @@ export class CsvTabelaComponent implements OnInit {
   posaljiFajl()
   {
       this.spinner.show("Spiner2");
+      
       this.setSession();
       const formData = new FormData();
       let file = new File([this.gridApi.getDataAsCsv()],this.imeFajla ,{type: 'application/vnd.ms-excel'});
@@ -170,6 +171,7 @@ export class CsvTabelaComponent implements OnInit {
         if(this.received)
         {
           console.log(this.statistika);
+          this.spinner.hide("Spiner2");
           this.shared.setMessage(this.statistika);
           this.route.navigate(["./statistic"]);
         }

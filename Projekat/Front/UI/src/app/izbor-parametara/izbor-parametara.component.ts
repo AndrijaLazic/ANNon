@@ -1,14 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSelectModule } from '@angular/material/select';
 import { FullWidth } from 'ag-grid-community/dist/lib/components/framework/componentTypes';
+import { SharedService } from '../shared-statistic/shared.service';
 @Component({
   selector: 'app-izbor-parametara',
   templateUrl: './izbor-parametara.component.html',
   styleUrls: ['./izbor-parametara.component.css']
 })
+
+
 export class IzborParametaraComponent implements OnInit {
 
-  constructor() { }
+  
+  constructor(private shared: SharedService) { }
+  statistika:Object;
   public SelektovanaVrednost;
   trenutniBrojSkrivenihSlojeva=0;
   listaSlojeva=[];
@@ -25,24 +30,39 @@ export class IzborParametaraComponent implements OnInit {
     console.log(this.listaKolona);
   }
 
-
-  listaKolona = [
-                            {"id":1,"itemName":"India"},
-                            {"id":2,"itemName":"Singapore"},
-                            {"id":3,"itemName":"Australia"},
-                            {"id":4,"itemName":"Canada"},
-                            {"id":5,"itemName":"South Korea"},
-                            {"id":6,"itemName":"Germany"},
-                            {"id":7,"itemName":"France"},
-                            {"id":8,"itemName":"Russia"},
-                            {"id":9,"itemName":"Italy"},
-                            {"id":10,"itemName":"Sweden"}
-                          ];
+  //{"id":1,"itemName":"India"},
+  listaKolona = [];
 
     ngOnInit(){
+      this.statistika=this.shared.getStatistic();
       
+      
+      var id=0;
+      interface Kolona {
+        id: string;
+        itemName: number;
+      }
+      for(let i=0;i<Object.keys(this.statistika['numericke_kolone']).length;i++)
+      {
+        var pom = {} as Kolona;
+        pom.id=id.toString();
+        pom.itemName=this.statistika['numericke_kolone'][i]['ime_kolone'];
+        
+        this.listaKolona.push(pom);
+        id++;
+      }
+      for(let i=0;i<Object.keys(this.statistika['kategoricke_kolone']).length;i++)
+      {
+        var pom = {} as Kolona;
+        pom.id=id.toString();
+        pom.itemName=this.statistika['kategoricke_kolone'][i]['ime_kolone'];
+        
+        this.listaKolona.push(pom);
+        id++;
+      }
       this.loadDataSet1();
-      this.loadDataSet2();                       
+      this.loadDataSet2();  
+                        
     } 
 
     // sortirajListuKolona(){

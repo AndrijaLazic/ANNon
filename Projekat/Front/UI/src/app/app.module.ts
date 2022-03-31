@@ -16,7 +16,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { PaginationComponent } from './excelsheet/pagination/pagination.component';
 import { MatSelectModule } from '@angular/material/select';
 import { AngularMultiSelectModule } from 'angular2-multiselect-dropdown';
-
+import {MatButtonModule} from '@angular/material/button';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
@@ -66,7 +66,8 @@ import { NgChartsModule } from 'ng2-charts';
     MatSelectModule,
     AngularMultiSelectModule,
     NgxNumberSpinnerModule,
-    NgChartsModule
+    NgChartsModule,
+    MatButtonModule
   ],
   providers: [],
   bootstrap: [AppComponent],

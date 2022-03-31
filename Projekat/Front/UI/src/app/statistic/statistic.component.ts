@@ -2,6 +2,8 @@ import { Component, OnInit,ElementRef } from '@angular/core';
 import {SharedService} from "../shared-statistic/shared.service";
 import { Router } from '@angular/router';
 import Chart from 'chart.js/auto';
+import {MatButtonModule} from '@angular/material/button';
+
 @Component({
   selector: 'app-statistic',
   templateUrl: './statistic.component.html',
