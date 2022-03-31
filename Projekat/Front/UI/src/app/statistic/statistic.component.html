@@ -1,25 +1,39 @@
 <app-header></app-header>
+<button class="navigator previous" (click)="previous()"><</button> 
 <div class="container content">
-    <button class="navigator previous" (click)="previous()"><</button>
-        <table >
-            <tbody>
-                <tr>
-                    <th *ngFor="let item of kolone" class="header-cell" >{{item}}</th>
-                </tr>
-                
-                <tr >
-                    <td *ngFor="let item of stats" [innerHTML]="item"></td>
-                </tr>
-                <tr >
-                    <td *ngFor="let item of kolone"><button autofocus type="button" class="btn btn-dark" (click)="iscrtajGraf($event)" value="{{item}}">Prikazi Graf!</button></td>
-                </tr>
-        </tbody>
-        </table>
-
-                <div id="divChart">
-                    <canvas id="myChart"></canvas>
-                </div> 
-
+    <br>
+    <div class="row justify-content-center" >
+        <div class="col-md-auto">
+            <table >
+                <tbody>
+                    <tr>
+                        <th *ngFor="let item of kolone" class="header-cell" >{{item}}</th>
+                    </tr>
+                    
+                    <tr >
+                        <td *ngFor="let item of stats" [innerHTML]="item"></td>
+                    </tr>
+                    <tr >
+                        <td *ngFor="let item of kolone"><button autofocus type="button" class="btn btn-dark" (click)="iscrtajGraf($event)" value="{{item}}">Prikazi Graf!</button></td>
+                    </tr>
+            </tbody>
+            </table>
+        </div>
+    </div>
+    <br>
+    <div class="row justify-content-center">
+        <div class="col-md-auto">
+            <div id="divChart">
+                <canvas id="myChart"></canvas>
+            </div> 
+        </div>
+    </div> 
+    <br>
+    <div class="row justify-content-center">
+        <button mat-raised-button color="primary" routerLink="/training">Predji na treniranje</button> 
+    </div>
+           
+       
 </div>
 
 

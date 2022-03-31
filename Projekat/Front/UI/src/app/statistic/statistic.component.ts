@@ -2,6 +2,8 @@ import { Component, OnInit,ElementRef } from '@angular/core';
 import {SharedService} from "../shared-statistic/shared.service";
 import { Router } from '@angular/router';
 import Chart from 'chart.js/auto';
+import {MatButtonModule} from '@angular/material/button';
+
 @Component({
   selector: 'app-statistic',
   templateUrl: './statistic.component.html',
@@ -13,8 +15,8 @@ export class StatisticComponent implements OnInit {
   strStat:string;
   myChart;
   constructor(private shared: SharedService,private route:Router,private elementRef: ElementRef) { }
-
-  statistika={
+    statistika:Object;
+  /*statistika={
     "numericke_kolone": [
         {
             "ime_kolone": "PassengerId",
@@ -226,10 +228,12 @@ export class StatisticComponent implements OnInit {
             }
         }
     ]
-};
+};*/
     canvas: any;
     ctx: any;
   ngOnInit(): void {
+
+    this.statistika=this.shared.getStatistic();
     for(let i=0;i<Object.keys(this.statistika['numericke_kolone']).length;i++)
     {
       this.kolone.push(this.statistika['numericke_kolone'][i]['ime_kolone']);

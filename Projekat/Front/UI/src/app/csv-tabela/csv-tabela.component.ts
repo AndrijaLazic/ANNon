@@ -1,4 +1,4 @@
-import { HttpClient, HttpEventType, HttpHeaders, HttpRequest, JsonpClientBackend } from '@angular/common/http';
+import { HttpClient, HttpEventType, HttpHeaders, HttpRequest, JsonpClientBackend,HttpParams } from '@angular/common/http';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Papa, ParseResult } from 'ngx-papaparse';
 import { ColDef,GridApi,GridReadyEvent,CellValueChangedEvent, ComponentStateChangedEvent, GridColumnsChangedEvent } from 'ag-grid-community';
@@ -31,10 +31,12 @@ export class CsvTabelaComponent implements OnInit {
   zaglavlja:any[] = [];
   podaci:any = null;
   sent:boolean = false;
+  received:boolean=false;
   public progress: number;
   public message: string;
   public imeFajla:string;
   model:DataModel;
+  statistika:Object;
   @Output() public onUploadFinished = new EventEmitter();
   
   
@@ -131,6 +133,7 @@ export class CsvTabelaComponent implements OnInit {
   posaljiFajl()
   {
       this.spinner.show("Spiner2");
+      
       this.setSession();
       const formData = new FormData();
       let file = new File([this.gridApi.getDataAsCsv()],this.imeFajla ,{type: 'application/vnd.ms-excel'});
@@ -142,7 +145,10 @@ export class CsvTabelaComponent implements OnInit {
            this.sent = true;
            this.model = res as DataModel;
            if(this.sent)
-              this.route.navigate(["./statistic"]);
+           {
+             this.getStatistic();
+           }
+              
            
         },
         err=>{
@@ -153,16 +159,32 @@ export class CsvTabelaComponent implements OnInit {
       
   }
 
-  // uzmiStatistiku(){     
+  getStatistic()
+  {
+    const params = new HttpParams()
+    .set('userID',sessionStorage.getItem("userId"));
+    console.log(params.get("userID"));
+    this.http.get(this.baseURL+"api/MachineLearning/getStatistic",{params:params}).subscribe(
+      res=>{
+        this.received=true;
+        this.statistika = res as Object;
+        if(this.received)
+        {
+          console.log(this.statistika);
+          this.spinner.hide("Spiner2");
+          this.shared.setMessage(this.statistika);
+          this.route.navigate(["./statistic"]);
+        }
+        
+      },
+      err=>{
+       
+      }
+    );
+
     
-  //   if(this.sent)
-  //   {
-  //     this.route.navigate(['./statistic']);
-  //     this.kolone=this.data[0];
-  //     console.log(this.kolone);
-  //     this.shared.setMessage(JSON.parse(this.model.statistic),this.kolone);
-  //   }             
-  // }
+  }
+
 
   ngOnInit(): void {
     

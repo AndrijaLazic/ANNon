@@ -54,6 +54,7 @@ html = """
 
 
 class UploadedFile(BaseModel):
+    userID:str
     FileName:str
     Putanja:str
 

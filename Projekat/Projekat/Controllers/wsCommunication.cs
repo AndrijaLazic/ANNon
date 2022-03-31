@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Projekat.Clients;
+using Projekat.Data;
 using Projekat.SignalRCommunication.Hubs;
+using Projekat.TimeFeatures;
 using System.Net.WebSockets;
 using System.Text;
 using WebSocketSharp;
@@ -45,11 +47,19 @@ namespace Projekat.Controllers
             await _hub.Clients.Client(connectionID).SendAsync("sendResults", ans);
             return Ok();
         }
-        
-       
-        
-        
-        
+        [HttpGet("wsrequest")]
+        public async Task<IActionResult> Get()
+        {
+            var timeManager = new TimerManager(() => _hub.Clients.All.SendAsync("transferchartdata", DataManager.getData()));
+            return Ok(new { Message = "Request Completed" });
+
+
+        }
+
+
+
+
+
     }
         
 }

@@ -267,7 +267,7 @@ export class ExcelsheetComponent implements OnInit {
       this.route.navigate(['./statistic']);
       this.kolone=this.data[0];
       console.log(this.kolone);
-      this.shared.setMessage(JSON.parse(this.model.statistic),this.kolone);
+      this.shared.setMessage(JSON.parse(this.model.statistic));
     }             
    }
 

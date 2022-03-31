@@ -42,9 +42,10 @@ namespace Projekat.Clients
             }
         } 
         public async Task<string> sendData(string model)
-        { 
+        {
+            Console.WriteLine(model);
             var content = new StringContent(model,Encoding.UTF8, "application/json");
-            HttpResponseMessage response = await _client.PostAsync(_client.BaseAddress+"send", content);
+            HttpResponseMessage response = await _client.PostAsync(_configuration.GetSection("ML_Server_Config:http").Value + _configuration.GetSection("ML_Server_Config:host").Value + ":" + _configuration.GetSection("ML_Server_Config:port").Value + "/" + "send", content);
             var result = await response.Content.ReadAsStringAsync();
             return result;
         }
