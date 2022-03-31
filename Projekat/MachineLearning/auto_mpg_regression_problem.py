@@ -30,7 +30,7 @@ dataset.tail()
 train_dataset = dataset.sample(frac=0.8, random_state=0)
 test_dataset = dataset.drop(train_dataset.index)
 
-sns.pairplot(train_dataset[['MPG', 'Cylinders', 'Displacement', 'Weight']], diag_kind='kde')
+#sns.pairplot(train_dataset[['MPG', 'Cylinders', 'Displacement', 'Weight']], diag_kind='kde')
 
 
 train_features = train_dataset.copy()
@@ -53,38 +53,6 @@ with np.printoptions(precision=2, suppress=True):
   print('Normalized:', normalizer(first).numpy())
 
 
-horsepower = np.array(train_features['Horsepower'])
-
-horsepower_normalizer = tf.keras.layers.Normalization(input_shape=[1,], axis=None)
-horsepower_normalizer.adapt(horsepower)
-
-horsepower_model = tf.keras.Sequential([
-    horsepower_normalizer,
-    layers.Dense(units=1)
-])
-
-horsepower_model.summary()
-
-#horsepower_model.predict(horsepower[:10])
-
-horsepower_model.compile(
-    optimizer=tf.optimizers.Adam(learning_rate=0.1),
-    loss='mean_absolute_error')
-
-
-history = horsepower_model.fit(
-    train_features['Horsepower'],
-    train_labels,
-    epochs=100,
-    # Suppress logging.
-    verbose=0,
-    # Calculate validation results on 20% of the training data.
-    validation_split = 0.2)
-
-hist = pd.DataFrame(history.history)
-hist['epoch'] = history.epoch
-hist.tail()
-
 def plot_loss(history):
   plt.plot(history.history['loss'], label='loss')
   plt.plot(history.history['val_loss'], label='val_loss')
@@ -94,55 +62,8 @@ def plot_loss(history):
   plt.legend()
   plt.grid(True)
 
-plot_loss(history)
+#test_results = {}
 
-
-test_results = {}
-
-test_results['horsepower_model'] = horsepower_model.evaluate(
-    test_features['Horsepower'],
-    test_labels, verbose=0)
-
-x = tf.linspace(0.0, 250, 251)
-y = horsepower_model.predict(x)
-
-def plot_horsepower(x, y):
-  plt.scatter(train_features['Horsepower'], train_labels, label='Data')
-  plt.plot(x, y, color='k', label='Predictions')
-  plt.xlabel('Horsepower')
-  plt.ylabel('MPG')
-  plt.legend()
-
-plot_horsepower(x, y)
-
-linear_model = tf.keras.Sequential([
-    normalizer,
-    layers.Dense(units=1)
-])
-
-linear_model.predict(train_features[:10])
-
-linear_model.layers[1].kernel
-
-linear_model.compile(
-    optimizer=tf.optimizers.Adam(learning_rate=0.1),
-    loss='mean_absolute_error')
-
-
-history = linear_model.fit(
-    train_features,
-    train_labels,
-    epochs=100,
-    # Suppress logging.
-    verbose=0,
-    # Calculate validation results on 20% of the training data.
-    validation_split = 0.2)
-
-plot_loss(history)
-
-
-test_results['linear_model'] = linear_model.evaluate(
-    test_features, test_labels, verbose=0)
 
 def build_and_compile_model(norm):
   model = keras.Sequential([
@@ -156,27 +77,6 @@ def build_and_compile_model(norm):
                 optimizer=tf.keras.optimizers.Adam(0.001))
   return model
 
-dnn_horsepower_model = build_and_compile_model(horsepower_normalizer)
-
-dnn_horsepower_model.summary()
-
-
-history = dnn_horsepower_model.fit(
-    train_features['Horsepower'],
-    train_labels,
-    validation_split=0.2,
-    verbose=0, epochs=100)
-
-plot_loss(history)
-
-x = tf.linspace(0.0, 250, 251)
-y = dnn_horsepower_model.predict(x)
-
-plot_horsepower(x, y)
-
-test_results['dnn_horsepower_model'] = dnn_horsepower_model.evaluate(
-    test_features['Horsepower'], test_labels,
-    verbose=0)
 
 dnn_model = build_and_compile_model(normalizer)
 dnn_model.summary()
@@ -190,4 +90,4 @@ history = dnn_model.fit(
 
 plot_loss(history)
 
-#plt.show()
+plt.show()

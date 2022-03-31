@@ -1,64 +1,118 @@
-from nntf2 import get_model
-from nntf2 import determine_variable_types
+import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
+import seaborn as sns
 
-data = pd.read_csv("diamonds/diamonds.csv")
-data.head()
-data.nunique()
+# Make NumPy printouts easier to read.
+np.set_printoptions(precision=3, suppress=True)
+import tensorflow as tf
 
-# categorical_feature_names = ['cut','color']
-# numeric_feature_names = ['x', 'y', 'z', 'carat']
-predicted_feature_name = ['price']
+from tensorflow import keras
+from tensorflow.python.keras import layers
 
-categorical_feature_names, numeric_feature_names = determine_variable_types(data, predicted_feature_name)
+raw_dataset = pd.read_csv('diamonds/diamonds.csv')
+column_names = ['carat', 'cut', 'color', 'clarity', 'depth', 'price',
+                'x', 'y', 'z']
 
- 
-X=data[numeric_feature_names].values
-y=data[predicted_feature_name].values
- 
-### Sandardization of data ###
-from sklearn.preprocessing import StandardScaler
-PredictorScaler=StandardScaler()
-TargetVarScaler=StandardScaler()
- 
-# Storing the fit object for later reference
-PredictorScalerFit=PredictorScaler.fit(X)
-TargetVarScalerFit=TargetVarScaler.fit(y)
- 
-# Generating the standardized values of X and y
-X=PredictorScalerFit.transform(X)
-y=TargetVarScalerFit.transform(y)
-#type(X)
+dataset = raw_dataset.copy()
 
-model, target, data = get_model(data, predicted_feature_name, 'one_hot', 2, 10, "relu")
-#history = model.fit(dict(data_train), target_train, epochs=20, batch_size=8)
+def determine_variable_types(data, label):
+    nunique = data.nunique()
+    dtypes = data.dtypes
+    # nunique.drop(label, inplace=True, axis=1)
+    # dtypes.drop(label, inplace=True, axis=1)
+    categorical = []
+    numerical = []
+    dnu = dict(nunique)
+    dnu.pop(label[0], None)
+    for key in dnu:
+        if nunique[key] <= 20:
+            categorical.append(key)
+        elif (dtypes[key] != object):
+            numerical.append(key)
+    
+    return (categorical, numerical)
 
-from sklearn.model_selection import train_test_split
-data_train, data_test, target_train, target_test = train_test_split(data, target, test_size=0.2, random_state=42)
+categorical_features, numeric_features = determine_variable_types(dataset, ['price'])
 
-# data_train.shape
-# data_test.shape
-# target_train.shape
-# target_test.shape
+def label_encode_categorical_features(data, categorical_feature_names):
+  from sklearn.preprocessing import LabelEncoder
+  label_encoder = LabelEncoder()
+  for name in categorical_feature_names:
+    data[name] = label_encoder.fit_transform(data[name])
+  
+  return data
 
-from keras.models import Sequential
-from keras.layers import Dense
+dataset.isna().sum()
+dataset = dataset.dropna()
+dataset = label_encode_categorical_features(dataset, categorical_features)
 
-model = Sequential()
- 
-# Defining the Input layer and FIRST hidden layer, both are same!
-model.add(Dense(units=5, input_dim=7, kernel_initializer='normal', activation='relu'))
- 
-# Defining the Second layer of the model
-# after the first layer we don't have to specify input_dim as keras configure it automatically
-model.add(Dense(units=5, kernel_initializer='normal', activation='tanh'))
- 
-# The output neuron is a single fully connected node 
-# Since we will be predicting a single number
-model.add(Dense(1, kernel_initializer='normal'))
- 
-# Compiling the model
-model.compile(loss='mean_squared_error', optimizer='adam')
- 
-# Fitting the ANN to the Training set
-model.fit(data_train, target_train ,batch_size = 20, epochs = 50, verbose=1)
+#dataset.nunique()
+
+dataset = pd.get_dummies(dataset, columns=['Origin'], prefix='', prefix_sep='')
+dataset.tail()
+
+train_dataset = dataset.sample(frac=0.8, random_state=0)
+test_dataset = dataset.drop(train_dataset.index)
+
+#sns.pairplot(train_dataset[['MPG', 'Cylinders', 'Displacement', 'Weight']], diag_kind='kde')
+
+
+train_features = train_dataset.copy()
+test_features = test_dataset.copy()
+
+train_labels = train_features.pop('MPG')
+test_labels = test_features.pop('MPG')
+
+train_dataset.describe().transpose()[['mean', 'std']]
+
+normalizer = tf.keras.layers.Normalization(axis=-1)
+
+normalizer.adapt(np.array(train_features))
+
+first = np.array(train_features[:1])
+
+with np.printoptions(precision=2, suppress=True):
+  print('First example:', first)
+  print()
+  print('Normalized:', normalizer(first).numpy())
+
+
+def plot_loss(history):
+  plt.plot(history.history['loss'], label='loss')
+  plt.plot(history.history['val_loss'], label='val_loss')
+  plt.ylim([0, 10])
+  plt.xlabel('Epoch')
+  plt.ylabel('Error [MPG]')
+  plt.legend()
+  plt.grid(True)
+
+#test_results = {}
+
+
+def build_and_compile_model(norm):
+  model = keras.Sequential([
+      norm,
+      layers.Dense(64, activation='relu'),
+      layers.Dense(64, activation='relu'),
+      layers.Dense(1)
+  ])
+
+  model.compile(loss='mean_absolute_error',
+                optimizer=tf.keras.optimizers.Adam(0.001))
+  return model
+
+
+dnn_model = build_and_compile_model(normalizer)
+dnn_model.summary()
+
+
+history = dnn_model.fit(
+    train_features,
+    train_labels,
+    validation_split=0.2,
+    verbose=0, epochs=100)
+
+plot_loss(history)
+
+plt.show()
