@@ -2,10 +2,10 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { IzborParametaraComponent } from './izbor-parametara.component';
 
-interface Kolona {
-  id: string;
-  itemName: number;
-}
+
+
+
+
 describe('IzborParametaraComponent', () => {
   let component: IzborParametaraComponent;
   let fixture: ComponentFixture<IzborParametaraComponent>;

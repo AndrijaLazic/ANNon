@@ -45,8 +45,8 @@
     <div class="col-md-auto" id="BrojSkrivenihSlojevaSelektor">
       <label>Izaberi broj skrivenih slojeva</label>
       <ngx-number-spinner
-          [value]="0"
-          (change)="change($event)"
+          [value]="trenutniBrojSkrivenihSlojeva"
+          (change)="change($event,-1)"
           [min]="0"
           [max]="5">
       </ngx-number-spinner>
@@ -54,8 +54,16 @@
   </div>
 
   <div class="row justify-content-center" id="TreciRed">
-
-
-  </div>
+    <div class="col-md-2" *ngFor="let item of listaSkrivenihSlojeva ;index as i;" >
+      
+    <label>Izaberi broj neurona za {{i+1}}. sloj</label> 
+      <ngx-number-spinner id="{{i}}"
+            [value]='item.brojNeurona' 
+            (change)='change($event,i)' 
+            [min]='0' 
+            [max]='5'> 
+        </ngx-number-spinner> 
+    </div>
+    </div>
 </div>
 

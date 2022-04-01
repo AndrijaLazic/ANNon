@@ -16,7 +16,7 @@ export class IzborParametaraComponent implements OnInit {
   statistika:Object;
   public SelektovanaVrednost;
   trenutniBrojSkrivenihSlojeva=0;
-  listaSlojeva=[];
+  
   dropdownList = [];
   selectedItems = [];
   dropdownSettings = {};
@@ -25,6 +25,9 @@ export class IzborParametaraComponent implements OnInit {
   dropdownList2 = [];
   izlaznaKolona;
   dropdownSettings2={};
+
+  listaSkrivenihSlojeva=[];
+
 
   pom(){
     console.log(this.listaKolona);
@@ -42,6 +45,7 @@ export class IzborParametaraComponent implements OnInit {
         id: string;
         itemName: number;
       }
+      
       for(let i=0;i<Object.keys(this.statistika['numericke_kolone']).length;i++)
       {
         var pom = {} as Kolona;
@@ -161,29 +165,36 @@ export class IzborParametaraComponent implements OnInit {
         this.loadDataSet1();
     }
 
-    change(value: any): void {
-      let myContainer = <HTMLElement>document.getElementById('TreciRed');
-        
-      if(value>this.trenutniBrojSkrivenihSlojeva){
-        this.trenutniBrojSkrivenihSlojeva=value;
-        this.listaSlojeva.push(1)
 
-        myContainer.innerHTML = myContainer.innerHTML+"<div class='col-md-auto' id='BrojNeuronaSloja'> "+
-        "<label>Izaberi broj neurona</label> "+
-        "<ngx-number-spinner "+
-            "[value]='0' "+
-            "(change)='change($event)' "+
-            "[min]='0' "+
-            "[max]='5'> "+
-        "</ngx-number-spinner> "+
-      "</div> ";
+    change(value: any,id:any): void {
+      interface SkriveniSloj{
+        brojNeurona:number;
       }
-      else{
-        this.trenutniBrojSkrivenihSlojeva=value;
-        this.listaSlojeva.splice(this.listaSlojeva.length-1, 1);
-        
+      
+      if(id==-1){
+        if(value>this.trenutniBrojSkrivenihSlojeva){
+          this.trenutniBrojSkrivenihSlojeva=value;
+          var pom = {} as SkriveniSloj;
+          pom.brojNeurona=1;
+          this.listaSkrivenihSlojeva.push(pom)
+
+      
+        }
+        else{
+          this.trenutniBrojSkrivenihSlojeva=value;
+          this.listaSkrivenihSlojeva.splice(this.listaSkrivenihSlojeva.length-1, 1);
+          
+        }
+        console.log(this.listaSkrivenihSlojeva);
+        return;
       }
-      console.log(this.listaSlojeva);
+      if(value==0){
+        this.listaSkrivenihSlojeva.splice(id, 1);
+        this.trenutniBrojSkrivenihSlojeva=this.trenutniBrojSkrivenihSlojeva-1;
+        return;
+      }
+      
+      console.log(this.listaSkrivenihSlojeva);
     }
 
 
