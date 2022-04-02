@@ -3,8 +3,6 @@ import { ChartModel } from 'ag-grid-community';
 import{webSocket} from 'rxjs/webSocket'
 import { SignalRService } from '../shared/signal-r.service';
 import { Chart } from 'chart.js';
-import { HttpClient } from '@aspnet/signalr';
-import { from } from 'rxjs';
 
 @Component({
   selector: 'app-trening',
@@ -13,9 +11,9 @@ import { from } from 'rxjs';
 })
 export class TreningComponent implements OnInit {
   ind=false;
-  _signalR:SignalRService;
-  constructor(private signalR:SignalRService, private http: HttpClient) { 
-    this._signalR = signalR;
+  
+  constructor(private signalR:SignalRService) { 
+    
   }
 
   
@@ -23,13 +21,11 @@ export class TreningComponent implements OnInit {
   ngOnInit(): void {
     this.signalR.startConnection();
     this.signalR.addTransferChartDatalistener();
+    //this.signalR.sendRequest();
+    
   }
-  
-  
-  
   SendtoBack()
-  {
-    /*
+  {/*
     const myChart = new Chart('myChart', {
       type: 'line',
       data: {
@@ -60,11 +56,11 @@ export class TreningComponent implements OnInit {
       }
   });
    this.ind=true;
-   
-  }*/
-
+   */
   }
+
 }
+
 
 
 
