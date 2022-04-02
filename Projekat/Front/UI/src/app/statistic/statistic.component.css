@@ -21,7 +21,7 @@ button:focus{
   position: absolute;
   border: 0;
   width: 100px;
-  height: 100%;
+  height: 100vh;
   opacity: 0.2;
   font-size: 50px;
   background: rgba(196, 196, 196);
@@ -31,7 +31,7 @@ button:focus{
 }
 .next
 {
-    right: 0;
+  right: 0;
 }
 .navigator:hover
 {
@@ -97,16 +97,6 @@ table{
   justify-content: center;
   width: 120px;
 }
-
-
-
-
-
-
-
-
-
-
 
 
 section {

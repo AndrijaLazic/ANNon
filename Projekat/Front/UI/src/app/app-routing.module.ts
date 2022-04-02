@@ -1,7 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { DefaultComponent } from './layouts/default/default.component';
 import { LoginParentComponent } from './login-parent/login-parent.component';
 import { LoginComponent } from './login-parent/login/login.component';
+import { HomeComponent } from './moduli/home/home.component';
+import { MojNalogComponent } from './moduli/moj-nalog/moj-nalog.component';
 import { PocetnastranaComponent } from './pocetnastrana/pocetnastrana.component';
 import { VerifikacijaComponent } from './proba/verifikacija/verifikacija.component';
 import { RegisterParentComponent } from './register-parent/register-parent.component';
@@ -14,8 +17,18 @@ import { TreningComponent } from './trening/trening.component';
 
 const routes: Routes = [
   {
-    path:'',redirectTo:'pocetna',pathMatch:'full'
-  },
+    path:'',
+    // redirectTo:'pocetna',
+    // pathMatch:'full'
+    component:DefaultComponent,
+    children:[{
+      path:'',
+      component:PocetnastranaComponent
+    },
+    {
+      path:'MojNalog',
+      component:MojNalogComponent
+    },
   {
     path:'login',component:LoginComponent,canActivate:[NotAuthGuard]
   },
@@ -39,7 +52,9 @@ const routes: Routes = [
   },
   {
     path:'training',component:TreningComponent
+  }]
   }
+  
 ];
 
 @NgModule({

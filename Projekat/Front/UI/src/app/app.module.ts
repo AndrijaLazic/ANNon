@@ -32,6 +32,7 @@ import { IzborParametaraComponent } from './izbor-parametara/izbor-parametara.co
 import { NgxNumberSpinnerModule } from 'ngx-number-spinner';
 import { ChartModel } from 'ag-grid-community';
 import { NgChartsModule } from 'ng2-charts';
+import { DefaultModule } from './layouts/default/default.module';
 @NgModule({
   declarations: [
     AppComponent,
@@ -43,12 +44,11 @@ import { NgChartsModule } from 'ng2-charts';
     PocetnastranaComponent,
     PaginationComponent,
     VerifikacijaComponent,
-    HeaderComponent,
-    FooterComponent,
     StatisticComponent,
     CsvTabelaComponent,
     TreningComponent,
     IzborParametaraComponent
+    
     
   ],
   imports: [
@@ -67,7 +67,8 @@ import { NgChartsModule } from 'ng2-charts';
     AngularMultiSelectModule,
     NgxNumberSpinnerModule,
     NgChartsModule,
-    MatButtonModule
+    MatButtonModule,
+    DefaultModule
   ],
   providers: [],
   bootstrap: [AppComponent],

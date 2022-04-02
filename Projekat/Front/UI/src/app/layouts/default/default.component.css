@@ -1,0 +1,13 @@
+:host{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.Sadrzaj{
+    padding: 20px;
+    /* overflow: hidden; */
+    position: relative;
+    width: cal(100%+40px);
+}
+
