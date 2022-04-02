@@ -6,7 +6,8 @@ from fastapi import Body
 import statistics as stats
 import pandas as pd
 from pydantic import BaseModel
-
+from example import fja
+from asgiref.sync import sync_to_async
 
 import statistics as stats
 #vazno!!!!!!
@@ -54,7 +55,6 @@ html = """
 
 
 class UploadedFile(BaseModel):
-    userID:str
     FileName:str
     Putanja:str
 
@@ -127,9 +127,9 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str):
             #primer sablona funkcije je u example.py
             
             #sledeci poziv radi
-            #await sync_to_async(fja)(client_id)
-            print(client_id)
-            await manager.send_text(client_id,"radisdadasd")
+            await sync_to_async(fja)(client_id)
+            #print(client_id)
+            #await manager.send_text(client_id,"radisdadasd")
     except WebSocketDisconnect:
         manager.disconnect(client_id)
 

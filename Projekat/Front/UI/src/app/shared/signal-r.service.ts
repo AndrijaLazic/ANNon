@@ -20,34 +20,29 @@ export class SignalRService {
     
     this.hubConnection.start()
     .then(() => console.log("Connection started!!! "))
-   // .then(() => this.getConnectionID()) 
+    .then(() => this.getConnectionID()) 
     .catch(err => console.log("Error occurs: "+err));
   }
 
-  private getConnectionID = () =>
+ 
+  public getConnectionID = () =>
   {
     this.hubConnection.on("getConnectionID", (data)=>{
-      console.log("ID: "+data);
-    
+      sessionStorage.setItem("connectionID",data);
   });}
 
   //this.hubConnection.on("sendResults", (data) => console.log(data))
     //this.hubConnection.onclose(() => (err) => console.log("Restartuje browser!!! \n"+err))
 
     public addTransferChartDatalistener=()=>{
-      this.hubConnection.on('transferchartdata',(res)=>{
+      this.hubConnection.on('sendResults',(res)=>{
         this.data=res;
         //console.log(this.data);
         
       })
     }
-
-    sendRequest()
-    {
-      return this.http.get("https://localhost:7286/api/wsCommunication/wsrequest").subscribe
-      (
-        (data) => console.log(data)
-      )
-    }
+    
+    
+    
   
 }

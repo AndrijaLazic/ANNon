@@ -2,9 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Projekat.Clients;
-using Projekat.Data;
 using Projekat.SignalRCommunication.Hubs;
-using Projekat.TimeFeatures;
 using System.Net.WebSockets;
 using System.Text;
 using WebSocketSharp;
@@ -42,24 +40,32 @@ namespace Projekat.Controllers
             if(userID.IsNullOrEmpty())
                 return BadRequest();
 
-            var ans = await _client.WsServerConnect(userID);
+            using (var socket = new ClientWebSocket())
+            {
+                try
+                {
+                    await socket.ConnectAsync(new Uri("ws://127.0.0.1:8000/test/" + userID), CancellationToken.None);
+                    while(true)
+                    {
+                        await _client.Send(socket, userID);
+                        var ans = await _client.Recieve(socket);
+                        await _hub.Clients.Client(connectionID).SendAsync("sendResults", ans);
+                    }
+                }
+                catch (Exception ex)
+                {
 
-            await _hub.Clients.Client(connectionID).SendAsync("sendResults", ans);
-            return Ok();
+                    return BadRequest(ex.Message);
+
+                }
+
+            }
         }
-        [HttpGet("wsrequest")]
-        public async Task<IActionResult> Get()
-        {
-            var timeManager = new TimerManager(() => _hub.Clients.All.SendAsync("transferchartdata", DataManager.getData()));
-            return Ok(new { Message = "Request Completed" });
-
-
-        }
-
-
-
-
-
+        
+       
+        
+        
+        
     }
         
 }

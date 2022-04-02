@@ -1,5 +1,4 @@
 import tensorflow as tf
-from fastapi_websocket_rpc import WebSocketRpcClient,RpcMethodsBase,RpcUtilityMethods
 import keras
 from CustomCallback import CustomCallback
 
