@@ -18,24 +18,27 @@
 >
   <p style="font-size: 20px; color: white">Obrada podataka...</p>
 </ngx-spinner>
-<button class="navigator next" (click)="posaljiFajl()" *ngIf="podaci.length>0" style="height: 100%;">></button>
-<div class="container statistic">
-  
-  <div class="mb-3" style="width: 300px; margin: auto;background-color: white;border: 2px black solid; padding: 10px;border-radius: 15px;">
-    <label for="formFile" class="form-label">Dodaj csv fajl</label>
-    <input class="form-control" type="file" #file id="uploadData" multiple="false" accept=".csv"
-      (change)="onFileSelected($event)">
-  </div>
-  <div style="width: 800px;" class="grid-wrapper" *ngIf="podaci">
-    <button type="button" class="btn btn-dark" (click)="izbrisiSelektovano()">Obrisi selektovano</button>
-    <button type="button" class="btn btn-dark" (click)="skiniFajl()">Download</button>
+
+<div class="container">
+  <button class="navigator next" (click)="posaljiFajl()" *ngIf="podaci && podaci.length>0" style="height: 100%;">></button>
+  <div class="container statistic">
     
-    
-    <br>
-    <ag-grid-angular style="height: 520px;" class="ag-theme-alpine-dark" [rowData]="RedoviPodaci"
-      [columnDefs]="KoloneDef" [pagination]="true" [paginationPageSize]="brojElemenataNaStrani"
-      [rowSelection]="rowSelection" [animateRows]="true" (gridReady)="onGridReady($event)"
-      (gridColumnsChanged)="onGridColumnsChanged($event)">
-    </ag-grid-angular>
+    <div class="mb-3" style="width: 300px; margin: auto;background-color: white;border: 2px black solid; padding: 10px;border-radius: 15px;">
+      <label for="formFile" class="form-label">Dodaj csv fajl</label>
+      <input class="form-control" type="file" #file id="uploadData" multiple="false" accept=".csv"
+        (change)="onFileSelected($event)">
+    </div>
+    <div class="grid-wrapper" *ngIf="podaci">
+      <button type="button" class="btn btn-dark" (click)="izbrisiSelektovano()">Obrisi selektovano</button>
+      <button type="button" class="btn btn-dark" (click)="skiniFajl()">Download</button>
+      
+      
+      <br>
+      <ag-grid-angular style="height: 520px;" class="ag-theme-alpine-dark" [rowData]="RedoviPodaci"
+        [columnDefs]="KoloneDef" [pagination]="true" [paginationPageSize]="brojElemenataNaStrani"
+        [rowSelection]="rowSelection" [animateRows]="true" (gridReady)="onGridReady($event)"
+        (gridColumnsChanged)="onGridColumnsChanged($event)">
+      </ag-grid-angular>
+    </div>
   </div>
 </div>

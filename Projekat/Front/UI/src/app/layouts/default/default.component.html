@@ -1,10 +1,13 @@
 <app-header flexLayout="column" class="zaglavlje"></app-header>
-<div flexLayout="row" fxFlex>
+<div flexLayout="row" fxFlex id="layout1">
+    
+    <video [muted]="true" autoplay playsinline loop id="myVideo">
+        <source src="assets/pozadina.mp4" type="video/mp4">
+    </video>
     
     <div fxFlex="100" class="Sadrzaj">
         <router-outlet></router-outlet>
     </div>
-    
 </div>
 <app-footer flexLayout="column" class="podnaslov"></app-footer>
 

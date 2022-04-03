@@ -14,9 +14,9 @@ body{
     height: 100%;
     left: 0px;
     top: 0px;
-    background: url('./e6553da20abc6b8cd20b644ec9522f6c.jpg');
+    /* background: url('./e6553da20abc6b8cd20b644ec9522f6c.jpg');
     background-size: cover;
-    background-repeat: no-repeat;
+    background-repeat: no-repeat; */
 }
 
   input.invalid{
@@ -29,4 +29,10 @@ html,body{
     padding: 0;
     margin: 0;
     height: 100%;
+    overflow-x: hidden;
 }
+
+
+/* Style the video: 100% width and height to cover the entire window */
+
+  
