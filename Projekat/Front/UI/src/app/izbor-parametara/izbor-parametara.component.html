@@ -4,7 +4,7 @@
     <div class="col-md-auto">
       <mat-form-field appearance="fill" id="TipEnkodiranjaSelektor">
         <mat-label>Tip enkodiranja</mat-label>
-        <mat-select [(value)]="SelektovanaVrednost" id="TipEnkodiranjaSelektor2">
+        <mat-select [(ngModel)]="SelektovanaVrednost" id="TipEnkodiranjaSelektor2">
           <mat-option value="one_hot">
               one hot
           </mat-option>
