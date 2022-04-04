@@ -16,14 +16,27 @@ namespace Projekat.Ostalo
             return (extension == ".xlsx" || extension == ".xls" || extension == ".csv");
         }
 
-        public static async Task<bool> UpisiFajl(IFormFile fajl)
+        public static bool DaLiFajlPostoji(string NazivFajla)
         {
-            bool uspesnoCuvanjeFajla = false;
+            var pathBuilt = Path.Combine(Directory.GetCurrentDirectory(), "Upload\\csvFajlovi", NazivFajla);
+
+            if (System.IO.File.Exists(pathBuilt))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public static async Task<string> UpisiFajl(IFormFile fajl)
+        {
             string imeFajla;
             try
             {
                 var extension = "." + fajl.FileName.Split('.')[fajl.FileName.Split('.').Length - 1];
                 imeFajla = fajl.FileName;
+     
+                imeFajla = System.Text.RegularExpressions.Regex.Replace(imeFajla, @"\s+", " ").Trim(); // convert multiple spaces into one space  
+                imeFajla = System.Text.RegularExpressions.Regex.Replace(imeFajla, @"\s", "_"); // //Replace spaces by dashes
 
                 var pathBuilt = Path.Combine(Directory.GetCurrentDirectory(), "Upload\\csvFajlovi");
 
@@ -38,20 +51,19 @@ namespace Projekat.Ostalo
                 {
                     await fajl.CopyToAsync(stream);
                 }
-
-                uspesnoCuvanjeFajla = true;
             }
             catch (Exception e)
             {
-
+                return null;
             }
 
-            return uspesnoCuvanjeFajla;
+            return imeFajla;
         }
 
         public static DataTable UcitajFajl(string imeFajla)
         {
-            var pathBuilt = Path.Combine(Directory.GetCurrentDirectory(), "Upload\\csvFajlovi\\" + imeFajla + ".csv");
+            var pathBuilt = Path.Combine(Directory.GetCurrentDirectory(), "Upload\\csvFajlovi\\" + imeFajla);
+          
             using (var streamReader = new StreamReader(pathBuilt))
             {
 
@@ -59,7 +71,6 @@ namespace Projekat.Ostalo
                 {
                     var records = new List<dynamic>();
                     csvReader.Read();
-                    csvReader.ReadHeader();
                     records.Add(csvReader.GetRecord<dynamic>());
                     while (csvReader.Read())
                     {
@@ -77,7 +88,7 @@ namespace Projekat.Ostalo
         public static DataTable UcitajFajl(string imeFajla, int BrojRedova, int RedniBrojStrane)
         {
             
-            var pathBuilt = Path.Combine(Directory.GetCurrentDirectory(), "Upload\\csvFajlovi\\" + imeFajla + ".csv");
+            var pathBuilt = Path.Combine(Directory.GetCurrentDirectory(), "Upload\\csvFajlovi\\" + imeFajla);
             using (var reader = new StreamReader(pathBuilt))
             using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
             {
@@ -88,7 +99,6 @@ namespace Projekat.Ostalo
                 string json;
                 DataTable dataTable;
                 csv.Read();
-                csv.ReadHeader();
                 records.Add(csv.GetRecord<dynamic>());
 
                 while (csv.Read())

@@ -152,7 +152,7 @@ export class CsvTabelaComponent implements OnInit {
            
         },
         err=>{
-          
+          this.spinner.hide("Spiner2");
         }
        
       );
@@ -178,7 +178,7 @@ export class CsvTabelaComponent implements OnInit {
         
       },
       err=>{
-       
+        this.spinner.hide("Spiner2");
       }
     );
 

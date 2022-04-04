@@ -41,23 +41,27 @@ button:focus{
 }
 table{
     
-    overflow-y:scroll;
-    overflow-x: scroll;
-    display: block;
-    
-
 
     background: rgba(196, 196, 196, 0.7);
     
+ }
+ #tabela{
+  overflow-y:scroll;
+  overflow-x: scroll;
+  display: block;
+  
+
+
  }
  th,td{
      height: 50px;
      width: 300px;
  }
  td{
-     font-size: 10px;
-
-     
+     font-size: 10px; 
+ }
+ .veciFont{
+   font-size: 20px;
  }
 
  #divChart{
@@ -130,3 +134,6 @@ section {
     justify-content: center;
     width: 120px;
   }
+  .hiddenRow {
+    padding: 0 !important;
+}

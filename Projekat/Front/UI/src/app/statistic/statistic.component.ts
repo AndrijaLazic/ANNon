@@ -12,11 +12,13 @@ import {MatButtonModule} from '@angular/material/button';
 export class StatisticComponent implements OnInit {
   kolone=new Array();
   stats=new Array();
+  kategorije=new Array();
+  prazna=new Array();
   strStat:string;
   myChart;
   constructor(private shared: SharedService,private route:Router,private elementRef: ElementRef) { }
-    statistika:Object;
-  /*statistika={
+    //statistika:Object;
+  statistika={
     "numericke_kolone": [
         {
             "ime_kolone": "PassengerId",
@@ -30,7 +32,7 @@ export class StatisticComponent implements OnInit {
             "maximum": 891.0,
             "broj_autlajera": 0,
             "column_chart_data": {
-                "(0.11, 128.143]": 300,
+                "(0.11, 128.143]": 128,
                 "(763.857, 891.0]": 128,
                 "(128.143, 255.286]": 127,
                 "(255.286, 382.429]": 127,
@@ -228,10 +230,10 @@ export class StatisticComponent implements OnInit {
             }
         }
     ]
-};*/
+};
   ngOnInit(): void {
 
-    this.statistika=this.shared.getStatistic();
+    //this.statistika=this.shared.getStatistic();
     for(let i=0;i<Object.keys(this.statistika['numericke_kolone']).length;i++)
     {
       this.kolone.push(this.statistika['numericke_kolone'][i]['ime_kolone']);
@@ -241,24 +243,47 @@ export class StatisticComponent implements OnInit {
       this.kolone.push(this.statistika['kategoricke_kolone'][i]['ime_kolone']);
     }
 
-    this.myChart=new Chart("myChart", {
-        type: 'bar',
-        data: {
-            labels: Object.keys(this.statistika['numericke_kolone'][0]['column_chart_data']) ,
-            datasets: [{
-                label: '',
-                data: Object.values(this.statistika['numericke_kolone'][0]['column_chart_data']),
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
+    if(Object.keys(this.statistika['numericke_kolone']).length==0)
+    {
+        this.myChart=new Chart("myChart", {
+            type: 'bar',
+            data: {
+                labels: Object.keys(this.statistika['kategoricke_kolone'][0]['column_chart_data']) ,
+                datasets: [{
+                    label: '',
+                    data: Object.values(this.statistika['kategoricke_kolone'][0]['column_chart_data']),
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
                 }
             }
-        }
-    })
-    ;
+        });
+    }
+    else
+    {
+        this.myChart=new Chart("myChart", {
+            type: 'bar',
+            data: {
+                labels: Object.keys(this.statistika['numericke_kolone'][0]['column_chart_data']) ,
+                datasets: [{
+                    label: '',
+                    data: Object.values(this.statistika['numericke_kolone'][0]['column_chart_data']),
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+    
    
     this.selectChangeHandler();
   }
@@ -273,30 +298,42 @@ export class StatisticComponent implements OnInit {
     
     for(let j=0;j<this.kolone.length;j++)
     {
-
-      for(let i=0;i<Object.keys(this.statistika['numericke_kolone']).length;i++)
-      {
-        if(this.kolone[j]==this.statistika['numericke_kolone'][i]['ime_kolone'])
+        if(Object.keys(this.statistika['numericke_kolone']).length!=0)
         {
-          this.strStat='';
-          this.strStat+='Broj praznih polja: '+this.statistika['numericke_kolone'][i]['broj_praznih_polja']+'<br>Prosek: '
-          +this.statistika['numericke_kolone'][i]['prosek']+'<br>Standardna devijacija: ' +this.statistika['numericke_kolone'][i]['standardna_devijacija']+'<br>Minimum: '
-          +this.statistika['numericke_kolone'][i]['minimum']+'<br>Prvi kvartal: ' +this.statistika['numericke_kolone'][i]['prvi_kvartal']+'<br>Drugi kvartal: '
-          +this.statistika['numericke_kolone'][i]['drugi_kvartal']+'<br>Treci kvartal: ' +this.statistika['numericke_kolone'][i]['treci_kvartal']+'<br>Maximum: '
-          +this.statistika['numericke_kolone'][i]['maximum']+'<br>Broj autlajera: ' +this.statistika['numericke_kolone'][i]['broj_autlajera'];
-          this.stats.push(this.strStat);
-        }
+            for(let i=0;i<Object.keys(this.statistika['numericke_kolone']).length;i++)
+            {
+                if(this.kolone[j]==this.statistika['numericke_kolone'][i]['ime_kolone'])
+                {
+                this.kategorije.push('Numericki');
+                this.prazna.push(this.statistika['numericke_kolone'][i]['broj_praznih_polja']);
 
-      }
+
+                this.strStat='';
+                this.strStat+='Srednja vrednost: '
+                +this.statistika['numericke_kolone'][i]['prosek']+'<br>Standardna devijacija: ' +this.statistika['numericke_kolone'][i]['standardna_devijacija']+'<br>Minimum: '
+                +this.statistika['numericke_kolone'][i]['minimum']+'<br>Prvi kvartal: ' +this.statistika['numericke_kolone'][i]['prvi_kvartal']+'<br>Medijana: '
+                +this.statistika['numericke_kolone'][i]['drugi_kvartal']+'<br>Treci kvartal: ' +this.statistika['numericke_kolone'][i]['treci_kvartal']+'<br>Maximum: '
+                +this.statistika['numericke_kolone'][i]['maximum']+'<br>Broj autlajera: ' +this.statistika['numericke_kolone'][i]['broj_autlajera'];
+                this.stats.push(this.strStat);
+
+                }
+
+            }
+        }
+      
       for(let i=0;i<Object.keys(this.statistika['kategoricke_kolone']).length;i++)
       {
         if(this.kolone[j]==this.statistika['kategoricke_kolone'][i]['ime_kolone'])
         {
+            this.kategorije.push('Kategorijski');
+            this.prazna.push(this.statistika['kategoricke_kolone'][i]['broj_praznih_polja']);
+
           this.strStat='';
-          this.strStat+='Broj praznih polja: '+this.statistika['kategoricke_kolone'][i]['broj_praznih_polja']+'<br>Broj jedinstvenih polja: '
+          this.strStat+='Broj jedinstvenih polja: '
           +this.statistika['kategoricke_kolone'][i]['broj_jedinstvenih_polja']+'<br>Najcesca vrednost: ' +this.statistika['kategoricke_kolone'][i]['najcesca_vrednost']+'<br>Najveci broj ponavljanja: '
           +this.statistika['kategoricke_kolone'][i]['najveci_broj_ponavljanja'];
           this.stats.push(this.strStat);
+
         }
       }
     }
@@ -314,7 +351,7 @@ export class StatisticComponent implements OnInit {
         {
             this.myChart.destroy();
           //graf
-          this.myChart=new Chart("myChart", {
+          this.myChart=new Chart(this.vrednost, {
             type: 'bar',
             data: {
                 labels: Object.keys(this.statistika['numericke_kolone'][i]['column_chart_data']) ,
@@ -344,7 +381,7 @@ export class StatisticComponent implements OnInit {
         {
             this.myChart.destroy();
           //graf
-          this.myChart=new Chart("myChart", {
+          this.myChart=new Chart(this.vrednost, {
             type: 'bar',
             data: {
                 labels: Object.keys(this.statistika['kategoricke_kolone'][i]['column_chart_data']) ,
@@ -368,7 +405,25 @@ export class StatisticComponent implements OnInit {
   }
   previous()
   {
-    this.route.navigate(['./pocetna']);
+    if(window.confirm('Da li ste sigurni da zelite da se vratite na prethodnu stranu?'))
+    {
+        this.route.navigate(['./pocetna']);
+    }
+    
   }
+  obrisi(id:any){
+    if(window.confirm('Da li ste sigurni da zelite da obrisete ovaj red?')){
+        this.kolone.splice(id,1);
+        this.prazna.splice(id,1);
+        this.kategorije.splice(id,1);
+        this.stats.splice(id,1);
+    }
+    
+
+    console.log(this.kolone,this.prazna,this.kategorije,this.stats);
+
+
+  }
+
 
 }

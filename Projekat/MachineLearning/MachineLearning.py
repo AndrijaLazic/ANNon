@@ -1,6 +1,6 @@
 from types import ClassMethodDescriptorType
 from typing import Dict, List
-from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect,HTTPException
 from fastapi.responses import HTMLResponse
 from fastapi import Body
 import statistics as stats
@@ -8,8 +8,9 @@ import pandas as pd
 from pydantic import BaseModel
 from example import fja
 from asgiref.sync import sync_to_async
-
+import requests
 import statistics as stats
+import csv
 #vazno!!!!!!
 #pokretanje aplikacije komanda
 #uvicorn MachineLearning:app --reload
@@ -108,8 +109,11 @@ def mainPage():
 @app.post('/send')
 async def update_item(
         model:UploadedFile
-):
-    fajl = pd.read_csv (model.Putanja)
+):  
+    
+    fajl = pd.read_csv('https://localhost:7286/api/FajlKontroler/DajFajl?NazivFajla='+model.FileName+'&imeKorisnika=Korisnik')
+    if(fajl.empty):
+        raise HTTPException(status_code=404, detail="Fajl ne postoji")
     Statistic=stats.getStats(fajl)
     return Statistic
 

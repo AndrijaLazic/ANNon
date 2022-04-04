@@ -51,7 +51,7 @@ namespace Projekat.Clients
         [HttpPost("uploadFile"), DisableRequestSizeLimit]
         public async Task<IActionResult> UploadFile([FromForm] IFormFile uploadedFile, [FromForm]string userID)
         {
-
+            string imeFajla;
             try
             {
 
@@ -59,14 +59,13 @@ namespace Projekat.Clients
                 {
                     if (RadSaFajlovima.ProveriAkoJeCsvFajl(uploadedFile))
                     {
-                        if (await RadSaFajlovima.UpisiFajl(uploadedFile))
+                        if ((imeFajla = await RadSaFajlovima.UpisiFajl(uploadedFile))!=null)
                         {
-                            var pathBuilt = Path.Combine(Directory.GetCurrentDirectory(), "Upload\\csvFajlovi\\" + uploadedFile.FileName);
                             DataModel dataModel = new DataModel
                             {
                                 userID = userID,
-                                FileName = uploadedFile.FileName,
-                                Putanja = pathBuilt
+                                FileName = imeFajla,
+                                Putanja = "put"
                             };
                             _context.Files.Add(dataModel);
                             await _context.SaveChangesAsync();
@@ -95,8 +94,11 @@ namespace Projekat.Clients
             DataModel model = _context.Files.Where(x => x.userID.Equals(userID)).FirstOrDefault();
             if (model != null)
             {
+                if(!RadSaFajlovima.DaLiFajlPostoji(model.FileName))
+                    return BadRequest("Fajl ne postoji "+ model.FileName);
                 var jsonObject = JsonConvert.SerializeObject(model);
                 var answer = await _iCustomClient.sendData(jsonObject);
+
                 string statistic = JsonConvert.DeserializeObject<string>(answer);
                 return Ok(statistic);
 
