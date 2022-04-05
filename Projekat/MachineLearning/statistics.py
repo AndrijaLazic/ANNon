@@ -62,9 +62,13 @@ def getStats(data):
         else:
             #ubacivacemo u numerical columns
             s=data[column_name]
-            s.rolling(window=20).mean().plot()
-            s=pd.cut(s, 7,ordered=True).astype(str)
-            #grafik=histogram
+            s=pd.cut(s, 10,ordered=True)
+            s=s.value_counts()
+            novi_indexi=[]
+            for i in range(len(s)):
+                novi_indexi.append(round(s.index[i].mid,1))
+            s.index=novi_indexi
+            #grafik=linijski
             recnik["prosek"]=round(opis["mean"],2)
             recnik["standardna_devijacija"]=round(opis["std"],2)
             recnik["minimum"]=opis["min"]
@@ -73,12 +77,7 @@ def getStats(data):
             recnik["treci_kvartal"]=opis["75%"]
             recnik["maximum"]=opis["max"]
             recnik["broj_autlajera"]=sum(np.abs(stats.zscore(data[column_name])) > 3)
-            recnik["column_chart_data"]=dict(s.value_counts())
+            recnik["column_chart_data"]=dict(s)
             analiza["numericke_kolone"].append(recnik) 
 
     return json.dumps(analiza,cls=NpEncoder,indent=4)
-
-data=pd.read_csv("diamonds.csv")
-print(data["Price"].rolling(window=100).mean())
-print(getStats(data))
-
