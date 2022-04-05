@@ -59,58 +59,5 @@ namespace Projekat.Clients
             return result;
         }
 
-        /*
-        public async Task<string> WsServerConnect(string userID)
-        {
-            using (var socket = new ClientWebSocket())
-            {
-                try
-                { 
-                    await socket.ConnectAsync(new Uri("ws://127.0.0.1:8000/test/"+userID), CancellationToken.None);
-                    await Send(socket, userID);
-                    var res = await Recieve(socket);
-                }
-                catch (Exception ex)
-                {
-
-                    return ex.Message;
-
-                }
-                
-            }
-        }
-        */
-        public  async Task Send(ClientWebSocket socket, string userID)
-        {
-            await socket.SendAsync(Encoding.UTF8.GetBytes(userID), WebSocketMessageType.Text, true, CancellationToken.None);
-        }
-
-        public  async Task<string> Recieve(ClientWebSocket socket)
-        {
-            var buffer = new ArraySegment<byte>(new byte[1024 * 4]);
-            //SKINI DO WHILE PETLJU I NAPRAVI JE U FJI KOJU ZOVES KAKO BI UZEO REZULTAT NORMALNO I KONEKCIJA DA BI OSTALA OTVORENA STALNO
-           
-                //prima samo jednu poruku, omoguci stalno da radi
-                WebSocketReceiveResult result;
-                using (var ms = new MemoryStream())
-                {
-                    do
-                    {
-                        result = await socket.ReceiveAsync(buffer, CancellationToken.None);
-                        ms.Write(buffer.Array, buffer.Offset, result.Count);
-                    } while (!result.EndOfMessage);
-
-                    
-                    ms.Seek(0, SeekOrigin.Begin);
-                    
-                }
-                //POGLEDAJ KAKO DA SE VRATI REZULTAT
-                return Encoding.UTF8.GetString(buffer.ToArray(), 0, result.Count);
-          
-
-            
-
-
-        }
     }
 }

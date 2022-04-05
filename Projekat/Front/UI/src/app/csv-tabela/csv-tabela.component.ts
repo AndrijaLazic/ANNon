@@ -126,15 +126,16 @@ export class CsvTabelaComponent implements OnInit {
   public skiniFajl(){
     this.gridApi.exportDataAsCsv();
   }
-  setSession()
+  /*setSession()
   {
     sessionStorage.setItem('userId',uuidv4());
   }
+  */
   posaljiFajl()
   {
       this.spinner.show("Spiner2");
       
-      this.setSession();
+      //this.setSession();
       const formData = new FormData();
       let file = new File([this.gridApi.getDataAsCsv()],this.imeFajla ,{type: 'application/vnd.ms-excel'});
       formData.append("uploadedFile",file);

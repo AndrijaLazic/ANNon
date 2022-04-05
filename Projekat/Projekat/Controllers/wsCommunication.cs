@@ -23,7 +23,8 @@ namespace Projekat.Controllers
         private readonly MachineLearningClient _client;
         private readonly IHubContext<EpochHub> _hub;
         private readonly MySqlDbContext _context;
-        private readonly ClientWebSocket  _clientWebSocket;
+        private readonly ClientWebSocket  socket;
+        private readonly WebSocketCustomClient  _customClient;
         private readonly string uri = string.Empty;
         public wsCommunication(IConfiguration configuration, MachineLearningClient client, IHubContext<EpochHub> hub, MySqlDbContext context)
         {
@@ -31,7 +32,8 @@ namespace Projekat.Controllers
            _client = client;
            _hub = hub;
            _context = context;
-           _clientWebSocket = new ClientWebSocket();
+            _customClient = new WebSocketCustomClient();
+            socket = _customClient.newClient();
             uri = _configuration.GetSection("ML_Server_Config:host").Value + ":" + _configuration.GetSection("ML_Server_Config:port").Value;
         }
         
@@ -42,21 +44,20 @@ namespace Projekat.Controllers
         }
         //NEKA VRSTA MIDDLEWARE-A KOJA SPAJA SIGNALR 
         [HttpPost("user")]
-        public async Task<IActionResult> getUserID(string userID, string connectionID)
+        public async Task<IActionResult> startTraining([FromForm]string userID,[FromForm] string connectionID)
         {
             if(userID.IsNullOrEmpty())
                 return BadRequest();
 
-            using (var socket = new ClientWebSocket())
+            using (socket)
             {
                 try
                 {
-                    Console.WriteLine("ws://" + uri + "/test/" + userID);
                     await socket.ConnectAsync(new Uri("ws://"+uri+"/test/" + userID), CancellationToken.None);
                     while(true)
                     {
-                        await _client.Send(socket, userID);
-                        var ans = await _client.Recieve(socket);
+                        await _customClient.Send(socket, userID);
+                        var ans = await _customClient.Recieve(socket);
                         await _hub.Clients.Client(connectionID).SendAsync("sendResults", ans);
                     }
                 }
@@ -72,20 +73,20 @@ namespace Projekat.Controllers
 
        
        [HttpGet("getStatistic")]
-       public async Task getStatistic(string userID,string connectionID)
+       public async Task getStatistic([FromForm]string userID,string connectionID)
        {
            DataModel model = _context.Files.Where(x => x.userID.Equals(userID)).FirstOrDefault();
            if (model != null)
            {
-               using(_clientWebSocket)
+               using(socket)
                {
                    try
                    {
-                       await _clientWebSocket.ConnectAsync(new Uri("ws://" + uri + "/send/" + userID), CancellationToken.None);
+                       await socket.ConnectAsync(new Uri("ws://" + uri + "/send/" + userID), CancellationToken.None);
                        while (true)
                        {
-                           await _client.Send(_clientWebSocket, userID);
-                           var ans = await _client.Recieve(_clientWebSocket);
+                           await _customClient.Send(socket, userID);
+                           var ans = await _customClient.Recieve(socket);
                            await _hub.Clients.Client(connectionID).SendAsync("getStats", ans);
 
                        }
@@ -105,15 +106,15 @@ namespace Projekat.Controllers
        {
            var json = JsonConvert.SerializeObject(param_model);
            //var answer = await _iCustomClient.sendParametars(json);
-           using (_clientWebSocket)
+           using (socket)
            {
                try
                {
-                   await _clientWebSocket.ConnectAsync(new Uri(uri + userID), CancellationToken.None);
+                   await socket.ConnectAsync(new Uri(uri + userID), CancellationToken.None);
                    while (true)
                    {
-                       await _client.Send(_clientWebSocket, userID);//dodaj parametre kao model = null i onda salji
-                       var ans = await _client.Recieve(_clientWebSocket);
+                       await _customClient.Send(socket, userID);//dodaj parametre kao model = null i onda salji
+                       var ans = await _customClient.Recieve(socket);
                        await _hub.Clients.Client(connectionID).SendAsync("getParams", ans);
 
                    }

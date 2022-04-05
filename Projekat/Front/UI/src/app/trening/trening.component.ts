@@ -3,6 +3,7 @@ import { ChartModel } from 'ag-grid-community';
 import{webSocket} from 'rxjs/webSocket'
 import { SignalRService } from '../shared/signal-r.service';
 import { Chart } from 'chart.js';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-trening',
@@ -12,7 +13,7 @@ import { Chart } from 'chart.js';
 export class TreningComponent implements OnInit {
   ind=false;
   
-  constructor(private signalR:SignalRService) { 
+  constructor(private signalR:SignalRService, private http: HttpClient) { 
     
   }
 
@@ -25,7 +26,12 @@ export class TreningComponent implements OnInit {
     
   }
   SendtoBack()
-  {/*
+  {
+    var formData = new FormData();
+    formData.append("userID",sessionStorage.getItem("userId"));
+    formData.append("connectionID",sessionStorage.getItem("connectionID"));
+    this.http.post("https://localhost:7286/api/wsCommunication/user",formData).subscribe();
+    /*
     const myChart = new Chart('myChart', {
       type: 'line',
       data: {
