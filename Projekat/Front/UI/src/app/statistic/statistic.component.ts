@@ -14,6 +14,7 @@ export class StatisticComponent implements OnInit {
   stats=new Array();
   kategorije=new Array();
   prazna=new Array();
+  collapse=new Array();
   strStat:string;
   myChart;
   constructor(private shared: SharedService,private route:Router,private elementRef: ElementRef) { }
@@ -250,7 +251,7 @@ export class StatisticComponent implements OnInit {
             data: {
                 labels: Object.keys(this.statistika['kategoricke_kolone'][0]['column_chart_data']) ,
                 datasets: [{
-                    label: '',
+                    label: 'Broj redova',
                     data: Object.values(this.statistika['kategoricke_kolone'][0]['column_chart_data']),
                 }]
             },
@@ -270,7 +271,7 @@ export class StatisticComponent implements OnInit {
             data: {
                 labels: Object.keys(this.statistika['numericke_kolone'][0]['column_chart_data']) ,
                 datasets: [{
-                    label: '',
+                    label: 'Broj redova',
                     data: Object.values(this.statistika['numericke_kolone'][0]['column_chart_data']),
                 }]
             },
@@ -306,6 +307,7 @@ export class StatisticComponent implements OnInit {
                 {
                 this.kategorije.push('Numericki');
                 this.prazna.push(this.statistika['numericke_kolone'][i]['broj_praznih_polja']);
+                this.collapse.push(0);
 
 
                 this.strStat='';
@@ -327,6 +329,7 @@ export class StatisticComponent implements OnInit {
         {
             this.kategorije.push('Kategorijski');
             this.prazna.push(this.statistika['kategoricke_kolone'][i]['broj_praznih_polja']);
+            this.collapse.push(0);
 
           this.strStat='';
           this.strStat+='Broj jedinstvenih polja: '
@@ -337,12 +340,11 @@ export class StatisticComponent implements OnInit {
         }
       }
     }
-    console.log(this.myChart);
+    console.log(this.collapse);
 
     
   }
   iscrtajGraf(event:any){
-    
     this.vrednost = event.target.value;
 
     for(let i=0;i<Object.keys(this.statistika['numericke_kolone']).length;i++)
@@ -356,7 +358,7 @@ export class StatisticComponent implements OnInit {
             data: {
                 labels: Object.keys(this.statistika['numericke_kolone'][i]['column_chart_data']) ,
                 datasets: [{
-                    label: '',
+                    label: 'Broj redova',
                     data: Object.values(this.statistika['numericke_kolone'][i]['column_chart_data']),
                 }]
             },
@@ -386,7 +388,7 @@ export class StatisticComponent implements OnInit {
             data: {
                 labels: Object.keys(this.statistika['kategoricke_kolone'][i]['column_chart_data']) ,
                 datasets: [{
-                    label: '',
+                    label: 'Broj redova',
                     data: Object.values(this.statistika['kategoricke_kolone'][i]['column_chart_data']),
                 }]
             },
@@ -417,12 +419,23 @@ export class StatisticComponent implements OnInit {
         this.prazna.splice(id,1);
         this.kategorije.splice(id,1);
         this.stats.splice(id,1);
+        this.collapse.splice(id,1);
     }
     
 
     console.log(this.kolone,this.prazna,this.kategorije,this.stats);
 
 
+  }
+  prikazi(id:any){
+      this.collapse[id]=1;
+      for(let i=0;i<this.collapse.length;i++){
+        if(i!=id) this.collapse[i]=0;
+      }
+
+  }
+  smanji(id:any){
+      this.collapse[id]=0;
   }
 
 

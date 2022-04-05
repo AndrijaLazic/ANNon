@@ -13,8 +13,8 @@
                         <th>Naziv kolone</th>
                         <th>Tip podataka</th>
                         <th>Broj Praznih polja</th>
-                        <th>Opcije</th>
-                        <th></th>
+                        <th colspan="2">Opcije</th>
+                        
                     </tr>
                 </thead>
                 <tbody *ngFor="let pr of prazna;let item of kolone;let tip of kategorije;let st of stats;index as i">
@@ -22,10 +22,11 @@
                         <td class="veciFont">{{kolone[i]}}</td>
                         <td class="veciFont">{{kategorije[i]}}</td>
                         <td class="veciFont">{{prazna[i]}}</td>
-                        <td><button class="btn btn-dark" (click)="iscrtajGraf($event)" value="{{kolone[i]}}" >Vise</button></td>
+                        <td><button class="btn btn-dark" *ngIf="collapse[i]==0" (click)="prikazi(i)" >Vise</button>
+                        <button class="btn btn-dark" *ngIf="collapse[i]==1" (click)="smanji(i)" >Manje</button></td>
                         <td><button class="btn btn-dark" (click)="obrisi(i)">Brisi!</button></td>
                     </tr>
-                    <tr>
+                    <tr *ngIf="collapse[i]==1">
                         <td colspan="5"><div id="demo1">
                             <table class="table table-striped">
                                 <tbody>
@@ -33,11 +34,10 @@
                                         <td>Mesto za izbor</td>
                                         <td [innerHTML]="stats[i]"></td>
                                         <td>
-                                            <div class="col-md-auto">
+                                            <button class="btn btn-dark" (click)="iscrtajGraf($event)" value="{{kolone[i]}}" >Prikazi graf!</button>                                          
                                                 <div id="divChart">
                                                     <canvas id={{kolone[i]}}></canvas>
                                                 </div> 
-                                            </div>
                                         </td>
                                     </tr>
                                 </tbody>

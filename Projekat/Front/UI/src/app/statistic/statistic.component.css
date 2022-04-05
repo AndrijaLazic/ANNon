@@ -58,14 +58,14 @@ table{
      width: 300px;
  }
  td{
-     font-size: 10px; 
+     font-size: 15px; 
  }
  .veciFont{
    font-size: 20px;
  }
 
  #divChart{
-    background-color: white;
+    background-color: transparent;
     width: 434px;
  }
 
