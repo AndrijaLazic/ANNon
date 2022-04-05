@@ -3,7 +3,8 @@ import {SharedService} from "../shared-statistic/shared.service";
 import { Router } from '@angular/router';
 import Chart from 'chart.js/auto';
 import {MatButtonModule} from '@angular/material/button';
-
+import { HttpClient } from '@angular/common/http';
+import { default as Konfiguracija } from '../../../KonfiguracioniFajl.json';
 @Component({
   selector: 'app-statistic',
   templateUrl: './statistic.component.html',
@@ -17,7 +18,8 @@ export class StatisticComponent implements OnInit {
   collapse=new Array();
   strStat:string;
   myChart;
-  constructor(private shared: SharedService,private route:Router,private elementRef: ElementRef) { }
+  readonly conStr=Konfiguracija.KonfiguracijaServera.osnovniURL;
+  constructor(private shared: SharedService,private route:Router,private elementRef: ElementRef,private http:HttpClient) { }
     //statistika:Object;
   statistika={
     "numericke_kolone": [
@@ -415,11 +417,13 @@ export class StatisticComponent implements OnInit {
   }
   obrisi(id:any){
     if(window.confirm('Da li ste sigurni da zelite da obrisete ovaj red?')){
+        console.log(id);
         this.kolone.splice(id,1);
         this.prazna.splice(id,1);
         this.kategorije.splice(id,1);
         this.stats.splice(id,1);
         this.collapse.splice(id,1);
+        //this.izbrisiKolonuZahtev(id); ne salje zahtev back-u
     }
     
 
@@ -438,5 +442,13 @@ export class StatisticComponent implements OnInit {
       this.collapse[id]=0;
   }
 
+  izbrisiKolonuZahtev(id:any)
+  {
+      var form=new FormData();
+      form.append("NazivFajla",sessionStorage.getItem('imeFajla'));
+      console.log(sessionStorage.getItem('imeFajla'));
+      form.append("idKolone",id);
+    this.http.put(this.conStr+"api/FajlKontroler/IzbrisiKolonu",form);
+  }
 
 }

@@ -34,7 +34,7 @@ namespace Projekat.Ostalo
             {
                 var extension = "." + fajl.FileName.Split('.')[fajl.FileName.Split('.').Length - 1];
                 imeFajla = fajl.FileName;
-     
+
                 imeFajla = System.Text.RegularExpressions.Regex.Replace(imeFajla, @"\s+", " ").Trim(); // convert multiple spaces into one space  
                 imeFajla = System.Text.RegularExpressions.Regex.Replace(imeFajla, @"\s", "_"); // //Replace spaces by dashes
 
@@ -45,7 +45,7 @@ namespace Projekat.Ostalo
                     Directory.CreateDirectory(pathBuilt);
                 }
 
-                var path = Path.Combine(Directory.GetCurrentDirectory(), "Upload\\csvFajlovi",imeFajla);
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "Upload\\csvFajlovi", imeFajla);
 
                 using (var stream = new FileStream(path, FileMode.Create))
                 {
@@ -60,10 +60,10 @@ namespace Projekat.Ostalo
             return imeFajla;
         }
 
-        public static DataTable UcitajFajl(string imeFajla)
+        public static DataTable UcitajFajl(string pathBuilt)
         {
-            var pathBuilt = Path.Combine(Directory.GetCurrentDirectory(), "Upload\\csvFajlovi\\" + imeFajla);
-          
+
+
             using (var streamReader = new StreamReader(pathBuilt))
             {
 
@@ -71,6 +71,7 @@ namespace Projekat.Ostalo
                 {
                     var records = new List<dynamic>();
                     csvReader.Read();
+                    csvReader.ReadHeader();
                     records.Add(csvReader.GetRecord<dynamic>());
                     while (csvReader.Read())
                     {
@@ -85,10 +86,9 @@ namespace Projekat.Ostalo
 
             return null;
         }
-        public static DataTable UcitajFajl(string imeFajla, int BrojRedova, int RedniBrojStrane)
+        public static DataTable UcitajFajl(string pathBuilt, int BrojRedova, int RedniBrojStrane)
         {
-            
-            var pathBuilt = Path.Combine(Directory.GetCurrentDirectory(), "Upload\\csvFajlovi\\" + imeFajla);
+
             using (var reader = new StreamReader(pathBuilt))
             using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
             {
@@ -99,11 +99,12 @@ namespace Projekat.Ostalo
                 string json;
                 DataTable dataTable;
                 csv.Read();
+                csv.ReadHeader();
                 records.Add(csv.GetRecord<dynamic>());
 
                 while (csv.Read())
                 {
-                    if (trenutniRed<poslednjiRed && trenutniRed>=pocetniRed)
+                    if (trenutniRed < poslednjiRed && trenutniRed >= pocetniRed)
                     {
                         records.Add(csv.GetRecord<dynamic>());
                     }
@@ -123,7 +124,35 @@ namespace Projekat.Ostalo
             }
             return null;
         }
-        
+
+        public static bool IzbrisiKolonu(string Putanja, int IndexKolone)
+        {
+            DataTable dataTable = UcitajFajl(Putanja);
+            if(dataTable == null)
+                return false;
+            try
+            {
+                dataTable.Columns.RemoveAt(IndexKolone);
+                using (var writer = new StreamWriter(Putanja))
+                using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+                {
+                    foreach (DataRow row in dataTable.Rows)
+                    {
+                        for (var i = 0; i < dataTable.Columns.Count; i++)
+                        {
+                            csv.WriteField(row[i]);
+                        }
+                        csv.NextRecord();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+            return true;
+
+        }
 
     }
 }

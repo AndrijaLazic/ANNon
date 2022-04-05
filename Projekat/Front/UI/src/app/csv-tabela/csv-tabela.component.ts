@@ -139,6 +139,7 @@ export class CsvTabelaComponent implements OnInit {
       const formData = new FormData();
       let file = new File([this.gridApi.getDataAsCsv()],this.imeFajla ,{type: 'application/vnd.ms-excel'});
       formData.append("uploadedFile",file);
+      
       formData.append("userID",sessionStorage.getItem("userId"));
       this.http.post(this.baseURL+"api/MachineLearning/uploadFile",formData)
       .subscribe(
@@ -174,6 +175,7 @@ export class CsvTabelaComponent implements OnInit {
           console.log(this.statistika);
           this.spinner.hide("Spiner2");
           this.shared.setMessage(this.statistika);
+          sessionStorage.setItem("imeFajla",this.imeFajla);
           this.route.navigate(["./statistic"]);
         }
         
