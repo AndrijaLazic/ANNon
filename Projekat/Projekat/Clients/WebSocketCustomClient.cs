@@ -1,7 +1,7 @@
 ﻿using Projekat.Modeli;
 using System.Net.WebSockets;
 using System.Text;
-
+using Newtonsoft.Json;
 namespace Projekat.Clients
 {
     public class WebSocketCustomClient
@@ -15,12 +15,12 @@ namespace Projekat.Clients
         {
             await socket.SendAsync(Encoding.UTF8.GetBytes(userID), WebSocketMessageType.Text, true, CancellationToken.None);
         }
-        public async Task Send(ClientWebSocket socket, string userID, ParametarsModel model)
+        public async Task Send(ClientWebSocket socket,  ParametarsModel model)
         {
 
-            var buffer = new ArraySegment<byte>(new byte[1024 * 4]);
+            var data_to_send = JsonConvert.SerializeObject(model);
             //spakuj u buffer userid i 
-            await socket.SendAsync(Encoding.UTF8.GetBytes(userID), WebSocketMessageType.Text, true, CancellationToken.None);
+            await socket.SendAsync(Encoding.UTF8.GetBytes(data_to_send), WebSocketMessageType.Text, true, CancellationToken.None);
         }
 
         public async Task<string> Recieve(ClientWebSocket socket)

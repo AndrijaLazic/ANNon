@@ -2,12 +2,15 @@
 {
     public class ParametarsModel
     {
-        public List<string> Input { get; set; } = new List<string>();
+        public List<TableColumnModel> Input { get; set; } = new List<TableColumnModel>();
         public string Output { get; set; }
-        public string Encoding { get; set; }
         public int LayerNumber { get; set; }
-        public int NeuronNumver { get;set; }
-        public string ActivationFunction { get;set;}
+        public List<int> NeuronNumber { get;set; } = new List<int>();
+        public List<string> ActivationFunction { get; set; } = new List<string>();
+        public string LossMetric { get; set; } = string.Empty;
+        public string SuccessMetric { get; set; } = string.Empty;
+        public string ProblemType { get; set; }  = string.Empty;
+
 
 
     }
