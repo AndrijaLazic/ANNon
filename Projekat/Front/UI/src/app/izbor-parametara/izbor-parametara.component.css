@@ -4,6 +4,11 @@
 
 ::ng-deep #MultiselectIzlazneKolone .cuppa-dropdown{
     width: 250px;
+    
+}
+::ng-deep #MultiselectIzlazneKolone .cuppa-dropdown label{
+    width: 250px;
+    color: black;
 }
 
 ::ng-deep #TipEnkodiranjaSelektor{
@@ -14,11 +19,17 @@
 ::ng-deep #TipEnkodiranjaSelektor .mat-form-field-infix{
     background-color: white;
 }
+::ng-deep #TipEnkodiranjaSelektor .mat-form-field-flex{
+    background-color: white;
+    margin-top: 2px;
+}
+
 ::ng-deep #BrojSkrivenihSlojevaSelektor{
     margin: auto;
-    color: white;
-    
-    
+    color: white;  
+}
+#TreciRed{
+    margin-top: 10px;
 }
 
 .Brojac{

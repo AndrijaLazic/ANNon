@@ -20,8 +20,9 @@ button:focus{
 {
   position: absolute;
   border: 0;
-  width: 100px;
-  height: 100vh;
+  min-width: 2vh;
+  max-width: 10vh;
+  min-height: 90%;
   opacity: 0.2;
   font-size: 50px;
   background: rgba(196, 196, 196);
@@ -152,4 +153,10 @@ section {
 
 ::ng-deep #TipEnkodiranjaSelektor .mat-form-field-infix{
   background-color: white;
+}
+
+
+::ng-deep #MultiselectIzlazneKolone .cuppa-dropdown label{
+  width: 250px;
+  color: black;
 }

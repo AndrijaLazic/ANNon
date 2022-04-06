@@ -274,48 +274,50 @@ listaKolona=[];
   ngOnInit(): void {
 
     this.statistika=this.shared.getStatistic();
-    for(let i=0;i<Object.keys(this.statistika['numericke_kolone']).length;i++)
-    {
-      this.kolone.push(this.statistika['numericke_kolone'][i]['ime_kolone']);
-    }
-    for(let i=0;i<Object.keys(this.statistika['kategoricke_kolone']).length;i++)
-    {
-      this.kolone.push(this.statistika['kategoricke_kolone'][i]['ime_kolone']);
-    }
+    if(this.statistika){
+        for(let i=0;i<Object.keys(this.statistika['numericke_kolone']).length;i++)
+        {
+        this.kolone.push(this.statistika['numericke_kolone'][i]['ime_kolone']);
+        }
+        for(let i=0;i<Object.keys(this.statistika['kategoricke_kolone']).length;i++)
+        {
+        this.kolone.push(this.statistika['kategoricke_kolone'][i]['ime_kolone']);
+        }
 
 
-    
-   
-    this.selectChangeHandler();
-    
-
-    var id=0;
-      interface Kolona {
-        id: string;
-        itemName: string;
-      }
-      
-      for(let i=0;i<Object.keys(this.statistika['numericke_kolone']).length;i++)
-      {
-        var pom = {} as Kolona;
-        pom.id=id.toString();
-        pom.itemName=this.statistika['numericke_kolone'][i]['ime_kolone'];
         
-        this.listaKolona.push(pom);
-        id++;
-      }
-      for(let i=0;i<Object.keys(this.statistika['kategoricke_kolone']).length;i++)
-      {
-        var pom = {} as Kolona;
-        pom.id=id.toString();
-        pom.itemName=this.statistika['kategoricke_kolone'][i]['ime_kolone'];
+    
+        this.selectChangeHandler();
         
-        this.listaKolona.push(pom);
-        id++;
-      }
 
-    this.loadDataSet1();
-    this.loadDataSet2();  
+        var id=0;
+        interface Kolona {
+            id: string;
+            itemName: string;
+        }
+        
+        for(let i=0;i<Object.keys(this.statistika['numericke_kolone']).length;i++)
+        {
+            var pom = {} as Kolona;
+            pom.id=id.toString();
+            pom.itemName=this.statistika['numericke_kolone'][i]['ime_kolone'];
+            
+            this.listaKolona.push(pom);
+            id++;
+        }
+        for(let i=0;i<Object.keys(this.statistika['kategoricke_kolone']).length;i++)
+        {
+            var pom = {} as Kolona;
+            pom.id=id.toString();
+            pom.itemName=this.statistika['kategoricke_kolone'][i]['ime_kolone'];
+            
+            this.listaKolona.push(pom);
+            id++;
+        }
+
+        this.loadDataSet1();
+        this.loadDataSet2();  
+    }
   }
   
   vrednost: any;

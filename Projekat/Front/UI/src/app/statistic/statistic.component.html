@@ -1,10 +1,10 @@
 
-<button class="navigator previous" (click)="previous()" style="height: 100%;"><</button> 
-<button class="navigator next" (click)="next()" style="height: 100%;">></button> 
+<button class="navigator previous" (click)="previous()"><</button> 
+<button class="navigator next" (click)="next()">></button> 
 
 <div class="container" style="height: 100%;">
     <br>
-    <div class="container">
+    <div class="row justify-content-center">
         <div class="col-md-auto">
             <label>Izaberi ulazne kolone</label>
             <angular2-multiselect id="MultiselectUlaznihKolona" [data]="dropdownList" [(ngModel)]="selectedItems" 
@@ -26,7 +26,7 @@
             </angular2-multiselect>
           </div>
     </div>
-    <div class="row justify-content-center">
+    <div class="row justify-content-center" style="margin-top: 20px;">
         <div class="col-md-auto">
             <table id="tabela" class="table table-condensed table-striped" >
                 <thead>
