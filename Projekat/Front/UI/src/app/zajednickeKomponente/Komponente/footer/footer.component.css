@@ -1,7 +1,8 @@
 
 footer{
-    background-color:#C4C4C4;
+    background-image: linear-gradient(to bottom right, #023E8A, #002e4c);
     height: 70px;
+    color: #1e5aaf;
 }
 .copyright{
     text-align: center;

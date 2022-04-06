@@ -1,6 +1,6 @@
 export interface epochModel{
-    id:number,
-    epoch:[],
-    loss:[],
+    epoch:number,
+    to_send:string,
+    loss:number,
     precision:number
 }

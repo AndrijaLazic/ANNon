@@ -1,0 +1,12 @@
+#Container1{
+    background-image: linear-gradient(to bottom right, #023E8A, #002e4c);
+    padding: 20px;
+}
+
+::ng-deep .ngx-charts { 
+    fill: white; 
+}
+
+::ng-deep .legend-title-text{
+    color: white; 
+}

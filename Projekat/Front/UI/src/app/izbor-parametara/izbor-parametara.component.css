@@ -16,7 +16,12 @@
 }
 ::ng-deep #BrojSkrivenihSlojevaSelektor{
     margin: auto;
-    background-color: white;
+    color: white;
+    
     
 }
 
+.Brojac{
+    margin: auto;
+    color: white;
+}

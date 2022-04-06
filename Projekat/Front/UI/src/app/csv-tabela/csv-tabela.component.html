@@ -23,9 +23,9 @@
   <button class="navigator next" (click)="posaljiFajl()" *ngIf="podaci && podaci.length>0" style="height: 100%;">></button>
   <div class="container statistic">
     
-    <div class="mb-3" style="width: 300px; margin: auto;background-color: white;border: 2px black solid; padding: 10px;border-radius: 15px;">
+    <div class="col-md-auto dugme" style="width: 300px; margin: auto;border: 2px black solid; padding: 10px;border-radius: 15px;">
       <label for="formFile" class="form-label">Dodaj csv fajl</label>
-      <input class="form-control" type="file" #file id="uploadData" multiple="false" accept=".csv"
+      <input class="form-control " type="file" #file id="uploadData" multiple="false" accept=".csv"
         (change)="onFileSelected($event)">
     </div>
     <div class="grid-wrapper" *ngIf="podaci">
