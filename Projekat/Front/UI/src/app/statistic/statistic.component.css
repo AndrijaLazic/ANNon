@@ -47,7 +47,6 @@ table{
  }
  #tabela{
   overflow-y:scroll;
-  overflow-x: scroll;
   display: block;
   
 
@@ -136,4 +135,21 @@ section {
   }
   .hiddenRow {
     padding: 0 !important;
+}
+
+::ng-deep .cuppa-dropdown{
+  width: 350px;
+}
+
+::ng-deep #MultiselectIzlazneKolone .cuppa-dropdown{
+  width: 250px;
+}
+
+::ng-deep #TipEnkodiranjaSelektor{
+  width: 170px;
+  
+}
+
+::ng-deep #TipEnkodiranjaSelektor .mat-form-field-infix{
+  background-color: white;
 }

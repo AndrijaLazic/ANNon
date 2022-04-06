@@ -4,6 +4,15 @@ import { Router } from '@angular/router';
 import Chart from 'chart.js/auto';
 import {MatButtonModule} from '@angular/material/button';
 
+
+export class Model
+{
+  nazivKolone:string="";
+  tipPodataka:string="";
+  tipEnkodiranja:string="";
+  
+}
+
 @Component({
   selector: 'app-statistic',
   templateUrl: './statistic.component.html',
@@ -16,225 +25,255 @@ export class StatisticComponent implements OnInit {
   prazna=new Array();
   collapse=new Array();
   strStat:string;
-  public myChart: Chart
+  model:Model;
+
+  //pomocni niz u koji se pakuju svi modeli koji su menjani
+  modelKolona=new Array<Model>();
+
+  //niz koji treba slati na back,u njemu su samo modeli cije kolone su odabrane kao ulazne ili izlazna kolona
+  modelKolona2=new Array<Model>();
+  public myChart: Chart;
+  public selected;
+
+
+  dropdownList = [];
+  selectedItems = [];
+  dropdownSettings = {};
+
+
+  dropdownList2 = [];
+  izlaznaKolona;
+  dropdownSettings2={};
+  statistika:Object;
   constructor(private shared: SharedService,private route:Router,private elementRef: ElementRef) { }
-    //statistika:Object;
-  statistika={
+    
+  /*statistika={
     "numericke_kolone": [
         {
-            "ime_kolone": "PassengerId",
+            "ime_kolone": "Carat",
             "broj_praznih_polja": 0.0,
-            "prosek": 446.0,
-            "standardna_devijacija": 257.3538420152301,
-            "minimum": 1.0,
-            "prvi_kvartal": 223.5,
-            "drugi_kvartal": 446.0,
-            "treci_kvartal": 668.5,
-            "maximum": 891.0,
+            "prosek": 0.8,
+            "standardna_devijacija": 0.47,
+            "minimum": 0.2,
+            "prvi_kvartal": 0.4,
+            "drugi_kvartal": 0.7,
+            "treci_kvartal": 1.04,
+            "maximum": 5.01,
+            "broj_autlajera": 439,
+            "column_chart_data": {
+                "0.4": 25155,
+                "0.9": 18626,
+                "1.4": 7129,
+                "1.9": 2349,
+                "2.4": 614,
+                "2.8": 53,
+                "3.3": 6,
+                "3.8": 5,
+                "4.3": 2,
+                "4.8": 1
+            }
+        },
+        {
+            "ime_kolone": "Depth",
+            "broj_praznih_polja": 3.0,
+            "prosek": 61.75,
+            "standardna_devijacija": 1.43,
+            "minimum": 43.0,
+            "prvi_kvartal": 61.0,
+            "drugi_kvartal": 61.8,
+            "treci_kvartal": 62.5,
+            "maximum": 79.0,
             "broj_autlajera": 0,
             "column_chart_data": {
-                "(0.11, 128.143]": 128,
-                "(763.857, 891.0]": 128,
-                "(128.143, 255.286]": 127,
-                "(255.286, 382.429]": 127,
-                "(382.429, 509.571]": 127,
-                "(509.571, 636.714]": 127,
-                "(636.714, 763.857]": 127
+                "62.8": 39262,
+                "59.2": 13245,
+                "66.4": 1032,
+                "55.6": 303,
+                "70.0": 74,
+                "52.0": 12,
+                "44.8": 3,
+                "73.6": 3,
+                "77.2": 3,
+                "48.4": 0
             }
         },
         {
-            "ime_kolone": "Survived",
+            "ime_kolone": "Table",
             "broj_praznih_polja": 0.0,
-            "prosek": 0.3838383838383838,
-            "standardna_devijacija": 0.4865924542648575,
+            "prosek": 57.46,
+            "standardna_devijacija": 2.23,
+            "minimum": 43.0,
+            "prvi_kvartal": 56.0,
+            "drugi_kvartal": 57.0,
+            "treci_kvartal": 59.0,
+            "maximum": 95.0,
+            "broj_autlajera": 336,
+            "column_chart_data": {
+                "56.0": 37549,
+                "61.2": 15131,
+                "50.8": 669,
+                "66.4": 572,
+                "71.6": 14,
+                "45.6": 2,
+                "76.8": 2,
+                "92.4": 1,
+                "82.0": 0,
+                "87.2": 0
+            }
+        },
+        {
+            "ime_kolone": "Price",
+            "broj_praznih_polja": 0.0,
+            "prosek": 3932.8,
+            "standardna_devijacija": 3989.44,
+            "minimum": 326.0,
+            "prvi_kvartal": 950.0,
+            "drugi_kvartal": 2401.0,
+            "treci_kvartal": 5324.25,
+            "maximum": 18823.0,
+            "broj_autlajera": 1206,
+            "column_chart_data": {
+                "1241.6": 25335,
+                "3100.6": 9328,
+                "4950.2": 7393,
+                "6800.0": 3878,
+                "8649.6": 2364,
+                "10499.4": 1745,
+                "12349.0": 1306,
+                "14198.8": 1002,
+                "16048.4": 863,
+                "17898.2": 726
+            }
+        },
+        {
+            "ime_kolone": "X",
+            "broj_praznih_polja": 0.0,
+            "prosek": 5.73,
+            "standardna_devijacija": 1.12,
             "minimum": 0.0,
-            "prvi_kvartal": 0.0,
-            "drugi_kvartal": 0.0,
-            "treci_kvartal": 1.0,
-            "maximum": 1.0,
-            "broj_autlajera": 0,
+            "prvi_kvartal": 4.71,
+            "drugi_kvartal": 5.7,
+            "treci_kvartal": 6.54,
+            "maximum": 10.74,
+            "broj_autlajera": 43,
             "column_chart_data": {
-                "(-0.001, 0.143]": 549,
-                "(0.857, 1.0]": 342
+                "4.8": 20895,
+                "5.9": 14440,
+                "7.0": 12205,
+                "8.1": 3260,
+                "3.8": 2934,
+                "9.1": 191,
+                "0.5": 8,
+                "10.2": 7,
+                "1.6": 0,
+                "2.7": 0
             }
         },
         {
-            "ime_kolone": "Pclass",
+            "ime_kolone": "Y",
             "broj_praznih_polja": 0.0,
-            "prosek": 2.308641975308642,
-            "standardna_devijacija": 0.836071240977049,
-            "minimum": 1.0,
-            "prvi_kvartal": 2.0,
-            "drugi_kvartal": 3.0,
-            "treci_kvartal": 3.0,
-            "maximum": 3.0,
-            "broj_autlajera": 0,
-            "column_chart_data": {
-                "(2.714, 3.0]": 491,
-                "(0.998, 1.286]": 216,
-                "(1.857, 2.143]": 184
-            }
-        },
-        {
-            "ime_kolone": "Age",
-            "broj_praznih_polja": 177.0,
-            "prosek": 29.69911764705882,
-            "standardna_devijacija": 14.526497332334042,
-            "minimum": 0.42,
-            "prvi_kvartal": 20.125,
-            "drugi_kvartal": 28.0,
-            "treci_kvartal": 38.0,
-            "maximum": 80.0,
-            "broj_autlajera": 0,
-            "column_chart_data": {
-                "(23.157, 34.526]": 233,
-                "(11.789, 23.157]": 178,
-                "nan": 177,
-                "(34.526, 45.894]": 134,
-                "(45.894, 57.263]": 68,
-                "(0.34, 11.789]": 68,
-                "(57.263, 68.631]": 26,
-                "(68.631, 80.0]": 7
-            }
-        },
-        {
-            "ime_kolone": "SibSp",
-            "broj_praznih_polja": 0.0,
-            "prosek": 0.5230078563411896,
-            "standardna_devijacija": 1.1027434322934317,
+            "prosek": 5.73,
+            "standardna_devijacija": 1.14,
             "minimum": 0.0,
-            "prvi_kvartal": 0.0,
-            "drugi_kvartal": 0.0,
-            "treci_kvartal": 1.0,
-            "maximum": 8.0,
-            "broj_autlajera": 30,
+            "prvi_kvartal": 4.72,
+            "drugi_kvartal": 5.71,
+            "treci_kvartal": 6.54,
+            "maximum": 58.9,
+            "broj_autlajera": 34,
             "column_chart_data": {
-                "(-0.008, 1.143]": 817,
-                "(1.143, 2.286]": 28,
-                "(3.429, 4.571]": 18,
-                "(2.286, 3.429]": 16,
-                "(6.857, 8.0]": 7,
-                "(4.571, 5.714]": 5
+                "2.9": 30633,
+                "8.8": 23305,
+                "32.4": 1,
+                "56.0": 1,
+                "14.7": 0,
+                "20.6": 0,
+                "26.5": 0,
+                "38.3": 0,
+                "44.2": 0,
+                "50.1": 0
             }
         },
         {
-            "ime_kolone": "Parch",
+            "ime_kolone": "Z",
             "broj_praznih_polja": 0.0,
-            "prosek": 0.38159371492704824,
-            "standardna_devijacija": 0.8060572211299483,
+            "prosek": 3.54,
+            "standardna_devijacija": 0.71,
             "minimum": 0.0,
-            "prvi_kvartal": 0.0,
-            "drugi_kvartal": 0.0,
-            "treci_kvartal": 0.0,
-            "maximum": 6.0,
-            "broj_autlajera": 15,
+            "prvi_kvartal": 2.91,
+            "drugi_kvartal": 3.53,
+            "treci_kvartal": 4.04,
+            "maximum": 31.8,
+            "broj_autlajera": 55,
             "column_chart_data": {
-                "(-0.006, 0.857]": 678,
-                "(0.857, 1.714]": 118,
-                "(1.714, 2.571]": 80,
-                "(4.286, 5.143]": 5,
-                "(2.571, 3.429]": 5,
-                "(3.429, 4.286]": 4,
-                "(5.143, 6.0]": 1
-            }
-        },
-        {
-            "ime_kolone": "Fare",
-            "broj_praznih_polja": 0.0,
-            "prosek": 32.204207968574636,
-            "standardna_devijacija": 49.6934285971809,
-            "minimum": 0.0,
-            "prvi_kvartal": 7.9104,
-            "drugi_kvartal": 14.4542,
-            "treci_kvartal": 31.0,
-            "maximum": 512.3292,
-            "broj_autlajera": 20,
-            "column_chart_data": {
-                "(-0.512, 73.19]": 789,
-                "(73.19, 146.38]": 71,
-                "(146.38, 219.57]": 15,
-                "(219.57, 292.76]": 13,
-                "(439.139, 512.329]": 3
+                "4.8": 33983,
+                "1.6": 19951,
+                "8.0": 5,
+                "30.2": 1,
+                "11.1": 0,
+                "14.3": 0,
+                "17.5": 0,
+                "20.7": 0,
+                "23.8": 0,
+                "27.0": 0
             }
         }
     ],
     "kategoricke_kolone": [
         {
-            "ime_kolone": "Name",
+            "ime_kolone": "Cut",
             "broj_praznih_polja": 0,
-            "broj_jedinstvenih_polja": 891,
-            "najcesca_vrednost": "Braund, Mr. Owen Harris",
-            "najveci_broj_ponavljanja": 1,
+            "broj_jedinstvenih_polja": 5,
+            "najcesca_vrednost": "Ideal",
+            "najveci_broj_ponavljanja": 21551,
             "column_chart_data": {
-                "Braund, Mr. Owen Harris": 1,
-                "Boulos, Mr. Hanna": 1,
-                "Frolicher-Stehli, Mr. Maxmillian": 1,
-                "Gilinski, Mr. Eliezer": 1,
-                "Murdlin, Mr. Joseph": 1,
-                "Rintamaki, Mr. Matti": 1,
-                "others(885)": 885
+                "Ideal": 21551,
+                "Premium": 13791,
+                "Very Good": 12082,
+                "Good": 4906,
+                "Fair": 1610
             }
         },
         {
-            "ime_kolone": "Sex",
+            "ime_kolone": "Color",
             "broj_praznih_polja": 0,
-            "broj_jedinstvenih_polja": 2,
-            "najcesca_vrednost": "male",
-            "najveci_broj_ponavljanja": 577,
+            "broj_jedinstvenih_polja": 7,
+            "najcesca_vrednost": "G",
+            "najveci_broj_ponavljanja": 11292,
             "column_chart_data": {
-                "male": 577,
-                "female": 314
+                "G": 11292,
+                "E": 9797,
+                "F": 9542,
+                "H": 8304,
+                "D": 6775,
+                "I": 5422,
+                "J": 2808
             }
         },
         {
-            "ime_kolone": "Ticket",
+            "ime_kolone": "Clarity",
             "broj_praznih_polja": 0,
-            "broj_jedinstvenih_polja": 681,
-            "najcesca_vrednost": "347082",
-            "najveci_broj_ponavljanja": 7,
+            "broj_jedinstvenih_polja": 8,
+            "najcesca_vrednost": "SI1",
+            "najveci_broj_ponavljanja": 13065,
             "column_chart_data": {
-                "347082": 7,
-                "CA. 2343": 7,
-                "1601": 7,
-                "3101295": 6,
-                "CA 2144": 6,
-                "347088": 6,
-                "others(675)": 852
-            }
-        },
-        {
-            "ime_kolone": "Cabin",
-            "broj_praznih_polja": 687,
-            "broj_jedinstvenih_polja": 147,
-            "najcesca_vrednost": "B96 B98",
-            "najveci_broj_ponavljanja": 4,
-            "column_chart_data": {
-                "B96 B98": 4,
-                "G6": 4,
-                "C23 C25 C27": 4,
-                "C22 C26": 3,
-                "F33": 3,
-                "F2": 3,
-                "others(141)": 870
-            }
-        },
-        {
-            "ime_kolone": "Embarked",
-            "broj_praznih_polja": 2,
-            "broj_jedinstvenih_polja": 3,
-            "najcesca_vrednost": "S",
-            "najveci_broj_ponavljanja": 644,
-            "column_chart_data": {
-                "S": 644,
-                "C": 168,
-                "Q": 77
+                "SI1": 13065,
+                "VS2": 12258,
+                "SI2": 9194,
+                "VS1": 8171,
+                "VVS2": 5066,
+                "VVS1": 3655,
+                "others(2)": 2531
             }
         }
     ]
-};
+};*/
+listaKolona=[];
+
+
+
   ngOnInit(): void {
 
-    //this.statistika=this.shared.getStatistic();
+    this.statistika=this.shared.getStatistic();
     for(let i=0;i<Object.keys(this.statistika['numericke_kolone']).length;i++)
     {
       this.kolone.push(this.statistika['numericke_kolone'][i]['ime_kolone']);
@@ -244,51 +283,39 @@ export class StatisticComponent implements OnInit {
       this.kolone.push(this.statistika['kategoricke_kolone'][i]['ime_kolone']);
     }
 
-    // if(Object.keys(this.statistika['numericke_kolone']).length==0)
-    // {
-    //     this.myChart=new Chart("myChart", {
-    //         type: 'bar',
-    //         data: {
-    //             labels: Object.keys(this.statistika['kategoricke_kolone'][0]['column_chart_data']) ,
-    //             datasets: [{
-    //                 label: 'Broj redova',
-    //                 data: Object.values(this.statistika['kategoricke_kolone'][0]['column_chart_data']),
-    //             }]
-    //         },
-    //         options: {
-    //             scales: {
-    //                 y: {
-    //                     beginAtZero: true
-    //                 }
-    //             }
-    //         }
-    //     });
-    // }
-    // else
-    // {
-    //     if (this.myChart) 
-    //         this.myChart.destroy();
-    //     this.myChart=new Chart("myChart", {
-    //         type: 'bar',
-    //         data: {
-    //             labels: Object.keys(this.statistika['numericke_kolone'][0]['column_chart_data']) ,
-    //             datasets: [{
-    //                 label: 'Broj redova',
-    //                 data: Object.values(this.statistika['numericke_kolone'][0]['column_chart_data']),
-    //             }]
-    //         },
-    //         options: {
-    //             scales: {
-    //                 y: {
-    //                     beginAtZero: true
-    //                 }
-    //             }
-    //         }
-    //     });
-    // }
+
     
    
     this.selectChangeHandler();
+    
+
+    var id=0;
+      interface Kolona {
+        id: string;
+        itemName: string;
+      }
+      
+      for(let i=0;i<Object.keys(this.statistika['numericke_kolone']).length;i++)
+      {
+        var pom = {} as Kolona;
+        pom.id=id.toString();
+        pom.itemName=this.statistika['numericke_kolone'][i]['ime_kolone'];
+        
+        this.listaKolona.push(pom);
+        id++;
+      }
+      for(let i=0;i<Object.keys(this.statistika['kategoricke_kolone']).length;i++)
+      {
+        var pom = {} as Kolona;
+        pom.id=id.toString();
+        pom.itemName=this.statistika['kategoricke_kolone'][i]['ime_kolone'];
+        
+        this.listaKolona.push(pom);
+        id++;
+      }
+
+    this.loadDataSet1();
+    this.loadDataSet2();  
   }
   
   vrednost: any;
@@ -347,8 +374,8 @@ export class StatisticComponent implements OnInit {
     
   }
   iscrtajGraf(event:any){
-    this.vrednost = event.target.value;
-
+    this.vrednost = event;
+    
     for(let i=0;i<Object.keys(this.statistika['numericke_kolone']).length;i++)
       {
         if(this.vrednost==this.statistika['numericke_kolone'][i]['ime_kolone'])
@@ -357,11 +384,12 @@ export class StatisticComponent implements OnInit {
                 this.myChart.destroy();
           //graf
           this.myChart=new Chart(this.vrednost, {
-            type: 'bar',
+            type: 'line',
             data: {
                 labels: Object.keys(this.statistika['numericke_kolone'][i]['column_chart_data']) ,
                 datasets: [{
                     label: 'Broj redova',
+                    tension: 0.5,
                     data: Object.values(this.statistika['numericke_kolone'][i]['column_chart_data']),
                 }]
             },
@@ -417,6 +445,31 @@ export class StatisticComponent implements OnInit {
     }
     
   }
+  next()
+  {
+    if(window.confirm('Da li ste sigurni da zelite da predjete na sledecu stranu,izmene koje ste napravili ce biti sacuvane?'))
+    {
+        for(let j=0;j<this.modelKolona.length;j++)
+        {
+            for(let i=0;i<this.selectedItems.length;i++)
+            {
+                if(this.modelKolona[j].nazivKolone==this.selectedItems[i].itemName)
+                {
+                    this.modelKolona2.push(this.modelKolona[j]);
+                }
+            }
+            if(this.modelKolona[j].nazivKolone==this.izlaznaKolona[0].itemName)
+            {
+                this.modelKolona2.push(this.modelKolona[j]);
+            }
+        }
+        console.log(this.modelKolona2);
+
+        this.route.navigate(['./training']);
+    }
+    
+  }
+
   obrisi(id:any){
     if(window.confirm('Da li ste sigurni da zelite da obrisete ovaj red?')){
         this.kolone.splice(id,1);
@@ -434,13 +487,146 @@ export class StatisticComponent implements OnInit {
   prikazi(id:any){
       this.collapse[id]=1;
       for(let i=0;i<this.collapse.length;i++){
-        if(i!=id) this.collapse[i]=0;
+        if(i!=id && this.collapse[i]==1)
+        {
+                this.dodajUModel(i);
+                this.collapse[i]=0;
+            
+            
+        } 
       }
 
   }
   smanji(id:any){
-      this.collapse[id]=0;
+        this.collapse[id]=0;
+        this.dodajUModel(id);
+
+      
   }
+  dodajUModel(id:any){
+    for(let i=0;i<this.modelKolona.length;i++)
+    {
+        if(this.modelKolona[i].nazivKolone==this.kolone[id])
+        {
+            this.modelKolona.splice(i,1);
+        }
+    }
+    this.model=new Model();
+    this.model.nazivKolone=this.kolone[id];
+    this.model.tipPodataka=this.kategorije[id];
+    if(this.kategorije[id]=='Kategorijski')
+        this.model.tipEnkodiranja= this.selected;
+    else
+    {
+        this.model.tipEnkodiranja=null;
+        this.modelKolona.push(this.model);
+    }
+    if(this.selected!=null)
+        this.modelKolona.push(this.model);
+    console.log(this.modelKolona);
+    this.selected=null;
+
+    console.log(this.selectedItems,this.izlaznaKolona);
+
+
+      
+  }
+  promeniUNumericki(id:any){
+      this.kategorije[id]='Numericki';
+  }
+  promeniUKategorijski(id:any){
+    this.kategorije[id]='Kategorijski';
+}
+
+    loadDataSet1() {
+        this.dropdownSettings = { 
+        singleSelection: false, 
+        text:"Select Countries",
+        selectAllText:'Select All',
+        unSelectAllText:'UnSelect All',
+        enableSearchFilter: true,
+        classes:"myclass custom-class",
+        badgeShowLimit:"3",
+        limitSelection: this.listaKolona.length-1
+        
+        };
+
+        // this.sortirajListuKolona();
+        this.dropdownList = [];
+        for (let i = 0; i < this.listaKolona.length; ++i) {
+        if(this.izlaznaKolona){
+            if(this.izlaznaKolona[0]){
+            if(this.listaKolona[i].id==this.izlaznaKolona[0].id){
+                continue;
+            }
+            }
+        }
+            
+        this.dropdownList.push(this.listaKolona[i]);
+        }
+    }
+    loadDataSet2() {
+    this.dropdownSettings2 = { 
+        singleSelection: true, 
+        text:"Select Countries",
+        selectAllText:'Select All',
+        unSelectAllText:'UnSelect All',
+        enableSearchFilter: true,
+        classes:"myclass custom-class",
+        showCheckbox:false
+
+        
+    };
+        this.dropdownList2 = [];
+        // this.sortirajListuKolona();
+
+        for (let i = 0; i < this.listaKolona.length; ++i) {
+        var stanje=true;
+        for (let j = 0; j < this.selectedItems.length; ++j){
+            if(this.selectedItems[j].id==this.listaKolona[i].id){
+            stanje=false;
+            break;
+            }
+        }
+        if(stanje)
+            this.dropdownList2.push(this.listaKolona[i]);
+        }
+    }
+
+    // brisanjeElementaIzListe(item:any){
+    //   this.listaKolona.forEach((element,index)=>{
+    //     if(element.id==item.id) this.listaKolona.splice(index,1);
+    //   });
+    // }
+
+    onItemSelect(item:any){
+        
+        
+        this.loadDataSet2();
+    }
+    OnItemDeSelect(item:any){
+        
+        this.loadDataSet2();
+    }
+
+    onSelectAll(items: any){
+        
+        this.loadDataSet2();
+    }
+    onDeSelectAll(items: any){
+        
+        this.loadDataSet2();
+    }
+    
+
+    onItemSelect2(item:any){
+        
+        this.loadDataSet1();
+    }
+    OnItemDeSelect2(item:any){
+
+        this.loadDataSet1();
+    }
 
 
 }
