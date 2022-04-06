@@ -48,8 +48,6 @@ export class SignalRService {
           
           this.podaciZaGrafik.push(new podatakZaGrafikKlasa("loss"));
           this.podaciZaGrafik.push(new podatakZaGrafikKlasa("preciznost"));
-          this.podaciZaGrafik[0].dodajSeries(new vrednostiZaGrafikKlasa(0.24170850217342377,this.brojEpoha.toString()));
-          this.podaciZaGrafik[1].dodajSeries(new vrednostiZaGrafikKlasa(0.9322666525840759,this.brojEpoha.toString()));
           this.brojEpoha=this.brojEpoha+1;
         }
         this.data=res.replaceAll("'", '"');
