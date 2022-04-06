@@ -33,6 +33,7 @@ import { NgxNumberSpinnerModule } from 'ngx-number-spinner';
 import { ChartModel } from 'ag-grid-community';
 import { NgChartsModule } from 'ng2-charts';
 import { DefaultModule } from './layouts/default/default.module';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 @NgModule({
   declarations: [
     AppComponent,
@@ -68,7 +69,8 @@ import { DefaultModule } from './layouts/default/default.module';
     NgxNumberSpinnerModule,
     NgChartsModule,
     MatButtonModule,
-    DefaultModule
+    DefaultModule,
+    NgxChartsModule
   ],
   providers: [],
   bootstrap: [AppComponent],

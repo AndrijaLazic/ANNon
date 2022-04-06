@@ -1,3 +1,18 @@
 <app-izbor-parametara></app-izbor-parametara>
-<button (click)="SendtoBack()">Start Training</button>
-<canvas id="myChart" style="position: relative; height:40vh; width:60vw"></canvas>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-auto">
+            <ngx-charts-line-chart
+                [results]="PodaciZaGrafik"
+                
+            >
+            </ngx-charts-line-chart>
+        </div>
+        
+    </div>  
+    <div class="row justify-content-center">
+        <div class="col-md-2">
+            <button (click)="SendtoBack()">Start Training</button>
+        </div>
+    </div>
+</div>

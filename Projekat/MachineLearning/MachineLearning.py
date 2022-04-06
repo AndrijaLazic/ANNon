@@ -1,5 +1,8 @@
+import io
 from types import ClassMethodDescriptorType
 from typing import Dict, List
+
+from rsa import verify
 from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect,HTTPException
 from fastapi.responses import HTMLResponse
 from fastapi import Body
@@ -110,8 +113,9 @@ def mainPage():
 async def update_item(
         model:UploadedFile
 ):  
-    
-    fajl = pd.read_csv('https://localhost:7286/api/FajlKontroler/DajFajl?NazivFajla='+model.FileName+'&imeKorisnika=Korisnik')
+    s=requests.get('https://localhost:7286/api/FajlKontroler/DajFajl?NazivFajla='+model.FileName+'&imeKorisnika=Korisnik',verify=False).content
+    fajl=pd.read_csv(io.StringIO(s.decode('utf-8')))
+
     if(fajl.empty):
         raise HTTPException(status_code=404, detail="Fajl ne postoji")
     Statistic=stats.getStats(fajl)
