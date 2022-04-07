@@ -6,6 +6,22 @@ import pandas as pd
 from keras.models import load_model
 from CustomCallback import CustomCallback
 
+class Hiperparametri:
+  def __init__(self, broj_slojeva, cvorovi, aktivacione_funkcije, mera_greske):
+    self.broj_slojeva = broj_slojeva
+    self.cvorovi= cvorovi
+    self.aktivacione_funkcije =aktivacione_funkcije
+    self.mera_greske = mera_greske
+
+class Kolona:
+  def __init__(self, tip_podataka, enkodiranje, nedostajuce_vrednosti):
+    self.tip_podataka = tip_podataka
+    self.enkodiranje = enkodiranje
+    self.nedostajuce_vrednosti = nedostajuce_vrednosti
+
+class Pretprocesiranje:
+  def __init__(self, kolone):
+      self.kolone = kolone
 
 def determine_variable_types(data, label):
     nunique = data.nunique()
@@ -144,17 +160,17 @@ def prepare_preprocess_layers(data,target,train):
   encoded_features=encoded_features+all_num_inputs
   return all_inputs,encoded_features
 
-def make_model(all_inputs,encoded_features,num_of_layers=3,num_of_nodes=[10,10,10],activation_functions=["relu","relu","relu"],loss="mae",metric="mape"):
+def make_model(all_inputs,encoded_features,hiperparametri ,metric="mape"):
   all_features = tf.keras.layers.concatenate(encoded_features)
   x=tf.keras.layers.Normalization(axis=-1)(all_features)
-  for i in range(num_of_layers):
-    x=tf.keras.layers.Dense(num_of_nodes[i],activation=activation_functions[i])(x)
+  for i in range(hiperparametri.broj_slojeva):
+    x=tf.keras.layers.Dense(hiperparametri.cvorovi[i],activation=hiperparametri.aktivacione_funkcije[i])(x)
   output = tf.keras.layers.Dense(1)(x)
 
   model = tf.keras.Model(all_inputs, output)
 
   model.compile(optimizer='Adam',
-                loss=loss,
+                loss=hiperparametri.mera_greske,
                 metrics=metric)
   return model
 
