@@ -1,4 +1,5 @@
 import io
+import json
 from types import ClassMethodDescriptorType
 from typing import Dict, List
 
@@ -8,12 +9,13 @@ from fastapi.responses import HTMLResponse
 from fastapi import Body
 import statistics as stats
 import pandas as pd
-from pydantic import BaseModel
+from pydantic import BaseModel, Json
 from example import fja
 from asgiref.sync import sync_to_async
 import requests
 import statistics as stats
 import csv
+import mreza
 #vazno!!!!!!
 #pokretanje aplikacije komanda
 #uvicorn MachineLearning:app --reload
@@ -59,6 +61,7 @@ html = """
 
 
 class UploadedFile(BaseModel):
+    userID:str
     FileName:str
     Putanja:str
 
@@ -70,19 +73,26 @@ class FileWithStatistic:
         self.FileName=fileModel.FileName
         self.Statistic=statistic
 
+class TableColumnModel(BaseModel):
+    Name:str
+    Type:str
+    Encoding:str
 class Parameters(BaseModel):
-    FilePath:str
     Input:list
     Output:str
-    Encoding:str
     LayerNumber:int 
-    NeuronNumver:int
-    ActivationFunction:str
+    NeuronNumber:list
+    ActivationFunction:list
+    LossMetric:str
+    SuccessMetric:str
+    ProblemType:str
+
  
 
 class ConnectionManager:
     def __init__(self):
         self.active_connections: Dict= {}
+        self.filePaths:Dict={}
 
     async def connect(self, websocket: WebSocket,client_id:str):
         await websocket.accept()
@@ -90,6 +100,7 @@ class ConnectionManager:
 
     def disconnect(self,client_id:str):
         self.active_connections.pop(client_id,True)
+        self.filePaths.pop(client_id,True)
 
     async def receive_text(self,client_id:str):
         return await self.active_connections[client_id].receive_text()
@@ -100,6 +111,11 @@ class ConnectionManager:
     async def broadcast(self, message: str):
         for connection in self.active_connections.values():
             await connection.send_text(message)
+    async def addFilePath(self,client_id:str,path:str):
+        self.filePaths[client_id]=path
+    async def getFilePath(self,client_id:str):
+        return self.filePaths[client_id]
+
 
 manager = ConnectionManager()
 app=FastAPI()
@@ -114,10 +130,11 @@ async def update_item(
         model:UploadedFile
 ):  
     s=requests.get('https://localhost:7286/api/FajlKontroler/DajFajl?NazivFajla='+model.FileName+'&imeKorisnika=Korisnik',verify=False).content
-    fajl=pd.read_csv(io.StringIO(s.decode('utf-8')))
-
+    fajl=pd.read_csv(io.StringIO(s.decode('utf-8')),sep='|')
     if(fajl.empty):
         raise HTTPException(status_code=404, detail="Fajl ne postoji")
+    
+    await manager.addFilePath(model.userID,'https://localhost:7286/api/FajlKontroler/DajFajl?NazivFajla='+model.FileName+'&imeKorisnika=Korisnik')
     Statistic=stats.getStats(fajl)
     return Statistic
 
@@ -127,6 +144,19 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str):
     try:
         while True:
             data = await websocket.receive_text()
+            model=json.loads(data)
+            s=requests.get(await manager.getFilePath(client_id),verify=False).content
+            fajl=pd.read_csv(io.StringIO(s.decode('utf-8')),sep='|')
+            if(fajl.empty):
+                raise HTTPException(status_code=404, detail="Fajl ne postoji")
+            print(fajl.info())
+            target="Survived"
+            fajl.dropna(inplace=True)
+            train,val,test=mreza.split_data(fajl,0.8,0.1,0.1)
+
+            all_inputs,encoded_features=mreza.prepare_preprocess_layers(fajl,target,train)
+            model=mreza.make_model(all_inputs,encoded_features)
+            await sync_to_async(mreza.train_model)(model,train,val,target,client_id)
             #ovde treba pozvati asinhronu fju koja prihvata id_klijenta i kada zove model.fit,zove i CustomCallback sa parametrima:
             #root="http://localhost:8000"
             #path="/publish/epoch/end"
@@ -135,7 +165,7 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str):
             #primer sablona funkcije je u example.py
             
             #sledeci poziv radi
-            await sync_to_async(fja)(client_id)
+            # await sync_to_async(fja)(client_id)
             #print(client_id)
             #await manager.send_text(client_id,"radisdadasd")
     except WebSocketDisconnect:

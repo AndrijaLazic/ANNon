@@ -1,7 +1,7 @@
 import { HttpClient, HttpEventType, HttpHeaders, HttpRequest, JsonpClientBackend,HttpParams } from '@angular/common/http';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Papa, ParseResult } from 'ngx-papaparse';
-import { ColDef,GridApi,GridReadyEvent,CellValueChangedEvent, ComponentStateChangedEvent, GridColumnsChangedEvent } from 'ag-grid-community';
+import { ColDef,GridApi,GridReadyEvent,CellValueChangedEvent, ComponentStateChangedEvent, GridColumnsChangedEvent, CsvExportParams } from 'ag-grid-community';
 import { AgGridModule } from 'ag-grid-angular';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
@@ -137,7 +137,8 @@ export class CsvTabelaComponent implements OnInit {
       
       //this.setSession();
       const formData = new FormData();
-      let file = new File([this.gridApi.getDataAsCsv()],this.imeFajla ,{type: 'application/vnd.ms-excel'});
+      const params:CsvExportParams = {suppressQuotes: true,columnSeparator:"|"};
+      let file = new File([this.gridApi.getDataAsCsv(params)],this.imeFajla ,{type: 'application/vnd.ms-excel'});
       formData.append("uploadedFile",file);
       
       formData.append("userID",sessionStorage.getItem("userId"));
