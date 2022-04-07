@@ -10,13 +10,17 @@ import { SharedService } from '../shared-statistic/shared.service';
 
 
 export class IzborParametaraComponent implements OnInit {
-
+  
   
   constructor(private shared: SharedService) { }
   statistika:Object;
   public SelektovanaVrednost;
   trenutniBrojSkrivenihSlojeva=0;
   
+  SelektovaniTipProblema;
+  SelektovanaVrednostGreske;
+  SelektovanaVrednostUspeha;
+
   dropdownList = [];
   selectedItems = [];
   dropdownSettings = {};
@@ -27,7 +31,6 @@ export class IzborParametaraComponent implements OnInit {
   dropdownSettings2={};
 
   listaSkrivenihSlojeva=[];
-
 
   pom(){
     console.log(this.listaKolona);
@@ -169,6 +172,7 @@ export class IzborParametaraComponent implements OnInit {
     change(value: any,id:any): void {
       interface SkriveniSloj{
         brojNeurona:number;
+        aktivacionaFunkcija:string;
       }
       
       if(id==-1){
@@ -176,9 +180,7 @@ export class IzborParametaraComponent implements OnInit {
           this.trenutniBrojSkrivenihSlojeva=value;
           var pom = {} as SkriveniSloj;
           pom.brojNeurona=1;
-          this.listaSkrivenihSlojeva.push(pom)
-
-      
+          this.listaSkrivenihSlojeva.push(pom);
         }
         else{
           this.trenutniBrojSkrivenihSlojeva=value;
@@ -193,10 +195,12 @@ export class IzborParametaraComponent implements OnInit {
         this.trenutniBrojSkrivenihSlojeva=this.trenutniBrojSkrivenihSlojeva-1;
         return;
       }
-      
-      console.log(this.listaSkrivenihSlojeva);
+      console.log(this.listaSkrivenihSlojeva[id].brojNeurona);
     }
 
 
+    selektujAktFunkciju(selektovanaVrednost,id){
+      this.listaSkrivenihSlojeva[id].aktivacionaFunkcija=selektovanaVrednost;
+    }
     
 }

@@ -11,15 +11,14 @@
     color: black;
 }
 
-::ng-deep #TipEnkodiranjaSelektor{
-    width: 170px;
-    
+::ng-deep .selektorAktivacioneFje{
+    width: 100%;
 }
 
-::ng-deep #TipEnkodiranjaSelektor .mat-form-field-infix{
+::ng-deep .selektorAktivacioneFje .mat-form-field-infix{
     background-color: white;
 }
-::ng-deep #TipEnkodiranjaSelektor .mat-form-field-flex{
+::ng-deep .selektorAktivacioneFje .mat-form-field-flex{
     background-color: white;
     margin-top: 2px;
 }
