@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { MatSelectModule } from '@angular/material/select';
 import { FullWidth } from 'ag-grid-community/dist/lib/components/framework/componentTypes';
 import { SharedService } from '../shared-statistic/shared.service';
@@ -52,6 +52,9 @@ export class IzborParametaraComponent implements OnInit {
 
 
   //forma
+  @Output() newItemEvent = new EventEmitter<ObjekatZaSlanje>();
+  @ViewChild('FormaZaHParametre') FormaZaHParametre;
+
   forma=new FormGroup({
     TipProblema:new FormControl('',[Validators.required]),
     MeraGreske:new FormControl('',[Validators.required]),
@@ -107,7 +110,7 @@ export class IzborParametaraComponent implements OnInit {
           this.ListaSkrivenihSlojeva.removeAt(this.ListaSkrivenihSlojeva.length-1);
         }
         
-        console.log(this.ListaSkrivenihSlojeva)
+        
         return;
       }
       if(value==0){
@@ -116,14 +119,22 @@ export class IzborParametaraComponent implements OnInit {
         this.trenutniBrojSkrivenihSlojeva=this.trenutniBrojSkrivenihSlojeva-1;
       }
       
-      console.log(this.ListaSkrivenihSlojeva)
+      
     }
-    stampa(){
-      var ParametriZaSlanje=new ObjekatZaSlanje(); 
-      ParametriZaSlanje=Object.assign(new ObjekatZaSlanje(), this.forma.value);
-      ParametriZaSlanje.BrojSlojeva=this.ListaSkrivenihSlojeva.length;
-      console.log(ParametriZaSlanje);
-      console.log(JSON.stringify(ParametriZaSlanje));
+    dajParametre(){
+      this.forma.markAllAsTouched();
+      if(this.forma.invalid){
+        // this.FormaZaHParametre.nativeElement.submit();
+        this.newItemEvent.emit(null);
+      }
+      else{
+        var ParametriZaSlanje=new ObjekatZaSlanje(); 
+        ParametriZaSlanje=Object.assign(new ObjekatZaSlanje(), this.forma.value);
+        ParametriZaSlanje.BrojSlojeva=this.ListaSkrivenihSlojeva.length;
+        
+        this.newItemEvent.emit(ParametriZaSlanje);
+      }
+
     }
     
 }

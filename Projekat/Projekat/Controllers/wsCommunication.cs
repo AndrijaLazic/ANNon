@@ -44,17 +44,18 @@ namespace Projekat.Controllers
         }
         //NEKA VRSTA MIDDLEWARE-A KOJA SPAJA SIGNALR 
         [HttpPost("user")]
-        public async Task<IActionResult> startTraining([FromForm]string userID,[FromForm] string connectionID,[FromForm] ParametarsModel model)
+        public async Task<IActionResult> startTraining([FromForm]string userID,[FromForm] string connectionID,[FromForm] ParametarsModel parametri)
         {
             if(userID.IsNullOrEmpty())
                 return BadRequest();
-
+            Console.WriteLine(parametri);
+            return Ok();
             using (socket)
             {
                 try
                 {
                     await socket.ConnectAsync(new Uri("ws://"+uri+"/test/" + userID), CancellationToken.None);
-                    await _customClient.Send(socket, model);
+                    await _customClient.Send(socket, parametri);
                     while (true)
                     {
                         
