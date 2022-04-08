@@ -17,6 +17,8 @@ import { PaginationComponent } from './excelsheet/pagination/pagination.componen
 import { MatSelectModule } from '@angular/material/select';
 import { AngularMultiSelectModule } from 'angular2-multiselect-dropdown';
 import {MatButtonModule} from '@angular/material/button';
+import { ReactiveFormsModule } from '@angular/forms';
+
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
@@ -70,7 +72,8 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     NgChartsModule,
     MatButtonModule,
     DefaultModule,
-    NgxChartsModule
+    NgxChartsModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent],

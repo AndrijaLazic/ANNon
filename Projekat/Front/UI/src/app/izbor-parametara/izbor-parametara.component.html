@@ -1,140 +1,150 @@
 
 <div class="container">
-  <div class="row justify-content-center">
-    <div class="col-md-auto">
-      <mat-form-field appearance="fill" class="selektorAktivacioneFje">
-        <mat-label>Tip problema</mat-label>
-        <mat-select [(ngModel)]="SelektovaniTipProblema">
-          <mat-option value="regresija">
-            Regresija
-          </mat-option>
-          <mat-option value="klasifikacija">
-            Klasifikacija
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-    <!-- Ako je regresija -->
-    <div class="col-md-auto" *ngIf="SelektovaniTipProblema=='regresija'">
-      <mat-form-field appearance="fill" class="selektorAktivacioneFje">
-        <mat-label>Mera greske</mat-label>
-        <mat-select [(ngModel)]="SelektovanaVrednostGreske">
-          <mat-option value="mse">
-            mse
-          </mat-option>
-          <mat-option value="rmse">
-            rmse
-          </mat-option>
-          <mat-option value="mae">
-            mae
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-    <div class="col-md-auto" *ngIf="SelektovaniTipProblema=='regresija'">
-      <mat-form-field appearance="fill" class="selektorAktivacioneFje">
-        <mat-label>Mera uspeha</mat-label>
-        <mat-select [(ngModel)]="SelektovanaVrednostUspeha">
-          <mat-option value="mse">
-            mse
-          </mat-option>
-          <mat-option value="rmse">
-            rmse
-          </mat-option>
-          <mat-option value="mae">
-            mae
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-
-    <!-- Ako je regresija -->
-    <div class="col-md-auto" *ngIf="SelektovaniTipProblema=='klasifikacija'">
-      <mat-form-field appearance="fill" class="selektorAktivacioneFje">
-        <mat-label>Mera greske</mat-label>
-        <mat-select [(ngModel)]="SelektovanaVrednostGreske">
-          <mat-option value="mse">
-            accuracy
-          </mat-option>
-          <mat-option value="rmse">
-            precision
-          </mat-option>
-          <mat-option value="mae">
-            recall
-          </mat-option>
-          <mat-option value="mae">
-            f1
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-    <div class="col-md-auto" *ngIf="SelektovaniTipProblema=='klasifikacija'">
-      <mat-form-field appearance="fill" class="selektorAktivacioneFje">
-        <mat-label>Mera uspeha</mat-label>
-        <mat-select [(ngModel)]="SelektovanaVrednost">
-          <mat-option value="mse">
-            accuracy
-          </mat-option>
-          <mat-option value="rmse">
-            precision
-          </mat-option>
-          <mat-option value="mae">
-            recall
-          </mat-option>
-          <mat-option value="mae">
-            f1
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-
-  </div>
-
-  
-
-  <div class="row justify-content-center">
-    <div class="col-md-auto" id="BrojSkrivenihSlojevaSelektor">
-      <label>Izaberi broj skrivenih slojeva</label>
-      <ngx-number-spinner class="Brojac"
-          [value]="trenutniBrojSkrivenihSlojeva"
-          (change)="change($event,-1)"
-          [min]="0"
-          [max]="5">
-      </ngx-number-spinner>
-    </div>
-  </div>
-
-  <div class="row justify-content-center gx-5" id="TreciRed">
-    <div class="col-md-2" *ngFor="let item of listaSkrivenihSlojeva ;index as i;" >
-      <div class="row justify-content-center">
-        <label>Broj neurona za {{i+1}}. sloj</label> 
-          <ngx-number-spinner class="Brojac"
-                [value]='item.brojNeurona' 
-                (change)='change($event,i)' 
-                [min]='0' 
-                [max]='5'> 
-          </ngx-number-spinner> 
-      </div>
-      <div class="row justify-content-center">
+  <form [formGroup]="forma">
+    <div class="row justify-content-center">
+      
         <div class="col-md-auto">
           <mat-form-field appearance="fill" class="selektorAktivacioneFje">
-            <mat-label>Aktivaciona funkcija</mat-label>
-            <mat-select (selectionChange)="selektujAktFunkciju($event.value,i)">
-              <mat-option value="relu">
-                relu
+            <mat-label>Tip problema</mat-label>
+            <mat-select formControlName="TipProblema">
+              <mat-option value="regresija">
+                Regresija
               </mat-option>
-              <mat-option value="linear">
-                linear
-                </mat-option>
-                <mat-option value="tanh">
-                  tanh
-              </mat-option >
+              <mat-option value="klasifikacija">
+                Klasifikacija
+              </mat-option>
             </mat-select>
+            <mat-error *ngIf="TipProblema && TipProblema.invalid">Izaberite tip problema</mat-error>
           </mat-form-field>
-          <!-- {{SelektovanaVrednost}} -->
+        </div>
+        <!-- Ako je regresija -->
+        <div class="col-md-auto" *ngIf="TipProblema.value=='regresija'">
+          <mat-form-field appearance="fill" class="selektorAktivacioneFje">
+            <mat-label>Mera greske</mat-label>
+            <mat-select formControlName="MeraGreske">
+              <mat-option value="mse">
+                mse
+              </mat-option>
+              <mat-option value="rmse">
+                rmse
+              </mat-option>
+              <mat-option value="mae">
+                mae
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="MeraGreske && MeraGreske.invalid">Izaberite tip problema</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-auto" *ngIf="TipProblema.value=='regresija'">
+          <mat-form-field appearance="fill" class="selektorAktivacioneFje">
+            <mat-label>Mera uspeha</mat-label>
+            <mat-select formControlName="MeraUspeha">
+              <mat-option value="mse">
+                mse
+              </mat-option>
+              <mat-option value="rmse">
+                rmse
+              </mat-option>
+              <mat-option value="mae">
+                mae
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="MeraUspeha && MeraUspeha.invalid">Izaberite tip problema</mat-error>
+          </mat-form-field>
+        </div>
+
+        <!-- Ako je regresija -->
+        <div class="col-md-auto" *ngIf="TipProblema.value=='klasifikacija'">
+          <mat-form-field appearance="fill" class="selektorAktivacioneFje">
+            <mat-label>Mera greske</mat-label>
+            <mat-select formControlName="MeraGreske">
+              <mat-option value="accuracy">
+                accuracy
+              </mat-option>
+              <mat-option value="precision">
+                precision
+              </mat-option>
+              <mat-option value="recall">
+                recall
+              </mat-option>
+              <mat-option value="f1">
+                f1
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="MeraGreske && MeraGreske.invalid">Izaberite tip problema</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-auto" *ngIf="TipProblema.value=='klasifikacija'">
+          <mat-form-field appearance="fill" class="selektorAktivacioneFje">
+            <mat-label>Mera uspeha</mat-label>
+            <mat-select formControlName="MeraUspeha">
+              <mat-option value="accuracy">
+                accuracy
+              </mat-option>
+              <mat-option value="precision">
+                precision
+              </mat-option>
+              <mat-option value="recall">
+                recall
+              </mat-option>
+              <mat-option value="f1">
+                f1
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="MeraUspeha && MeraUspeha.invalid">Izaberite tip problema</mat-error>
+          </mat-form-field>
+        </div>
+    </div>
+   
+    
+
+    <div class="row justify-content-center">
+      <div class="col-md-auto" id="BrojSkrivenihSlojevaSelektor">
+        <label>Izaberi broj skrivenih slojeva</label>
+        <ngx-number-spinner class="Brojac"
+            [value]="trenutniBrojSkrivenihSlojeva"
+            (change)="change($event,-1)"
+            [min]="0"
+            [max]="5">
+        </ngx-number-spinner>
+      </div>
+    </div>
+
+    <div class="row justify-content-center gx-5" id="TreciRed" formArrayName="formArraylistaSkrivenihSlojeva">
+      <div class="col-md-2" *ngFor="let item of listaSkrivenihSlojeva ;index as i;" >
+        <div [formGroupName]="i">
+          <div class="row justify-content-center">
+            <label>Broj neurona za {{i+1}}. sloj</label> 
+              <ngx-number-spinner class="Brojac" formControlName="BrojNeurona"
+                    [value]='item.brojNeurona' 
+                    (change)='change($event,i)' 
+                    [min]='0' 
+                    [max]='5'> 
+              </ngx-number-spinner> 
+          </div>
+          <div class="row justify-content-center">
+            <div class="col-md-auto">
+              <mat-form-field appearance="fill" class="selektorAktivacioneFje">
+                <mat-label>Aktivaciona funkcija</mat-label>
+                <mat-select (selectionChange)="selektujAktFunkciju($event.value,i)" formControlName="AktivacionaFunkcija">
+                  <mat-option value="relu">
+                    relu
+                  </mat-option>
+                  <mat-option value="linear">
+                    linear
+                    </mat-option>
+                    <mat-option value="tanh">
+                      tanh
+                  </mat-option >
+                </mat-select>
+              </mat-form-field>
+              <!-- {{SelektovanaVrednost}} -->
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+    
+  </form> 
 </div>
 
