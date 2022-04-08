@@ -18,6 +18,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { AngularMultiSelectModule } from 'angular2-multiselect-dropdown';
 import {MatButtonModule} from '@angular/material/button';
 import { ReactiveFormsModule } from '@angular/forms';
+import { NgxSliderModule } from '@angular-slider/ngx-slider';
 
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -73,7 +74,8 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     MatButtonModule,
     DefaultModule,
     NgxChartsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgxSliderModule
   ],
   providers: [],
   bootstrap: [AppComponent],
