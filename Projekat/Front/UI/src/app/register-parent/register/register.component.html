@@ -1,6 +1,4 @@
-<div class="container" id="blok">
-    <div class="row">
-        <div class="col-md-6">
+
             <div class="card">
                 <div class="text-center">
                     <h1>Register</h1><hr>
@@ -9,9 +7,9 @@
                 <form novalidate #form="ngForm" (submit)="onSubmit1(form)">
                     
                     <div class="mb-3">
-                        <label class="form-label">Username*</label>
+                        <label class="form-label">Username</label>
                         <input type="text" class="form-control" name="username" #username="ngModel" [(ngModel)]="service.formdata.username" 
-                         placeholder="example:user123" pattern="^[a-zA-Z][a-zA-Z0-9]*" required [class.invalid]="username.touched && username.invalid" minlength="5" maxlength="15">
+                         placeholder="example:user123" pattern="^[a-zA-Z][a-zA-Z0-9\.]*" required [class.invalid]="username.touched && username.invalid" minlength="5" maxlength="30">
                          <div *ngIf="username.invalid && username.touched"
                               class="alert">
 
@@ -19,19 +17,19 @@
                               Username is required.
                             </p>
                             <p class="alert alert-danger" *ngIf="username.errors?.['pattern']">
-                              Username can not start with numbers!
+                              Username can not start with numbers.
                             </p>
                             <p class="alert alert-danger" *ngIf="username.errors?.['minlength']">
                               Username must contain at least 5 characters.
                             </p>
                             <p class="alert alert-danger" *ngIf="username.errors?.['maxlength']">
-                              Username can not contain more than 15 characters.
+                              Username can not contain more than 30 characters.
                             </p>
 
                           </div>
                       </div>
                       <div class="mb-3">
-                        <label class="form-label">Email*</label>
+                        <label class="form-label">Email</label>
                         <input type="text" class="form-control" name="email" #email="ngModel" [(ngModel)]="service.formdata.email"
                          required placeholder="example:user@gmail.com" [class.invalid]="email.touched && email.invalid"
                          pattern="^[a-zA-Z0-9]+([\.\-\+][a-zA-Z0-9]+)*\@([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}$">
@@ -39,38 +37,41 @@
                          class="alert">
 
                        <p class="alert alert-danger" *ngIf="email.errors?.['required']">
-                         Email is required!
+                         Email is required.
                        </p>
                        <p class="alert alert-danger" *ngIf="email.errors?.['pattern']">
-                         It's not proper email!
+                         It's not proper email.
                        </p>
 
                      </div>
                       </div>
                     
                     <div class="mb-3">
-                      <label class="form-label">Password*</label>
+                      <label class="form-label">Password</label>
                       <input type="password" class="form-control" name="password" #password="ngModel" [(ngModel)]="service.formdata.password" 
                       required minlength="5" [class.invalid]="password.touched && password.invalid" placeholder="*****">
                       <div *ngIf="password.invalid && password.touched"
                          class="alert">
 
                        <p class="alert alert-danger" *ngIf="password.errors?.['required']">
-                         Password is required!
+                         Password is required.
                        </p>
                        <p class="alert alert-danger" *ngIf="password.errors?.['minlength']">
-                         Password must contains at least 5 characters!
+                         Password must contains at least 5 characters.
                        </p>
 
                      </div>
                     </div>
                     
                     
-                    <button type="submit" class="btn btn-primary" [disabled]="form.invalid">Sign Up</button>
+                    
+                    <div class="akaunt">
+                      <button type="submit" id="dugme" class="btn btn-primary" [disabled]="form.invalid">Sign Up</button><br>
+                      Already have an account?<a routerLink="/login">Log in</a>
+                    </div>
+                   
                   </form>
-                  <p>*-required fields</p>
-                  Already have an account?<a routerLink="/login">Log in</a>
+                  
             </div>
-        </div>
-    </div>
-</div>
+       
+
