@@ -6,7 +6,7 @@
         public string AktivacionaFunkcija { get; set; }
     }
 
-    public class ParametarsModel
+    public class ParametriDTO
     {
         public string TipProblema { get; set; }
         public string MeraGreske { get; set; }

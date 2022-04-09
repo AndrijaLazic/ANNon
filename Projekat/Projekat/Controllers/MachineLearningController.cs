@@ -109,7 +109,7 @@ namespace Projekat.Clients
 
 
         [HttpPost("parametars")]
-        public async Task<IActionResult> getParametars(ParametarsModel param_model)
+        public async Task<IActionResult> getParametars(ParametriDTO param_model)
         {
             var json = JsonConvert.SerializeObject(param_model);  
             var answer = await _iCustomClient.sendParametars(json);

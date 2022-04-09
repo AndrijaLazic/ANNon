@@ -45,7 +45,6 @@ export class TreningComponent implements OnInit {
   ispis(item:ObjekatZaSlanje){
     
     if(item){
-      console.log(JSON.stringify(item))
       var formData = new FormData();
       formData.append("userID",sessionStorage.getItem("userId"));
       formData.append("connectionID",sessionStorage.getItem("connectionID"));

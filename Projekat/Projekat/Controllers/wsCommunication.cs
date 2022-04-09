@@ -44,12 +44,11 @@ namespace Projekat.Controllers
         }
         //NEKA VRSTA MIDDLEWARE-A KOJA SPAJA SIGNALR 
         [HttpPost("user")]
-        public async Task<IActionResult> startTraining([FromForm]string userID,[FromForm] string connectionID,[FromForm] ParametarsModel parametri)
+        public async Task<IActionResult> startTraining([FromForm]string userID,[FromForm] string connectionID,[FromForm] string parametri)
         {
             if(userID.IsNullOrEmpty())
                 return BadRequest();
-            Console.WriteLine(parametri);
-            return Ok();
+            var result = JsonConvert.DeserializeObject<ParametriDTO>(parametri);
             using (socket)
             {
                 try
@@ -105,7 +104,7 @@ namespace Projekat.Controllers
 
 
        [HttpPost("parametars")]
-       public async Task getParametars(ParametarsModel param_model, string userID, string connectionID)
+       public async Task getParametars(ParametriDTO param_model, string userID, string connectionID)
        {
            var json = JsonConvert.SerializeObject(param_model);
            //var answer = await _iCustomClient.sendParametars(json);

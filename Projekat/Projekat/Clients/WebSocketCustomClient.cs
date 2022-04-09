@@ -15,7 +15,7 @@ namespace Projekat.Clients
         {
             await socket.SendAsync(Encoding.UTF8.GetBytes(userID), WebSocketMessageType.Text, true, CancellationToken.None);
         }
-        public async Task Send(ClientWebSocket socket,  ParametarsModel model)
+        public async Task Send(ClientWebSocket socket, ParametriDTO model)
         {
 
             var data_to_send = JsonConvert.SerializeObject(model);

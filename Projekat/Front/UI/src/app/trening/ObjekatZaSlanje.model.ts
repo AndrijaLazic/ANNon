@@ -7,6 +7,7 @@ export class ObjekatZaSlanje {
     UlazneKolone:[];
     IzlaznaKolona:string;
     odnosPodataka:number;
+    
 }
 
 export interface ListaSkrivenihSlojeva {
