@@ -3,15 +3,8 @@ import {SharedService} from "../shared-statistic/shared.service";
 import { Router } from '@angular/router';
 import Chart from 'chart.js/auto';
 import {MatButtonModule} from '@angular/material/button';
-
-
-export class Model
-{
-  nazivKolone:string="";
-  tipPodataka:string="";
-  tipEnkodiranja:string="";
-  
-}
+import { statisticModel,Model } from '../shared/statistic-model.model';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-statistic',
@@ -26,7 +19,7 @@ export class StatisticComponent implements OnInit {
   collapse=new Array();
   strStat:string;
   model:Model;
-
+  statsModel:statisticModel;
   //pomocni niz u koji se pakuju svi modeli koji su menjani
   modelKolona=new Array<Model>();
 
@@ -39,13 +32,14 @@ export class StatisticComponent implements OnInit {
   dropdownList = [];
   selectedItems = [];
   dropdownSettings = {};
-
+  
+  ulazne=new Array();
 
   dropdownList2 = [];
   izlaznaKolona;
   dropdownSettings2={};
   statistika:Object;
-  constructor(private shared: SharedService,private route:Router,private elementRef: ElementRef) { }
+  constructor(private shared: SharedService,private route:Router,private elementRef: ElementRef,private cookie:CookieService) { }
     
   
 listaKolona=[];
@@ -232,6 +226,7 @@ listaKolona=[];
   {
     if(window.confirm('Da li ste sigurni da zelite da predjete na sledecu stranu,izmene koje ste napravili ce biti sacuvane?'))
     {
+        this.dodajUlazne;
         for(let j=0;j<this.modelKolona.length;j++)
         {
             for(let i=0;i<this.selectedItems.length;i++)
@@ -246,7 +241,14 @@ listaKolona=[];
                 this.modelKolona2.push(this.modelKolona[j]);
             }
         }
-        console.log(this.modelKolona2);
+        this.statsModel=new statisticModel();
+        this.statsModel.nizPromena=this.modelKolona2;
+        this.statsModel.nizUlaznih=this.ulazne;
+        this.statsModel.izlazna=this.izlaznaKolona[0].itemName;
+        this.cookie.set('params',JSON.stringify(this.statsModel));
+
+
+        
 
         this.route.navigate(['./training']);
     }
@@ -409,6 +411,13 @@ listaKolona=[];
     OnItemDeSelect2(item:any){
 
         this.loadDataSet1();
+    }
+
+    dodajUlazne(){
+        for(let i=0;i<this.selectedItems.length;i++)
+        {
+            this.ulazne.push(this.selectedItems[i].itemName);
+        }
     }
 
 
