@@ -160,18 +160,18 @@ def prepare_preprocess_layers(data,target,train):
   encoded_features=encoded_features+all_num_inputs
   return all_inputs,encoded_features
 
-def make_model(all_inputs,encoded_features,hiperparametri ,metric="mape"):
+def make_model(all_inputs,encoded_features,metric="mape"):
   all_features = tf.keras.layers.concatenate(encoded_features)
   x=tf.keras.layers.Normalization(axis=-1)(all_features)
-  for i in range(hiperparametri.broj_slojeva):
-    x=tf.keras.layers.Dense(hiperparametri.cvorovi[i],activation=hiperparametri.aktivacione_funkcije[i])(x)
+  for i in range(3):
+    x=tf.keras.layers.Dense(5,activation="relu")(x)
   output = tf.keras.layers.Dense(1)(x)
 
   model = tf.keras.Model(all_inputs, output)
 
   model.compile(optimizer='Adam',
-                loss=hiperparametri.mera_greske,
-                metrics=metric)
+                loss="mae",
+                metrics="mae")
   return model
 
 
