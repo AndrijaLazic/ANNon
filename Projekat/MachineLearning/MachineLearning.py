@@ -150,7 +150,7 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str):
             if(fajl.empty):
                 raise HTTPException(status_code=404, detail="Fajl ne postoji")
             print(fajl.info())
-            target="Survived"
+            target="Price"
             fajl.dropna(inplace=True)
             train,val,test=mreza.split_data(fajl,0.8,0.1,0.1)
 
