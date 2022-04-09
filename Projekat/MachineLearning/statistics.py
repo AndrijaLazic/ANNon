@@ -38,6 +38,7 @@ def getStats(data):
 
     for column in kategorijske_kolone:
         data[column]=pd.Categorical(data[column])
+    numericals=pd.DataFrame()
     if("int64" in data.dtypes.values or "float64" in data.dtypes.values):
         numericals=data.describe(include=["int64","float64"])
     categoricals=pd.DataFrame()
@@ -46,7 +47,6 @@ def getStats(data):
     irrelevants=pd.DataFrame()
     if(object in data.dtypes.values):
         irrelevants=data.describe(include=[object])
-
     for column_name in categoricals.columns:
         recnik=dict()
         recnik["ime_kolone"]=column_name
