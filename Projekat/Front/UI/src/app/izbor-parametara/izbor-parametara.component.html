@@ -94,10 +94,23 @@
             <mat-error *ngIf="MeraUspeha && MeraUspeha.invalid">Izaberite tip problema</mat-error>
           </mat-form-field>
         </div>
+        <div class="col-md-auto">
+          <mat-form-field appearance="fill" class="selektorAktivacioneFje">
+            <mat-label>Broj epoha</mat-label>
+            <input matInput type="number" formControlName="BrojEpoha" min="{{MinBrojEpoha}}">
+            <mat-error *ngIf="BrojEpoha.errors?.['required']">
+              Unesite broj epoha
+            </mat-error>
+            <mat-error *ngIf="BrojEpoha.errors?.['min']">
+              Najmanji broj epoha je {{MinBrojEpoha}}
+            </mat-error>
+            
+          </mat-form-field>
+      </div>
     </div>
     <div class="row justify-content-center">
       <div class="col-md-5" style="background: #01315d6e;padding: 10px;">
-        <h4 style="text-align: center;color: white;">Procenat podataka za treniranje</h4>
+        <h4 style="text-align: center;color: white;">Procenat podataka za testiranje</h4>
         <ngx-slider [(value)]="value" [options]="options" id="slajderZaPodatke" formControlName="odnosPodataka"></ngx-slider>
       </div>
     </div>
@@ -124,7 +137,7 @@
                     [value]='item.value.BrojNeurona' 
                     (change)='change($event,i)' 
                     [min]='0' 
-                    [max]='5'> 
+                    [max]='8'> 
               </ngx-number-spinner> 
           </div>
           <div class="row justify-content-center">

@@ -39,3 +39,7 @@
 ::ng-deep #slajderZaPodatke span{
     color: white;
 }
+
+::ng-deep #selektorBrojEpoha mat-form-field{
+    background-color: white;
+}

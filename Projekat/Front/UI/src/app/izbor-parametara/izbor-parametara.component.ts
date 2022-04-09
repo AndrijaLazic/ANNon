@@ -15,6 +15,9 @@ import { Options } from '@angular-slider/ngx-slider';
 
 
 export class IzborParametaraComponent implements OnInit {
+
+  MinBrojEpoha=5;
+
   //slajder
   value: number = 12;
   options: Options = {
@@ -59,6 +62,7 @@ export class IzborParametaraComponent implements OnInit {
     TipProblema:new FormControl('',[Validators.required]),
     MeraGreske:new FormControl('',[Validators.required]),
     MeraUspeha:new FormControl('',[Validators.required]),
+    BrojEpoha:new FormControl(5,[Validators.required,Validators.min(5)]),
     odnosPodataka:new FormControl(25),
     ListaSkrivenihSlojeva:this.fb.array([
     ])
@@ -74,6 +78,9 @@ export class IzborParametaraComponent implements OnInit {
   }
   get ListaSkrivenihSlojeva() {
     return this.forma.get('ListaSkrivenihSlojeva') as FormArray;
+  }
+  get BrojEpoha() {
+    return this.forma.get('BrojEpoha');
   }
 
 
@@ -136,5 +143,11 @@ export class IzborParametaraComponent implements OnInit {
       }
 
     }
+
+    promenaBrojaEpoha(){
+      this.forma.controls['BrojEpoha'].markAsTouched;
+    }
+
+    
     
 }

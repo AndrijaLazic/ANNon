@@ -243,7 +243,11 @@ listaKolona=[];
         }
         this.statsModel=new statisticModel();
         this.statsModel.nizPromena=this.modelKolona2;
-        this.statsModel.nizUlaznih=this.ulazne;
+        this.statsModel.nizUlaznih=[];
+        for(let i=0;i<this.selectedItems.length;i++)
+            {
+                this.statsModel.nizUlaznih.push(this.selectedItems[i].itemName);
+            }
         this.statsModel.izlazna=this.izlaznaKolona[0].itemName;
         this.cookie.set('params',JSON.stringify(this.statsModel));
 
