@@ -160,7 +160,7 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str):
                 model["UlazneKolone"],
                 model["IzlaznaKolona"])
             model,train,val=make_regression_model(fajl,hiperparametri)
-            await sync_to_async(train_model)(model,train,val,hiperparametri.izlazna_kolona,client_id)
+            await sync_to_async(train_model)(model,train,val,hiperparametri.izlazna_kolona,client_id,hiperparametri.broj_epoha)
             #ovde treba pozvati asinhronu fju koja prihvata id_klijenta i kada zove model.fit,zove i CustomCallback sa parametrima:
             #root="http://localhost:8000"
             #path="/publish/epoch/end"
