@@ -1,3 +1,5 @@
+from re import S
+from typing import List
 from unicodedata import category
 import numpy as np
 import sklearn
@@ -7,17 +9,28 @@ from keras.models import load_model
 from CustomCallback import CustomCallback
 
 class Hiperparametri:
-  def __init__(self, broj_slojeva, cvorovi, aktivacione_funkcije, mera_greske):
-    self.broj_slojeva = broj_slojeva
-    self.cvorovi= cvorovi
-    self.aktivacione_funkcije =aktivacione_funkcije
+  def __init__(self,tip_problema,test_skup,slojevi, mera_greske,mera_uspeha,broj_epoha,ulazne_kolone,izlazna_kolona):
+    self.tip_problema=tip_problema
+    self.test_skup=test_skup
+    #self.kolone=kolone
+    self.slojevi=slojevi
     self.mera_greske = mera_greske
+    self.mera_uspeha=mera_uspeha
+    self.broj_epoha=broj_epoha
+    self.ulazne_kolone=ulazne_kolone
+    self.izlazna_kolona=izlazna_kolona
+
+class Sloj:
+  def __init__(self,broj_cvorova,aktivaciona_funkcija):
+    self.broj_cvorova=broj_cvorova
+    self.aktivaciona_funkcija=aktivaciona_funkcija
 
 class Kolona:
-  def __init__(self, tip_podataka, enkodiranje, nedostajuce_vrednosti):
+  def __init__(self,naziv, tip_podataka, enkodiranje):
+    self.naziv=naziv
     self.tip_podataka = tip_podataka
     self.enkodiranje = enkodiranje
-    self.nedostajuce_vrednosti = nedostajuce_vrednosti
+    #self.nedostajuce_vrednosti = nedostajuce_vrednosti
 
 class Pretprocesiranje:
   def __init__(self, kolone):
@@ -160,18 +173,18 @@ def prepare_preprocess_layers(data,target,train):
   encoded_features=encoded_features+all_num_inputs
   return all_inputs,encoded_features
 
-def make_model(all_inputs,encoded_features,metric="mape"):
+def make_model(all_inputs,encoded_features,layers:List[Sloj],loss_metric,success_metric):
   all_features = tf.keras.layers.concatenate(encoded_features)
   x=tf.keras.layers.Normalization(axis=-1)(all_features)
-  for i in range(3):
-    x=tf.keras.layers.Dense(5,activation="relu")(x)
+  for layer in layers:
+    x=tf.keras.layers.Dense(layer.broj_cvorova,activation=layer.aktivaciona_funkcija)(x)
   output = tf.keras.layers.Dense(1)(x)
 
   model = tf.keras.Model(all_inputs, output)
 
   model.compile(optimizer='Adam',
-                loss="mae",
-                metrics="mae")
+                loss=loss_metric,
+                metrics=success_metric)
   return model
 
 
@@ -180,6 +193,17 @@ def train_model(model,train_data,validation_data,target,client_id,epochs=20):
 
 def test_model(model,test_data,target):
   return model.evaluate(df_to_dataset(test_data,target,shuffle=False))
+
+def make_regression_model(data,hiperparametri:Hiperparametri):
+  relevant_columns=hiperparametri.ulazne_kolone+[hiperparametri.izlazna_kolona]
+  data=data[relevant_columns]
+
+  data.dropna(inplace=True)
+  train,val,test=split_data(data,(100-hiperparametri.test_skup-10)/100,hiperparametri.test_skup/100,0.1)
+
+  all_inputs,encoded_features=prepare_preprocess_layers(data,hiperparametri.izlazna_kolona,train)
+  model=make_model(all_inputs,encoded_features,hiperparametri.slojevi,hiperparametri.mera_greske,hiperparametri.mera_uspeha)
+  return model,train,val
 
 # data=load_data("titanic/train.csv")
 # target="Survived"

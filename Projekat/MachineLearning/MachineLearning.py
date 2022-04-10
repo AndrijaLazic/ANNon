@@ -15,7 +15,7 @@ from asgiref.sync import sync_to_async
 import requests
 import statistics as stats
 import csv
-import mreza
+from mreza import *
 #vazno!!!!!!
 #pokretanje aplikacije komanda
 #uvicorn MachineLearning:app --reload
@@ -149,14 +149,18 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str):
             fajl=pd.read_csv(io.StringIO(s.decode('utf-8')),sep='|')
             if(fajl.empty):
                 raise HTTPException(status_code=404, detail="Fajl ne postoji")
-            print(fajl.info())
-            target="Survived"
-            fajl.dropna(inplace=True)
-            train,val,test=mreza.split_data(fajl,0.8,0.1,0.1)
-
-            all_inputs,encoded_features=mreza.prepare_preprocess_layers(fajl,target,train)
-            model=mreza.make_model(all_inputs,encoded_features)
-            await sync_to_async(mreza.train_model)(model,train,val,target,client_id)
+            print(model)
+            slojevi=[Sloj(sloj["BrojNeurona"],sloj["AktivacionaFunkcija"]) for sloj in model["ListaSkrivenihSlojeva"]]
+            hiperparametri=Hiperparametri(
+                model["TipProblema"],
+                model["odnosPodataka"],
+                slojevi,model["MeraGreske"],
+                model["MeraUspeha"],
+                model["BrojEpoha"],
+                model["UlazneKolone"],
+                model["IzlaznaKolona"])
+            model,train,val=make_regression_model(fajl,hiperparametri)
+            await sync_to_async(train_model)(model,train,val,hiperparametri.izlazna_kolona,client_id)
             #ovde treba pozvati asinhronu fju koja prihvata id_klijenta i kada zove model.fit,zove i CustomCallback sa parametrima:
             #root="http://localhost:8000"
             #path="/publish/epoch/end"
