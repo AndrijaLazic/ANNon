@@ -25,28 +25,28 @@ export class IzborParametaraComponent implements OnInit {
     ceil: 90,
     showSelectionBar: true,
     getSelectionBarColor: (value: number): string => {
-      if (value <= 30) {
-          return 'red';
-      }
-      if (value <= 60) {
-          return 'orange';
-      }
-      if (value <= 80) {
-          return 'yellow';
-      }
-      return '#2AE02A';
+      // if (value <= 30) {
+      //     return 'red';
+      // }
+      // if (value <= 60) {
+      //     return 'orange';
+      // }
+      // if (value <= 80) {
+      //     return 'yellow';
+      // }
+      return '#00B38F';
     },
     getPointerColor: (value: number): string => {
-      if (value <= 30) {
-          return 'red';
-      }
-      if (value <= 60) {
-          return 'orange';
-      }
-      if (value <= 80) {
-          return 'yellow';
-      }
-      return '#2AE02A';
+      // if (value <= 30) {
+      //     return 'red';
+      // }
+      // if (value <= 60) {
+      //     return 'orange';
+      // }
+      // if (value <= 80) {
+      //     return 'yellow';
+      // }
+      return '#00B38F';
     },
     translate: (value: number): string => {
       return value+"%";
