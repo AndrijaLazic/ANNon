@@ -45,7 +45,8 @@ namespace Projekat.Clients
         {
             var content = new StringContent(model,Encoding.UTF8, "application/json");
             HttpResponseMessage response = await _client.PostAsync(_configuration.GetSection("ML_Server_Config:http").Value + _configuration.GetSection("ML_Server_Config:host").Value + ":" + _configuration.GetSection("ML_Server_Config:port").Value + "/" + "send", content);
-
+            if (await response.Content.ReadAsStringAsync() == "")
+                return "";
             var result = await response.Content.ReadAsStringAsync();
             return result;
         }

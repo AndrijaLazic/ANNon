@@ -37,11 +37,6 @@ namespace Projekat.Controllers
             uri = _configuration.GetSection("ML_Server_Config:host").Value + ":" + _configuration.GetSection("ML_Server_Config:port").Value;
         }
         
-        [HttpPost("{connectionID}")]
-        public void Post(string connectionID,string message)
-        {
-            _hub.Clients.Client(connectionID).SendAsync("sendResults", message);
-        }
         //NEKA VRSTA MIDDLEWARE-A KOJA SPAJA SIGNALR 
         [HttpPost("user")]
         public async Task<IActionResult> startTraining([FromForm]string userID,[FromForm] string connectionID,[FromForm] string parametri)
@@ -65,77 +60,11 @@ namespace Projekat.Controllers
                 }
                 catch (Exception ex)
                 {
-
                     return BadRequest(ex.Message);
-
                 }
 
             }
         }
-
-       
-       [HttpGet("getStatistic")]
-       public async Task getStatistic([FromForm]string userID,string connectionID)
-       {
-           DataModel model = _context.Files.Where(x => x.userID.Equals(userID)).FirstOrDefault();
-           if (model != null)
-           {
-               using(socket)
-               {
-                   try
-                   {
-                       await socket.ConnectAsync(new Uri("ws://" + uri + "/send/" + userID), CancellationToken.None);
-                       while (true)
-                       {
-                           await _customClient.Send(socket, userID);
-                           var ans = await _customClient.Recieve(socket);
-                           await _hub.Clients.Client(connectionID).SendAsync("getStats", ans);
-
-                       }
-                   }
-                   catch (Exception e)
-                   {
-
-                       throw;
-                   }
-               }
-           }
-       }
-
-
-       [HttpPost("parametars")]
-       public async Task getParametars(ParametriDTO param_model, string userID, string connectionID)
-       {
-           var json = JsonConvert.SerializeObject(param_model);
-           //var answer = await _iCustomClient.sendParametars(json);
-           using (socket)
-           {
-               try
-               {
-                   await socket.ConnectAsync(new Uri(uri + userID), CancellationToken.None);
-                   while (true)
-                   {
-                       await _customClient.Send(socket, userID);//dodaj parametre kao model = null i onda salji
-                       var ans = await _customClient.Recieve(socket);
-                       await _hub.Clients.Client(connectionID).SendAsync("getParams", ans);
-
-                   }
-
-               }
-               catch (Exception e)
-               {
-
-                   throw;
-               }
-           }
-
-       }
-       
-
-
-
-
-
     }
 
 }

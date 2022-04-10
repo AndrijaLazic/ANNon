@@ -3,7 +3,7 @@
 namespace Projekat.SignalRCommunication.Hubs
 {
     
-    public class EpochHub : Hub
+    public class EpochHub : Hub 
     {
         
         public override Task OnConnectedAsync()
@@ -18,7 +18,7 @@ namespace Projekat.SignalRCommunication.Hubs
         }
         public async Task SendResults(string data, string connectionID)
         {
-            Clients.Client(connectionID).SendAsync("getTrainingResults", data); 
+            Clients.Client(connectionID).SendAsync("sendResults", data); 
         }
 
         

@@ -19,14 +19,14 @@ namespace Projekat.Migrations
                 {
                     userID = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    FileName = table.Column<string>(type: "longtext", nullable: false)
+                    FileName = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Putanja = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Files", x => x.userID);
+                    table.PrimaryKey("PK_Files", x => new { x.userID, x.FileName });
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
