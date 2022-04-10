@@ -25,14 +25,13 @@ namespace Projekat.Migrations
                         .HasColumnType("varchar(255)");
 
                     b.Property<string>("FileName")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("Putanja")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.HasKey("userID");
+                    b.HasKey("userID", "FileName");
 
                     b.ToTable("Files");
                 });

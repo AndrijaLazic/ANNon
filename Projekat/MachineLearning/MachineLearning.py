@@ -72,8 +72,14 @@ async def update_item(
     s=requests.get('https://localhost:7286/api/FajlKontroler/DajFajl?NazivFajla='+model.FileName+'&imeKorisnika=Korisnik',verify=False).content
     try:
         fajl=pd.read_csv(io.StringIO(s.decode('utf-8')),sep='|')
+<<<<<<< HEAD
     except Exception:
         return ""
+=======
+    except Exception :
+        return ""
+    
+>>>>>>> fe92cf942d985df99ce9862d2f2fa2f17f9ce300
     if(fajl.empty):
         raise HTTPException(status_code=404, detail="Fajl ne postoji")
     

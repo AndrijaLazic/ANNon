@@ -11,7 +11,7 @@ using Projekat.Data;
 namespace Projekat.Migrations
 {
     [DbContext(typeof(MySqlDbContext))]
-    [Migration("20220404213820_InitialCreate")]
+    [Migration("20220410152813_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,14 +27,13 @@ namespace Projekat.Migrations
                         .HasColumnType("varchar(255)");
 
                     b.Property<string>("FileName")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("Putanja")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.HasKey("userID");
+                    b.HasKey("userID", "FileName");
 
                     b.ToTable("Files");
                 });

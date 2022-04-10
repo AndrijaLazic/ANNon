@@ -54,7 +54,6 @@ namespace Projekat.Clients
             string imeFajla;
             try
             {
-
                 if (uploadedFile.Length > 0)
                 {
                     if (RadSaFajlovima.ProveriAkoJeCsvFajl(uploadedFile))
@@ -86,7 +85,13 @@ namespace Projekat.Clients
 
 
         }
+        private bool IfFileExists(IFormFile file,string userID)
+        {
+            if (_context.Files.Where(x => x.userID == userID && x.FileName == file.FileName) != null)
+                return true;
 
+            return false;
+        }
 
         [HttpGet("getStatistic")]
         public async Task<IActionResult> getStatistic(string userID)
@@ -98,12 +103,16 @@ namespace Projekat.Clients
                     return BadRequest("Fajl ne postoji "+ model.FileName);
                 var jsonObject = JsonConvert.SerializeObject(model);
                 var answer = await _iCustomClient.sendData(jsonObject);
-
                 string statistic = JsonConvert.DeserializeObject<string>(answer);
+                if (statistic.IsNullOrEmpty())
+                {
+                  
+                    _context.Entry(model).State = EntityState.Deleted;
+                    _context.SaveChanges();
+                    return BadRequest();
+                }
                 return Ok(statistic);
-
             }
-
             return BadRequest();
         }
 
