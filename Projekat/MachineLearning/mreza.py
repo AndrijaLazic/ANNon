@@ -1,8 +1,5 @@
-from re import S
 from typing import List
-from unicodedata import category
 import numpy as np
-import sklearn
 import tensorflow as tf
 import pandas as pd
 from keras.models import load_model
@@ -68,11 +65,6 @@ def load_data(path):
 def split_data(data,train_percentage=0.8,test_percentage=0.1,val_percentage=0.1):
   #podela 80/10/10
   train,val,test=np.split(data.sample(frac=1),[int(train_percentage*len(data)),int((val_percentage+train_percentage)*len(data))])
-  print(len(data), 'training examples')
-  print(data)
-  print(len(train), 'training examples')
-  print(len(val), 'validation examples')
-  print(len(test), 'test examples')
   return train,val,test
 
 
@@ -80,15 +72,11 @@ def df_to_dataset(dataframe,target, shuffle=True, batch_size=256):
   df = dataframe.copy()
   labels = df.pop(target)
   df = {key: value[:,tf.newaxis] for key, value in df.items()}
-  for key,value in df.items():
-    print(key)
-    print(value[:5])
   ds = tf.data.Dataset.from_tensor_slices((dict(df), labels))
   if shuffle:
     ds = ds.shuffle(buffer_size=len(dataframe))
   ds = ds.batch(batch_size)
   ds = ds.prefetch(batch_size)
-  print(ds)
   return ds
 
 def get_normalization_layer(name, dataset):
@@ -126,19 +114,15 @@ def get_category_encoding_layer(name, dataset, dtype, max_tokens=None):
 
 def prepare_preprocess_layers(data,target,train):
   categorical_column_names,numerical_column_names=determine_variable_types(data,target)
-  print("kategojskie")
-  print(categorical_column_names)
-  print("numericke")
-  print(numerical_column_names)
 
   if(target in categorical_column_names):
     categorical_column_names.remove(target)
   elif(target in numerical_column_names):
     numerical_column_names.remove(target)
 
-  print(len(train))
   train_ds=df_to_dataset(train,target,batch_size=256)
   [(train_features, label_batch)] = train_ds.take(1)
+  #todo proveriti normalizaciju, da li radi kako treba
   # depth_col=train_features["depth"]
   # layer=get_normalization_layer('depth',train_ds)
   # print(layer(depth_col))
@@ -149,14 +133,11 @@ def prepare_preprocess_layers(data,target,train):
 
   # Numerical features.
   for header in numerical_column_names:
-      print("zapoceta normalizacija "+header)
       numeric_col = tf.keras.Input(shape=(1,), name=header)
       all_inputs.append(numeric_col)
       all_num_inputs.append(numeric_col)
-      print("normalizovana "+header)
 
   for header in categorical_column_names:
-      print("zapoceto enkodiranje "+header)
       if(data.dtypes[header]!=object):
           tip="int64"
       else:
@@ -168,7 +149,6 @@ def prepare_preprocess_layers(data,target,train):
       encoded_categorical_col = encoding_layer(categorical_col)
       all_inputs.append(categorical_col)
       encoded_features.append(encoded_categorical_col)
-      print("zavrseno enkodiranje "+header)
 
   encoded_features=encoded_features+all_num_inputs
   return all_inputs,encoded_features
