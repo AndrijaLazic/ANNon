@@ -9,3 +9,33 @@
     margin: 0px;
     padding: 0px;
 }
+
+.card{
+    background-color: #344e83a8;
+    margin: auto;
+    width: 35%;
+    margin-top: 7%;
+    
+}
+h1{
+    color: white;
+}
+form{
+    margin-left: 10%;
+    margin-right: 10%;
+}
+#dugme{
+    margin-bottom: 6px;
+}
+#akaunt{
+    margin: auto;
+    text-align: center;
+    color: white;
+}
+a{
+    color: #35AAFA;
+}
+
+hr{
+    color:#f1f1f1;
+}

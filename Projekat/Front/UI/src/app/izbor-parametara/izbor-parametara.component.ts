@@ -143,11 +143,6 @@ export class IzborParametaraComponent implements OnInit {
       }
 
     }
-
-    promenaBrojaEpoha(){
-      this.forma.controls['BrojEpoha'].markAsTouched;
-    }
-
     
     
 }

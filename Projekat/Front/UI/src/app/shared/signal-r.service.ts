@@ -43,18 +43,17 @@ export class SignalRService {
     public addTransferChartDatalistener=()=>{
       
       this.hubConnection.on('sendResults',(res)=>{
-        
         if(this.podaciZaGrafik.length==0){
           
           this.podaciZaGrafik.push(new podatakZaGrafikKlasa("loss"));
-          this.podaciZaGrafik.push(new podatakZaGrafikKlasa("preciznost"));
+          this.podaciZaGrafik.push(new podatakZaGrafikKlasa("val_loss"));
           this.brojEpoha=this.brojEpoha+1;
         }
         this.data=res.replaceAll("'", '"');
         this.data=JSON.parse(this.data);
         console.log(this.data)
         this.podaciZaGrafik[0].dodajSeries(new vrednostiZaGrafikKlasa(this.data.loss,this.brojEpoha.toString()));
-        this.podaciZaGrafik[1].dodajSeries(new vrednostiZaGrafikKlasa(this.data.accuracy,this.brojEpoha.toString()));
+        this.podaciZaGrafik[1].dodajSeries(new vrednostiZaGrafikKlasa(this.data.val_loss,this.brojEpoha.toString()));
         this.podaciZaGrafik=[...this.podaciZaGrafik];
         this.brojEpoha=this.brojEpoha+1;
         
