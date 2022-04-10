@@ -188,8 +188,8 @@ def make_model(all_inputs,encoded_features,layers:List[Sloj],loss_metric,success
   return model
 
 
-def train_model(model,train_data,validation_data,target,client_id,epochs=20):
-  model.fit(df_to_dataset(train_data,target,shuffle=False), epochs=20, validation_data=df_to_dataset(validation_data,target,shuffle=False),callbacks=CustomCallback(root="http://localhost:8000",path="/publish/epoch/end",send_as_json=True,to_send=client_id))
+def train_model(model,train_data,validation_data,target,client_id,epoch_number=20):
+  model.fit(df_to_dataset(train_data,target,shuffle=False), epochs=epoch_number, validation_data=df_to_dataset(validation_data,target,shuffle=False),callbacks=CustomCallback(root="http://localhost:8000",path="/publish/epoch/end",send_as_json=True,to_send=client_id))
 
 def test_model(model,test_data,target):
   return model.evaluate(df_to_dataset(test_data,target,shuffle=False))
