@@ -30,12 +30,6 @@ const routes: Routes = [
       component:MojNalogComponent
     },
   {
-    path:'login',component:LoginComponent,canActivate:[NotAuthGuard]
-  },
-  {
-    path:'signup',component:RegisterComponent,canActivate:[NotAuthGuard]
-  },
-  {
     path:'pocetna',component:PocetnastranaComponent,canActivate:[NotAuthGuard]
   },
   {
@@ -44,16 +38,23 @@ const routes: Routes = [
   {
     path:'success-register',component:RegisterParentComponent,canActivate:[AuthRegisterGuard]
   },
-  {
-    path:'verifikacija',component:VerifikacijaComponent,canActivate:[AuthRegisterGuard]
-  },
+
   {
     path:'statistic',component:StatisticComponent
   },
   {
     path:'training',component:TreningComponent
   }]
-  }
+  },
+  {
+    path:'login',component:LoginComponent,canActivate:[NotAuthGuard]
+  },
+  {
+    path:'signup',component:RegisterComponent,canActivate:[NotAuthGuard]
+  },
+  {
+    path:'verifikacija',component:VerifikacijaComponent,canActivate:[AuthRegisterGuard]
+  },
   
 ];
 

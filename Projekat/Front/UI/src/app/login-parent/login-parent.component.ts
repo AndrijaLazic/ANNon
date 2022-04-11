@@ -14,9 +14,6 @@ export class LoginParentComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  Delete(){
-    this.cookie.delete('token');
-    this.route.navigate(['pocetna'])
-  }
+ 
 
 }

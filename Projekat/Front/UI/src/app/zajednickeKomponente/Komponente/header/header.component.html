@@ -12,11 +12,19 @@
                     <span></span>
                     <span></span>
                 </div>
-                <div class="menu" [class.menuClass]="menuInd">
+                <div class="menu" [class.menuClass]="menuInd" *ngIf="!login_ind">
                     <ul>
                         <li><a routerLink="/login">Login</a></li>
                         <li><a routerLink="/signup">Register</a></li>
                     </ul>
+                </div>
+                <div *ngIf="login_ind">
+                    <div class="dropdown">
+                        <button class="dropbtn">{{username}}</button>
+                        <div class="dropdown-content">
+                          <button (click)="logout()">Logout</button>
+                        </div>
+                      </div>
                 </div>
             </div>
         </div>

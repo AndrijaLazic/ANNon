@@ -27,7 +27,11 @@ export class LoginComponent implements OnInit {
         {
           this.cookie.set('token',err['error']['text']);
           this.toastr.success("Successfully login")
-          this.route.navigate(['success-login'])
+         // let currentUrl = this.route.url;
+      //this.route.routeReuseStrategy.shouldReuseRoute = () => false;
+     // this.route.onSameUrlNavigation = 'reload';
+      this.route.navigate(['success-login']);
+          
         }
         else
         {
