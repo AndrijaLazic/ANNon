@@ -17,7 +17,7 @@ import { Options } from '@angular-slider/ngx-slider';
 export class IzborParametaraComponent implements OnInit {
 
   MinBrojEpoha=5;
-
+  MaxBrojEpoha=300;
   //slajder
   value: number = 12;
   options: Options = {
@@ -62,7 +62,7 @@ export class IzborParametaraComponent implements OnInit {
     TipProblema:new FormControl('',[Validators.required]),
     MeraGreske:new FormControl('',[Validators.required]),
     MeraUspeha:new FormControl('',[Validators.required]),
-    BrojEpoha:new FormControl(5,[Validators.required,Validators.min(5)]),
+    BrojEpoha:new FormControl(5,[Validators.required,Validators.min(this.MinBrojEpoha),Validators.max(this.MaxBrojEpoha)]),
     odnosPodataka:new FormControl(25),
     ListaSkrivenihSlojeva:this.fb.array([
     ])

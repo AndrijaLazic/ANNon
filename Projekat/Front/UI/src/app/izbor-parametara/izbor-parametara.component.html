@@ -104,6 +104,9 @@
             <mat-error *ngIf="BrojEpoha.errors?.['min']">
               Najmanji broj epoha je {{MinBrojEpoha}}
             </mat-error>
+            <mat-error *ngIf="BrojEpoha.errors?.['max']">
+              Maksimalni broj epoha je {{MaxBrojEpoha}}
+            </mat-error>
             
           </mat-form-field>
       </div>

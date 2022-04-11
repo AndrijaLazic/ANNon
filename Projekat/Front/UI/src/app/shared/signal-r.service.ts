@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { ThisReceiver } from '@angular/compiler';
 import { epochModel } from './epoch.model';
 import { vrednostiZaGrafikKlasa,podatakZaGrafikKlasa } from '../trening/podatakZaGrafik.model';
+import { Subject } from 'rxjs';
 
 
 @Injectable({
@@ -19,7 +20,13 @@ export class SignalRService {
   public connectionID: string;
   private baseUrl:string = "https://localhost:7286/api/wsCommunication/"; 
   private hubConnection: signalR.HubConnection
+
+  private poruka=new Subject<number>();
+  porukaObservable$=this.poruka.asObservable();
+
   constructor(private http: HttpClient) { }
+
+
   public startConnection = () =>
   {
     this.hubConnection = new signalR.HubConnectionBuilder().withUrl("https://localhost:7286/hub").build();
@@ -47,8 +54,10 @@ export class SignalRService {
           
           this.podaciZaGrafik.push(new podatakZaGrafikKlasa("loss"));
           this.podaciZaGrafik.push(new podatakZaGrafikKlasa("val_loss"));
-          this.brojEpoha=this.brojEpoha+1;
+          this.brojEpoha=1;
+          
         }
+        this.poruka.next(this.brojEpoha);
         this.data=res.replaceAll("'", '"');
         this.data=JSON.parse(this.data);
         console.log(this.data)

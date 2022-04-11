@@ -13,6 +13,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { statisticModel } from '../shared/statistic-model.model';
 import { Router } from '@angular/router';
 import { Model } from '../shared/statistic-model.model';
+import { NgxSpinnerService } from 'ngx-spinner';
 @Component({
   selector: 'app-trening',
   templateUrl: './trening.component.html',
@@ -23,15 +24,17 @@ export class TreningComponent implements OnInit {
   legenda=true;
   prikaziXlabel=true;
   prikaziYlabel=true;
-  xLabela='vreme';
+  xLabela='epoha';
   yLabela='vrednost'
   yOsa=true;
   xOsa=true;
+  BrojEpoha=0;
+  StanjeDugmeta=false;
   @ViewChild(IzborParametaraComponent, {static : true}) child : IzborParametaraComponent;
   linija=shape.curveBasis;
   readonly osnovniUrl=Konfiguracija.KonfiguracijaServera.osnovniURL;
   
-  constructor(public signalR:SignalRService, private http: HttpClient,private cookieService:CookieService,private route:Router) { 
+  constructor(private spinner:NgxSpinnerService,public signalR:SignalRService, private http: HttpClient,private cookieService:CookieService,private route:Router) { 
   }
 
   
@@ -43,7 +46,21 @@ export class TreningComponent implements OnInit {
 
     this.signalR.startConnection();
     this.signalR.addTransferChartDatalistener();
-    
+    this.signalR.podaciZaGrafik.push(new podatakZaGrafikKlasa("loss"));
+    this.signalR.podaciZaGrafik.push(new podatakZaGrafikKlasa("val_loss"));
+    this.signalR.porukaObservable$
+      .subscribe(
+        poruka=>{
+          if(poruka==this.BrojEpoha){
+            this.StanjeDugmeta=false;
+            return;
+          }
+          this.spinner.hide("Spiner1");
+          this.StanjeDugmeta=true;
+          
+          
+        }
+      );
   }
   SendtoBack()
   {
@@ -51,14 +68,15 @@ export class TreningComponent implements OnInit {
   }
 
   ispis(item:ObjekatZaSlanje){
-    
+    this.signalR.podaciZaGrafik=[];
     if(item){
+      this.spinner.show("Spiner1");
       var formData = new FormData();
       var pom=new statisticModel();
       pom=Object.assign(new statisticModel(),JSON.parse(this.cookieService.get('params')));
       item.IzlaznaKolona=pom.izlazna;
       item.UlazneKolone=pom.nizUlaznih;
-      console.log(JSON.stringify(item));
+      this.BrojEpoha=item.BrojEpoha;
       formData.append("userID",sessionStorage.getItem("userId"));
       formData.append("connectionID",sessionStorage.getItem("connectionID"));
       formData.append("parametri",JSON.stringify(item));
