@@ -8,6 +8,7 @@ from fastapi import Body
 import statistics as stats
 import pandas as pd
 from pydantic import BaseModel, Json
+from requests.api import request
 from example import fja
 from asgiref.sync import sync_to_async
 import requests
@@ -30,7 +31,16 @@ class FileWithStatistic:
     def __init__(self,fileModel,statistic) -> None:
         self.FileName=fileModel.FileName
         self.Statistic=statistic
+class ResponseModel:
+    Status:int
+    Content:str
+    def __init__(self,status,content) -> None:
+        self.Status = status
+        self.Content = content
 
+    def toJSON(self):
+        return json.dumps(self, default=lambda o: o.__dict__)
+    
 
 class ConnectionManager:
     def __init__(self):
@@ -72,20 +82,16 @@ async def update_item(
     s=requests.get('https://localhost:7286/api/FajlKontroler/DajFajl?NazivFajla='+model.FileName+'&imeKorisnika=Korisnik',verify=False).content
     try:
         fajl=pd.read_csv(io.StringIO(s.decode('utf-8')),sep='|')
-<<<<<<< HEAD
     except Exception:
-        return ""
-=======
-    except Exception :
-        return ""
-    
->>>>>>> fe92cf942d985df99ce9862d2f2fa2f17f9ce300
+
+        return ResponseModel(1,"Greska pri parsiranju fajla.").toJSON()
+
     if(fajl.empty):
         raise HTTPException(status_code=404, detail="Fajl ne postoji")
     
     await manager.addFilePath(model.userID,'https://localhost:7286/api/FajlKontroler/DajFajl?NazivFajla='+model.FileName+'&imeKorisnika=Korisnik')
     Statistic=stats.getStats(fajl)
-    return Statistic
+    return ResponseModel(0,Statistic).toJSON()
 
 @app.websocket("/test/{client_id}")
 async def websocket_endpoint(websocket: WebSocket, client_id: str):

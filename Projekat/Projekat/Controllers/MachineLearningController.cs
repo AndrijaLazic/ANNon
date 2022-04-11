@@ -96,36 +96,46 @@ namespace Projekat.Clients
         [HttpGet("getStatistic")]
         public async Task<IActionResult> getStatistic(string userID)
         {
-            DataModel model = _context.Files.Where(x => x.userID.Equals(userID)).FirstOrDefault();
-            if (model != null)
-            {
-                if(!RadSaFajlovima.DaLiFajlPostoji(model.FileName))
-                    return BadRequest("Fajl ne postoji "+ model.FileName);
-                var jsonObject = JsonConvert.SerializeObject(model);
-                var answer = await _iCustomClient.sendData(jsonObject);
-                string statistic = JsonConvert.DeserializeObject<string>(answer);
-                if (statistic.IsNullOrEmpty())
+            try {
+                DataModel model = _context.Files.Where(x => x.userID.Equals(userID)).FirstOrDefault();
+                if (model != null)
                 {
-                  
-                    _context.Entry(model).State = EntityState.Deleted;
-                    _context.SaveChanges();
-                    return BadRequest();
+                    if (!RadSaFajlovima.DaLiFajlPostoji(model.FileName))
+                        return BadRequest("Fajl ne postoji " + model.FileName);
+                    var jsonObject = JsonConvert.SerializeObject(model);
+                    var answer = await _iCustomClient.sendData(jsonObject);
+                    var statistic = JsonConvert.DeserializeObject<ResponseModel>(answer);
+                    Console.WriteLine(statistic);
+                    if (statistic.Status == 1)
+                    {
+                        _context.Entry(model).State = EntityState.Deleted;
+                        _context.SaveChanges();
+                        return BadRequest(statistic.Content);
+                    }
+
+                    return Ok(statistic.Content);
                 }
-                return Ok(statistic);
+                return BadRequest();
             }
-            return BadRequest();
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
 
 
-        [HttpPost("parametars")]
-        public async Task<IActionResult> getParametars(ParametriDTO param_model)
+        [HttpPost("compare")]
+        public async Task<IActionResult> ComparasionBetweenTwoDataSet([FromForm]string userID)
         {
-            var json = JsonConvert.SerializeObject(param_model);  
-            var answer = await _iCustomClient.sendParametars(json);
-            if (this.Response.StatusCode != 200)
-                return BadRequest("Greska pri prosledjivanju parametara!");
+            //var json = JsonConvert.SerializeObject(param_model);  
+            var answer = await _iCustomClient.sendRequestForCompare(userID);
+           
+            var jsonToObject = JsonConvert.DeserializeObject<ResponseModel>(answer);
+            if (jsonToObject.Status == 1)
+                return BadRequest(jsonToObject.Content);
 
-            return Ok("Uspesno prosledjeni parametri");    
+            return Ok(jsonToObject.Content);
+                     
 
 
 

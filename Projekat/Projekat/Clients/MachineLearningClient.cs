@@ -48,16 +48,20 @@ namespace Projekat.Clients
             if (await response.Content.ReadAsStringAsync() == "")
                 return "";
             var result = await response.Content.ReadAsStringAsync();
-            return result;
+
+            return JsonConvert.DeserializeObject<string>(result);
         }
 
-        public async Task<string> sendParametars(string json_model)
+        public async Task<string> sendRequestForCompare(string userID)
         {
-            var content = new StringContent(json_model, Encoding.UTF8, "application/json");
-            HttpResponseMessage httpResponse = await _client.PostAsync(_client.BaseAddress + "param", content);
+            var content = new StringContent(userID, Encoding.UTF8, "application/json");
+            HttpResponseMessage httpResponse = await _client.PostAsync(_client.BaseAddress + "compare", content);
             var result = await httpResponse.Content.ReadAsStringAsync();
+           
+          
 
-            return result;
+            return result; //pogledaj kako da vratis gresku da ne vracas prazan string
+            
         }
 
     }
