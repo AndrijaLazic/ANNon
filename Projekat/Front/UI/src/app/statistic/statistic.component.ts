@@ -39,6 +39,226 @@ export class StatisticComponent implements OnInit {
   izlaznaKolona;
   dropdownSettings2={};
   statistika:Object;
+  /*statistika={
+    "numericke_kolone": [
+        {
+            "ime_kolone": "Carat",
+            "broj_praznih_polja": 0.0,
+            "prosek": 0.8,
+            "standardna_devijacija": 0.47,
+            "minimum": 0.2,
+            "prvi_kvartal": 0.4,
+            "drugi_kvartal": 0.7,
+            "treci_kvartal": 1.04,
+            "maximum": 5.01,
+            "broj_autlajera": 439,
+            "column_chart_data": {
+                "0.4": 25155,
+                "0.9": 18626,
+                "1.4": 7129,
+                "1.9": 2349,
+                "2.4": 614,
+                "2.8": 53,
+                "3.3": 6,
+                "3.8": 5,
+                "4.3": 2,
+                "4.8": 1
+            }
+        },
+        {
+            "ime_kolone": "Depth",
+            "broj_praznih_polja": 3.0,
+            "prosek": 61.75,
+            "standardna_devijacija": 1.43,
+            "minimum": 43.0,
+            "prvi_kvartal": 61.0,
+            "drugi_kvartal": 61.8,
+            "treci_kvartal": 62.5,
+            "maximum": 79.0,
+            "broj_autlajera": 0,
+            "column_chart_data": {
+                "62.8": 39262,
+                "59.2": 13245,
+                "66.4": 1032,
+                "55.6": 303,
+                "70.0": 74,
+                "52.0": 12,
+                "44.8": 3,
+                "73.6": 3,
+                "77.2": 3,
+                "48.4": 0
+            }
+        },
+        {
+            "ime_kolone": "Table",
+            "broj_praznih_polja": 0.0,
+            "prosek": 57.46,
+            "standardna_devijacija": 2.23,
+            "minimum": 43.0,
+            "prvi_kvartal": 56.0,
+            "drugi_kvartal": 57.0,
+            "treci_kvartal": 59.0,
+            "maximum": 95.0,
+            "broj_autlajera": 336,
+            "column_chart_data": {
+                "56.0": 37549,
+                "61.2": 15131,
+                "50.8": 669,
+                "66.4": 572,
+                "71.6": 14,
+                "45.6": 2,
+                "76.8": 2,
+                "92.4": 1,
+                "82.0": 0,
+                "87.2": 0
+            }
+        },
+        {
+            "ime_kolone": "Price",
+            "broj_praznih_polja": 0.0,
+            "prosek": 3932.8,
+            "standardna_devijacija": 3989.44,
+            "minimum": 326.0,
+            "prvi_kvartal": 950.0,
+            "drugi_kvartal": 2401.0,
+            "treci_kvartal": 5324.25,
+            "maximum": 18823.0,
+            "broj_autlajera": 1206,
+            "column_chart_data": {
+                "1241.6": 25335,
+                "3100.6": 9328,
+                "4950.2": 7393,
+                "6800.0": 3878,
+                "8649.6": 2364,
+                "10499.4": 1745,
+                "12349.0": 1306,
+                "14198.8": 1002,
+                "16048.4": 863,
+                "17898.2": 726
+            }
+        },
+        {
+            "ime_kolone": "X",
+            "broj_praznih_polja": 0.0,
+            "prosek": 5.73,
+            "standardna_devijacija": 1.12,
+            "minimum": 0.0,
+            "prvi_kvartal": 4.71,
+            "drugi_kvartal": 5.7,
+            "treci_kvartal": 6.54,
+            "maximum": 10.74,
+            "broj_autlajera": 43,
+            "column_chart_data": {
+                "4.8": 20895,
+                "5.9": 14440,
+                "7.0": 12205,
+                "8.1": 3260,
+                "3.8": 2934,
+                "9.1": 191,
+                "0.5": 8,
+                "10.2": 7,
+                "1.6": 0,
+                "2.7": 0
+            }
+        },
+        {
+            "ime_kolone": "Y",
+            "broj_praznih_polja": 0.0,
+            "prosek": 5.73,
+            "standardna_devijacija": 1.14,
+            "minimum": 0.0,
+            "prvi_kvartal": 4.72,
+            "drugi_kvartal": 5.71,
+            "treci_kvartal": 6.54,
+            "maximum": 58.9,
+            "broj_autlajera": 34,
+            "column_chart_data": {
+                "2.9": 30633,
+                "8.8": 23305,
+                "32.4": 1,
+                "56.0": 1,
+                "14.7": 0,
+                "20.6": 0,
+                "26.5": 0,
+                "38.3": 0,
+                "44.2": 0,
+                "50.1": 0
+            }
+        },
+        {
+            "ime_kolone": "Z",
+            "broj_praznih_polja": 0.0,
+            "prosek": 3.54,
+            "standardna_devijacija": 0.71,
+            "minimum": 0.0,
+            "prvi_kvartal": 2.91,
+            "drugi_kvartal": 3.53,
+            "treci_kvartal": 4.04,
+            "maximum": 31.8,
+            "broj_autlajera": 55,
+            "column_chart_data": {
+                "4.8": 33983,
+                "1.6": 19951,
+                "8.0": 5,
+                "30.2": 1,
+                "11.1": 0,
+                "14.3": 0,
+                "17.5": 0,
+                "20.7": 0,
+                "23.8": 0,
+                "27.0": 0
+            }
+        }
+    ],
+    "kategoricke_kolone": [
+        {
+            "ime_kolone": "Cut",
+            "broj_praznih_polja": 0,
+            "broj_jedinstvenih_polja": 5,
+            "najcesca_vrednost": "Ideal",
+            "najveci_broj_ponavljanja": 21551,
+            "column_chart_data": {
+                "Ideal": 21551,
+                "Premium": 13791,
+                "Very Good": 12082,
+                "Good": 4906,
+                "Fair": 1610
+            }
+        },
+        {
+            "ime_kolone": "Color",
+            "broj_praznih_polja": 0,
+            "broj_jedinstvenih_polja": 7,
+            "najcesca_vrednost": "G",
+            "najveci_broj_ponavljanja": 11292,
+            "column_chart_data": {
+                "G": 11292,
+                "E": 9797,
+                "F": 9542,
+                "H": 8304,
+                "D": 6775,
+                "I": 5422,
+                "J": 2808
+            }
+        },
+        {
+            "ime_kolone": "Clarity",
+            "broj_praznih_polja": 0,
+            "broj_jedinstvenih_polja": 8,
+            "najcesca_vrednost": "SI1",
+            "najveci_broj_ponavljanja": 13065,
+            "column_chart_data": {
+                "SI1": 13065,
+                "VS2": 12258,
+                "SI2": 9194,
+                "VS1": 8171,
+                "VVS2": 5066,
+                "VVS1": 3655,
+                "others(2)": 2531
+            }
+        }
+    ]
+};*/
   constructor(private shared: SharedService,private route:Router,private elementRef: ElementRef,private cookie:CookieService) { }
     
   
@@ -52,11 +272,11 @@ listaKolona=[];
     if(this.statistika){
         for(let i=0;i<Object.keys(this.statistika['numericke_kolone']).length;i++)
         {
-        this.kolone.push(this.statistika['numericke_kolone'][i]['ime_kolone']);
+            this.kolone.push(this.statistika['numericke_kolone'][i]['ime_kolone']);
         }
         for(let i=0;i<Object.keys(this.statistika['kategoricke_kolone']).length;i++)
         {
-        this.kolone.push(this.statistika['kategoricke_kolone'][i]['ime_kolone']);
+            this.kolone.push(this.statistika['kategoricke_kolone'][i]['ime_kolone']);
         }
 
 
@@ -261,15 +481,33 @@ listaKolona=[];
 
   obrisi(id:any){
     if(window.confirm('Da li ste sigurni da zelite da obrisete ovaj red?')){
+        for(let i=0;i<this.selectedItems.length;i++)
+        {
+            if(this.kolone[id]==this.selectedItems[i].itemName)
+            {
+                this.selectedItems.splice(i,1);
+            }
+        }
+        if(this.izlaznaKolona)
+            if(typeof this.izlaznaKolona[0]!="undefined")
+                if(this.kolone[id]==this.izlaznaKolona[0].itemName)
+                {
+                    this.izlaznaKolona.splice(0,1);
+                }
+        
         this.kolone.splice(id,1);
         this.prazna.splice(id,1);
         this.kategorije.splice(id,1);
         this.stats.splice(id,1);
         this.collapse.splice(id,1);
+        this.listaKolona.splice(id,1);
+
+
+        this.loadDataSet1();
+        this.loadDataSet2();  
+        
     }
     
-
-    console.log(this.kolone,this.prazna,this.kategorije,this.stats);
 
 
   }

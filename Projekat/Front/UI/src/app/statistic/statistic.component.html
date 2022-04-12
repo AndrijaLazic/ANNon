@@ -1,6 +1,6 @@
 
-<button class="navigator previous" (click)="previous()"><</button> 
-<button class="navigator next" (click)="next()">></button> 
+<button class="navigator previous prikaz" (click)="previous()"><</button> 
+<button class="navigator next prikaz" (click)="next()">></button> 
 
 <div class="container" style="height: 100%;">
     <br>
@@ -44,9 +44,9 @@
                         <td class="veciFont">{{kolone[i]}}</td>
                         <td class="veciFont">{{kategorije[i]}}</td>
                         <td class="veciFont">{{prazna[i]}}</td>
-                        <td><button class="btn btn-dark" *ngIf="collapse[i]==0" (click)="prikazi(i)" >Vise</button>
-                        <button class="btn btn-dark" *ngIf="collapse[i]==1" (click)="smanji(i)" >Manje</button></td>
-                        <td><button class="btn btn-dark" (click)="obrisi(i)">Brisi!</button></td>
+                        <td><button class="dugme prikaz" mat-raised-button color="primary" *ngIf="collapse[i]==0" (click)="prikazi(i)" >Vise</button>
+                        <button class="dugme prikaz" mat-raised-button color="primary" *ngIf="collapse[i]==1" (click)="smanji(i)" >Manje</button></td>
+                        <td><button class="dugme prikaz" mat-raised-button color="primary" (click)="obrisi(i)">Brisi!</button></td>
                     </tr>
                     <tr *ngIf="collapse[i]==1">
                         <td colspan="5"><div id="demo1">
@@ -73,18 +73,18 @@
                                               </div>
                                               <div>
                                                   <p>Zelite li da promenite tip u numericki?</p>
-                                                  <button (click)="promeniUNumericki(i)">Da</button>
+                                                  <button class="dugme" mat-raised-button color="primary" (click)="promeniUNumericki(i)">Da</button>
                                               </div>
                                         </td>
                                         <td *ngIf="kategorije[i]=='Numericki'">
                                             <div>
                                                 <p>Zelite li da promenite tip u kategorijski?</p>
-                                                <button (click)="promeniUKategorijski(i)">Da</button>
+                                                <button class="dugme" mat-raised-button color="primary" (click)="promeniUKategorijski(i)">Da</button>
                                             </div>
                                         </td>
                                         <td [innerHTML]="stats[i]"></td>
                                         <td>
-                                            <button class="btn btn-dark" (click)="iscrtajGraf(kolone[i])" >Prikazi graf!</button>                 
+                                            <button class="dugme" mat-raised-button color="primary" (click)="iscrtajGraf(kolone[i])" >Prikazi graf!</button>                 
                                                 <div id="divChart">
                                                     <canvas  id={{kolone[i]}}></canvas>
                                                 </div> 
@@ -99,16 +99,6 @@
             </table>
         </div>
     </div>
-    <br>
-    <!--<div class="row justify-content-center">
-        <div class="col-md-auto">
-            <div id="divChart">
-                <canvas id="myChart"></canvas>
-            </div> 
-        </div>
-    </div> -->
-        
-           
-       
+    <br>   
 </div>
 

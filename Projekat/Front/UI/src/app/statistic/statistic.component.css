@@ -1,12 +1,9 @@
 
-button{
+.prikaz{
     width: 180px;
     height: 50px;
     border: 1px solid #000000;
     box-sizing: border-box;
-}
-button:focus{
-    background-color:dimgrey;
 }
 
 .content
