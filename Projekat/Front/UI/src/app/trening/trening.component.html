@@ -14,7 +14,7 @@
     
     <div class="container" style="margin-top: 20px;" >
         <div class="row justify-content-center">
-            <div class="col-md-7" style="height: 300px;background-color: #16355D;">
+            <div class="col-md-9" style="height: 400px;background-color: #16355D;">
                 <ngx-charts-line-chart
                     [results]="signalR.podaciZaGrafik"
                     [legend]="legenda"
@@ -25,10 +25,34 @@
                     [yAxis]="yOsa"
                     [xAxis]="xOsa"
                     [curve]="linija"
+                    [yScaleMin]="signalR.Ymin"
+                    [yScaleMax]="signalR.Ymax"
+                    [showGridLines]="signalR.PrikaziLinije"
                 >
                 </ngx-charts-line-chart>
             </div>
-            
+            <div class="col-md-3" id="OpcijeZaGrafikDiv">
+                <div class="row">
+                    <div class="row">
+                        <div class="col-md-auto">
+                            <label>Opcije za grafik</label>
+                        </div> 
+                    </div>
+                    <div class="row">
+                        <div class="col-md-auto">
+                            <mat-slide-toggle>Prikazi grid linije</mat-slide-toggle>
+                        </div>
+                        
+                    </div>
+                    <div class="row">
+                        <div class="col-md-auto">
+                            <mat-slide-toggle>Prikazi grid linije</mat-slide-toggle>
+                        </div>
+                    </div>
+                </div>
+                
+                
+            </div>
         </div>  
         
         <div class="row justify-content-center" style="margin-top: 20px;">

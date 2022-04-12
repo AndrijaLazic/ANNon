@@ -10,3 +10,8 @@
 ::ng-deep .legend-title-text{
     color: white; 
 }
+
+#OpcijeZaGrafikDiv{
+    background-color: #16355D;
+    margin-left: 5px;
+}

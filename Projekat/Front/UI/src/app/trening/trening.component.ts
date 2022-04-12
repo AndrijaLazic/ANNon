@@ -67,6 +67,13 @@ export class TreningComponent implements OnInit {
     this.child.dajParametre();
   }
 
+  axisFormat(val) {
+    if (val % 1 === 0) {
+      return val;
+    } else {
+      return '';
+    }
+  }
   ispis(item:ObjekatZaSlanje){
     this.signalR.podaciZaGrafik=[];
     if(item){

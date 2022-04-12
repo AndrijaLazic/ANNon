@@ -20,7 +20,9 @@ export class SignalRService {
   public connectionID: string;
   private baseUrl:string = "https://localhost:7286/api/wsCommunication/"; 
   private hubConnection: signalR.HubConnection
-
+  public Ymin;
+  public Ymax;
+  public PrikaziLinije;
   private poruka=new Subject<number>();
   porukaObservable$=this.poruka.asObservable();
 
@@ -60,7 +62,44 @@ export class SignalRService {
         this.poruka.next(this.brojEpoha);
         this.data=res.replaceAll("'", '"');
         this.data=JSON.parse(this.data);
-        console.log(this.data)
+        
+
+
+        if(!this.Ymin){
+          if(this.data.val_loss<this.data.loss){
+            this.Ymin=this.data.val_loss*0.9;
+          }
+          else{
+            this.Ymin=this.data.loss*0.9;
+          }
+        }
+        else{
+          if(this.data.val_loss<this.Ymin){
+            this.Ymin=this.data.val_loss*0.9;
+          }
+          if(this.data.loss<this.Ymin){
+            this.Ymin=this.data.loss*0.9;
+          }
+        }
+
+        if(!this.Ymax){
+          if(this.data.val_loss>this.data.loss){
+            this.Ymax=this.data.val_loss*1.1;
+          }
+          else{
+            this.Ymax=this.data.loss*1.1;
+          }
+        }
+        else{
+          if(this.data.val_loss>this.Ymax){
+            this.Ymax=this.data.val_loss*1.1;
+          }
+          
+          if(this.data.loss>this.Ymax){
+            this.Ymax=this.data.loss*1.1;
+          }
+        }
+        console.log(this.Ymax+"" +this.Ymin)
         this.podaciZaGrafik[0].dodajSeries(new vrednostiZaGrafikKlasa(this.data.loss,this.brojEpoha.toString()));
         this.podaciZaGrafik[1].dodajSeries(new vrednostiZaGrafikKlasa(this.data.val_loss,this.brojEpoha.toString()));
         this.podaciZaGrafik=[...this.podaciZaGrafik];
