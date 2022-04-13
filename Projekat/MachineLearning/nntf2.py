@@ -107,7 +107,8 @@ def get_model(data, label, encoding, number_of_layers, number_of_nodes, activati
   x = preprocessor(inputs)
   result = network(x)
   model = tf.keras.Model(inputs, result)
-  model.compile(optimizer='adam',
+  adam = tf.keras.optimizers.Adam(learning_rate=0.001)
+  model.compile(optimizer=adam,
                   loss=loss_fuc,
                   metrics=['accuracy'])
   #history = model.fit(dict(data), target, epochs=20, batch_size=8)
@@ -134,14 +135,14 @@ default_classification_loss = tf.keras.losses.BinaryCrossentropy(from_logits=Tru
 default_regression_loss = 'mean_squared_error' #'mean_absolute_error'
 #model = get_model(data, predicted_feature_name, 'one_hot', 2, 10, "relu", classification_loss)
 
-diamonds = pd.read_csv("diamonds/diamonds.csv")
+data = pd.read_csv("titanic/train.csv")
 
 # categorical_feature_names = ['cut','color']
 # numeric_feature_names = ['x', 'y', 'z', 'carat']
-predicted_feature_name = ['price']
+predicted_feature_name = ['Survived']
 
-model, target, data = get_model(diamonds, predicted_feature_name, 'one_hot', 2, [10, 10], ['relu', 'relu'], default_regression_loss)
+model, target, data = get_model(data, predicted_feature_name, 'one_hot', 3, [10, 10, 5], ['relu', 'relu', 'relu'], default_classification_loss)
 #history = model.fit(dict(data), target, epochs=20, batch_size=100)
 
 (train_data, val_data, train_target, val_target) = create_train_test_split(data, 0.8)
-history = model.fit(dict(train_data), train_target, validation_data=(dict(val_data), val_target), epochs=20, batch_size=16)
+history = model.fit(dict(train_data), train_target, validation_data=(dict(val_data), val_target), epochs=50, batch_size=8)

@@ -185,6 +185,10 @@ def make_regression_model(data,hiperparametri:Hiperparametri):
   model=make_model(all_inputs,encoded_features,hiperparametri.slojevi,hiperparametri.mera_greske,hiperparametri.mera_uspeha)
   return model,train,val
 
+def make_classification_model(data, hiperparametri:Hiperparametri):
+  
+  pass
+
 # data=load_data("titanic/train.csv")
 # target="Survived"
 # data.dropna(inplace=True)
