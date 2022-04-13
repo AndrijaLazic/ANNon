@@ -39,8 +39,8 @@ export class StatisticComponent implements OnInit {
   dropdownList2 = [];
   izlaznaKolona;
   dropdownSettings2={};
-  //statistika:Object;
-  statistika={
+  statistika:Object;
+  /*statistika={
     "numericke_kolone": [
         {
             "ime_kolone": "Carat",
@@ -259,7 +259,7 @@ export class StatisticComponent implements OnInit {
             }
         }
     ]
-};
+};*/
   constructor(private shared: SharedService,private route:Router,private elementRef: ElementRef,private cookie:CookieService,private modalService: NgbModal,private toastr:ToastrService) { }
     
   
@@ -269,7 +269,7 @@ listaKolona=[];
 
   ngOnInit(): void {
 
-    //this.statistika=this.shared.getStatistic();
+    this.statistika=this.shared.getStatistic();
     if(this.statistika){
         for(let i=0;i<Object.keys(this.statistika['numericke_kolone']).length;i++)
         {
