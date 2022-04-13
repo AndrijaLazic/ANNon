@@ -122,7 +122,9 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str):
     except WebSocketDisconnect:
         manager.disconnect(client_id)
 
-
+@app.post("/compare")
+async def compare_request(request:Request):
+    return ResponseModel(0,"proslo").toJSON()
 @app.post("/publish/epoch/end")
 async def post_data(request:Request):
     result=await request.json()

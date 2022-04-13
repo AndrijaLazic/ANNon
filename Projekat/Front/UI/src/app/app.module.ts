@@ -39,6 +39,7 @@ import { ChartModel } from 'ag-grid-community';
 import { NgChartsModule } from 'ng2-charts';
 import { DefaultModule } from './layouts/default/default.module';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { PocetnatestComponent } from './pocetnatest/pocetnatest.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -53,7 +54,8 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     StatisticComponent,
     CsvTabelaComponent,
     TreningComponent,
-    IzborParametaraComponent
+    IzborParametaraComponent,
+    PocetnatestComponent
     
     
   ],

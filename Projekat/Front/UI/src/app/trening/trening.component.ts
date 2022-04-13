@@ -68,6 +68,17 @@ export class TreningComponent implements OnInit {
   {
     this.child.dajParametre();
   }
+  uporediModele()
+  {
+    console.log(sessionStorage.getItem("userId"));
+    const formData = new FormData();
+    formData.append("userID",sessionStorage.getItem("userId"));
+    console.log(formData);
+    this.http.post(this.osnovniUrl+"api/MachineLearning/compare",formData).subscribe(
+      res => console.log(res),
+      err => console.log(err)
+    )
+  }
   promenaCurve(event:any){
     if(event.value=="curveBasis"){
       this.linija=shape.curveBasis;
