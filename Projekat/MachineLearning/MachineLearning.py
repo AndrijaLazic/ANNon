@@ -115,12 +115,16 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str):
                 model["UlazneKolone"],
                 model["IzlaznaKolona"])
             model,train,val=make_regression_model(fajl,hiperparametri)
-            await sync_to_async(train_model)(model,train,val,hiperparametri.izlazna_kolona,client_id,hiperparametri.broj_epoha)
+            filename=await sync_to_async(train_model)(model,train,val,hiperparametri.izlazna_kolona,client_id,hiperparametri.broj_epoha)
+            #testiranje
+            #await sync_to_async(test_model)(filename,train,hiperparametri.izlazna_kolona)
             #await manager.send_text(client_id,"radisdadasd")
     except WebSocketDisconnect:
         manager.disconnect(client_id)
 
-
+@app.post("/compare")
+async def compare_request(request:Request):
+    return ResponseModel(0,"proslo").toJSON()
 @app.post("/publish/epoch/end")
 async def post_data(request:Request):
     result=await request.json()

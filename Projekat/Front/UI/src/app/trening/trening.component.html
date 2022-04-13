@@ -14,7 +14,7 @@
     
     <div class="container" style="margin-top: 20px;" >
         <div class="row justify-content-center">
-            <div class="col-md-9" style="height: 400px;background-color: #16355D;">
+            <div class="col-md-9 m-1" style="height: 400px;background-color: #16355D;">
                 <ngx-charts-line-chart
                     [results]="signalR.podaciZaGrafik"
                     [legend]="legenda"
@@ -25,33 +25,31 @@
                     [yAxis]="yOsa"
                     [xAxis]="xOsa"
                     [curve]="linija"
-                    [yScaleMin]="signalR.Ymin"
-                    [yScaleMax]="signalR.Ymax"
                     [showGridLines]="signalR.PrikaziLinije"
+                    [autoScale]="true"
                 >
                 </ngx-charts-line-chart>
             </div>
-            <div class="col-md-3" id="OpcijeZaGrafikDiv">
-                <div class="row">
-                    <div class="row">
-                        <div class="col-md-auto">
-                            <label>Opcije za grafik</label>
-                        </div> 
-                    </div>
-                    <div class="row">
-                        <div class="col-md-auto">
-                            <mat-slide-toggle>Prikazi grid linije</mat-slide-toggle>
-                        </div>
-                        
-                    </div>
-                    <div class="row">
-                        <div class="col-md-auto">
-                            <mat-slide-toggle>Prikazi grid linije</mat-slide-toggle>
-                        </div>
-                    </div>
+            <div class="col-md-auto rounded-sm m-1" id="OpcijeZaGrafikDiv">
+                <div class="col-md-auto">
+                    <label>Opcije za grafik</label>
+                </div> 
+                <div class="col-md-auto">
+                    <mat-slide-toggle [checked]="checked1" (change)="cekiranPrikazGridLinije($event)">Prikazi grid linije</mat-slide-toggle>
                 </div>
-                
-                
+                <div class="col-md-auto">
+                    <mat-form-field appearance="fill" class="selektorAktivacioneFje">
+                        <mat-label>Curve tip</mat-label>
+                        <mat-select (selectionChange)="promenaCurve($event)">
+                          <mat-option value="curveBasis">
+                            curveBasis
+                          </mat-option>
+                          <mat-option value="curveLinear">
+                            curveLinear
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                </div>
             </div>
         </div>  
         
@@ -62,3 +60,4 @@
         </div>
     </div>
 </div>
+<button class="dugme" mat-raised-button color="primary" (click)=uporediModele() [disabled]="StanjeDugmeta">Uporedi model</button>

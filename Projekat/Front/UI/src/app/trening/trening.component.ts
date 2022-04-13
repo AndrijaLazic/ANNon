@@ -20,7 +20,9 @@ import { NgxSpinnerService } from 'ngx-spinner';
   styleUrls: ['./trening.component.css']
 })
 export class TreningComponent implements OnInit {
-  ind=false;
+  
+  checked1=true;
+  ind=false; 
   legenda=true;
   prikaziXlabel=true;
   prikaziYlabel=true;
@@ -66,13 +68,26 @@ export class TreningComponent implements OnInit {
   {
     this.child.dajParametre();
   }
-
-  axisFormat(val) {
-    if (val % 1 === 0) {
-      return val;
-    } else {
-      return '';
+  uporediModele()
+  {
+    console.log(sessionStorage.getItem("userId"));
+    const formData = new FormData();
+    formData.append("userID",sessionStorage.getItem("userId"));
+    console.log(formData);
+    this.http.post(this.osnovniUrl+"api/MachineLearning/compare",formData).subscribe(
+      res => console.log(res),
+      err => console.log(err)
+    )
+  }
+  promenaCurve(event:any){
+    if(event.value=="curveBasis"){
+      this.linija=shape.curveBasis;
+      return;
     }
+    this.linija=shape.curveLinear;
+  }
+  cekiranPrikazGridLinije(value:any){
+    this.signalR.PrikaziLinije=value.checked;
   }
   ispis(item:ObjekatZaSlanje){
     this.signalR.podaciZaGrafik=[];

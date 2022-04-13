@@ -14,7 +14,7 @@ import { AuthGuard } from './shared/auth.guard';
 import { NotAuthGuard } from './shared/not-auth.guard';
 import { StatisticComponent } from './statistic/statistic.component';
 import { TreningComponent } from './trening/trening.component';
-
+import { PocetnatestComponent } from './pocetnatest/pocetnatest.component';
 const routes: Routes = [
   {
     path:'',
@@ -55,6 +55,9 @@ const routes: Routes = [
   {
     path:'verifikacija',component:VerifikacijaComponent,canActivate:[AuthRegisterGuard]
   },
+  {
+    path:"test",component:PocetnatestComponent
+  }
   
 ];
 
