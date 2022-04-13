@@ -5,7 +5,8 @@ import Chart from 'chart.js/auto';
 import {MatButtonModule} from '@angular/material/button';
 import { statisticModel,Model } from '../shared/statistic-model.model';
 import { CookieService } from 'ngx-cookie-service';
-
+import { NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-statistic',
   templateUrl: './statistic.component.html',
@@ -38,8 +39,8 @@ export class StatisticComponent implements OnInit {
   dropdownList2 = [];
   izlaznaKolona;
   dropdownSettings2={};
-  statistika:Object;
-  /*statistika={
+  //statistika:Object;
+  statistika={
     "numericke_kolone": [
         {
             "ime_kolone": "Carat",
@@ -258,8 +259,8 @@ export class StatisticComponent implements OnInit {
             }
         }
     ]
-};*/
-  constructor(private shared: SharedService,private route:Router,private elementRef: ElementRef,private cookie:CookieService) { }
+};
+  constructor(private shared: SharedService,private route:Router,private elementRef: ElementRef,private cookie:CookieService,private modalService: NgbModal,private toastr:ToastrService) { }
     
   
 listaKolona=[];
@@ -268,7 +269,7 @@ listaKolona=[];
 
   ngOnInit(): void {
 
-    this.statistika=this.shared.getStatistic();
+    //this.statistika=this.shared.getStatistic();
     if(this.statistika){
         for(let i=0;i<Object.keys(this.statistika['numericke_kolone']).length;i++)
         {
@@ -370,6 +371,7 @@ listaKolona=[];
 
     
   }
+
   iscrtajGraf(event:any){
     this.vrednost = event;
     
@@ -444,43 +446,55 @@ listaKolona=[];
   }
   next()
   {
-    if(window.confirm('Da li ste sigurni da zelite da predjete na sledecu stranu,izmene koje ste napravili ce biti sacuvane?'))
-    {
         this.dodajUlazne;
-        for(let j=0;j<this.modelKolona.length;j++)
+        if(this.selectedItems.length==0)
         {
-            for(let i=0;i<this.selectedItems.length;i++)
-            {
-                if(this.modelKolona[j].nazivKolone==this.selectedItems[i].itemName)
-                {
-                    this.modelKolona2.push(this.modelKolona[j]);
-                }
-            }
-            if(this.modelKolona[j].nazivKolone==this.izlaznaKolona[0].itemName)
-            {
-                this.modelKolona2.push(this.modelKolona[j]);
-            }
+            this.toastr.warning("Niste uneli ulazne kolone!");
         }
-        this.statsModel=new statisticModel();
-        this.statsModel.nizPromena=this.modelKolona2;
-        this.statsModel.nizUlaznih=[];
-        for(let i=0;i<this.selectedItems.length;i++)
+        else
+        {
+            if(this.izlaznaKolona==null || typeof this.izlaznaKolona[0]=="undefined")
+                this.toastr.warning("Niste uneli izlaznu kolonu!");
+            else
             {
-                this.statsModel.nizUlaznih.push(this.selectedItems[i].itemName);
+                for(let j=0;j<this.modelKolona.length;j++)
+                {
+                    for(let i=0;i<this.selectedItems.length;i++)
+                    {
+                        if(this.modelKolona[j].nazivKolone==this.selectedItems[i].itemName)
+                        {
+                            this.modelKolona2.push(this.modelKolona[j]);
+                        }
+                    }
+                    if(this.modelKolona[j].nazivKolone==this.izlaznaKolona[0].itemName)
+                    {
+                        this.modelKolona2.push(this.modelKolona[j]);
+                    }
+                }
+                this.statsModel=new statisticModel();
+                this.statsModel.nizPromena=this.modelKolona2;
+                this.statsModel.nizUlaznih=[];
+                for(let i=0;i<this.selectedItems.length;i++)
+                    {
+                        this.statsModel.nizUlaznih.push(this.selectedItems[i].itemName);
+                    }
+                this.statsModel.izlazna=this.izlaznaKolona[0].itemName;
+                this.cookie.set('params',JSON.stringify(this.statsModel));
+    
+    
+                
+    
+                this.route.navigate(['./training']);
             }
-        this.statsModel.izlazna=this.izlaznaKolona[0].itemName;
-        this.cookie.set('params',JSON.stringify(this.statsModel));
+
+        }
+            
 
 
-        
-
-        this.route.navigate(['./training']);
-    }
     
   }
 
   obrisi(id:any){
-    if(window.confirm('Da li ste sigurni da zelite da obrisete ovaj red?')){
         for(let i=0;i<this.selectedItems.length;i++)
         {
             if(this.kolone[id]==this.selectedItems[i].itemName)
@@ -506,7 +520,8 @@ listaKolona=[];
         this.loadDataSet1();
         this.loadDataSet2();  
         
-    }
+        
+    
     
 
 
@@ -661,6 +676,10 @@ listaKolona=[];
             this.ulazne.push(this.selectedItems[i].itemName);
         }
     }
+
+    openModalDialogCustomClass(content) {
+        this.modalService.open(content);
+      }
 
 
 }

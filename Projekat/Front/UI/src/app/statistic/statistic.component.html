@@ -1,6 +1,20 @@
 
+<ng-template #content2 let-modal class="modal-content">
+                        <div class="modal-header">
+                          <h4 class="modal-title">Upozorenje</h4>
+                          <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+                        </div>
+                        <div class="modal-body">
+                          <p>Da li ste sigurni da zelite da predjete na sledecu stranu,izmene koje ste napravili ce biti sacuvane?</p>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-light" (click)="modal.close('Close click');next()">Potvrdi</button>
+                        </div>
+                      </ng-template> 
 <button class="navigator previous prikaz" (click)="previous()"><</button> 
-<button class="navigator next prikaz" (click)="next()">></button> 
+<button class="navigator next prikaz" (click)="openModalDialogCustomClass(content2)">></button>
+
+
 
 <div class="container" style="height: 100%;">
     <br>
@@ -40,13 +54,25 @@
                     </tr>
                 </thead>
                 <tbody *ngFor="let pr of prazna;let item of kolone;let tip of kategorije;let st of stats;index as i">
+                    <ng-template #content let-modal class="modal-content">
+                        <div class="modal-header">
+                          <h4 class="modal-title">Upozorenje</h4>
+                          <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+                        </div>
+                        <div class="modal-body">
+                          <p>Da li ste sigurni da zelite da obrisete ovaj red?</p>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-light" (click)="obrisi(i);modal.close('Close click')">Potvrdi</button>
+                        </div>
+                      </ng-template> 
                     <tr>
                         <td class="veciFont">{{kolone[i]}}</td>
                         <td class="veciFont">{{kategorije[i]}}</td>
                         <td class="veciFont">{{prazna[i]}}</td>
-                        <td><button class="dugme prikaz" mat-raised-button color="primary" *ngIf="collapse[i]==0" (click)="prikazi(i)" >Vise</button>
+                        <td><button class="dugme prikaz" mat-raised-button color="primary" *ngIf="collapse[i]==0" (click)="prikazi(i);" >Vise</button>
                         <button class="dugme prikaz" mat-raised-button color="primary" *ngIf="collapse[i]==1" (click)="smanji(i)" >Manje</button></td>
-                        <td><button class="dugme prikaz" mat-raised-button color="primary" (click)="obrisi(i)">Brisi!</button></td>
+                        <td><button class="dugme prikaz" mat-raised-button color="primary" (click)="openModalDialogCustomClass(content)">Brisi!</button></td>
                     </tr>
                     <tr *ngIf="collapse[i]==1">
                         <td colspan="5"><div id="demo1">
