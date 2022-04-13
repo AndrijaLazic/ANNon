@@ -2,8 +2,9 @@ from typing import List
 import numpy as np
 import tensorflow as tf
 import pandas as pd
-from keras.models import load_model
 from CustomCallback import CustomCallback
+from keras.models import load_model
+import model_handling
 
 class Hiperparametri:
   def __init__(self,tip_problema,test_skup,slojevi, mera_greske,mera_uspeha,broj_epoha,ulazne_kolone,izlazna_kolona):
@@ -68,7 +69,7 @@ def split_data(data,train_percentage=0.8,test_percentage=0.1,val_percentage=0.1)
   return train,val,test
 
 
-def df_to_dataset(dataframe,target, shuffle=True, batch_size=256):
+def df_to_dataset(dataframe,target, shuffle=True, batch_size=32):
   df = dataframe.copy()
   labels = df.pop(target)
   df = {key: value[:,tf.newaxis] for key, value in df.items()}
@@ -120,7 +121,7 @@ def prepare_preprocess_layers(data,target,train):
   elif(target in numerical_column_names):
     numerical_column_names.remove(target)
 
-  train_ds=df_to_dataset(train,target,batch_size=256)
+  train_ds=df_to_dataset(train,target,batch_size=32)
   [(train_features, label_batch)] = train_ds.take(1)
   #todo proveriti normalizaciju, da li radi kako treba
   # depth_col=train_features["depth"]
