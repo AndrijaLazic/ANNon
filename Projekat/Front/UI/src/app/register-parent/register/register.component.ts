@@ -19,6 +19,7 @@ export class RegisterComponent implements OnInit {
   ngOnInit(): void {
   }
   onSubmit1(form:NgForm){
+    console.log(form)
     this.service.postFunkcija().subscribe(
       //uspesna registracija
       res=>{
@@ -30,6 +31,22 @@ export class RegisterComponent implements OnInit {
         this.toastr.error(err['error'])
       }
     )
+  }
+
+  url = 'assets/image/pocetna1.png';
+  onSelect(event) {
+    let fileType = event.target.files[0].type
+    if (fileType.match(/image\/*/)) {
+      let reader = new FileReader();
+      reader.readAsDataURL(event.target.files[0]);
+      reader.onload = (event: any) => {
+        this.url = event.target.result;
+        
+      };
+    } else {
+      window.alert('Please select correct image format');
+    }
+    
   }
 
 }

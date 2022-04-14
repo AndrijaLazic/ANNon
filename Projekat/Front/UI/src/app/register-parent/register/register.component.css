@@ -47,3 +47,32 @@ hr{
     background-image: linear-gradient(to bottom, #03045e, #011167, #001d70, #002778, #003180, #003a88, #00438f, #004c96, #00579f, #0062a7, #006caf, #0077b6);
     object-fit: cover;
 }
+#slika{
+    display: flex;
+    flex-direction: column;
+   align-items: center;
+    
+}
+#slika label {
+    background-color: rgb(255, 255, 255);
+    border: solid 4px black;
+    border-radius: 10px;
+    color: black;
+    
+    width: 130px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 15px;
+    font-weight: bold;
+    margin: 6px 7px;
+    cursor: pointer;
+    
+  }
+  #slika p{
+      color: white;
+  }
+  #slika img{
+      clip-path: circle();
+      
+  }

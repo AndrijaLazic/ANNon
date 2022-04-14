@@ -4,7 +4,19 @@
             <div class="card">
                 <div class="text-center">
                     <h1>Register</h1><hr>
-                    
+                    <div id="slika">
+                      <p>Set profile picture</p>
+                    <img [src]="url" title="Profile Picture" height="150px" width="150px" src="" />
+                      <input
+                        type="file"
+                        id="img"
+                        style="display:none"
+                        accept="image/*"
+                        (change)="onSelect($event)"
+                       
+                      />
+                       <label for="img">Choose image</label> 
+                    </div>
                 </div>
                 <form novalidate #form="ngForm" (submit)="onSubmit1(form)">
                     
@@ -64,7 +76,6 @@
 
                      </div>
                     </div>
-                    
                     
                     
                     <div class="akaunt">
