@@ -15,11 +15,10 @@ print("Shape after removing duplicates", data.shape)
 data.nunique()
 data.describe(include='all')
 data.isna().sum()
+del data["Description"]
 
-target = data.pop("AdoptionSpeed")
 #target = target.to_numpy()
 
-del data["Description"]
 
 def split_data(data,train_percentage=0.8,test_percentage=0.1,val_percentage=0.1):
   #podela 80/10/10
@@ -42,8 +41,8 @@ def determine_variable_types(data):
 
 categorical_feature_names, numerical_feature_names = determine_variable_types(data)
 data = data[categorical_feature_names+numerical_feature_names]
-data.tail()
-target.tail()
+
+train, val, test = split_data(data)
 
 @tf.autograph.experimental.do_not_convert
 def get_category_encoding_layer(name, dataset, dtype, max_tokens=None):
@@ -80,40 +79,37 @@ def get_normalization_layer(name, dataset):
 
   return normalizer
 
-def df_to_dataset(dataframe, target, shuffle=True, batch_size=256):
+def df_to_dataset(dataframe, target, shuffle=True, one_hot_label=False, batch_size=256):
   df = dataframe.copy()
-  value = sorted(set(target))
-  lookup = tf.keras.layers.IntegerLookup(vocabulary=value, output_mode="one_hot")
-  target = target[:, tf.newaxis]
-  labels = lookup(target)
+  if one_hot_label:
+    target = get_one_hot_target(target)
   df = {key: value[:,tf.newaxis] for key, value in df.items()}
-  ds = tf.data.Dataset.from_tensor_slices((dict(df), labels))
+  ds = tf.data.Dataset.from_tensor_slices((dict(df), target))
   if shuffle:
     ds = ds.shuffle(buffer_size=len(dataframe))
   ds = ds.batch(batch_size)
   ds = ds.prefetch(batch_size)
   return ds
 
-#ds = df_to_dataset(data, target, batch_size=64)
+def get_one_hot_target(target):
+  value = sorted(set(target))
+  if type(value[0]) is str:
+    lookup = tf.keras.layers.StringLookup(vocabulary=value, output_mode="one_hot")
+  else:
+    lookup = tf.keras.layers.IntegerLookup(vocabulary=value, output_mode="one_hot")
+  target2 = target[:, tf.newaxis]
+  labels = lookup(target2)
+  return labels
 
-df = data.copy()
-value = sorted(set(target))
-lookup = tf.keras.layers.IntegerLookup(vocabulary=value, output_mode="one_hot")
-target2 = target[:, tf.newaxis]
-
-labels = lookup(target2)
-df = {key: value[:,tf.newaxis] for key, value in df.items()}
-ds = tf.data.Dataset.from_tensor_slices((dict(df), labels))
-ds = ds.shuffle(buffer_size=len(data))
-ds = ds.batch(32)
-ds = ds.prefetch(32)
-
+target = train.pop("AdoptionSpeed")
+ds = df_to_dataset(train, target, batch_size=64)
 #age_ds = ds.map(lambda x, y: x['Age'])
 
 all_inputs = []
 encoded_features = []
 
 numerical_feature_names.remove("Age")
+categorical_feature_names.append("Age")
 
 # Numerical features.
 for header in numerical_feature_names:
@@ -123,22 +119,26 @@ for header in numerical_feature_names:
     all_inputs.append(numeric_col)
     encoded_features.append(encoded_numeric_col)
 
-age_col = tf.keras.Input(shape=(1,), name = "Age", dtype = "int64")
-encoding_layer = get_category_encoding_layer(name="Age", dataset=ds, dtype="int64", max_tokens=5)
+# age_col = tf.keras.Input(shape=(1,), name = "Age", dtype = "int64")
+# encoding_layer = get_category_encoding_layer(name="Age", dataset=ds, dtype="int64", max_tokens=5)
 
-encoded_age_col = encoding_layer(age_col)
-all_inputs.append(age_col)
-encoded_features.append(encoded_age_col)
+# encoded_age_col = encoding_layer(age_col)
+# all_inputs.append(age_col)
+# encoded_features.append(encoded_age_col)
 
 for header in categorical_feature_names:
-    categorical_col = tf.keras.Input(shape=(1,), name=header, dtype="string")
-    encoding_layer = get_category_encoding_layer(name=header,
-                                                dataset=ds,
-                                                dtype="string",
-                                                max_tokens=5)
-    encoded_categorical_col = encoding_layer(categorical_col)
-    all_inputs.append(categorical_col)
-    encoded_features.append(encoded_categorical_col)
+  tip = train.dtypes[header]
+  if tip == 'object':
+    tip='string'
+  print(header, ":", tip)
+  categorical_col = tf.keras.Input(shape=(1,), name=header, dtype=tip)
+  encoding_layer = get_category_encoding_layer(name=header,
+                                              dataset=ds,
+                                              dtype=tip,
+                                              max_tokens=5)
+  encoded_categorical_col = encoding_layer(categorical_col)
+  all_inputs.append(categorical_col)
+  encoded_features.append(encoded_categorical_col)
 
 
 
@@ -150,12 +150,14 @@ output = layers.Dense(6, activation="softmax")(x)
 
 model = tf.keras.Model(all_inputs, output)
 
-model.compile(optimizer='Adam',
+model.compile(optimizer=tf.keras.optimizers.Adam(0.001),
             loss="categorical_crossentropy", #tf.keras.losses.CategoricalCrossentropy(),
             metrics="Accuracy")
 
 
 model.summary()
 
+val_target = val.pop("AdoptionSpeed")
+history = model.fit(df_to_dataset(train, target, False, True, 24), epochs=200, validation_data=df_to_dataset(val, val_target, False, True, 24))
 
-history = model.fit(ds, epochs=20)
+y_pred = model.predict()
