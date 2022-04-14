@@ -19,10 +19,7 @@
 h1{
     color: white;
 }
-form{
-    margin-left: 10%;
-    margin-right: 10%;
-}
+
 hr{
     color:#f1f1f1;
 }
@@ -37,16 +34,6 @@ hr{
 #dugme{
     margin-bottom: 7px;
 }
-#myVideo {
-    position: fixed;
-    right: 0;
-    bottom: 0;
-    width: 100%;
-    min-height: 100%;
-    z-index: -1;
-    background-image: linear-gradient(to bottom, #03045e, #011167, #001d70, #002778, #003180, #003a88, #00438f, #004c96, #00579f, #0062a7, #006caf, #0077b6);
-    object-fit: cover;
-}
 #slika{
     display: flex;
     flex-direction: column;
@@ -54,17 +41,15 @@ hr{
     
 }
 #slika label {
-    background-color: rgb(255, 255, 255);
     border: solid 4px black;
     border-radius: 10px;
-    color: black;
+    color: white;
     
     width: 130px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 15px;
-    font-weight: bold;
     margin: 6px 7px;
     cursor: pointer;
     
@@ -76,3 +61,37 @@ hr{
       clip-path: circle();
       
   }
+
+  .window{
+    min-width: fit-content;
+    max-width: 30%;
+    margin: auto;
+    padding:40px;
+    padding-left: 7%;
+    padding-right: 7%;
+    text-align:center;
+    border-radius:20px;
+    backdrop-filter:blur(20px) brightness(60%);
+    
+    
+    color:white;
+  }
+
+   ::ng-deep body{
+    background: url(PozadinaRegistracija.jpg) no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+
+   }
+
+   .vertical-center {
+    min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
+    min-height: 100vh; /* These two lines are counted as one :-)       */
+  
+    display: flex;
+    align-items: center;
+  }
+  
+

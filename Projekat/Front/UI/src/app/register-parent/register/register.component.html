@@ -1,90 +1,99 @@
-<video disablePictureInPicture [muted]="true" autoplay playsinline loop id="myVideo">
-  <source src="assets/pozadina.mp4" type="video/mp4">
-</video>
-            <div class="card">
-                <div class="text-center">
-                    <h1>Register</h1><hr>
-                    <div id="slika">
-                      <p>Set profile picture</p>
-                    <img [src]="url" title="Profile Picture" height="150px" width="150px" src="" />
-                      <input
-                        type="file"
-                        id="img"
-                        style="display:none"
-                        accept="image/*"
-                        (change)="onSelect($event)"
-                       
-                      />
-                       <label for="img">Choose image</label> 
-                    </div>
-                </div>
-                <form novalidate #form="ngForm" (submit)="onSubmit1(form)">
-                    
-                    <div class="mb-3">
-                        <label class="form-label">Username</label>
-                        <input type="text" class="form-control" name="username" #username="ngModel" [(ngModel)]="service.formdata.username" 
-                         placeholder="example:user123" pattern="^[a-zA-Z][a-zA-Z0-9\.]*" required [class.invalid]="username.touched && username.invalid" minlength="5" maxlength="30">
-                         <div *ngIf="username.invalid && username.touched"
-                              class="alert">
+<div class="jumbotron vertical-center">
+  <div class="window">
+    <div class="row justify-content-center">
+      <div class="col-md-auto">
+        <h1 style="font-size:3rem;">Register</h1>
+      </div>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-md-auto">
+        <hr>
+          <div id="slika">
+            
+          <img [src]="url" title="Profile Picture" height="150px" width="150px" src="" />
+            <input
+              type="file"
+              id="img"
+              style="display:none"
+              accept="image/*"
+              (change)="onSelect($event)"
+              
+            />
+              <label class="dugme" for="img">Choose image</label> 
+          </div>
+      </div>
+    </div>  
+    <form novalidate #form="ngForm" (submit)="onSubmit1(form)">
+      <div class="row justify-content-center">
+        <div class="col-md-auto">
+          
+                      
+            <div class="mb-4">
+                <label class="form-label">Username</label>
+                <input type="text" class="form-control" name="username" #username="ngModel" [(ngModel)]="service.formdata.username" 
+                placeholder="example:user123" pattern="^[a-zA-Z][a-zA-Z0-9\.]*" required [class.invalid]="username.touched && username.invalid" minlength="5" maxlength="30">
+                <div *ngIf="username.invalid && username.touched"
+                      class="alert">
 
-                            <p class="alert alert-danger" *ngIf="username.errors?.['required']">
-                              Username is required.
-                            </p>
-                            <p class="alert alert-danger" *ngIf="username.errors?.['pattern']">
-                              Username can not start with numbers.
-                            </p>
-                            <p class="alert alert-danger" *ngIf="username.errors?.['minlength']">
-                              Username must contain at least 5 characters.
-                            </p>
-                            <p class="alert alert-danger" *ngIf="username.errors?.['maxlength']">
-                              Username can not contain more than 30 characters.
-                            </p>
+                    <p class="alert alert-danger" *ngIf="username.errors?.['required']">
+                      Username is required.
+                    </p>
+                    <p class="alert alert-danger" *ngIf="username.errors?.['pattern']">
+                      Username can not start with numbers.
+                    </p>
+                    <p class="alert alert-danger" *ngIf="username.errors?.['minlength']">
+                      Username must contain at least 5 characters.
+                    </p>
+                    <p class="alert alert-danger" *ngIf="username.errors?.['maxlength']">
+                      Username can not contain more than 30 characters.
+                    </p>
 
-                          </div>
-                      </div>
-                      <div class="mb-3">
-                        <label class="form-label">Email</label>
-                        <input type="text" class="form-control" name="email" #email="ngModel" [(ngModel)]="service.formdata.email"
-                         required placeholder="example:user@gmail.com" [class.invalid]="email.touched && email.invalid"
-                         pattern="^[a-zA-Z0-9]+([\.\-\+][a-zA-Z0-9]+)*\@([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}$">
-                      <div *ngIf="email.invalid && email.touched"
-                         class="alert">
+                  </div>
+              </div>
+              <div class="mb-4">
+                <label class="form-label">Email</label>
+                <input type="text" class="form-control" name="email" #email="ngModel" [(ngModel)]="service.formdata.email"
+                required placeholder="example:user@gmail.com" [class.invalid]="email.touched && email.invalid"
+                pattern="^[a-zA-Z0-9]+([\.\-\+][a-zA-Z0-9]+)*\@([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}$">
+              <div *ngIf="email.invalid && email.touched"
+                class="alert">
 
-                       <p class="alert alert-danger" *ngIf="email.errors?.['required']">
-                         Email is required.
-                       </p>
-                       <p class="alert alert-danger" *ngIf="email.errors?.['pattern']">
-                         It's not proper email.
-                       </p>
+              <p class="alert alert-danger" *ngIf="email.errors?.['required']">
+                Email is required.
+              </p>
+              <p class="alert alert-danger" *ngIf="email.errors?.['pattern']">
+                It's not proper email.
+              </p>
 
-                     </div>
-                      </div>
-                    
-                    <div class="mb-3">
-                      <label class="form-label">Password</label>
-                      <input type="password" class="form-control" name="password" #password="ngModel" [(ngModel)]="service.formdata.password" 
-                      required minlength="5" [class.invalid]="password.touched && password.invalid" placeholder="*****">
-                      <div *ngIf="password.invalid && password.touched"
-                         class="alert">
-
-                       <p class="alert alert-danger" *ngIf="password.errors?.['required']">
-                         Password is required.
-                       </p>
-                       <p class="alert alert-danger" *ngIf="password.errors?.['minlength']">
-                         Password must contains at least 5 characters.
-                       </p>
-
-                     </div>
-                    </div>
-                    
-                    
-                    <div class="akaunt">
-                      <button type="submit" id="dugme" class="btn btn-primary" [disabled]="form.invalid">Sign Up</button><br>
-                      Already have an account?<a routerLink="/login">Log in</a>
-                    </div>
-                   
-                  </form>
-                  
             </div>
-       
+              </div>
+            
+            <div class="mb-4">
+              <label class="form-label">Password</label>
+              <input type="password" class="form-control" name="password" #password="ngModel" [(ngModel)]="service.formdata.password" 
+              required minlength="5" [class.invalid]="password.touched && password.invalid" placeholder="*****">
+              <div *ngIf="password.invalid && password.touched"
+                class="alert">
 
+              <p class="alert alert-danger" *ngIf="password.errors?.['required']">
+                Password is required.
+              </p>
+              <p class="alert alert-danger" *ngIf="password.errors?.['minlength']">
+                Password must contains at least 5 characters.
+              </p>
+
+            </div>
+            </div>
+            
+            
+            <div class="akaunt">
+              <button type="submit" id="dugme" class="btn btn-primary" [disabled]="form.invalid">Sign Up</button><br>
+              Already have an account?<a routerLink="/login">Log in</a>
+            </div>
+          
+        </div>
+      </div>
+    </form>              
+                
+  </div> 
+</div>
