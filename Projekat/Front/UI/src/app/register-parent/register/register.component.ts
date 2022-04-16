@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { ToastrService } from 'ngx-toastr';
 import { RegisterServiceService } from 'src/app/shared/register-service.service';
-
+import { NgxSpinnerService } from 'ngx-spinner';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -12,22 +12,25 @@ import { RegisterServiceService } from 'src/app/shared/register-service.service'
 })
 export class RegisterComponent implements OnInit {
 
-  constructor(public service:RegisterServiceService,private toastr:ToastrService,private route:Router,private cookie:CookieService) { }
+  constructor(private spinner:NgxSpinnerService,public service:RegisterServiceService,private toastr:ToastrService,private route:Router,private cookie:CookieService) { }
 
 
 
   ngOnInit(): void {
   }
   onSubmit1(form:NgForm){
+    this.spinner.show("Spiner1")
     console.log(form)
     this.service.postFunkcija().subscribe(
       //uspesna registracija
       res=>{
+        this.spinner.hide("Spiner1");
         this.toastr.success(res['data']['message'])
         this.cookie.set('register','uspesna')
         this.route.navigate(['success-register'])
       },
       err=>{
+        this.spinner.hide("Spiner1");
         this.toastr.error(err['error'])
       }
     )
