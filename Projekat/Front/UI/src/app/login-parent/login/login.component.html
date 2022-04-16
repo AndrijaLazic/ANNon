@@ -1,65 +1,72 @@
 <video disablePictureInPicture [muted]="true" autoplay playsinline loop id="myVideo">
   <source src="assets/pozadina.mp4" type="video/mp4">
 </video>
-            <div class="card">
-                <div class="text-center">
-                  <h1>Login</h1>
-                    <hr>
-                </div>
-                <form novalidate #form="ngForm" (submit)="onSubmit(form)">
-                    
-                    <div class="mb-3">
-                        <label class="form-label">Username</label>
-                        <input type="text" class="form-control" name="username" #username="ngModel" [(ngModel)]="service.formData.username"
-                        required pattern="^[a-zA-Z][a-zA-Z0-9\.]*" [class.invalid]="username.invalid && username.touched" placeholder="example:user123" minlength="5" maxlength="25">
-                        <div *ngIf="username.invalid && username.touched"
-                              class="alert">
+<div class="jumbotron vertical-center">
+  <div class="window">
+    <div class="row justify-content-center">
+      <div class="col-md-auto">
+        <h1 style="font-size:3rem;">Login</h1>
+      </div>
+    </div>
+    <hr>
+    <form novalidate #form="ngForm" (submit)="onSubmit(form)">
+      <div class="row justify-content-center">          
+        <div class="col-md-auto">
+            <label class="form-label">Username</label>
+            <input type="text" class="form-control" name="username" #username="ngModel" [(ngModel)]="service.formData.username"
+            required pattern="^[a-zA-Z][a-zA-Z0-9\.]*" [class.invalid]="username.invalid && username.touched" placeholder="example:user123" minlength="5" maxlength="25">
+            <div *ngIf="username.invalid && username.touched"
+                  class="alert">
 
-                            <p class="alert alert-danger" *ngIf="username.errors?.['required']">
-                              Username is required.
-                            </p>
-                            <p class="alert alert-danger"  *ngIf="username.errors?.['pattern']">
-                              Username can not start with numbers.
-                            </p>
-                            <p class="alert alert-danger"  *ngIf="username.errors?.['minlength']">
-                                Username must contain at least 5 characters.
-                              </p>
-                              <p class="alert alert-danger"  *ngIf="username.errors?.['maxlength']">
-                                Username can not contain more than 25 characters.
-                              </p>
+                <p class="alert alert-danger" *ngIf="username.errors?.['required']">
+                  Username is required.
+                </p>
+                <p class="alert alert-danger"  *ngIf="username.errors?.['pattern']">
+                  Username can not start with numbers.
+                </p>
+                <p class="alert alert-danger"  *ngIf="username.errors?.['minlength']">
+                    Username must contain at least 5 characters.
+                  </p>
+                  <p class="alert alert-danger"  *ngIf="username.errors?.['maxlength']">
+                    Username can not contain more than 25 characters.
+                  </p>
 
-                          </div>
-                      </div>
-                    
-                    <div class="mb-3">
-                      <label class="form-label">Password</label>
-                      <input type="password" class="form-control" name="password" #password="ngModel" [(ngModel)]="service.formData.password" 
-                      required minlength="5" [class.invalid]="password.invalid && password.touched" placeholder="*****"
-                      >
-                      <div *ngIf="password.invalid && password.touched"
-                         class="alert">
+              </div>
+        </div>
+      </div>
+      <div class="row justify-content-center">          
+        <div class="col-md-auto">
+          <label class="form-label">Password</label>
+          <input type="password" class="form-control" name="password" #password="ngModel" [(ngModel)]="service.formData.password" 
+          required minlength="5" [class.invalid]="password.invalid && password.touched" placeholder="*****"
+          >
+          <div *ngIf="password.invalid && password.touched"
+            class="alert">
+            <p class="alert alert-danger"  *ngIf="password.errors?.['required']">
+              Password is required.
+            </p>
+            <p class="alert alert-danger"  *ngIf="password.errors?.['minlength']">
+              Password must contains at least 5 characters.
+            </p>
+          </div>
+        </div>  
+      </div>  
+      <div class="row justify-content-center">          
+        <div class="col-md-auto">
+          <div id="akaunt">
+            <button type="submit" id="dugme" class="btn btn-primary " [disabled]="form.invalid">Login</button><br>
+            Don't have an account?<a routerLink="/signup">Sign up</a>
+          </div>
+        </div>
+      </div>
+      
+      
+    </form>
+              
+                
+  </div> 
+</div>
 
-                       <p class="alert alert-danger"  *ngIf="password.errors?.['required']">
-                         Password is required.
-                       </p>
-                       <p class="alert alert-danger"  *ngIf="password.errors?.['minlength']">
-                         Password must contains at least 5 characters.
-                       </p>
-
-                     </div>
-                     
-                     
-                    </div>
-                    
-                    
-                    <div id="akaunt">
-                      <button type="submit" id="dugme" class="btn btn-primary " [disabled]="form.invalid">Login</button><br>
-                      Don't have an account?<a routerLink="/signup">Sign up</a>
-                      </div>
-                  </form>
-                  
-                  
-            </div>
         
     
 
