@@ -48,16 +48,16 @@ namespace Projekat.Controllers
 
                     _context.Korisnici.Add(korisnik);
                     await _context.SaveChangesAsync();
-                    
 
-                    EmailKontroler.PosaljiEmail("Kliknite na link za potvrdu registracije:http://147.91.204.115:10000/verifikacija?token=" + EmailToken, "Potvrda registracije", zahtev.Email, configuration);
-                    
+
+                    EmailKontroler.PosaljiEmail("Kliknite na link za potvrdu registracije:http://localhost:4200/verifikacija?token=" + EmailToken, "Potvrda registracije", zahtev.Email, configuration);
+
                     return Ok(new
                     {
                         success = true,
                         data = new
                         {
-                            message= "Uspesna registracija"
+                            message = "Uspesna registracija"
                         }
                     });
                 }
@@ -88,7 +88,7 @@ namespace Projekat.Controllers
             {
                 return BadRequest("Pogresna sifra");
             }
-            else if(korisnik.EmailPotvrdjen==false)
+            else if (korisnik.EmailPotvrdjen == false)
             {
                 return BadRequest("Email nije potvrdjen,proverite svoju email adresu");
             }
@@ -98,8 +98,8 @@ namespace Projekat.Controllers
 
         }
 
-        
-        private string CreateToken(Korisnik korisnik,int trajanjeUMinutima)
+
+        private string CreateToken(Korisnik korisnik, int trajanjeUMinutima)
         {
             List<Claim> claims = new List<Claim>
             {
@@ -131,7 +131,7 @@ namespace Projekat.Controllers
 
         }
         */
-        public static string? ValidateToken(string token,IConfiguration konfiguracija)
+        public static string? ValidateToken(string token, IConfiguration konfiguracija)
         {
             if (token == null)
                 return null;
@@ -187,7 +187,7 @@ namespace Projekat.Controllers
         }
 
 
-       
+
 
     }
 }

@@ -74,12 +74,16 @@ class ConnectionManager:
 
 manager = ConnectionManager()
 app=FastAPI()
+#konfiguracija
+f = open('KonfiguracioniFajl.json')
+Konfiguracija = json.load(f)
+#print(Konfiguracija['KonfiguracijaServera']['backURL'])
 
 @app.post('/send')
 async def update_item(
         model:UploadedFile
 ):  
-    s=requests.get('https://localhost:7286/api/FajlKontroler/DajFajl?NazivFajla='+model.FileName+'&imeKorisnika=Korisnik',verify=False).content
+    s=requests.get(Konfiguracija['KonfiguracijaServera']['backURL']+'api/FajlKontroler/DajFajl?NazivFajla='+model.FileName+'&imeKorisnika=Korisnik',verify=False).content
     try:
         fajl=pd.read_csv(io.StringIO(s.decode('utf-8')),sep='|')
     except Exception:
@@ -89,7 +93,7 @@ async def update_item(
     if(fajl.empty):
         raise HTTPException(status_code=404, detail="Fajl ne postoji")
     
-    await manager.addFilePath(model.userID,'https://localhost:7286/api/FajlKontroler/DajFajl?NazivFajla='+model.FileName+'&imeKorisnika=Korisnik')
+    await manager.addFilePath(model.userID,Konfiguracija['KonfiguracijaServera']['backURL']+'api/FajlKontroler/DajFajl?NazivFajla='+model.FileName+'&imeKorisnika=Korisnik')
     Statistic=stats.getStats(fajl)
     return ResponseModel(0,Statistic).toJSON()
 

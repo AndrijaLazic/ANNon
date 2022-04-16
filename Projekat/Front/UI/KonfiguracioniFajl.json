@@ -1,6 +1,6 @@
 {
-    "KonfiguracijaServera": {
-      "osnovniURL": "http://147.91.204.115:10001/"
-      
-    }
+  "KonfiguracijaServera": {
+    "osnovniURL": "https://localhost:7286/"
+    
+  }
 }

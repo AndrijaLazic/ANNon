@@ -22,6 +22,7 @@ h1{
 
 hr{
     color:#f1f1f1;
+    width: 100%;
 }
 .akaunt{
     margin: auto;
@@ -66,7 +67,7 @@ hr{
     min-width: fit-content;
     max-width: 30%;
     margin: auto;
-    padding:40px;
+    padding:30px;
     padding-left: 7%;
     padding-right: 7%;
     text-align:center;
@@ -95,3 +96,13 @@ hr{
   }
   
 
+  #myVideo {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    min-height: 100%;
+    z-index: -1;
+    background-image: linear-gradient(to bottom, #03045e, #011167, #001d70, #002778, #003180, #003a88, #00438f, #004c96, #00579f, #0062a7, #006caf, #0077b6);
+    object-fit: cover;
+}

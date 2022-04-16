@@ -6,7 +6,7 @@ import { ThisReceiver } from '@angular/compiler';
 import { epochModel } from './epoch.model';
 import { vrednostiZaGrafikKlasa,podatakZaGrafikKlasa } from '../trening/podatakZaGrafik.model';
 import { Subject } from 'rxjs';
-
+import { default as Konfiguracija } from '../../../KonfiguracioniFajl.json';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +18,7 @@ export class SignalRService {
   public data;
   public podaciZaGrafik=[];
   public connectionID: string;
-  private baseUrl:string = "https://localhost:7286/api/wsCommunication/"; 
+  private baseUrl:string =Konfiguracija.KonfiguracijaServera.osnovniURL+"api/wsCommunication/"; 
   private hubConnection: signalR.HubConnection
   public PrikaziLinije=true;
   private poruka=new Subject<number>();
@@ -29,7 +29,7 @@ export class SignalRService {
 
   public startConnection = () =>
   {
-    this.hubConnection = new signalR.HubConnectionBuilder().withUrl("https://localhost:7286/hub").build();
+    this.hubConnection = new signalR.HubConnectionBuilder().withUrl(Konfiguracija.KonfiguracijaServera.osnovniURL+"hub").build();
     
     this.hubConnection.start()
     .then(() => console.log("Connection started!!! "))
