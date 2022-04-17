@@ -20,7 +20,8 @@ namespace Projekat.Modeli
 
         public byte[] PasswordSalt { get; set; }
 
-        public bool EmailPotvrdjen { get; set; }=false;
+        public bool EmailPotvrdjen { get; set; } = false;
         public string EmailToken { get; set; }
+        public string ProfileImage { get; set; }
     }
 }

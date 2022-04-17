@@ -13,9 +13,9 @@ export class RegisterServiceService {
   formdata:RegisterModel=new RegisterModel();
   readonly conStr=Konfiguracija.KonfiguracijaServera.osnovniURL+'api/KontrolerAutorizacije/registracija';
   readonly conStr2=Konfiguracija.KonfiguracijaServera.osnovniURL+'api/EmailKontroler/';
-  postFunkcija()
+  postFunkcija(form:any)
   {
-    return this.http.post(this.conStr,this.formdata);
+    return this.http.post(this.conStr,form);
   }
   isRegister()
   {

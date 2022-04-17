@@ -44,6 +44,8 @@ namespace Projekat.Migrations
                     PasswordSalt = table.Column<byte[]>(type: "longblob", nullable: false),
                     EmailPotvrdjen = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     EmailToken = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ProfileImage = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>

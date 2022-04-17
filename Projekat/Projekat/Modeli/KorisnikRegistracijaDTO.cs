@@ -15,5 +15,7 @@
         [Required(ErrorMessage = "Nije uneta sifra")]
         public string Password { get; set; } = string.Empty;
 
+        public IFormFile? image { get; set; }
+
     }
 }

@@ -10,6 +10,8 @@ using MySqlConnector;
 using MailKit;
 using MailKit.Net.Smtp;
 using MimeKit;
+using Projekat.Ostalo;
+using System.Diagnostics;
 
 namespace Projekat.Controllers
 {
@@ -30,7 +32,7 @@ namespace Projekat.Controllers
 
 
         [HttpPost("registracija")]
-        public async Task<ActionResult<Korisnik>> Registracija(KorisnikRegistracijaDTO zahtev)
+        public async Task<ActionResult<Korisnik>> Registracija([FromForm] KorisnikRegistracijaDTO zahtev)
         {
             if (ModelState.IsValid)
             {
@@ -45,9 +47,15 @@ namespace Projekat.Controllers
                     korisnik.PasswordSalt = passwordSalt;
                     string EmailToken = CreateToken(korisnik, int.Parse(configuration.GetSection("AppSettings:TrajanjeEmailTokenaUMinutima").Value.ToString()));
                     korisnik.EmailToken = EmailToken;
-
+                    korisnik.ProfileImage = "";
                     _context.Korisnici.Add(korisnik);
                     await _context.SaveChangesAsync();
+                    var user_id = _context.Korisnici.FirstOrDefault(x => x.Username == zahtev.Username);
+                    if (zahtev.image != null)
+                    {
+                        korisnik.ProfileImage = RadSaFajlovima.upisiSliku(user_id.ID, zahtev.image);
+                        await _context.SaveChangesAsync();
+                    }
 
 
                     EmailKontroler.PosaljiEmail("Kliknite na link za potvrdu registracije:http://localhost:4200/verifikacija?token=" + EmailToken, "Potvrda registracije", zahtev.Email, configuration);

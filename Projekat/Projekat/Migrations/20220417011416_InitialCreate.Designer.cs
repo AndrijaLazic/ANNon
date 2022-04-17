@@ -11,7 +11,7 @@ using Projekat.Data;
 namespace Projekat.Migrations
 {
     [DbContext(typeof(MySqlDbContext))]
-    [Migration("20220410152813_InitialCreate")]
+    [Migration("20220417011416_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -63,6 +63,10 @@ namespace Projekat.Migrations
                     b.Property<byte[]>("PasswordSalt")
                         .IsRequired()
                         .HasColumnType("longblob");
+
+                    b.Property<string>("ProfileImage")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Username")
                         .IsRequired()

@@ -59,6 +59,21 @@ namespace Projekat.Ostalo
 
             return imeFajla;
         }
+        public static string upisiSliku(int id, IFormFile photo)
+        {
+            var pathBuilt = Path.Combine(Directory.GetCurrentDirectory(), "Upload\\profileimage\\img" + id);
+            if (!Directory.Exists(pathBuilt))
+            {
+                Directory.CreateDirectory(pathBuilt);
+            }
+            pathBuilt = pathBuilt + "\\" + photo.FileName;
+            using (var stream = System.IO.File.Create(pathBuilt))
+            {
+                photo.CopyToAsync(stream);
+                stream.Flush();
+            }
+            return pathBuilt;
+        }
 
         public static DataTable UcitajFajl(string pathBuilt)
         {
@@ -128,7 +143,7 @@ namespace Projekat.Ostalo
         public static bool IzbrisiKolonu(string Putanja, int IndexKolone)
         {
             DataTable dataTable = UcitajFajl(Putanja);
-            if(dataTable == null)
+            if (dataTable == null)
                 return false;
             try
             {

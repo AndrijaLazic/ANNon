@@ -62,6 +62,10 @@ namespace Projekat.Migrations
                         .IsRequired()
                         .HasColumnType("longblob");
 
+                    b.Property<string>("ProfileImage")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasMaxLength(20)
