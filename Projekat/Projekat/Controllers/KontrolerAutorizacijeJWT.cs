@@ -106,6 +106,48 @@ namespace Projekat.Controllers
 
         }
 
+        [HttpPost("IzmenaProfila")]
+        public async Task<ActionResult<string>> IzmenaProfila(string token,IzmeneProfilaDTO izmene)
+        {
+            if (ModelState.IsValid)
+            {
+                string? name = ValidateToken(token, this.configuration);
+                if (name == null)
+                    return BadRequest("Los token/ ne postoji");
+                Korisnik korisnik = _context.Korisnici.Where(x => x.Username.Equals(name)).FirstOrDefault();
+                if (korisnik == null)
+                    return BadRequest("Dati korisnik ne postoji");
+                if (!VerifyPasswordHash(izmene.StariPassword, korisnik.PasswordHash, korisnik.PasswordSalt))
+                {
+                    return BadRequest("Pogresna sifra");
+                }
+
+                if (!string.IsNullOrEmpty(izmene.Username))
+                {
+                    Korisnik korisnik2 = _context.Korisnici.Where(x => x.Username.Equals(izmene.Username)).FirstOrDefault();
+                    if(korisnik2!=null)
+                        return BadRequest("Vec postoji korisnik sa datim username-om");
+                    korisnik.Username = izmene.Username;
+                }
+                if (!string.IsNullOrEmpty(izmene.NoviPassword))
+                {
+                    CreatePasswordHash(izmene.NoviPassword, out byte[] passwordHash, out byte[] passwordSalt);
+                    korisnik.PasswordSalt = passwordSalt;
+                    korisnik.PasswordHash= passwordHash;
+                }
+                if (!string.IsNullOrEmpty(izmene.Email))
+                {
+                    Korisnik korisnik2 = _context.Korisnici.Where(x => x.Email.Equals(izmene.Email)).FirstOrDefault();
+                    if (korisnik2 != null)
+                        return BadRequest("Vec postoji korisnik sa datim Email-om");
+                    korisnik.Email=izmene.Email;
+                }
+                return Ok("Uspesna izmena naloga");
+            }
+            return BadRequest("Neuspesna izmena");
+            
+        }
+
 
         private string CreateToken(Korisnik korisnik, int trajanjeUMinutima)
         {
