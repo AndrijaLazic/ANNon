@@ -8,13 +8,14 @@ import { default as Konfiguracija } from '../../../KonfiguracioniFajl.json';
   providedIn: 'root'
 })
 export class RegisterServiceService {
-
+  email:string;
   constructor(private http:HttpClient,private cookie:CookieService) { }
   formdata:RegisterModel=new RegisterModel();
   readonly conStr=Konfiguracija.KonfiguracijaServera.osnovniURL+'api/KontrolerAutorizacije/registracija';
   readonly conStr2=Konfiguracija.KonfiguracijaServera.osnovniURL+'api/EmailKontroler/';
   postFunkcija(form:any)
   {
+    this.email=this.formdata.email;
     return this.http.post(this.conStr,form);
   }
   isRegister()
@@ -28,5 +29,8 @@ export class RegisterServiceService {
   verifikacionZahtev(tokens:any):Observable<any>
   {
     return this.http.get<any>(this.conStr2+tokens)
+  }
+  getEmail(){
+    return this.email;
   }
 }

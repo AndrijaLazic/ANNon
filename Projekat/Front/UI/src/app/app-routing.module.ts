@@ -35,10 +35,7 @@ const routes: Routes = [
   {
     path:'success-login',component:LoginParentComponent,canActivate:[AuthGuard]
   },
-  {
-    path:'success-register',component:RegisterParentComponent,canActivate:[AuthRegisterGuard]
-  },
-
+  
   {
     path:'statistic',component:StatisticComponent
   },
@@ -57,6 +54,9 @@ const routes: Routes = [
   },
   {
     path:"test",component:PocetnatestComponent
+  },
+  {
+    path:'success-register',component:RegisterParentComponent,canActivate:[AuthRegisterGuard]
   }
   
 ];
