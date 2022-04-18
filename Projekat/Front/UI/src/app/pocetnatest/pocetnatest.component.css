@@ -1,4 +1,11 @@
+::ng-deep body{
+    background: url("src/mainbackground.jpg") no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
 
+   }
 .navbar-nav .igra
 {
     border:2px solid #2B65EC;
@@ -21,8 +28,26 @@
     background-color: rgba(225, 18, 18, 0.15);  
     backdrop-filter: blur(5px);
 }
-.slika img
+
+.image img
 {
-    width: 600px;
-    height: 600px;
+    width: 100%;
+    height: 100%;
 }
+
+.content-part::before
+{
+    content: "";
+    position: absolute;
+}
+.content-part:nth-child(even)
+{
+    position: relative;
+    height: 400px;
+    background-color: rgba(45, 57, 70, 0.4);
+}
+.content-part:nth-child(odd)
+{
+    height: 400px;
+}
+
