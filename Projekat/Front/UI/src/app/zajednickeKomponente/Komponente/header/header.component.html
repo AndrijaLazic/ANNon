@@ -19,10 +19,22 @@
                     </ul>
                 </div>
                 <div *ngIf="login_ind">
-                    <div class="dropdown">
-                        <button class="dropbtn">{{username}}</button>
-                        <div class="dropdown-content">
-                          <button (click)="logout()">Logout</button>
+                    <div class="menu-container" clickOutside (clickOutside)="clickedOutside()" >
+                       
+                            <div class="username" id="isti">
+                                <a class="menu-toggler" (click)="openMenu()">{{username}}</a> 
+                            </div>
+                        <div class="profile" id="isti" >
+                            <img [src]="url" (click)="openMenu()"  >
+                        </div>
+                        
+                        
+                        <div class="dropdown-content" *ngIf="isMenuOpened" >
+                            <ul>
+                                <li><img src="assets/image/mojprofil.png"><a>Moj profil</a></li>
+                                <li><img src="assets/image/odjava2.png"><a (click)="logout()">Odjavi se</a></li>
+                            </ul>
+                          
                         </div>
                       </div>
                 </div>

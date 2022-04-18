@@ -40,6 +40,8 @@ import { NgChartsModule } from 'ng2-charts';
 import { DefaultModule } from './layouts/default/default.module';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { PocetnatestComponent } from './pocetnatest/pocetnatest.component';
+import { ClickOutsideDirective } from './zajednickeKomponente/Komponente/clickOutside.directive';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -55,8 +57,8 @@ import { PocetnatestComponent } from './pocetnatest/pocetnatest.component';
     CsvTabelaComponent,
     TreningComponent,
     IzborParametaraComponent,
-    PocetnatestComponent
-    
+    PocetnatestComponent,
+    ClickOutsideDirective
     
   ],
   imports: [

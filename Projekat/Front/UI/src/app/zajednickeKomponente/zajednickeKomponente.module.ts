@@ -12,7 +12,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
   declarations: [
     HeaderComponent,
     MojNalogComponent,
-    FooterComponent
+    FooterComponent,
   ],
   imports: [
     CommonModule,

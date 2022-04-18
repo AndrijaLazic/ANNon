@@ -10,10 +10,12 @@ import { LoginServiceService } from 'src/app/shared/login-service.service';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
+  isMenuOpened:boolean=false;
   menuInd:boolean=false;
   login_ind:boolean;
   username:any;
   help=new JwtHelperService();
+  url="assets/image/pocetna.png";
   constructor(private loginService:LoginServiceService,private cookie:CookieService,private route:Router) { }
 
   ngOnInit(): void {
@@ -23,6 +25,7 @@ export class HeaderComponent implements OnInit {
       let tokens=this.cookie.get('token')
       let pom=this.help.decodeToken(tokens);
       this.username=pom['username'];
+      //ovde saljem zahtev za slikom
     }
     else
     {
@@ -40,5 +43,18 @@ export class HeaderComponent implements OnInit {
       this.route.routeReuseStrategy.shouldReuseRoute = () => false;
       this.route.onSameUrlNavigation = 'reload';
     this.route.navigate(['pocetna'])
+  }
+  openMenu()
+  {
+    this.isMenuOpened=!this.isMenuOpened;
+  }
+  clickedOutside()
+  {
+    this.isMenuOpened=false;
+  }
+
+  posaljiZahtev()
+  {
+    console.log("dukila");
   }
 }
