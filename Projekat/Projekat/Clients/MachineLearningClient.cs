@@ -52,9 +52,9 @@ namespace Projekat.Clients
             return JsonConvert.DeserializeObject<string>(result);
         }
 
-        public async Task<string> sendRequestForCompare(string userID)
+        public async Task<string> sendRequestForCompare(string jsonObject)
         {
-            var content = new StringContent(userID, Encoding.UTF8, "application/json");
+            var content = new StringContent(jsonObject, Encoding.UTF8, "application/json");
             HttpResponseMessage httpResponse = await _client.PostAsync(_configuration.GetSection("ML_Server_Config:http").Value + _configuration.GetSection("ML_Server_Config:host").Value + ":" + _configuration.GetSection("ML_Server_Config:port").Value + "/" + "compare", content);
             var result = await httpResponse.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<string>(result);

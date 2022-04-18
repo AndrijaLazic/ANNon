@@ -74,6 +74,7 @@ export class TreningComponent implements OnInit {
     console.log(sessionStorage.getItem("userId"));
     const formData = new FormData();
     formData.append("userID",sessionStorage.getItem("userId"));
+    formData.append("metric","mse");
     console.log(formData);
     this.http.post(this.osnovniUrl+"api/MachineLearning/compare",formData).subscribe(
       res => console.log(res),

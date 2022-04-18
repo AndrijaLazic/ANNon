@@ -125,10 +125,16 @@ namespace Projekat.Clients
 
 
         [HttpPost("compare")]
-        public async Task<IActionResult> ComparasionBetweenTwoDataSet([FromForm]string userID)
+        public async Task<IActionResult> ComparasionBetweenTwoDataSet([FromForm]string userID, [FromForm]string metric)
         {
             //var json = JsonConvert.SerializeObject(param_model);  
-            var answer = await _iCustomClient.sendRequestForCompare(userID);
+            var obj = new
+            { 
+                userID = userID,
+                metric = metric
+            };
+            var objToJson = JsonConvert.SerializeObject(obj);
+            var answer = await _iCustomClient.sendRequestForCompare(objToJson);
            
             var jsonToObject = JsonConvert.DeserializeObject<ResponseModel>(answer);
             if (jsonToObject.Status == 1)
