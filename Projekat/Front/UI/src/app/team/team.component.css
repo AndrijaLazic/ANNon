@@ -1,0 +1,32 @@
+::ng-deep body{
+    background: url("src/mainbackground.jpg") no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+
+   }
+
+.current
+{
+    background-color: #0d6efd;
+    border:2px solid #0d6efd;
+    border-radius: 20px 0px;
+}
+
+.img-thumbnail {
+    padding: .25rem;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: .25rem;
+    max-width: 100%;
+    height: auto;
+}
+.lider
+{
+    font-size: 1.25rem;
+}
+.text-size
+{
+    font-size: 1.5rem;
+}

@@ -41,6 +41,7 @@ import { DefaultModule } from './layouts/default/default.module';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { PocetnatestComponent } from './pocetnatest/pocetnatest.component';
 import { ClickOutsideDirective } from './zajednickeKomponente/Komponente/clickOutside.directive';
+import { TeamComponent } from './team/team.component';
 
 @NgModule({
   declarations: [
@@ -58,7 +59,8 @@ import { ClickOutsideDirective } from './zajednickeKomponente/Komponente/clickOu
     TreningComponent,
     IzborParametaraComponent,
     PocetnatestComponent,
-    ClickOutsideDirective
+    ClickOutsideDirective,
+    TeamComponent
     
   ],
   imports: [

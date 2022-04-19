@@ -6,21 +6,29 @@
     background-size: cover;
 
    }
-.navbar-nav .igra
+.around-image
 {
-    border:2px solid #2B65EC;
+    max-height: 60%;
+    min-height: 50%;
+}
+.image 
+{
+    max-width: 400px;
+    max-height: 400px;
+    min-width: 250px;
+    min-height: 300px;
+}
+.current
+{
+    background-color: #0d6efd;
+    border:2px solid #0d6efd;
     border-radius: 20px 0px;
 }
 
-.igra:hover
-{
-    background-color: #2B65EC;
-    transition: 250ms ;
-}
 
 .content 
 {
-    height: calc(100vh - 68px);
+    height: 500px;
 }
 
 .glass-effect
@@ -28,25 +36,41 @@
     background-color: rgba(225, 18, 18, 0.15);  
     backdrop-filter: blur(5px);
 }
-
+.content
+{
+    height: 600px;
+}
 .image img
 {
     width: 100%;
     height: 100%;
 }
+.text-col
+{
+    max-height: 40%;
+    min-height: 30%;
+}
+.content-text
+{
+    font-size: 40px;
+}
 
+.about-app
+{
+    color: white;
+}
 .content-part::before
 {
     content: "";
     position: absolute;
 }
-.content-part:nth-child(even)
+.content-part:nth-child(odd)
 {
     position: relative;
     height: 400px;
     background-color: rgba(45, 57, 70, 0.4);
 }
-.content-part:nth-child(odd)
+.content-part:nth-child(even)
 {
     height: 400px;
 }

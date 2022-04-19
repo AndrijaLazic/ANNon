@@ -15,6 +15,7 @@ import { NotAuthGuard } from './shared/not-auth.guard';
 import { StatisticComponent } from './statistic/statistic.component';
 import { TreningComponent } from './trening/trening.component';
 import { PocetnatestComponent } from './pocetnatest/pocetnatest.component';
+import { TeamComponent } from './team/team.component';
 const routes: Routes = [
   {
     path:'',
@@ -54,6 +55,9 @@ const routes: Routes = [
   },
   {
     path:"test",component:PocetnatestComponent
+  },
+  {
+    path:"team",component:TeamComponent
   },
   {
     path:'success-register',component:RegisterParentComponent,canActivate:[AuthRegisterGuard]
