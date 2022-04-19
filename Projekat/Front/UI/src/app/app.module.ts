@@ -22,7 +22,7 @@ import { NgxSliderModule } from '@angular-slider/ngx-slider';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from "@angular/material/form-field";
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
-
+import { MatIconModule } from '@angular/material/icon';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { VerifikacijaComponent } from './proba/verifikacija/verifikacija.component';
@@ -41,7 +41,7 @@ import { DefaultModule } from './layouts/default/default.module';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { PocetnatestComponent } from './pocetnatest/pocetnatest.component';
 import { ClickOutsideDirective } from './zajednickeKomponente/Komponente/clickOutside.directive';
-
+import { MojNalogComponent } from './moj-nalog/moj-nalog.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -58,7 +58,8 @@ import { ClickOutsideDirective } from './zajednickeKomponente/Komponente/clickOu
     TreningComponent,
     IzborParametaraComponent,
     PocetnatestComponent,
-    ClickOutsideDirective
+    ClickOutsideDirective,
+    MojNalogComponent
     
   ],
   imports: [
@@ -84,7 +85,8 @@ import { ClickOutsideDirective } from './zajednickeKomponente/Komponente/clickOu
     NgxSliderModule,
     MatInputModule,
     MatFormFieldModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    MatIconModule
   ],
   providers: [],
   bootstrap: [AppComponent],

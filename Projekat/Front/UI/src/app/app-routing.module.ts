@@ -4,7 +4,6 @@ import { DefaultComponent } from './layouts/default/default.component';
 import { LoginParentComponent } from './login-parent/login-parent.component';
 import { LoginComponent } from './login-parent/login/login.component';
 import { HomeComponent } from './moduli/home/home.component';
-import { MojNalogComponent } from './moduli/moj-nalog/moj-nalog.component';
 import { PocetnastranaComponent } from './pocetnastrana/pocetnastrana.component';
 import { VerifikacijaComponent } from './proba/verifikacija/verifikacija.component';
 import { RegisterParentComponent } from './register-parent/register-parent.component';
@@ -15,6 +14,7 @@ import { NotAuthGuard } from './shared/not-auth.guard';
 import { StatisticComponent } from './statistic/statistic.component';
 import { TreningComponent } from './trening/trening.component';
 import { PocetnatestComponent } from './pocetnatest/pocetnatest.component';
+import { MojNalogComponent } from './moj-nalog/moj-nalog.component';
 const routes: Routes = [
   {
     path:'',

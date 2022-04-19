@@ -1,0 +1,114 @@
+.container{
+    background-image: linear-gradient(to bottom right, #023E8A, #002e4c);
+    color: white;
+}
+
+.vertical-center {
+    min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
+  
+    display: flex;
+    align-items: center;
+}
+
+.window{
+    min-width: fit-content;
+    max-width: 30%;
+    margin: auto;
+    padding:30px;
+    padding-left: 7%;
+    padding-right: 7%;
+    text-align:center;
+    border-radius:20px;
+    backdrop-filter:blur(20px) brightness(60%);
+    color:white;
+}
+
+
+
+
+.FormaZaIzmenuPodatakaOKorisniku ::ng-deep .mat-form-field-wrapper{
+    background-clip: content-box;
+    background-image: linear-gradient(to bottom right, #023E8A, #002e4c);
+    margin-top: 2px;
+    border-radius: 10px;
+    color: white;
+}
+
+/* Input kada se klikne na njega */
+.FormaZaIzmenuPodatakaOKorisniku ::ng-deep .mat-form-field-wrapper label{
+    color: white;
+}
+.FormaZaIzmenuPodatakaOKorisniku ::ng-deep .mat-form-field.mat-focused .mat-form-field-label {
+    color: #415ce4;
+}
+.FormaZaIzmenuPodatakaOKorisniku ::ng-deep .mat-form-field.mat-focused .mat-form-field-label {
+        color: #415ce4;
+}
+.FormaZaIzmenuPodatakaOKorisniku ::ng-deep .mat-form-field.mat-focused .mat-form-field-ripple {
+        background-color: #415ce4;
+}
+.FormaZaIzmenuPodatakaOKorisniku ::ng-deep .mat-form-field.mat-focused.mat-form-field-required-marker {
+        color: #415ce4;
+}
+.FormaZaIzmenuPodatakaOKorisniku ::ng-deep .mat-form-field.mat-focused.mat-input-element {
+        color: #415ce4;
+}
+
+
+/*Kada nije validan*/
+
+.FormaZaIzmenuPodatakaOKorisniku ::ng-deep .mat-form-field.mat-form-field-invalid .mat-input-element {
+    color: #ed1f1f;
+}
+.FormaZaIzmenuPodatakaOKorisniku ::ng-deep .mat-form-field.mat-form-field-invalid .mat-form-field-label {
+    color: #ed1f1f;
+}
+.FormaZaIzmenuPodatakaOKorisniku ::ng-deep .mat-form-field.mat-form-field-invalid .mat-form-field-required-marker {
+    color: #ed1f1f;
+} 
+.FormaZaIzmenuPodatakaOKorisniku::ng-deep .mat-form-field.mat-form-field-invalid .mat-form-field-ripple {
+    background-color: #ed1f1f;
+}
+
+/* hover za dugme */
+.btn {
+    text-decoration: none;
+    border: 1px solid rgb(146, 148, 248);
+    position: relative;
+    overflow: hidden;
+    color: white;
+}
+
+.btn:hover {
+    box-shadow: 1px 1px 15px 5px rgba(146, 148, 248, 0.4);
+  }
+  
+.btn:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      120deg,
+      transparent,
+      rgba(146, 148, 248, 0.4),
+      transparent
+    );
+    transition: all 650ms;
+  }
+  
+.btn:hover:before {
+    left: 100%;
+  }
+
+
+  /* fix za autofill */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+  transition: background-color 5000s;
+  -webkit-text-fill-color: #fff !important;
+  }
