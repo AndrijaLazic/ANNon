@@ -110,7 +110,9 @@
                                         </td>
                                         <td [innerHTML]="stats[i]"></td>
                                         <td>
-                                            <button class="dugme" mat-raised-button color="primary" (click)="iscrtajGraf(kolone[i])" >Prikazi graf!</button>                 
+                                          <mat-slide-toggle [checked]="checked1" (change)="iscrtajGraf(kolone[i],$event,1)">Prikazi Linijski grafik za datu kolonu</mat-slide-toggle>
+                                          <mat-slide-toggle [checked]="checked2" (change)="iscrtajGraf(kolone[i],$event,2)">Prikazi stubicasti grafik za datu kolonu</mat-slide-toggle>
+                                            <!--<button class="dugme" mat-raised-button color="primary" (click)="iscrtajGraf(kolone[i])" >Prikazi graf!</button>  -->               
                                                 <div id="divChart">
                                                     <canvas  id={{kolone[i]}}></canvas>
                                                 </div> 

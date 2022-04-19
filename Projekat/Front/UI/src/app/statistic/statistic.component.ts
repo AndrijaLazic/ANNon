@@ -15,6 +15,8 @@ import { ToastrService } from 'ngx-toastr';
 export class StatisticComponent implements OnInit {
   kolone=new Array();
   stats=new Array();
+  checked1=false;
+  checked2=false;
   kategorije=new Array();
   prazna=new Array();
   collapse=new Array();
@@ -372,9 +374,14 @@ listaKolona=[];
     
   }
 
-  iscrtajGraf(event:any){
+  iscrtajGraf(event:any,event2:any,event3:any){
     this.vrednost = event;
-    
+    if(event3==1)
+        this.checked1=event2.checked;
+    if(event3==2)
+        this.checked2=event2.checked;
+
+    console.log(this.checked1,this.checked2);
     for(let i=0;i<Object.keys(this.statistika['numericke_kolone']).length;i++)
       {
         if(this.vrednost==this.statistika['numericke_kolone'][i]['ime_kolone'])
@@ -382,26 +389,86 @@ listaKolona=[];
             if (this.myChart) 
                 this.myChart.destroy();
           //graf
-          this.myChart=new Chart(this.vrednost, {
-            type: 'line',
-            data: {
-                labels: Object.keys(this.statistika['numericke_kolone'][i]['column_chart_data']) ,
-                datasets: [{
-                    label: 'Broj redova',
-                    tension: 0.5,
-                    data: Object.values(this.statistika['numericke_kolone'][i]['column_chart_data']),
-                }]
-            },
-            options: {
-                scales: {
-                    
-                    y: {
-                        beginAtZero: true
+          if(this.checked1==false && this.checked2==false)
+          {
+              this.myChart.destroy;
+          }
+          else if(this.checked1==true && this.checked2==false)
+          {
+            this.myChart=new Chart(this.vrednost, {
+                type: 'line',
+                data: {
+                    labels: Object.keys(this.statistika['numericke_kolone'][i]['column_chart_data']) ,
+                    datasets: [{
+                        label: 'Broj redova',
+                        tension: 0.5,
+                        data: Object.values(this.statistika['numericke_kolone'][i]['column_chart_data']),
+                    }  
+                ]
+                },
+                options: {
+                    scales: {
+                        
+                        y: {
+                            beginAtZero: true
+                        }
                     }
                 }
-            }
-        })
-        ;
+            });
+          }
+          else if(this.checked1==false && this.checked2==true)
+          {
+            this.myChart=new Chart(this.vrednost, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(this.statistika['numericke_kolone'][i]['column_chart_data']) ,
+                    datasets: [{
+                        label: 'Broj redova',
+                        data: Object.values(this.statistika['numericke_kolone'][i]['column_chart_data']),
+                    }  
+                ]
+                },
+                options: {
+                    scales: {
+                        
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+          }
+          else
+          {
+            this.myChart=new Chart(this.vrednost, {
+                type: 'line',
+                data: {
+                    labels: Object.keys(this.statistika['numericke_kolone'][i]['column_chart_data']) ,
+                    datasets: [{
+                        type:'line',
+                        label: 'Broj redova',
+                        tension: 0.5,
+                        data: Object.values(this.statistika['numericke_kolone'][i]['column_chart_data']),
+                    },
+                    {
+                        type:'bar',
+                        label: 'Broj redova',
+                        data: Object.values(this.statistika['numericke_kolone'][i]['column_chart_data']),
+                    }
+                
+                ]
+                },
+                options: {
+                    scales: {
+                        
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+          }
+
         }
       }
 
@@ -414,24 +481,85 @@ listaKolona=[];
             if (this.myChart) 
                 this.myChart.destroy();
           //graf
-          this.myChart=new Chart(this.vrednost, {
-            type: 'bar',
-            data: {
-                labels: Object.keys(this.statistika['kategoricke_kolone'][i]['column_chart_data']) ,
-                datasets: [{
-                    label: 'Broj redova',
-                    data: Object.values(this.statistika['kategoricke_kolone'][i]['column_chart_data']),
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
+          if(this.checked1==false && this.checked2==false)
+          {
+              this.myChart.destroy;
+          }
+          else if(this.checked1==true && this.checked2==false)
+          {
+            this.myChart=new Chart(this.vrednost, {
+                type: 'line',
+                data: {
+                    labels: Object.keys(this.statistika['kategoricke_kolone'][i]['column_chart_data']) ,
+                    datasets: [{
+                        label: 'Broj redova',
+                        tension: 0.5,
+                        data: Object.values(this.statistika['kategoricke_kolone'][i]['column_chart_data']),
+                    }  
+                ]
+                },
+                options: {
+                    scales: {
+                        
+                        y: {
+                            beginAtZero: true
+                        }
                     }
                 }
-            }
-        })
-        ;
+            });
+          }
+          else if(this.checked1==false && this.checked2==true)
+          {
+            this.myChart=new Chart(this.vrednost, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(this.statistika['kategoricke_kolone'][i]['column_chart_data']) ,
+                    datasets: [{
+                        label: 'Broj redova',
+                        data: Object.values(this.statistika['kategoricke_kolone'][i]['column_chart_data']),
+                    }  
+                ]
+                },
+                options: {
+                    scales: {
+                        
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+          }
+          else
+          {
+            this.myChart=new Chart(this.vrednost, {
+                type: 'line',
+                data: {
+                    labels: Object.keys(this.statistika['kategoricke_kolone'][i]['column_chart_data']) ,
+                    datasets: [{
+                        type:'line',
+                        label: 'Broj redova',
+                        tension: 0.5,
+                        data: Object.values(this.statistika['kategoricke_kolone'][i]['column_chart_data']),
+                    },
+                    {
+                        type:'bar',
+                        label: 'Broj redova',
+                        data: Object.values(this.statistika['kategoricke_kolone'][i]['column_chart_data']),
+                    }
+                
+                ]
+                },
+                options: {
+                    scales: {
+                        
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+          }
         }
       }
 
@@ -537,6 +665,8 @@ listaKolona=[];
             
         } 
       }
+      this.checked1=false;
+      this.checked2=false;
 
   }
   smanji(id:any){
