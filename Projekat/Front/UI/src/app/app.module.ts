@@ -22,7 +22,7 @@ import { NgxSliderModule } from '@angular-slider/ngx-slider';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from "@angular/material/form-field";
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
-
+import { MatIconModule } from '@angular/material/icon';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { VerifikacijaComponent } from './proba/verifikacija/verifikacija.component';
@@ -41,8 +41,12 @@ import { DefaultModule } from './layouts/default/default.module';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { PocetnatestComponent } from './pocetnatest/pocetnatest.component';
 import { ClickOutsideDirective } from './zajednickeKomponente/Komponente/clickOutside.directive';
+<<<<<<< HEAD
 import { TeamComponent } from './team/team.component';
 
+=======
+import { MojNalogComponent } from './moj-nalog/moj-nalog.component';
+>>>>>>> 3de81786c880c40323b665ed846cbc07a4f2b103
 @NgModule({
   declarations: [
     AppComponent,
@@ -60,7 +64,11 @@ import { TeamComponent } from './team/team.component';
     IzborParametaraComponent,
     PocetnatestComponent,
     ClickOutsideDirective,
+<<<<<<< HEAD
     TeamComponent
+=======
+    MojNalogComponent
+>>>>>>> 3de81786c880c40323b665ed846cbc07a4f2b103
     
   ],
   imports: [
@@ -86,7 +94,8 @@ import { TeamComponent } from './team/team.component';
     NgxSliderModule,
     MatInputModule,
     MatFormFieldModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    MatIconModule
   ],
   providers: [],
   bootstrap: [AppComponent],

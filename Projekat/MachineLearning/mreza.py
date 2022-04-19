@@ -184,7 +184,7 @@ def make_regression_model(data,hiperparametri:Hiperparametri):
 
   all_inputs,encoded_features=prepare_preprocess_layers(data,hiperparametri.izlazna_kolona,train)
   model=make_model(all_inputs,encoded_features,hiperparametri.slojevi,hiperparametri.mera_greske,hiperparametri.mera_uspeha)
-  return model,train,val
+  return model,train,val,test
 
 def make_classification_model(data, hiperparametri:Hiperparametri):
   

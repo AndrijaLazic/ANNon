@@ -6,6 +6,7 @@ from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect,HTTPExcepti
 from fastapi.responses import HTMLResponse
 from fastapi import Body
 import statistics as stats
+from matplotlib import testing
 import pandas as pd
 from pydantic import BaseModel, Json
 from requests.api import request
@@ -23,6 +24,10 @@ class UploadedFile(BaseModel):
     userID:str
     FileName:str
     Putanja:str
+
+class TestRequest(BaseModel):
+    userID:str
+    metric:str
 
 class FileWithStatistic:
     FileName:str
@@ -46,6 +51,8 @@ class ConnectionManager:
     def __init__(self):
         self.active_connections: Dict= {}
         self.filePaths:Dict={}
+        self.testSets:Dict={}
+        self.models:Dict={}
 
     async def connect(self, websocket: WebSocket,client_id:str):
         await websocket.accept()
@@ -70,6 +77,16 @@ class ConnectionManager:
 
     async def getFilePath(self,client_id:str):
         return self.filePaths[client_id]
+    
+    async def addTestSet(self,client_id:str,set,target):
+        self.testSets[client_id]=(set,target)
+    
+    async def getTestSet(self,client_id):
+        return self.testSets[client_id]
+    async def addModel(self,client_id:str,model):
+        self.models[client_id]=model
+    async def getModel(self,client_id):
+        return self.models[client_id]
 
 
 manager = ConnectionManager()
@@ -118,20 +135,33 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str):
                 model["BrojEpoha"],
                 model["UlazneKolone"],
                 model["IzlaznaKolona"])
-            model,train,val=make_regression_model(fajl,hiperparametri)
+            model,train,val,test=make_regression_model(fajl,hiperparametri)
+            await manager.addTestSet(client_id,test,hiperparametri.izlazna_kolona)
             filename=await sync_to_async(train_model)(model,train,val,hiperparametri.izlazna_kolona,client_id,hiperparametri.broj_epoha)
+            await manager.addModel(client_id,model)
             #testiranje
             #await sync_to_async(test_model)(filename,train,hiperparametri.izlazna_kolona)
             #await manager.send_text(client_id,"radisdadasd")
     except WebSocketDisconnect:
         manager.disconnect(client_id)
 
-@app.post("/compare")
-async def compare_request(request:Request):
-    return ResponseModel(0,"proslo").toJSON()
 @app.post("/publish/epoch/end")
 async def post_data(request:Request):
     result=await request.json()
     await manager.send_text(result['to_send'],str(result))
     await manager.receive_text(result['to_send'])
     print(result)
+
+@app.post("/compare")
+async def start_testing(
+    model:TestRequest
+):
+    test,target=await manager.getTestSet(model.userID)
+    model=await manager.getModel(model.userID)
+    result=test_model(model,test,target)
+    #ovako samo za regresiju
+    recnik={"loss":result[0],"metric":result[1]}
+    ret=ResponseModel(0,json.dumps(recnik)).toJSON()
+    return ret
+    
+

@@ -122,19 +122,14 @@ namespace Projekat.Controllers
                     return BadRequest("Pogresna sifra");
                 }
 
-                Korisnik revertKorisnik = new Korisnik();
-                revertKorisnik.ProfileImage = korisnik.ProfileImage;
-                revertKorisnik.Username = korisnik.Username;
-                revertKorisnik.PasswordHash = korisnik.PasswordHash;
-                revertKorisnik.PasswordSalt= korisnik.PasswordSalt;
-                revertKorisnik.Email = korisnik.Email;
+                
 
                 if (!string.IsNullOrEmpty(izmene.Username))
                 {
                     Korisnik korisnik2 = _context.Korisnici.Where(x => x.Username.Equals(izmene.Username)).FirstOrDefault();
                     if (korisnik2 != null)
                     {
-                        korisnik = revertKorisnik;
+                        
                         return BadRequest("Vec postoji korisnik sa datim username-om");
                     }
                         
@@ -151,11 +146,16 @@ namespace Projekat.Controllers
                     Korisnik korisnik2 = _context.Korisnici.Where(x => x.Email.Equals(izmene.Email)).FirstOrDefault();
                     if (korisnik2 != null)
                     {
-                        korisnik = revertKorisnik;
+                        
                         return BadRequest("Vec postoji korisnik sa datim Email-om");
                     }
                         
                     korisnik.Email=izmene.Email;
+                }
+                if (izmene.image != null)
+                {
+                    korisnik.ProfileImage = RadSaFajlovima.upisiSliku(korisnik.ID, izmene.image);
+                    
                 }
                 await _context.SaveChangesAsync();
                 return Ok("Uspesna izmena naloga");
