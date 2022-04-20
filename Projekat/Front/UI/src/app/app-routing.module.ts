@@ -50,7 +50,7 @@ const routes: Routes = [
     path:'signup',component:RegisterComponent,canActivate:[NotAuthGuard]
   },
   {
-    path:'verifikacija',component:VerifikacijaComponent,canActivate:[AuthRegisterGuard]
+    path:'verifikacija',component:VerifikacijaComponent
   },
   {
     path:"test",component:PocetnatestComponent

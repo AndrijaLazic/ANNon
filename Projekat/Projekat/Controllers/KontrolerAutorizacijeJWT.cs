@@ -107,13 +107,15 @@ namespace Projekat.Controllers
         }
 
         [HttpPost("IzmenaProfila")]
-        public async Task<ActionResult<string>> IzmenaProfila(string token,IzmeneProfilaDTO izmene)
+        public async Task<ActionResult<string>> IzmenaProfila(IzmeneProfilaDTO izmene)
         {
+            Debug.WriteLine(izmene.token);
             if (ModelState.IsValid)
             {
-                string? name = ValidateToken(token, this.configuration);
+                string? name = ValidateToken(izmene.token, this.configuration);
                 if (name == null)
                     return BadRequest("Los token/ ne postoji");
+                Debug.WriteLine(name);
                 Korisnik korisnik = _context.Korisnici.Where(x => x.Username.Equals(name)).FirstOrDefault();
                 if (korisnik == null)
                     return BadRequest("Dati korisnik ne postoji");
@@ -151,6 +153,10 @@ namespace Projekat.Controllers
                     }
                         
                     korisnik.Email=izmene.Email;
+                    korisnik.EmailPotvrdjen = false;
+                    string EmailToken = CreateToken(korisnik, int.Parse(configuration.GetSection("AppSettings:TrajanjeEmailTokenaUMinutima").Value.ToString()));
+                    korisnik.EmailToken = EmailToken;
+                    EmailKontroler.PosaljiEmail("Kliknite na link za potvrdu promene email adrese:http://localhost:4200/verifikacija?token=" + EmailToken, "Potvrda registracije", izmene.Email, configuration);
                 }
                 if (izmene.image != null)
                 {

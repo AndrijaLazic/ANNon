@@ -3,9 +3,26 @@
         <form [formGroup]="forma">
             <div class="row justify-content-center">
                 <div class="col-md-auto">
+                    
+                        <img [src]="url" title="Profile Picture" height="150px" width="150px" src="" />
+                        <input
+                        type="file"
+                        id="img"
+                        style="display:none"
+                        accept="image/*"
+                        (change)="onSelect($event)"
+                        
+                        />
+                        <br>
+              <label class="dugme btn" mat-raised-button color="primary" for="img">Choose image</label> 
+                    
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-md-auto">
                     <mat-form-field appearance="fill">
                         <mat-label>Username</mat-label>
-                        <input  matInput formControlName="Username" (cdkAutofill)="false">
+                        <input  matInput formControlName="Username" (cdkAutofill)="false" >
                     </mat-form-field>
                 </div>
             </div>
@@ -40,7 +57,7 @@
                 </div>
             </div>
             <hr>
-            <button class="dugme btn" mat-raised-button color="primary" >Sacuvaj izmene</button>
+            <button class="dugme btn" mat-raised-button color="primary" (click)="posaljiZahtev()" >Sacuvaj izmene</button>
         </form>
     </div>
 </div>
