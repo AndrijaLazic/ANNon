@@ -10,6 +10,9 @@ import {SharedService} from "../shared-statistic/shared.service";
 
 import { default as Konfiguracija } from '../../../KonfiguracioniFajl.json';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { DemoFilePickerAdapter } from './UploadAdapter.adapter';
+import { FilePreviewModel, UploaderCaptions, ValidationError } from 'ngx-awesome-uploader';
+import { delay, Observable, of } from 'rxjs';
 
 export class DataModel
 {
@@ -39,7 +42,8 @@ export class CsvTabelaComponent implements OnInit {
   statistika:Object;
   @Output() public onUploadFinished = new EventEmitter();
   
-  
+  public adapter = new DemoFilePickerAdapter(this.http);
+
   constructor(private spinner:NgxSpinnerService,private papa:Papa,private http:HttpClient,private toastr:ToastrService,private route:Router,private shared: SharedService 
     ) {
       this.model = new DataModel();
@@ -188,10 +192,80 @@ export class CsvTabelaComponent implements OnInit {
 
     
   }
-
+  public uploadSuccess(event): void {
+    console.log(event);
+  }
 
   ngOnInit(): void {
     
   }
 
+
+
+
+
+
+
+
+  MaksVelicinaFajla=60;
+
+  public myFiles: FilePreviewModel[] = [];
+
+  public captions: UploaderCaptions = {
+    dropzone: {
+      title: 'Fayllari bura ata bilersiz',
+      or: 'və yaxud',
+      browse: 'Fayl seçin',
+    },
+    cropper: {
+      crop: 'Iseci',
+      cancel: 'Prekini',
+    },
+    previewCard: {
+      remove: 'Izbriši',
+      uploadError: 'Greška pri ucitavanju fajla',
+    },
+  };
+
+  public cropperOptions = {
+    minContainerWidth: '300',
+    minContainerHeight: '300',
+  };
+
+  public onValidationError(error: ValidationError): void {
+    alert(this.myFiles.length)
+    if("FILE_MAX_SIZE"==error.error && this.myFiles.length==0){
+      alert("Maksimalna velicina fajla je "+this.MaksVelicinaFajla+" Mb")
+    }
+    else if("FILE_MAX_COUNT"==error.error){
+      alert("Izaberite samo jedan fajl")
+    }
+    else{
+      alert(`Validation Error ${error.error}`);
+    }
+  }
+
+  public onUploadSuccess(e: FilePreviewModel): void {
+    console.log(e);
+    console.log(this.myFiles);
+  }
+
+  public onRemoveSuccess(e: FilePreviewModel) {
+    console.log(e);
+  }
+  public onFileAdded(file: FilePreviewModel) {
+    
+  }
+
+
+  public myCustomValidator(file: File): Observable<boolean> {
+    if (!file.name.includes('uploader')) {
+      return of(true).pipe(delay(2000));
+    }
+    return of(false).pipe(delay(2000));
+  }
+
+  public dajVelicinuFajla(){
+    
+  }
 }

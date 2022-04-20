@@ -23,11 +23,36 @@
   <button class="navigator next" (click)="posaljiFajl()" *ngIf="podaci && podaci.length>0" style="height: 100%;">></button>
   <div class="container statistic">
     
-    <div class="col-md-auto dugme" style="width: 300px; margin: auto;border: 2px black solid; padding: 10px;border-radius: 15px;">
-      <label for="formFile" class="form-label">Dodaj csv fajl</label>
-      <input class="form-control " type="file" #file id="uploadData" multiple="false" accept=".csv"
-        (change)="onFileSelected($event)">
+    <div class="row justify-content-center">
+      <div class="col-md-auto">
+        <ngx-awesome-uploader *ngIf="myFiles.length<1"
+        #uploader
+        [adapter]="adapter"
+        [fileMaxCount]="1"
+        [fileMaxSize]="MaksVelicinaFajla"
+        [uploadType]="'Multi'"
+        [enableCropper]="true"
+        [cropperOptions]="cropperOptions"
+        (validationError)="onValidationError($event)"
+        [fileExtensions]="['csv','xml']"
+        (uploadSuccess)="onUploadSuccess($event)"
+        (removeSuccess)="onRemoveSuccess($event)"
+        (fileAdded)="onFileAdded($event)"
+        [customValidator]="myCustomValidator"
+        [captions]="captions"
+        [accept]="'.xml, .csv'">
+        <div class="dropzoneTemplate">
+          <p style="text-align: center">Prevuci fajl ili klikni za izbor</p>
+          <p></p>
+        </div>
+        
+        </ngx-awesome-uploader>
+        
+
+      </div>
     </div>
+    
+
     <div class="grid-wrapper" *ngIf="podaci">
       <button type="button" class="btn btn-dark" (click)="izbrisiSelektovano()">Obrisi selektovano</button>
       <button type="button" class="btn btn-dark" (click)="skiniFajl()">Download</button>

@@ -42,6 +42,9 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { PocetnatestComponent } from './pocetnatest/pocetnatest.component';
 import { ClickOutsideDirective } from './zajednickeKomponente/Komponente/clickOutside.directive';
 import { TeamComponent } from './team/team.component';
+import { FilePickerModule } from  'ngx-awesome-uploader';
+import { FilePickerAdapter } from 'ngx-awesome-uploader';
+
 
 import { MojNalogComponent } from './moj-nalog/moj-nalog.component';
 @NgModule({
@@ -89,7 +92,8 @@ import { MojNalogComponent } from './moj-nalog/moj-nalog.component';
     MatInputModule,
     MatFormFieldModule,
     MatSlideToggleModule,
-    MatIconModule
+    MatIconModule,
+    FilePickerModule
   ],
   providers: [],
   bootstrap: [AppComponent],
