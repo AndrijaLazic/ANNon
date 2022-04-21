@@ -60,7 +60,7 @@ const routes: Routes = [
     path:"team",component:TeamComponent
   },
   {
-    path:'success-register',component:RegisterParentComponent,canActivate:[AuthRegisterGuard]
+    path:'success-register',component:RegisterParentComponent
   }
   
 ];

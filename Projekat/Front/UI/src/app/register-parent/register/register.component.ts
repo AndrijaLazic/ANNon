@@ -42,7 +42,7 @@ export class RegisterComponent implements OnInit {
       res=>{
         this.spinner.hide("Spiner1");
         this.toastr.success(res['data']['message'])
-        this.cookie.set('register','uspesna')
+        this.cookie.set('email',this.service.email)
         this.route.navigate(['success-register'])
       },
       err=>{

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { CookieService } from 'ngx-cookie-service';
 import { RegisterServiceService } from '../shared/register-service.service';
 
 @Component({
@@ -8,10 +9,10 @@ import { RegisterServiceService } from '../shared/register-service.service';
 })
 export class RegisterParentComponent implements OnInit {
   domen:string;
-  constructor(private registerService:RegisterServiceService) { }
+  constructor(private registerService:RegisterServiceService,private cookie:CookieService) { }
 
   ngOnInit(): void {
-    let email=this.registerService.getEmail();
+    let email=this.cookie.get('email')
     this.domen=email.split('@')[1];
   }
 

@@ -7,6 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { LoginServiceService } from '../shared/login-service.service';
 import { MojNalogModel } from '../shared/mojnalog.model';
 
+
 @Component({
   selector: 'app-moj-nalog',
   templateUrl: './moj-nalog.component.html',
@@ -78,9 +79,20 @@ export class MojNalogComponent implements OnInit {
           {
             
             this.toastr.success(err['error']['text']);
-            this.cookie.delete('token');
-            this.route.navigate(['login']);
-          
+            
+            console.log(this.jwtHelper.decodeToken(this.token)['email']);
+            console.log(this.forma.get('Email')['value'])
+            if(this.jwtHelper.decodeToken(this.token)['email']!=this.forma.get('Email')['value'] && this.forma.get('Email')['value']!='')
+            {
+              this.cookie.set('email',this.forma.get('Email')['value']);
+              this.cookie.delete('token');
+              this.route.navigate(['success-register']);
+            }
+            else
+            {
+              this.cookie.delete('token');
+              this.route.navigate(['login']);
+            }
           }
           else
           {

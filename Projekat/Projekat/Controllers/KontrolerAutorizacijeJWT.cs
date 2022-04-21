@@ -175,7 +175,8 @@ namespace Projekat.Controllers
         {
             List<Claim> claims = new List<Claim>
             {
-                new Claim("username",korisnik.Username)
+                new Claim("username",korisnik.Username),
+                new Claim("email",korisnik.Email)
             };
 
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
