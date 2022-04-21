@@ -45,7 +45,7 @@ namespace Projekat.Controllers
                     korisnik.Email = zahtev.Email;
                     korisnik.PasswordHash = passwordHash;
                     korisnik.PasswordSalt = passwordSalt;
-                    string EmailToken = CreateToken(korisnik, int.Parse(configuration.GetSection("PodesavanjaZaFajlove:CsvFajl:Velicina").Value.ToString()));
+                    string EmailToken = CreateToken(korisnik, int.Parse(configuration.GetSection("AppSettings:TrajanjeEmailTokenaUMinutima").Value.ToString()));
                     korisnik.EmailToken = EmailToken;
                     korisnik.ProfileImage = "";
                     _context.Korisnici.Add(korisnik);

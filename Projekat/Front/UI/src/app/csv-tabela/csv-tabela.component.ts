@@ -179,12 +179,12 @@ export class CsvTabelaComponent implements OnInit {
           if(this.procenatUploada==100){
             this.spinner.hide("Spiner2");
             this.spinner.show("Spiner3");
-            this.getStatistic();
           }
         }
-          
         else if (event.type === HttpEventType.Response) {
           this.message = 'Upload success.';
+          this.spinner.show("Spiner3");
+          this.getStatistic();
           this.onUploadFinished.emit(event.body);
         }
       });
