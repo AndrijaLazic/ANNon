@@ -31,10 +31,14 @@ namespace Projekat.Clients
     {
         private readonly MachineLearningClient _iCustomClient;
         private readonly MySqlDbContext _context;
-        public MachineLearningController(MachineLearningClient iCustomClient,MySqlDbContext context)
+        private readonly IConfiguration configuration;
+        private static int VelicinaCsvFajla=0;
+        public MachineLearningController(MachineLearningClient iCustomClient,MySqlDbContext context, IConfiguration configuration)
         {
             _iCustomClient = iCustomClient;
             _context = context;
+            this.configuration = configuration;
+            VelicinaCsvFajla = int.Parse(configuration.GetSection("AppSettings:TrajanjeEmailTokenaUMinutima").Value.ToString());
         }
 
         [HttpGet("mean")]
@@ -47,10 +51,13 @@ namespace Projekat.Clients
 
 
 
-
-        [HttpPost("uploadFile"), DisableRequestSizeLimit]
-        public async Task<IActionResult> UploadFile([FromForm] IFormFile uploadedFile, [FromForm]string userID)
+        //[RequestFormLimits(ValueLengthLimit = 3000, MultipartBodyLengthLimit = 3000)]
+        [RequestSizeLimit(100000000)]
+        [HttpPost("uploadFile")]
+        public async Task<IActionResult> UploadFile([FromForm] IFormFile uploadedFile, [FromForm]string userID, [FromForm] string? PrvoSlanje)
         {
+            if(PrvoSlanje!=null)
+                return Ok(true);
             string imeFajla;
             try
             {

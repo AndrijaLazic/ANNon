@@ -45,7 +45,7 @@ namespace Projekat.Controllers
                     korisnik.Email = zahtev.Email;
                     korisnik.PasswordHash = passwordHash;
                     korisnik.PasswordSalt = passwordSalt;
-                    string EmailToken = CreateToken(korisnik, int.Parse(configuration.GetSection("AppSettings:TrajanjeEmailTokenaUMinutima").Value.ToString()));
+                    string EmailToken = CreateToken(korisnik, int.Parse(configuration.GetSection("PodesavanjaZaFajlove:CsvFajl:Velicina").Value.ToString()));
                     korisnik.EmailToken = EmailToken;
                     korisnik.ProfileImage = "";
                     _context.Korisnici.Add(korisnik);
@@ -105,7 +105,7 @@ namespace Projekat.Controllers
             return Ok(token);
 
         }
-
+        
         [HttpPost("IzmenaProfila")]
         public async Task<ActionResult<string>> IzmenaProfila(IzmeneProfilaDTO izmene)
         {
@@ -124,14 +124,19 @@ namespace Projekat.Controllers
                     return BadRequest("Pogresna sifra");
                 }
 
-                
+                Korisnik revertKorisnik = new Korisnik();
+                revertKorisnik.ProfileImage = korisnik.ProfileImage;
+                revertKorisnik.Username = korisnik.Username;
+                revertKorisnik.PasswordHash = korisnik.PasswordHash;
+                revertKorisnik.PasswordSalt= korisnik.PasswordSalt;
+                revertKorisnik.Email = korisnik.Email;
 
                 if (!string.IsNullOrEmpty(izmene.Username))
                 {
                     Korisnik korisnik2 = _context.Korisnici.Where(x => x.Username.Equals(izmene.Username)).FirstOrDefault();
                     if (korisnik2 != null)
                     {
-                        
+                        korisnik = revertKorisnik;
                         return BadRequest("Vec postoji korisnik sa datim username-om");
                     }
                         
@@ -148,7 +153,7 @@ namespace Projekat.Controllers
                     Korisnik korisnik2 = _context.Korisnici.Where(x => x.Email.Equals(izmene.Email)).FirstOrDefault();
                     if (korisnik2 != null)
                     {
-                        
+                        korisnik = revertKorisnik;
                         return BadRequest("Vec postoji korisnik sa datim Email-om");
                     }
                         
@@ -157,11 +162,6 @@ namespace Projekat.Controllers
                     string EmailToken = CreateToken(korisnik, int.Parse(configuration.GetSection("AppSettings:TrajanjeEmailTokenaUMinutima").Value.ToString()));
                     korisnik.EmailToken = EmailToken;
                     EmailKontroler.PosaljiEmail("Kliknite na link za potvrdu promene email adrese:http://localhost:4200/verifikacija?token=" + EmailToken, "Potvrda registracije", izmene.Email, configuration);
-                }
-                if (izmene.image != null)
-                {
-                    korisnik.ProfileImage = RadSaFajlovima.upisiSliku(korisnik.ID, izmene.image);
-                    
                 }
                 await _context.SaveChangesAsync();
                 return Ok("Uspesna izmena naloga");
