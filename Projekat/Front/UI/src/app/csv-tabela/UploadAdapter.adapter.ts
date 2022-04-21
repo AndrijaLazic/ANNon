@@ -18,10 +18,12 @@ import {
     constructor(private http: HttpClient) {
       super();
     }
+    progresUploada=0;
     public uploadFile(fileItem: FilePreviewModel): Observable<UploadResponse> {
       const form = new FormData();
       form.append('uploadedFile', fileItem.file);
       form.append("userID",sessionStorage.getItem("userId"));
+      form.append('PrvoSlanje', 'PrvoSlanje');
       const baseURL=Konfiguracija.KonfiguracijaServera.osnovniURL
       const api = baseURL+"api/MachineLearning/uploadFile";
       
@@ -37,10 +39,12 @@ import {
           } else if (res.type === HttpEventType.UploadProgress) {
             /** Predstavlja procenat upload-a: */
             const uploadProgress = +Math.round((100 * res.loaded) / res.total);
+            this.progresUploada=uploadProgress;
             return {
               status: UploadStatus.IN_PROGRESS,
               progress: uploadProgress
             };
+
           }
         }),
         catchError(er => {
@@ -56,5 +60,8 @@ import {
       const removeApi =
         'https://run.mocky.io/v3/dedf88ec-7ce8-429a-829b-bd2fc55352bc';
       return this.http.post(removeApi, { id });
+    }
+    public dajUploadProgres(){
+      return this.progresUploada;
     }
   }

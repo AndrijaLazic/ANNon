@@ -5,7 +5,7 @@
   type="line-scale"
   name="Spiner1"
 >
-  <p style="font-size: 20px; color: white">Ucitavanje tebele...</p>
+  <p style="font-size: 20px; color: white">Ucitavanje fajla...</p>
 </ngx-spinner>
 
 <ngx-spinner
@@ -16,31 +16,44 @@
   name="Spiner2"
   
 >
-  <p style="font-size: 20px; color: white">Obrada podataka...</p>
+  <p style="font-size: 20px; color: white">Obrada podataka...{{procenatUploada}} %</p>
 </ngx-spinner>
 
+<ngx-spinner
+  bdColor="rgba(51,51,51,0.8)"
+  size="medium"
+  color="#fff"
+  type="timer"
+  name="Spiner3"
+  
+>
+  <p style="font-size: 20px; color: white">Obrada statistike...</p>
+</ngx-spinner>
+
+
+
 <div class="container">
-  <button class="navigator next" (click)="posaljiFajl()" *ngIf="podaci && podaci.length>0" style="height: 100%;">></button>
+  <button class="navigator next" (click)="uploadFile()" *ngIf="podaci && podaci.length>0" style="height: 100%;">></button>
   <div class="container statistic">
     
     <div class="row justify-content-center">
       <div class="col-md-auto">
-        <ngx-awesome-uploader *ngIf="myFiles.length<1"
+        <ngx-awesome-uploader *ngIf="myFiles.length<1" id="PoljeZaUnos"
         #uploader
         [adapter]="adapter"
         [fileMaxCount]="1"
         [fileMaxSize]="MaksVelicinaFajla"
-        [uploadType]="'Multi'"
+        [uploadType]="'Single'"
         [enableCropper]="true"
         [cropperOptions]="cropperOptions"
         (validationError)="onValidationError($event)"
-        [fileExtensions]="['csv','xml']"
+        [fileExtensions]="['csv','xls']"
         (uploadSuccess)="onUploadSuccess($event)"
         (removeSuccess)="onRemoveSuccess($event)"
         (fileAdded)="onFileAdded($event)"
         [customValidator]="myCustomValidator"
         [captions]="captions"
-        [accept]="'.xml, .csv'">
+        [accept]="'.xls, .csv'">
         <div class="dropzoneTemplate">
           <p style="text-align: center">Prevuci fajl ili klikni za izbor</p>
           <p></p>
@@ -53,11 +66,9 @@
     </div>
     
 
-    <div class="grid-wrapper" *ngIf="podaci">
+    <div class="grid-wrapper" *ngIf="podaci.length>0">
       <button type="button" class="btn btn-dark" (click)="izbrisiSelektovano()">Obrisi selektovano</button>
       <button type="button" class="btn btn-dark" (click)="skiniFajl()">Download</button>
-      
-      
       <br>
       <ag-grid-angular style="height: 520px;" class="ag-theme-alpine-dark" [rowData]="RedoviPodaci"
         [columnDefs]="KoloneDef" [pagination]="true" [paginationPageSize]="brojElemenataNaStrani"

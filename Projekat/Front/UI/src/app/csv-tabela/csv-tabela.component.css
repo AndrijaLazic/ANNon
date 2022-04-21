@@ -80,7 +80,7 @@
 }
 
 
-#PojeZaUnos ::ng-deep span.ngx-checkmark::after{
+#PoljeZaUnos ::ng-deep span.ngx-checkmark::after{
     content: "";
     position: absolute;
     display: block;
@@ -92,4 +92,7 @@
     border-width: 0 3px 3px 0;
     transform: scaleX(-1) rotate(45deg);
     
+}
+#PoljeZaUnos ::ng-deep .ngx-checkmark-wrapper{
+    opacity: 0;
 }

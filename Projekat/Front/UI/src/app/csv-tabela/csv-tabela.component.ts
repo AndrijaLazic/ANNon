@@ -1,4 +1,4 @@
-import { HttpClient, HttpEventType, HttpHeaders, HttpRequest, JsonpClientBackend,HttpParams } from '@angular/common/http';
+import { HttpClient, HttpEventType, HttpHeaders, HttpRequest, JsonpClientBackend,HttpParams, HttpEvent } from '@angular/common/http';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Papa, ParseResult } from 'ngx-papaparse';
 import { ColDef,GridApi,GridReadyEvent,CellValueChangedEvent, ComponentStateChangedEvent, GridColumnsChangedEvent, CsvExportParams } from 'ag-grid-community';
@@ -11,8 +11,9 @@ import {SharedService} from "../shared-statistic/shared.service";
 import { default as Konfiguracija } from '../../../KonfiguracioniFajl.json';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DemoFilePickerAdapter } from './UploadAdapter.adapter';
-import { FilePreviewModel, UploaderCaptions, ValidationError } from 'ngx-awesome-uploader';
-import { delay, Observable, of } from 'rxjs';
+import { FilePreviewModel, UploaderCaptions, UploadResponse, UploadStatus, ValidationError } from 'ngx-awesome-uploader';
+import { catchError, delay, map, Observable, of } from 'rxjs';
+import { UploadFajlServisService } from './upload-fajl-servis.service';
 
 export class DataModel
 {
@@ -32,7 +33,7 @@ export class CsvTabelaComponent implements OnInit {
   public brojElemenataNaStrani = 10;
   private gridApi!: GridApi;
   zaglavlja:any[] = [];
-  podaci:any = null;
+  podaci=[];
   sent:boolean = false;
   received:boolean=false;
   public progress: number;
@@ -43,7 +44,7 @@ export class CsvTabelaComponent implements OnInit {
   @Output() public onUploadFinished = new EventEmitter();
   
   public adapter = new DemoFilePickerAdapter(this.http);
-
+  public UploadServis=new UploadFajlServisService(this.http);
   constructor(private spinner:NgxSpinnerService,private papa:Papa,private http:HttpClient,private toastr:ToastrService,private route:Router,private shared: SharedService 
     ) {
       this.model = new DataModel();
@@ -64,22 +65,14 @@ export class CsvTabelaComponent implements OnInit {
   onComponentStateChanged(event: ComponentStateChangedEvent){
     this.spinner.hide("Spiner1");
   }
-  onFileSelected(event:Event)
+  onFileSelected(fajl: FilePreviewModel)
   {
     
-
-    // setTimeout(() => {
-    //   /** spinner ends after 5 seconds */
-    //   this.spinner.hide();
-    // }, 5000);
-    const element = event.currentTarget as HTMLInputElement;
-    let fileList: FileList | null = element.files;
-    
-    if (fileList && fileList?.length > 0) 
+    if (fajl) 
     {
       this.spinner.show("Spiner1")
-      var file = fileList[0];
-      this.imeFajla=file.name;
+      var file = fajl.file;
+      this.imeFajla=fajl.fileName;
       var parseResult : ParseResult = this.papa.parse(file,{
         header: true,
         skipEmptyLines:true,
@@ -166,6 +159,36 @@ export class CsvTabelaComponent implements OnInit {
       
   }
 
+  procenatUploada=0;
+  public uploadFile(){
+    this.spinner.show("Spiner2");
+    const params:CsvExportParams = {suppressQuotes: true,columnSeparator:"|"};
+    let file = new File([this.gridApi.getDataAsCsv(params)],this.imeFajla ,{type: 'application/vnd.ms-excel'});
+    const form = new FormData();
+    
+    
+    form.append("uploadedFile",file);
+    form.append("userID",sessionStorage.getItem("userId"));
+    const baseURL=Konfiguracija.KonfiguracijaServera.osnovniURL
+    const api = baseURL+"api/MachineLearning/uploadFile";
+    
+    this.http.post(api, form, {reportProgress: true, observe: 'events'})
+      .subscribe(event => {
+        if (event.type === HttpEventType.UploadProgress){
+          this.procenatUploada = Math.round(100 * event.loaded / event.total);
+          if(this.procenatUploada==100){
+            this.spinner.hide("Spiner2");
+            this.spinner.show("Spiner3");
+            this.getStatistic();
+          }
+        }
+          
+        else if (event.type === HttpEventType.Response) {
+          this.message = 'Upload success.';
+          this.onUploadFinished.emit(event.body);
+        }
+      });
+  }
   getStatistic()
   {
     const params = new HttpParams()
@@ -207,7 +230,7 @@ export class CsvTabelaComponent implements OnInit {
 
 
 
-  MaksVelicinaFajla=60;
+  MaksVelicinaFajla=100;
 
   public myFiles: FilePreviewModel[] = [];
 
@@ -233,7 +256,6 @@ export class CsvTabelaComponent implements OnInit {
   };
 
   public onValidationError(error: ValidationError): void {
-    alert(this.myFiles.length)
     if("FILE_MAX_SIZE"==error.error && this.myFiles.length==0){
       alert("Maksimalna velicina fajla je "+this.MaksVelicinaFajla+" Mb")
     }
@@ -251,10 +273,11 @@ export class CsvTabelaComponent implements OnInit {
   }
 
   public onRemoveSuccess(e: FilePreviewModel) {
-    console.log(e);
+    this.myFiles.pop();
+    this.podaci=[];
   }
   public onFileAdded(file: FilePreviewModel) {
-    
+    this.onFileSelected(file);
   }
 
 
@@ -265,7 +288,4 @@ export class CsvTabelaComponent implements OnInit {
     return of(false).pipe(delay(2000));
   }
 
-  public dajVelicinuFajla(){
-    
-  }
 }
