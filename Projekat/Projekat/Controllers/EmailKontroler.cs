@@ -27,8 +27,6 @@ namespace Projekat.Controllers
         public async Task<IActionResult> PotvrdiEmail(string EmailToken)
         {
 
-            
-
             if (KontrolerAutorizacije.ValidateToken(EmailToken, this.configuration) != null)
             {
                 try
