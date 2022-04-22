@@ -42,13 +42,10 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { PocetnatestComponent } from './pocetnatest/pocetnatest.component';
 import { ClickOutsideDirective } from './zajednickeKomponente/Komponente/clickOutside.directive';
 import { TeamComponent } from './team/team.component';
-<<<<<<< HEAD
-=======
 import { FilePickerModule } from  'ngx-awesome-uploader';
 import { FilePickerAdapter } from 'ngx-awesome-uploader';
 
 
->>>>>>> deb7f6cb8ce0f494197af26d065dbbeb1c317ab0
 import { MojNalogComponent } from './moj-nalog/moj-nalog.component';
 @NgModule({
   declarations: [
@@ -69,10 +66,6 @@ import { MojNalogComponent } from './moj-nalog/moj-nalog.component';
     ClickOutsideDirective,
     TeamComponent,
     MojNalogComponent
-<<<<<<< HEAD
-
-=======
->>>>>>> deb7f6cb8ce0f494197af26d065dbbeb1c317ab0
     
   ],
   imports: [

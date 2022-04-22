@@ -36,20 +36,7 @@ namespace Projekat.Controllers
             socket = _customClient.newClient();
             uri = _configuration.GetSection("ML_Server_Config:host").Value + ":" + _configuration.GetSection("ML_Server_Config:port").Value;
         }
-        [HttpPost("sendHandshake")]
-        public async Task<IActionResult> SendHandshakeToPythonWS([FromForm]string userID)
-        {
-            try
-            {
-                await socket.ConnectAsync(new Uri("ws://" + uri + "/test/" + userID), CancellationToken.None);
-                return Ok();
-            }
-            catch (Exception)
-            {
-
-                return BadRequest("Nije moguce povezati se na mikroservis!");
-            }
-        }
+        
         //NEKA VRSTA MIDDLEWARE-A KOJA SPAJA SIGNALR 
         [HttpPost("user")]
         public async Task<IActionResult> startTraining([FromForm]string userID,[FromForm] string connectionID,[FromForm] string parametri)
@@ -61,7 +48,7 @@ namespace Projekat.Controllers
             {
                 try
                 {
-                    //await socket.ConnectAsync(new Uri("ws://"+uri+"/test/" + userID), CancellationToken.None);
+                    await socket.ConnectAsync(new Uri("ws://"+uri+"/test/" + userID), CancellationToken.None);
                     await _customClient.Send(socket, parametri);
                     while (true)
                     {
