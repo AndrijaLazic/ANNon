@@ -34,9 +34,18 @@ export class SignalRService {
     this.hubConnection.start()
     .then(() => console.log("Connection started!!! "))
     .then(() => this.getConnectionID()) 
+    .then(() => this.startConnection())
     .catch(err => console.log("Error occurs: "+err));
   }
 
+  public startConnectionWithPyServer()
+  {
+    this.http.post(this.baseUrl+"sendHandshake",new FormData().append("userID",sessionStorage.getItem("userId"))).subscribe(
+      err => {
+        console.log(err);
+      }
+    )
+  } 
  
   public getConnectionID = () =>
   {

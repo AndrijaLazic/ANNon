@@ -16,9 +16,9 @@ namespace Projekat.SignalRCommunication.Hubs
         {
             return base.OnDisconnectedAsync(exception);
         }
-        public async Task SendResults(string data, string connectionID)
+        public async Task SendHandshakeToPythonWS(string data, string connectionID)
         {
-            Clients.Client(connectionID).SendAsync("sendResults", data); 
+            await Clients.Client(connectionID).SendAsync("sendResults", data); 
         }
 
         

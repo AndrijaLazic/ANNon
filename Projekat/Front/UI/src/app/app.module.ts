@@ -41,12 +41,8 @@ import { DefaultModule } from './layouts/default/default.module';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { PocetnatestComponent } from './pocetnatest/pocetnatest.component';
 import { ClickOutsideDirective } from './zajednickeKomponente/Komponente/clickOutside.directive';
-<<<<<<< HEAD
 import { TeamComponent } from './team/team.component';
-
-=======
 import { MojNalogComponent } from './moj-nalog/moj-nalog.component';
->>>>>>> 3de81786c880c40323b665ed846cbc07a4f2b103
 @NgModule({
   declarations: [
     AppComponent,
@@ -64,11 +60,9 @@ import { MojNalogComponent } from './moj-nalog/moj-nalog.component';
     IzborParametaraComponent,
     PocetnatestComponent,
     ClickOutsideDirective,
-<<<<<<< HEAD
-    TeamComponent
-=======
+    TeamComponent,
     MojNalogComponent
->>>>>>> 3de81786c880c40323b665ed846cbc07a4f2b103
+
     
   ],
   imports: [
