@@ -3,6 +3,7 @@
 @import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 @import "ag-grid-community/dist/styles/ag-theme-alpine-dark.css";
 @import '~bootstrap/dist/css/bootstrap.min.css';
+@import url("https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.4.3/cropper.min.css");
 *{
     margin:0;
     padding: 0;

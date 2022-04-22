@@ -16,6 +16,8 @@ export class LoginComponent implements OnInit {
   constructor(private spinner:NgxSpinnerService,public service:LoginServiceService,private toastr:ToastrService,private cookie:CookieService,private route:Router) { }
   
   ngOnInit(): void {
+    this.service.formData.username='';
+    this.service.formData.password='';
   }
   onSubmit(form:NgForm)
   {

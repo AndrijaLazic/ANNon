@@ -39,6 +39,7 @@
     "mdb-angular-ui-kit": "^2.0.0",
     "ng2-charts": "^3.0.8",
     "ngx": "^2.3.0",
+    "ngx-awesome-uploader": "^13.0.1",
     "ngx-cookie-service": "^13.1.2",
     "ngx-number-spinner": "^2.2.1",
     "ngx-pagination": "^5.1.1",

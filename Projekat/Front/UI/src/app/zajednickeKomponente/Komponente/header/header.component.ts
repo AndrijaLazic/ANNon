@@ -15,7 +15,7 @@ export class HeaderComponent implements OnInit {
   login_ind:boolean;
   username:any;
   help=new JwtHelperService();
-  url="assets/image/pocetna.png";
+  url = 'assets/image/pocetna1.png';
   constructor(private loginService:LoginServiceService,private cookie:CookieService,private route:Router) { }
 
   ngOnInit(): void {

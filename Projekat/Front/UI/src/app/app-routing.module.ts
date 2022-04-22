@@ -14,11 +14,8 @@ import { NotAuthGuard } from './shared/not-auth.guard';
 import { StatisticComponent } from './statistic/statistic.component';
 import { TreningComponent } from './trening/trening.component';
 import { PocetnatestComponent } from './pocetnatest/pocetnatest.component';
-<<<<<<< HEAD
 import { TeamComponent } from './team/team.component';
-=======
 import { MojNalogComponent } from './moj-nalog/moj-nalog.component';
->>>>>>> 3de81786c880c40323b665ed846cbc07a4f2b103
 const routes: Routes = [
   {
     path:'',
@@ -54,7 +51,7 @@ const routes: Routes = [
     path:'signup',component:RegisterComponent,canActivate:[NotAuthGuard]
   },
   {
-    path:'verifikacija',component:VerifikacijaComponent,canActivate:[AuthRegisterGuard]
+    path:'verifikacija',component:VerifikacijaComponent
   },
   {
     path:"test",component:PocetnatestComponent
@@ -63,7 +60,7 @@ const routes: Routes = [
     path:"team",component:TeamComponent
   },
   {
-    path:'success-register',component:RegisterParentComponent,canActivate:[AuthRegisterGuard]
+    path:'success-register',component:RegisterParentComponent
   }
   
 ];
