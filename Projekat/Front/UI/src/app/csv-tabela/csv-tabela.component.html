@@ -55,8 +55,13 @@
         [captions]="captions"
         [accept]="'.xls, .csv'">
         <div class="dropzoneTemplate">
-          <p style="text-align: center">Prevuci fajl ili klikni za izbor</p>
-          <p></p>
+          <div class="d-flex justify-content-center">
+            <img src="../../assets/image/drag-and-drop-Ikonica.png" class="img-fluid" alt="Responsive image">
+          </div>
+          <div class="d-flex justify-content-center">
+            <button id="KlikniZaIzborDugme" class="dugme dugmeAnimacija" mat-raised-button color="primary">klikni za izbor</button>
+          </div>
+          
         </div>
         
         </ngx-awesome-uploader>
