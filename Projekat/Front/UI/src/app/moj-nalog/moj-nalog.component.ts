@@ -18,16 +18,16 @@ export class MojNalogComponent implements OnInit {
   token=this.cookie.get('token');
   username:string;
   colorControl="primary";
-  url = 'assets/image/pocetna1.png';
+  url:any = 'assets/image/pocetna1.png';
   selectedFile:File=null;
   hide1 = true;
   hide2 = true;
   forma=new FormGroup({
-   // image:new FormControl(''),
+    Slika:new FormControl(''),
     Username:new FormControl(this.jwtHelper.decodeToken(this.token)['username']),
     StariPassword:new FormControl('',[Validators.required]),
     NoviPassword:new FormControl('',[Validators.minLength(5)]),
-    Email:new FormControl(''),
+    Email:new FormControl(this.jwtHelper.decodeToken(this.token)['email']),
     token:new FormControl('')
     // BrojEpoha:new FormControl(5,[Validators.required,Validators.min(),Validators.max()]),
     //odnosPodataka:new FormControl(25)
@@ -67,40 +67,58 @@ export class MojNalogComponent implements OnInit {
       this.toastr.error('Forma nije validna')
     }
     else{
-      var parametrizaslanje=new MojNalogModel();
-      parametrizaslanje=Object.assign(new MojNalogModel(),this.forma.value);
-      parametrizaslanje.token=this.cookie.get('token');
-      this.servis.izmeniProfilZahtev(parametrizaslanje).subscribe(
-        res=>{
-          console.log(res);
-        },
-        err=>{
-          if(err['status']==200)
+      if(this.jwtHelper.decodeToken(this.token)['username']==this.forma.value['Username'] && this.jwtHelper.decodeToken(this.token)['email']==this.forma.value['Email'] && !this.selectedFile )
+      {
+        this.toastr.error("Niste uneli nijednu promenu");
+      }
+      else
+      {
+        const formazaslanje=new FormData();
+          if(this.selectedFile)
           {
-            
-            this.toastr.success(err['error']['text']);
-            
-            console.log(this.jwtHelper.decodeToken(this.token)['email']);
-            console.log(this.forma.get('Email')['value'])
-            if(this.jwtHelper.decodeToken(this.token)['email']!=this.forma.get('Email')['value'] && this.forma.get('Email')['value']!='')
-            {
-              this.cookie.set('email',this.forma.get('Email')['value']);
-              this.cookie.delete('token');
-              this.route.navigate(['success-register']);
-            }
-            else
-            {
-              this.cookie.delete('token');
-              this.route.navigate(['login']);
-            }
+            formazaslanje.append('image',this.selectedFile,this.selectedFile.name);
           }
           else
           {
-            this.toastr.error(err['error'])
+            formazaslanje.append('image',this.selectedFile);
           }
-        }
-      );
-      
+          formazaslanje.append('Username',this.forma.value['Username']);
+            formazaslanje.append('StariPassword',this.forma.value['StariPassword']);
+            formazaslanje.append('NoviPassword',this.forma.value['NoviPassword']);
+            formazaslanje.append('Email',this.forma.value['Email']);  
+            formazaslanje.append('token',this.cookie.get('token'));
+            console.log(this.forma.value['Username']);
+            this.servis.izmeniProfilZahtev(formazaslanje).subscribe(
+              res=>{
+                console.log(res);
+              },
+              err=>{
+                if(err['status']==200)
+                {
+                  
+                  this.toastr.success(err['error']['text']);
+                  
+                  console.log(this.jwtHelper.decodeToken(this.token)['email']);
+                  console.log(this.forma.get('Email')['value'])
+                  if(this.jwtHelper.decodeToken(this.token)['email']!=this.forma.get('Email')['value'] && this.forma.get('Email')['value']!='')
+                  {
+                    //this.cookie.set('email',this.forma.get('Email')['value']);
+                    this.cookie.delete('token');
+                    this.route.navigate(['success-register']);
+                  }
+                  else
+                  {
+                    this.cookie.delete('token');
+                    this.route.navigate(['login']);
+                  }
+                }
+                else
+                {
+                  this.toastr.error(err['error'])
+                }
+              }
+            );
+      }
     }
     
   }
@@ -108,6 +126,20 @@ export class MojNalogComponent implements OnInit {
   constructor(private toastr:ToastrService,private servis:LoginServiceService,private cookie:CookieService,private route:Router) { }
 
   ngOnInit(): void {
+    this.servis.dajSlikuZahtev(this.jwtHelper.decodeToken(this.token)['username']).subscribe(
+      res=>{
+          let reader = new FileReader();
+          reader.addEventListener("load", () => {
+          this.url = reader.result;
+         
+        }, false);
+        reader.readAsDataURL(res.body);
+        },
+        err=>{
+
+        }
+        
+    )
   }
   
 

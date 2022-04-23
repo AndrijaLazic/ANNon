@@ -39,6 +39,8 @@ namespace Projekat.Controllers
 
                     Korisnik korisnik=_context.Korisnici.Where(x => x.Username.Equals(username)).FirstOrDefault();
                     korisnik.EmailPotvrdjen = true;
+                    korisnik.Email=token.Claims.First(claim => claim.Type == "email").Value;
+                    korisnik.EmailToken = EmailToken;
                     await _context.SaveChangesAsync();
                     //return Ok("Uspesno verifikovana Email adresa za korisnika " + korisnik.Username);
                     return Ok(new

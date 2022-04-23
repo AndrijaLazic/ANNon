@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { response } from 'express';
 import { CookieService } from 'ngx-cookie-service';
 import { LoginServiceService } from 'src/app/shared/login-service.service';
 
@@ -15,7 +16,7 @@ export class HeaderComponent implements OnInit {
   login_ind:boolean;
   username:any;
   help=new JwtHelperService();
-  url = 'assets/image/pocetna1.png';
+  url:any="assets/image/pocetna1.png";
   constructor(private loginService:LoginServiceService,private cookie:CookieService,private route:Router) { }
 
   ngOnInit(): void {
@@ -25,7 +26,20 @@ export class HeaderComponent implements OnInit {
       let tokens=this.cookie.get('token')
       let pom=this.help.decodeToken(tokens);
       this.username=pom['username'];
-      //ovde saljem zahtev za slikom
+      this.loginService.dajSlikuZahtev(this.username).subscribe(
+        res=>{
+            let reader = new FileReader();
+            reader.addEventListener("load", () => {
+            this.url = reader.result;
+           
+          }, false);
+          reader.readAsDataURL(res.body);
+          },
+          err=>{
+            
+          }
+          
+      )
     }
     else
     {

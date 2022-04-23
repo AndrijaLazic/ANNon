@@ -59,14 +59,14 @@ namespace Projekat.Ostalo
 
             return imeFajla;
         }
-        public static string upisiSliku(int id, IFormFile photo)
+        public static string upisiSliku(int id,IFormFile photo)
         {
-            var pathBuilt = Path.Combine(Directory.GetCurrentDirectory(), "Upload\\profileimage\\img" + id);
+            var pathBuilt = Path.Combine(Directory.GetCurrentDirectory(), "Upload\\profileimages");
             if (!Directory.Exists(pathBuilt))
             {
                 Directory.CreateDirectory(pathBuilt);
             }
-            pathBuilt = pathBuilt + "\\" + photo.FileName;
+            pathBuilt = pathBuilt + "\\" + id+".jpg";
             using (var stream = System.IO.File.Create(pathBuilt))
             {
                 photo.CopyToAsync(stream);
@@ -74,6 +74,7 @@ namespace Projekat.Ostalo
             }
             return pathBuilt;
         }
+
 
         public static DataTable UcitajFajl(string pathBuilt)
         {

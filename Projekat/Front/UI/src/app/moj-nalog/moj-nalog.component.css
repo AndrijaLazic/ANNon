@@ -112,3 +112,6 @@
   transition: background-color 5000s;
   -webkit-text-fill-color: #fff !important;
   }
+  #profileimage{
+      clip-path: circle();
+  }

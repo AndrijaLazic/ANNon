@@ -17,6 +17,7 @@ export class LoginServiceService {
   MojNalogForm:RegisterModel=new RegisterModel();
   readonly conStr=Konfiguracija.KonfiguracijaServera.osnovniURL+'api/KontrolerAutorizacije/login';
   readonly conStr2=Konfiguracija.KonfiguracijaServera.osnovniURL+'api/KontrolerAutorizacije/IzmenaProfila'
+  readonly conStr3=Konfiguracija.KonfiguracijaServera.osnovniURL+'api/KontrolerAutorizacije/';
   private subject=new Subject<boolean>();
   postFunkcija():Observable<any>
   {
@@ -43,6 +44,17 @@ export class LoginServiceService {
     console.log(parametrizaslanje);
     return this.http.post(this.conStr2,parametrizaslanje);
   }
+  dajSlikuZahtev(username:string)
+  {
+    let response = this.http.get(this.conStr3+`${username}`+'/dajsliku',
+    {
+      observe:"response",
+      responseType : "blob"
+    });
+    return response;
+  }
+
+  
 
   
 }
