@@ -21,17 +21,16 @@ import {
     progresUploada=0;
     public uploadFile(fileItem: FilePreviewModel): Observable<UploadResponse> {
       const form = new FormData();
-      form.append('uploadedFile', fileItem.file);
-      form.append("userID",sessionStorage.getItem("userId"));
-      form.append('PrvoSlanje', 'PrvoSlanje');
       const baseURL=Konfiguracija.KonfiguracijaServera.osnovniURL
-      const api = baseURL+"api/MachineLearning/uploadFile";
+      const api = baseURL+"api/SessionControler/upload";
       
       const req = new HttpRequest('POST', api, form, { reportProgress: true });
+      
       return this.http.request(req).pipe(
         map((res: HttpEvent<any>) => {
           if (res.type === HttpEventType.Response) {
             const responseFromBackend = res.body;
+            console.log(String(responseFromBackend))
             return {
               body: responseFromBackend,
               status: UploadStatus.UPLOADED

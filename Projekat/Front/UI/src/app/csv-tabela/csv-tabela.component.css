@@ -95,4 +95,20 @@
 }
 #PoljeZaUnos ::ng-deep .ngx-checkmark-wrapper{
     opacity: 0;
+    
+}
+#PoljeZaUnos ::ng-deep .custom-drag{
+    padding: 0;
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+}
+
+#KlikniZaIzborDugme{
+   text-align: center;
+   font-size: 26px;
+   margin-top: 5px;
+}
+
+.dropzoneTemplate{
+    padding: 0;
 }
