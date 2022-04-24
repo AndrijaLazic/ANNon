@@ -15,19 +15,18 @@ print("Shape after removing duplicates", data.shape)
 data.nunique()
 data.describe(include='all')
 data.isna().sum()
-del data["Description"]
 
 #target = target.to_numpy()
-
 
 def split_data(data,train_percentage=0.8,test_percentage=0.1,val_percentage=0.1):
   #podela 80/10/10
   train,val,test=np.split(data.sample(frac=1),[int(train_percentage*len(data)),int((val_percentage+train_percentage)*len(data))])
   return train,val,test
 
-def determine_variable_types(data):
+def determine_variable_types(data, target_name):
     nunique = data.nunique()
     dtypes = data.dtypes
+    del nunique[target_name]
     categorical = []
     numerical = []
     for key in dict(nunique):
@@ -38,10 +37,12 @@ def determine_variable_types(data):
     
     return (categorical, numerical)
 
+target_name = ['AdoptionSpeed']
+categorical_feature_names, numerical_feature_names = determine_variable_types(data, target_name[0])
 
-categorical_feature_names, numerical_feature_names = determine_variable_types(data)
-data = data[categorical_feature_names+numerical_feature_names]
+data = data[categorical_feature_names + numerical_feature_names + target_name]
 
+broj_klasa = data['AdoptionSpeed'].nunique()
 train, val, test = split_data(data)
 
 @tf.autograph.experimental.do_not_convert
@@ -79,7 +80,8 @@ def get_normalization_layer(name, dataset):
 
   return normalizer
 
-def df_to_dataset(dataframe, target, shuffle=True, one_hot_label=False, batch_size=256):
+#get_one_hot_target(target)
+def df_to_dataset(dataframe, target, shuffle=True, one_hot_label=False, combine_in_batches=True, batch_size=32):
   df = dataframe.copy()
   if one_hot_label:
     target = get_one_hot_target(target)
@@ -87,8 +89,9 @@ def df_to_dataset(dataframe, target, shuffle=True, one_hot_label=False, batch_si
   ds = tf.data.Dataset.from_tensor_slices((dict(df), target))
   if shuffle:
     ds = ds.shuffle(buffer_size=len(dataframe))
-  ds = ds.batch(batch_size)
-  ds = ds.prefetch(batch_size)
+  if combine_in_batches:
+    ds = ds.batch(batch_size)
+    ds = ds.prefetch(batch_size)
   return ds
 
 def get_one_hot_target(target):
@@ -102,7 +105,7 @@ def get_one_hot_target(target):
   return labels
 
 target = train.pop("AdoptionSpeed")
-ds = df_to_dataset(train, target, batch_size=64)
+ds = df_to_dataset(train, target, False, True, batch_size=16)
 #age_ds = ds.map(lambda x, y: x['Age'])
 
 all_inputs = []
@@ -141,23 +144,41 @@ for header in categorical_feature_names:
   encoded_features.append(encoded_categorical_col)
 
 
-
+data
 all_features = tf.keras.layers.concatenate(encoded_features)
 
-x = layers.Dense(32, "relu")(all_features)
-x = layers.Dense(10, "relu")(x)
+x = layers.Dense(64, "relu")(all_features)
+x = layers.Dense(20, "relu")(x)
+x = layers.Dense(32, "relu")(x)
 output = layers.Dense(6, activation="softmax")(x)
 
 model = tf.keras.Model(all_inputs, output)
 
 model.compile(optimizer=tf.keras.optimizers.Adam(0.001),
-            loss="categorical_crossentropy", #tf.keras.losses.CategoricalCrossentropy(),
+            #loss="sparese_categorical_crossentropy", 
+            loss = tf.keras.losses.CategoricalCrossentropy(),
             metrics="Accuracy")
 
 
 model.summary()
+#tf.keras.utils.plot_model(model = model , rankdir="LR", dpi=72, show_shapes=True)
 
 val_target = val.pop("AdoptionSpeed")
-history = model.fit(df_to_dataset(train, target, False, True, 24), epochs=200, validation_data=df_to_dataset(val, val_target, False, True, 24))
+history = model.fit(ds, epochs=20, validation_data=df_to_dataset(val, val_target, False, True, batch_size=16))
 
-y_pred = model.predict()
+test_target = test.pop("AdoptionSpeed")
+y_pred = model.predict(df_to_dataset(test, test_target, False, True, batch_size=16))
+
+predictions = [np.argmax(i) for i in y_pred]
+
+def print_cat(predictions):
+  print("0: ", predictions.count(0))
+  print("1: ", predictions.count(1))
+  print("2: ", predictions.count(2))
+  print("3: ", predictions.count(3))
+  print("4: ", predictions.count(4))
+
+len(predictions)
+
+print_cat(predictions)
+test_target.value_counts()
