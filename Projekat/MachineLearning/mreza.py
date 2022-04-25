@@ -122,7 +122,6 @@ def prepare_preprocess_layers(data,target,train):
     numerical_column_names.remove(target)
 
   train_ds=df_to_dataset(train,target,batch_size=32)
-  [(train_features, label_batch)] = train_ds.take(1)
   #todo proveriti normalizaciju, da li radi kako treba
   # depth_col=train_features["depth"]
   # layer=get_normalization_layer('depth',train_ds)
@@ -154,12 +153,15 @@ def prepare_preprocess_layers(data,target,train):
   encoded_features=encoded_features+all_num_inputs
   return all_inputs,encoded_features
 
-def make_model(all_inputs,encoded_features,layers:List[Sloj],loss_metric,success_metric):
+def make_model(all_inputs,encoded_features,layers:List[Sloj],loss_metric,success_metric, number_of_classes=0):
   all_features = tf.keras.layers.concatenate(encoded_features)
   x=tf.keras.layers.Normalization(axis=-1)(all_features)
   for layer in layers:
     x=tf.keras.layers.Dense(layer.broj_cvorova,activation=layer.aktivaciona_funkcija)(x)
-  output = tf.keras.layers.Dense(1)(x)
+  if (number_of_classes!=0):
+    output = tf.keras.layers.Dense(number_of_classes+1, activation="softmax")(x)
+  else:
+    output = tf.keras.layers.Dense(1)(x)
 
   model = tf.keras.Model(all_inputs, output)
 
@@ -179,6 +181,7 @@ def make_regression_model(data,hiperparametri:Hiperparametri):
   relevant_columns=hiperparametri.ulazne_kolone+[hiperparametri.izlazna_kolona]
   data=data[relevant_columns]
 
+  data.drop_duplicates()
   data.dropna(inplace=True)
   train,val,test=split_data(data,(100-hiperparametri.test_skup-10)/100,hiperparametri.test_skup/100,0.1)
 
@@ -187,8 +190,17 @@ def make_regression_model(data,hiperparametri:Hiperparametri):
   return model,train,val,test
 
 def make_classification_model(data, hiperparametri:Hiperparametri):
-  
-  pass
+  relevant_columns=hiperparametri.ulazne_kolone+[hiperparametri.izlazna_kolona]
+  data=data[relevant_columns]
+
+  data.drop_duplicates()
+  data.dropna(inplace=True)
+  broj_klasa = data[hiperparametri.izlazna_kolona].nunique()
+  train,val,test=split_data(data,(100-hiperparametri.test_skup-10)/100,hiperparametri.test_skup/100,0.1)
+
+  all_inputs,encoded_features=prepare_preprocess_layers(data,hiperparametri.izlazna_kolona,train)
+  model=make_model(all_inputs,encoded_features,hiperparametri.slojevi,hiperparametri.mera_greske,hiperparametri.mera_uspeha, broj_klasa)
+  return model,train,val,test
 
 # data=load_data("titanic/train.csv")
 # target="Survived"
@@ -200,3 +212,12 @@ def make_classification_model(data, hiperparametri:Hiperparametri):
 # model=make_model(all_inputs,encoded_features)
 # train_model(model,train,val,target,1)
 # test_model(model,test,target)
+
+slojevi = [Sloj(64, 'relu'), Sloj(20, 'relu'), Sloj(32, 'relu')]
+hiperparametri = Hiperparametri('klasifikacija', 0.1, slojevi, 'categorical_crossentropy', 'Accuracy', 20, 
+['Type', 'Gender', 'Color1', 'Color2', 'MaturitySize', 'FurLength', 'Vaccinated', 'Sterilized', 'Health', 'Age', 'Fee', 'PhotoAmt'],
+'AdoptionSpeed')
+data = pd.read_csv('petfinder-mini.csv')
+regression_model, regression_train, regression_val, regression_test  = make_regression_model(data, hiperparametri)
+
+train_model(regression_model, regression_train, regression_val, hiperparametri.izlazna_kolona, 1, 5)
