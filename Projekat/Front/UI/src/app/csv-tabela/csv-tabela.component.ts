@@ -14,6 +14,8 @@ import { DemoFilePickerAdapter } from './UploadAdapter.adapter';
 import { FilePreviewModel, UploaderCaptions, UploadResponse, UploadStatus, ValidationError } from 'ngx-awesome-uploader';
 import { catchError, delay, map, Observable, of } from 'rxjs';
 import { UploadFajlServisService } from './upload-fajl-servis.service';
+import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
+import { PopupProzorComponent } from './popup-prozor/popup-prozor.component';
 
 export class DataModel
 {
@@ -39,13 +41,17 @@ export class CsvTabelaComponent implements OnInit {
   public progress: number;
   public message: string;
   public imeFajla:string;
+  public VelicinaFajla:number;
   model:DataModel;
   statistika:Object;
   @Output() public onUploadFinished = new EventEmitter();
   
   public adapter = new DemoFilePickerAdapter(this.http);
   public UploadServis=new UploadFajlServisService(this.http);
-  constructor(private spinner:NgxSpinnerService,private papa:Papa,private http:HttpClient,private toastr:ToastrService,private route:Router,private shared: SharedService 
+
+  popupProzor: MdbModalRef<PopupProzorComponent> | null = null;
+  
+  constructor(private modalService: MdbModalService,private spinner:NgxSpinnerService,private papa:Papa,private http:HttpClient,private toastr:ToastrService,private route:Router,private shared: SharedService 
     ) {
       this.model = new DataModel();
       
@@ -73,6 +79,7 @@ export class CsvTabelaComponent implements OnInit {
       this.spinner.show("Spiner1")
       var file = fajl.file;
       this.imeFajla=fajl.fileName;
+      this.VelicinaFajla=fajl.file.size;
       var parseResult : ParseResult = this.papa.parse(file,{
         header: true,
         skipEmptyLines:true,
@@ -236,9 +243,9 @@ export class CsvTabelaComponent implements OnInit {
 
   public captions: UploaderCaptions = {
     dropzone: {
-      title: 'Fayllari bura ata bilersiz',
-      or: 'və yaxud',
-      browse: 'Fayl seçin',
+      title: '',
+      or: '',
+      browse: '',
     },
     cropper: {
       crop: 'Iseci',
@@ -263,20 +270,24 @@ export class CsvTabelaComponent implements OnInit {
       alert("Izaberite samo jedan fajl")
     }
     else{
-      alert(`Validation Error ${error.error}`);
+      alert(`Fajl nije .csv`);
     }
+    // ${error.error}
   }
 
   public onUploadSuccess(e: FilePreviewModel): void {
-    console.log(e);
-    console.log(this.myFiles);
+
+    console.log(this.myFiles.length);
   }
 
   public onRemoveSuccess(e: FilePreviewModel) {
+    
+    console.log(this.myFiles.length);
     this.myFiles.pop();
     this.podaci=[];
   }
   public onFileAdded(file: FilePreviewModel) {
+    this.spinner.show("Spiner1");
     this.onFileSelected(file);
   }
 
@@ -288,4 +299,15 @@ export class CsvTabelaComponent implements OnInit {
     return of(false).pipe(delay(2000));
   }
 
+  public izbrisiFajl(){
+    this.podaci=[];
+    
+  }
+
+  //POPUP prozor
+  public openPopupProzor() {
+    this.popupProzor = this.modalService.open(PopupProzorComponent,{
+      data: { title: 'Custom title' },
+    });
+  }
 }

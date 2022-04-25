@@ -37,8 +37,8 @@
   <div class="container statistic">
     
     <div class="row justify-content-center">
-      <div class="col-md-auto">
-        <ngx-awesome-uploader *ngIf="myFiles.length<1" id="PoljeZaUnos"
+      <div class="col-md-4" *ngIf="podaci.length<1">
+        <ngx-awesome-uploader  id="PoljeZaUnos"
         #uploader
         [adapter]="adapter"
         [fileMaxCount]="1"
@@ -53,23 +53,72 @@
         (fileAdded)="onFileAdded($event)"
         [customValidator]="myCustomValidator"
         [captions]="captions"
-        [accept]="'.xls, .csv'">
+        [accept]="'.xls, .csv'"
+        [itemTemplate]="myItemTemplate">
         <div class="dropzoneTemplate">
           <div class="d-flex justify-content-center">
             <img src="../../assets/image/drag-and-drop-Ikonica.png" class="img-fluid" alt="Responsive image">
           </div>
-          <div class="d-flex justify-content-center">
-            <button id="KlikniZaIzborDugme" class="dugme dugmeAnimacija" mat-raised-button color="primary">klikni za izbor</button>
+          <div class="d-flex justify-content-center" id="KlikniZaIzborDugme">
+            <button class="dugme2 dugmeAnimacija" mat-raised-button color="primary">
+              <img src="../../assets/image/klikni za izbor dugme.png" class="img-fluid" alt="Responsive image">
+            </button>
           </div>
           
         </div>
         
         </ngx-awesome-uploader>
-        
-
       </div>
+      
     </div>
-    
+
+
+    <div class="row justify-content-center" *ngIf="podaci.length>0">
+      
+        <!-- <div class="col-md-3">
+          <img src="../../assets/image/csvFajlIkona.jpg" class="img-fluid" alt="Responsive image">
+        </div>
+        <div class="col-md-6">
+          <div class="row justify-content">
+            <p>{{imeFajla}}</p>
+          </div>
+          <div class="row justify-content">
+            <p>{{(VelicinaFajla/1000000).toFixed(2)}}MB</p>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <button (click)="izbrisiFajl()">Remove</button>
+        </div> -->
+        <div class="col-sm-auto" >
+          <div id="fajl">
+            <div class="parent">
+              <div class="div1">
+                <img src="../../assets/image/csvFajlIkona.jpg" class="img-fluid" alt="Responsive image">
+              </div>
+              <div class="div2">
+                <div class="parent2">
+                  <div class="div1">{{imeFajla}}</div>
+                  <div class="div2">{{(VelicinaFajla/1000000).toFixed(2)}}MB</div>
+                </div>
+              </div>
+              <div class="div3">
+                <a (click)="izbrisiFajl()">
+                  <img src="../../assets/image/KorpaIkona.png" class="img-fluid" alt="Responsive image">
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+    </div>
+
+
+    <ng-template
+      #myItemTemplate
+      let-fileItem="fileItem"
+      let-uploadProgress="uploadProgress"
+    >
+    </ng-template>
 
     <div class="grid-wrapper" *ngIf="podaci.length>0">
       <button type="button" class="btn btn-dark" (click)="izbrisiSelektovano()">Obrisi selektovano</button>

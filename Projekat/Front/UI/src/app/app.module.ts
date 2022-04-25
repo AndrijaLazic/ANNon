@@ -44,9 +44,10 @@ import { ClickOutsideDirective } from './zajednickeKomponente/Komponente/clickOu
 import { TeamComponent } from './team/team.component';
 import { FilePickerModule } from  'ngx-awesome-uploader';
 import { FilePickerAdapter } from 'ngx-awesome-uploader';
-
+import { MdbModalModule } from 'mdb-angular-ui-kit/modal';
 
 import { MojNalogComponent } from './moj-nalog/moj-nalog.component';
+import { PopupProzorComponent } from './csv-tabela/popup-prozor/popup-prozor.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -65,7 +66,8 @@ import { MojNalogComponent } from './moj-nalog/moj-nalog.component';
     PocetnatestComponent,
     ClickOutsideDirective,
     TeamComponent,
-    MojNalogComponent
+    MojNalogComponent,
+    PopupProzorComponent
     
   ],
   imports: [
@@ -93,7 +95,8 @@ import { MojNalogComponent } from './moj-nalog/moj-nalog.component';
     MatFormFieldModule,
     MatSlideToggleModule,
     MatIconModule,
-    FilePickerModule
+    FilePickerModule,
+    MdbModalModule
   ],
   providers: [],
   bootstrap: [AppComponent],

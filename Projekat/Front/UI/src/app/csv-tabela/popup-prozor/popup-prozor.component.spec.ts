@@ -1,22 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { CsvTabelaComponent } from './csv-tabela.component';
-import { ColDef } from 'ag-grid-community';
 
+import { PopupProzorComponent } from './popup-prozor.component';
 
-
-describe('CsvTabelaComponent', () => {
-  let component: CsvTabelaComponent;
-  let fixture: ComponentFixture<CsvTabelaComponent>;
+describe('PopupProzorComponent', () => {
+  let component: PopupProzorComponent;
+  let fixture: ComponentFixture<PopupProzorComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CsvTabelaComponent ]
+      declarations: [ PopupProzorComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CsvTabelaComponent);
+    fixture = TestBed.createComponent(PopupProzorComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

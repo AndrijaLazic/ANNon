@@ -102,6 +102,12 @@
     padding-bottom: 8px;
     margin-bottom: 8px;
 }
+#PoljeZaUnos {
+    max-width: 70%;
+    border-radius: 10px;
+    margin: auto;
+}
+
 
 #KlikniZaIzborDugme{
    text-align: center;
@@ -112,3 +118,87 @@
 .dropzoneTemplate{
     padding: 0;
 }
+
+
+
+/* .mat-button-wrapper{
+
+} */
+#KlikniZaIzborDugme .mat-raised-button{
+    height: 10%;
+    padding: 1% 3%;
+}
+
+#KlikniZaIzborDugme .dugme2 img{
+    filter: brightness(3);
+}
+
+#fajl{
+    max-width: 25vh;
+    min-width: 250px;
+    background: white;
+    border-radius: 20px;
+    padding: 10px; 
+    margin: auto;
+}
+
+#fajl .parent {
+    
+    display: grid;
+    background: white;
+    border-radius: 15px;
+    border: gray 2px dashed;
+    overflow: hidden;
+    grid-template-columns: 25% 1fr 25%;
+    grid-template-rows: 1fr;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+    margin: auto;
+    padding: 2px;
+    }
+    
+#fajl .div1 { grid-area: 1 / 1 / 2 / 2;}
+#fajl .div2 { grid-area: 1 / 2 / 2 / 3;}
+#fajl .div3 { grid-area: 1 / 3 / 2 / 4;padding: 10px;}
+
+#fajl .div3:hover {cursor: pointer;}
+
+#fajl .div2 .parent2 {
+    padding-left: 5px;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(2, 1fr);
+    height: 100%;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+    }
+    
+#fajl .div2 .div1 { 
+    grid-area: 1 / 1 / 2 / 2; 
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+#fajl .div2 .div2 { grid-area: 2 / 1 / 3 / 2; }
+
+/* @media screen and (min-width: 601px) {
+    div.example {
+        font-size: 80px;
+    }
+}
+  
+@media screen and (max-width: 600px) {
+    #PoljeZaUnos ::ng-deepspan {
+        font-size: 30px;
+    }
+} */
+/* <button (click)="uploader.removeFile(fileItem)">Remove</button> */
+
+
+
+
+
+
+
+
+

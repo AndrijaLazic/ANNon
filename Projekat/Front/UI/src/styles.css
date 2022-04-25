@@ -75,3 +75,17 @@ label{
 .dugmeAnimacija:hover:before {
     left: 100%;
   }
+
+
+/* dugme 2 */
+  .dugme2 {background-image: linear-gradient(to right, #1f64e7 0%, #2a5298 51%, #1f64e7 100%);
+  }
+  .dugme2 {
+     text-align: center;
+     transition: 0.5s;
+     background-size: 200% auto;
+     color: white;            
+     box-shadow: 0 0 20px #eee;
+     border-radius: 10px;
+     display: block;
+   }

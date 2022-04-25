@@ -52,10 +52,9 @@ import {
         })
       );
     }
-    public removeFile(fileItem: FilePreviewModel): Observable<any> {
+    public removeFile(): Observable<any> {
       const id = 50;
-      const responseFromBackend = fileItem.uploadResponse;
-      console.log(fileItem);
+      
       const removeApi =
         'https://run.mocky.io/v3/dedf88ec-7ce8-429a-829b-bd2fc55352bc';
       return this.http.post(removeApi, { id });
