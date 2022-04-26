@@ -23,7 +23,7 @@ namespace Projekat.Controllers
         private readonly MachineLearningClient _client;
         private readonly IHubContext<EpochHub> _hub;
         private readonly MySqlDbContext _context;
-        private readonly ClientWebSocket  socket;
+        private ClientWebSocket  socket;
         private readonly WebSocketCustomClient  _customClient;
         private readonly string uri = string.Empty;
         public wsCommunication(IConfiguration configuration, MachineLearningClient client, IHubContext<EpochHub> hub, MySqlDbContext context)
@@ -33,7 +33,6 @@ namespace Projekat.Controllers
            _hub = hub;
            _context = context;
             _customClient = new WebSocketCustomClient();
-            socket = _customClient.newClient();
             uri = _configuration.GetSection("ML_Server_Config:host").Value + ":" + _configuration.GetSection("ML_Server_Config:port").Value;
         }
         
@@ -44,7 +43,7 @@ namespace Projekat.Controllers
             if(userID.IsNullOrEmpty())
                 return BadRequest();
             var result = JsonConvert.DeserializeObject<ParametriDTO>(parametri);
-            using (socket)
+            using (socket = _customClient.newClient())
             {
                 try
                 {

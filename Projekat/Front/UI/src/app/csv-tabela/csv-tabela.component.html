@@ -33,7 +33,14 @@
 
 
 <div class="container">
-  <button class="navigator next" (click)="uploadFile()" *ngIf="podaci && podaci.length>0" style="height: 100%;">></button>
+  <button class="navigator next" (click)="uploadFile()" *ngIf="podaci && podaci.length>0" style="height: 100%;">></button><!--
+  <div class="arrow" (click)="uploadFile()" *ngIf="podaci && podaci.length>0" style="height: 100%;">
+    <span></span>
+    <span></span>
+    <span></span>
+
+  </div>
+  -->
   <div class="container statistic">
     
     <div class="row justify-content-center">

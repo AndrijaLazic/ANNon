@@ -7,6 +7,7 @@ import { epochModel } from './epoch.model';
 import { vrednostiZaGrafikKlasa,podatakZaGrafikKlasa } from '../trening/podatakZaGrafik.model';
 import { Subject } from 'rxjs';
 import { default as Konfiguracija } from '../../../KonfiguracioniFajl.json';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +25,7 @@ export class SignalRService {
   private poruka=new Subject<number>();
   porukaObservable$=this.poruka.asObservable();
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private toastr: ToastrService) { }
 
 
   public startConnection = () =>
@@ -34,7 +35,7 @@ export class SignalRService {
     this.hubConnection.start()
     .then(() => console.log("Connection started!!! "))
     .then(() => this.getConnectionID()) 
-    .catch(err => console.log("Error occurs: "+err));
+    .catch(err => {console.log("Error occurs: "+err);this.toastr.error("Greška pri komunikaciji sa serverom!","Greška")});
   }
 
  

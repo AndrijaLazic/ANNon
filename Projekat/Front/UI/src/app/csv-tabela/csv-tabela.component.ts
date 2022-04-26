@@ -1,4 +1,4 @@
-import { HttpClient, HttpEventType, HttpHeaders, HttpRequest, JsonpClientBackend,HttpParams, HttpEvent } from '@angular/common/http';
+import { HttpClient, HttpEventType, HttpHeaders, HttpRequest, JsonpClientBackend,HttpParams, HttpEvent, HttpErrorResponse } from '@angular/common/http';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Papa, ParseResult } from 'ngx-papaparse';
 import { ColDef,GridApi,GridReadyEvent,CellValueChangedEvent, ComponentStateChangedEvent, GridColumnsChangedEvent, CsvExportParams } from 'ag-grid-community';
@@ -46,8 +46,8 @@ export class CsvTabelaComponent implements OnInit {
   statistika:Object;
   @Output() public onUploadFinished = new EventEmitter();
   
-  public adapter = new DemoFilePickerAdapter(this.http);
-  public UploadServis=new UploadFajlServisService(this.http);
+  public adapter = new DemoFilePickerAdapter(this.http,this.spinner,this.toastr);
+  public UploadServis=new UploadFajlServisService(this.http,this.toastr,this.spinner);
 
   popupProzor: MdbModalRef<PopupProzorComponent> | null = null;
   
@@ -159,7 +159,10 @@ export class CsvTabelaComponent implements OnInit {
            
         },
         err=>{
+          console.log(err);
+          this.toastr.error("Greška pri slanju fajla!","Greška")
           this.spinner.hide("Spiner2");
+          
         }
        
       );
@@ -216,7 +219,20 @@ export class CsvTabelaComponent implements OnInit {
         
       },
       err=>{
-        this.spinner.hide("Spiner2");
+        console.log(err);
+        switch(err["status"])
+        {
+          case 500:{
+            this.toastr.error("Greška pri komunikaciji sa mikroservisom!","Greška");
+            break;
+          }
+          default:{
+            this.toastr.error("Greška pri obradi statistike! \nPokušajte ponovo!","Greška");
+            break;
+          }
+        }
+        console.log(typeof(err["status"]))
+        this.spinner.hide("Spiner3");
       }
     );
 

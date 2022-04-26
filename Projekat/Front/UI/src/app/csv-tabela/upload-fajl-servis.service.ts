@@ -4,12 +4,14 @@ import { CsvExportParams } from 'ag-grid-community';
 import { UploadResponse, UploadStatus } from 'ngx-awesome-uploader';
 import { catchError, map, Observable, of } from 'rxjs';
 import { default as Konfiguracija } from '../../../KonfiguracioniFajl.json';
+import { ToastrService } from 'ngx-toastr';
+import { NgxSpinnerService } from 'ngx-spinner';
 @Injectable({
   providedIn: 'root'
 })
 export class UploadFajlServisService {
 
-  constructor(private http:HttpClient) { }
+  constructor(private http:HttpClient,private toastr:ToastrService, private spinner: NgxSpinnerService) { }
   procenatUploada=0;
   public uploadFile(file:any): Observable<UploadResponse> {
     const form = new FormData();
@@ -42,6 +44,8 @@ export class UploadFajlServisService {
           }
         }),
         catchError(er => {
+          this.spinner.hide("Spiner2");
+          this.toastr.error("Neuspešna konekcija sa serverom!","Greška")
           console.log(er);
           return of({ status: UploadStatus.ERROR, body: er });
         })

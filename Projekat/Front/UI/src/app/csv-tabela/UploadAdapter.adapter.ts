@@ -13,9 +13,10 @@ import {
     FilePreviewModel
   } from 'ngx-awesome-uploader';
   import { default as Konfiguracija } from '../../../KonfiguracioniFajl.json';
-
+  import { NgxSpinnerService } from 'ngx-spinner';
+  import { ToastrService } from 'ngx-toastr';
   export class DemoFilePickerAdapter extends FilePickerAdapter {
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient,private spinner: NgxSpinnerService, private toastr:ToastrService) {
       super();
     }
     progresUploada=0;
@@ -47,6 +48,8 @@ import {
           }
         }),
         catchError(er => {
+          this.toastr.error("Neuspešna konekcija sa serverom!","Greška");
+          this.spinner.hide("Spiner2");
           console.log(er);
           return of({ status: UploadStatus.ERROR, body: er });
         })
