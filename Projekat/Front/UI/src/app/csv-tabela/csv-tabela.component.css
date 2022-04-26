@@ -106,13 +106,22 @@
     max-width: 70%;
     border-radius: 10px;
     margin: auto;
+    height: fit-content;
+}
+
+#PoljeZaUnos ::ng-deep .files-preview-wrapper{
+    height: 0px;
 }
 
 
+
 #KlikniZaIzborDugme{
+   margin: auto;
    text-align: center;
    font-size: 26px;
    margin-top: 5px;
+   max-width: 70%;
+   
 }
 
 .dropzoneTemplate{

@@ -12,11 +12,10 @@
 
 .window{
     min-width: fit-content;
-    max-width: 30%;
     margin: auto;
     padding:30px;
-    padding-left: 7%;
-    padding-right: 7%;
+    padding-left: 4%;
+    padding-right: 4%;
     text-align:center;
     border-radius:20px;
     backdrop-filter:blur(20px) brightness(60%);
@@ -33,6 +32,15 @@
     border-radius: 10px;
     color: white;
 }
+.FormaZaIzmenuPodatakaOKorisniku ::ng-deep mat-form-field{
+    min-width: 265px;
+    max-width: 50vw;
+    
+}
+
+
+
+
 
 /* Input kada se klikne na njega */
 .FormaZaIzmenuPodatakaOKorisniku ::ng-deep .mat-form-field-wrapper label{

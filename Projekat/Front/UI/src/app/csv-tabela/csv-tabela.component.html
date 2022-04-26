@@ -59,36 +59,19 @@
           <div class="d-flex justify-content-center">
             <img src="../../assets/image/drag-and-drop-Ikonica.png" class="img-fluid" alt="Responsive image">
           </div>
-          <div class="d-flex justify-content-center" id="KlikniZaIzborDugme">
-            <button class="dugme2 dugmeAnimacija" mat-raised-button color="primary">
-              <img src="../../assets/image/klikni za izbor dugme.png" class="img-fluid" alt="Responsive image">
-            </button>
-          </div>
-          
         </div>
-        
         </ngx-awesome-uploader>
+        <div class="d-flex justify-content-center" id="KlikniZaIzborDugme">
+          <button class="dugme2 dugmeAnimacija" mat-raised-button color="primary" (click)="openPopupProzor()">
+            <img src="../../assets/image/klikni za izbor dugme.png" class="img-fluid" alt="Responsive image">
+          </button>
+        </div>
       </div>
       
     </div>
 
 
     <div class="row justify-content-center" *ngIf="podaci.length>0">
-      
-        <!-- <div class="col-md-3">
-          <img src="../../assets/image/csvFajlIkona.jpg" class="img-fluid" alt="Responsive image">
-        </div>
-        <div class="col-md-6">
-          <div class="row justify-content">
-            <p>{{imeFajla}}</p>
-          </div>
-          <div class="row justify-content">
-            <p>{{(VelicinaFajla/1000000).toFixed(2)}}MB</p>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <button (click)="izbrisiFajl()">Remove</button>
-        </div> -->
         <div class="col-sm-auto" >
           <div id="fajl">
             <div class="parent">
@@ -117,6 +100,7 @@
       #myItemTemplate
       let-fileItem="fileItem"
       let-uploadProgress="uploadProgress"
+      style="height: 0px;"
     >
     </ng-template>
 
