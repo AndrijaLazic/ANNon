@@ -270,7 +270,16 @@ namespace Projekat.Controllers
             }
 
         }
+        [HttpPost("{token}/models")]
+        public async Task<ActionResult<string>> validate(string jwt)
+        {
+            string currentUser = ValidateToken(jwt,configuration);
+            if (currentUser == "")
+                return BadRequest("sdada");
 
+            return Ok(currentUser);
+
+        }
         private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
             using (var hmac = new HMACSHA512())
