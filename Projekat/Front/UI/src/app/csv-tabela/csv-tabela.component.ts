@@ -324,6 +324,7 @@ export class CsvTabelaComponent implements OnInit {
   public openPopupProzor() {
     this.popupProzor = this.modalService.open(PopupProzorComponent,{
       data: { title: 'Custom title' },
+      modalClass: 'modal-dialog-centered'
     });
   }
 }
