@@ -18,7 +18,7 @@
 
 <div class="container" style="height: 100%;">
     <br>
-    <div class="row justify-content-center">
+   <!-- <div class="row justify-content-center">
         <div class="col-md-auto">
             <label>Izaberi ulazne kolone</label>
             <angular2-multiselect id="MultiselectUlaznihKolona" [data]="dropdownList" [(ngModel)]="selectedItems" 
@@ -39,7 +39,7 @@
                 >
             </angular2-multiselect>
           </div>
-    </div>
+    </div> -->
     <div class="row justify-content-center" style="margin-top: 20px;">
         <div class="col-md-auto">
             <table id="tabela" class="table table-condensed table-striped" >
@@ -49,6 +49,8 @@
                         <th>Naziv kolone</th>
                         <th>Tip podataka</th>
                         <th>Broj Praznih polja</th>
+                        <th>Ulazne kolone:</th>
+                        <th>Izlazna kolona:</th>
                         <th colspan="2">Opcije</th>
                         
                     </tr>
@@ -70,9 +72,11 @@
                         <td class="veciFont">{{kolone[i]}}</td>
                         <td class="veciFont">{{kategorije[i]}}</td>
                         <td class="veciFont">{{prazna[i]}}</td>
+                        <td><input type="checkbox" id={{i}} (click)="dajUlazne(i)" [checked]="cekiranaUlazna[i]" [disabled]="cekiranaIzlazna[i]"></td>
+                        <td><input type="checkbox" id="izlazna{{i}}" (click)="dajIzlaznu(i)" [checked]="cekiranaIzlazna[i]" [disabled]="cekiranaUlazna[i]"></td>
                         <td><button class="dugme prikaz" mat-raised-button color="primary" *ngIf="collapse[i]==0" (click)="prikazi(i);" >Vise</button>
                         <button class="dugme prikaz" mat-raised-button color="primary" *ngIf="collapse[i]==1" (click)="smanji(i)" >Manje</button></td>
-                        <td><button class="dugme prikaz" mat-raised-button color="primary" (click)="openModalDialogCustomClass(content)">Brisi!</button></td>
+                        <!--<td><button class="dugme prikaz" mat-raised-button color="primary" (click)="openModalDialogCustomClass(content)">Brisi!</button></td> -->
                     </tr>
                     <tr *ngIf="collapse[i]==1">
                         <td colspan="5"><div id="demo1">

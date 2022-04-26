@@ -18,6 +18,8 @@ export class StatisticComponent implements OnInit {
   checked1=false;
   checked2=false;
   kategorije=new Array();
+  cekiranaUlazna=new Array();
+  cekiranaIzlazna=new Array();
   prazna=new Array();
   collapse=new Array();
   strStat:string;
@@ -276,10 +278,14 @@ listaKolona=[];
         for(let i=0;i<Object.keys(this.statistika['numericke_kolone']).length;i++)
         {
             this.kolone.push(this.statistika['numericke_kolone'][i]['ime_kolone']);
+            this.cekiranaUlazna.push(false);
+            this.cekiranaIzlazna.push(false);
         }
         for(let i=0;i<Object.keys(this.statistika['kategoricke_kolone']).length;i++)
         {
             this.kolone.push(this.statistika['kategoricke_kolone'][i]['ime_kolone']);
+            this.cekiranaUlazna.push(false);
+            this.cekiranaIzlazna.push(false);
         }
 
 
@@ -313,8 +319,8 @@ listaKolona=[];
             id++;
         }
 
-        this.loadDataSet1();
-        this.loadDataSet2();  
+        //this.loadDataSet1();
+        //this.loadDataSet2();  
     }
   }
   
@@ -575,13 +581,19 @@ listaKolona=[];
   next()
   {
         this.dodajUlazne;
-        if(this.selectedItems.length==0)
+        let brojac=0;
+        let brojac2=0;
+        for(let i=0;i<this.cekiranaUlazna.length;i++)
+            if(this.cekiranaUlazna[i]) brojac+=1;
+        for(let i=0;i<this.cekiranaIzlazna.length;i++)
+            if(this.cekiranaIzlazna[i]) brojac2+=1;
+        if(brojac==0)
         {
             this.toastr.warning("Niste uneli ulazne kolone!");
         }
         else
         {
-            if(this.izlaznaKolona==null || typeof this.izlaznaKolona[0]=="undefined")
+            if(brojac2==0)
                 this.toastr.warning("Niste uneli izlaznu kolonu!");
             else
             {
@@ -602,11 +614,15 @@ listaKolona=[];
                 this.statsModel=new statisticModel();
                 this.statsModel.nizPromena=this.modelKolona2;
                 this.statsModel.nizUlaznih=[];
-                for(let i=0;i<this.selectedItems.length;i++)
+                for(let i=0;i<this.kolone.length;i++)
                     {
-                        this.statsModel.nizUlaznih.push(this.selectedItems[i].itemName);
+                        if(this.cekiranaUlazna[i])
+                            this.statsModel.nizUlaznih.push(this.kolone[i]);
+                        if(this.cekiranaIzlazna[i])
+                            this.statsModel.izlazna=this.kolone[i];
                     }
-                this.statsModel.izlazna=this.izlaznaKolona[0].itemName;
+                console.log(this.statsModel.nizUlaznih);
+                //this.statsModel.izlazna=this.izlaznaKolona[0].itemName;
                 this.cookie.set('params',JSON.stringify(this.statsModel));
     
     
@@ -645,8 +661,8 @@ listaKolona=[];
         this.listaKolona.splice(id,1);
 
 
-        this.loadDataSet1();
-        this.loadDataSet2();  
+        //this.loadDataSet1();
+        //this.loadDataSet2();  
         
         
     
@@ -710,7 +726,7 @@ listaKolona=[];
     this.kategorije[id]='Kategorijski';
 }
 
-    loadDataSet1() {
+    /*loadDataSet1() {
         this.dropdownSettings = { 
         singleSelection: false, 
         text:"",
@@ -798,7 +814,7 @@ listaKolona=[];
     OnItemDeSelect2(item:any){
 
         this.loadDataSet1();
-    }
+    } */
 
     dodajUlazne(){
         for(let i=0;i<this.selectedItems.length;i++)
@@ -810,6 +826,25 @@ listaKolona=[];
     openModalDialogCustomClass(content) {
         this.modalService.open(content);
       }
+
+
+    dajUlazne(event:any){
+        let element = <HTMLInputElement> document.getElementById(event);  
+        if (element.checked) { this.cekiranaUlazna[event]=true}
+        else {this.cekiranaUlazna[event]=false}
+        console.log(this.cekiranaUlazna);
+        
+    }
+    dajIzlaznu(event:any){
+        let element = <HTMLInputElement> document.getElementById("izlazna"+event);  
+        if (element.checked) {
+             this.cekiranaIzlazna[event]=true;
+             for(let i=0;i<this.cekiranaIzlazna.length;i++)
+                if(i!=event) this.cekiranaIzlazna[i]=false;
+        }
+        else {this.cekiranaIzlazna[event]=false}
+
+    }
 
 
 }
