@@ -11,7 +11,7 @@ using Projekat.Data;
 namespace Projekat.Migrations
 {
     [DbContext(typeof(MySqlDbContext))]
-    [Migration("20220417011416_InitialCreate")]
+    [Migration("20220427124124_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -82,6 +82,26 @@ namespace Projekat.Migrations
                         .IsUnique();
 
                     b.ToTable("Korisnici");
+                });
+
+            modelBuilder.Entity("Projekat.Modeli.SavedModelsModel", b =>
+                {
+                    b.Property<int>("UserID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ModelID")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<DateTime>("DateSaved")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("ModelName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("UserID", "ModelID", "DateSaved");
+
+                    b.ToTable("SavedModels");
                 });
 #pragma warning restore 612, 618
         }

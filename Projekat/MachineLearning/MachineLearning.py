@@ -1,6 +1,9 @@
 import io
 import json
+from os import truncate
 from typing import Dict, List
+
+from requests.models import Response
 
 from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect,HTTPException
 from fastapi.responses import HTMLResponse
@@ -15,6 +18,7 @@ from asgiref.sync import sync_to_async
 import requests
 import statistics as stats
 from mreza import *
+import model_handling
 #vazno!!!!!!
 #pokretanje aplikacije komanda
 #uvicorn MachineLearning:app --reload
@@ -164,4 +168,13 @@ async def start_testing(
     ret=ResponseModel(0,json.dumps(recnik)).toJSON()
     return ret
     
-
+#promeni da se ne prima ovaj testrequest nego samo userid neka bude string ili sta god
+@app.post("/save")
+async def saveModel(req: TestRequest):
+    try:
+        #model = await manager.getModel(req.userID)
+        #model_handling.save_model(model)
+        return ResponseModel(0, "Proslo").toJSON()
+    except :
+        return ResponseModel(1,"Greska pri cuvanju modela!").toJSON()
+    
