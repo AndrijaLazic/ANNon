@@ -11,6 +11,7 @@ import { LoginServiceService } from 'src/app/shared/login-service.service';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
+  navOpen=false;
   isMenuOpened:boolean=false;
   menuInd:boolean=false;
   login_ind:boolean;
@@ -70,5 +71,10 @@ export class HeaderComponent implements OnInit {
   posaljiZahtev()
   {
     console.log("dukila");
+  }
+
+  NavBarOpen()
+  {
+    this.navOpen=!this.navOpen;
   }
 }
