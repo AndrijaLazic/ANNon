@@ -103,3 +103,6 @@
 .username a:hover{
     background-color: red;
 }
+#logo{
+    max-width: 30%;
+}
