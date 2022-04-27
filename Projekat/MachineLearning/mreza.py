@@ -220,4 +220,4 @@ hiperparametri = Hiperparametri('klasifikacija', 0.1, slojevi, 'categorical_cros
 data = pd.read_csv('petfinder-mini.csv')
 regression_model, regression_train, regression_val, regression_test  = make_regression_model(data, hiperparametri)
 
-train_model(regression_model, regression_train, regression_val, hiperparametri.izlazna_kolona, 1, 5)
+#train_model(regression_model, regression_train, regression_val, hiperparametri.izlazna_kolona, 1, 5)
