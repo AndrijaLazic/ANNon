@@ -61,15 +61,16 @@ namespace Projekat.Ostalo
         }
         public static string upisiSliku(int id,IFormFile photo)
         {
-            var pathBuilt = Path.Combine(Directory.GetCurrentDirectory(), "Upload\\profileimages");
+            var pathBuilt = Path.Combine(Directory.GetCurrentDirectory(), "Upload");
+            pathBuilt = Path.Combine(pathBuilt, "profileimages");
             if (!Directory.Exists(pathBuilt))
             {
                 Directory.CreateDirectory(pathBuilt);
             }
-            pathBuilt = pathBuilt + "\\" + id+".jpg";
+            pathBuilt = Path.Combine(pathBuilt,id+".jpg");
             using (var stream = System.IO.File.Create(pathBuilt))
             {
-                photo.CopyToAsync(stream);
+                photo.CopyTo(stream);
                 stream.Flush();
             }
             return pathBuilt;

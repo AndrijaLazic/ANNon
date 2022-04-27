@@ -273,74 +273,74 @@ namespace Projekat.Controllers
             }
 
         }
-        //[Authorize]
-        [HttpPost("{token}/save")]
-        public async Task<ActionResult<string>> validate(string token)
-        {
-            try
-            {
-                string currentUser = ValidateToken(token,configuration);
-                if (currentUser.IsNullOrEmpty())
-                    return BadRequest("Vasa sesija je istekla!");
+        ////[Authorize]
+        //[HttpPost("{token}/save")]
+        //public async Task<ActionResult<string>> validate(string token)
+        //{
+        //    try
+        //    {
+        //        string currentUser = ValidateToken(token,configuration);
+        //        if (currentUser.IsNullOrEmpty())
+        //            return BadRequest("Vasa sesija je istekla!");
 
-                var jsonObject = new {userID = currentUser,metric = "prazno"};//promeni u py delu da se ne salje ovaj model nego samo UID
-                var objectToJson = JsonConvert.SerializeObject(jsonObject);
-                var answer = await _client.SaveModel(objectToJson);
+        //        var jsonObject = new {userID = currentUser,metric = "prazno"};//promeni u py delu da se ne salje ovaj model nego samo UID
+        //        var objectToJson = JsonConvert.SerializeObject(jsonObject);
+        //        var answer = await _client.SaveModel(objectToJson);
 
-                var response = JsonConvert.DeserializeObject<ResponseModel>(answer);
-                if (response.Status == 1)
-                    return BadRequest("Neuspesno cuvanje modela!");
+        //        var response = JsonConvert.DeserializeObject<ResponseModel>(answer);
+        //        if (response.Status == 1)
+        //            return BadRequest("Neuspesno cuvanje modela!");
 
-                Korisnik korisnik = _context.Korisnici.Where(x => x.Username.Equals(currentUser)).FirstOrDefault();
-                if (korisnik == null)
-                    return BadRequest("Korisnik nije pronadjen!");
+        //        Korisnik korisnik = _context.Korisnici.Where(x => x.Username.Equals(currentUser)).FirstOrDefault();
+        //        if (korisnik == null)
+        //            return BadRequest("Korisnik nije pronadjen!");
 
-                SavedModelsModel saveModel = new SavedModelsModel
-                {
-                    UserID = korisnik.ID,
-                    ModelID = "model",
-                    DateSaved = DateTime.Now,
-                    ModelName = "imeModela"
-                };
-                
-                _context.SavedModels.Add(saveModel);
-                await _context.SaveChangesAsync();
+        //        SavedModelsModel saveModel = new SavedModelsModel
+        //        {
+        //            UserID = korisnik.ID,
+        //            ModelID = "model",
+        //            DateSaved = DateTime.Now,
+        //            ModelName = "imeModela"
+        //        };
 
-                return Ok("Model sacuvan");
-                }
-            catch (Exception ex)
-            {
+        //        _context.SavedModels.Add(saveModel);
+        //        await _context.SaveChangesAsync();
 
-                return BadRequest(ex);
-            }
+        //        return Ok("Model sacuvan");
+        //        }
+        //    catch (Exception ex)
+        //    {
 
-        }
+        //        return BadRequest(ex);
+        //    }
 
-        [HttpGet("{token}/getAllModels")]
-        public async Task<ActionResult<string>> GetSavedModels(string token)
-        {
-            try
-            {
-                var currentUser = ValidateToken(token, configuration);
-                if (currentUser.IsNullOrEmpty())
-                    return BadRequest("Greska pri validaciji tokena");
+        //}
 
-                Korisnik korisnik = _context.Korisnici.Where(x => x.Username.Equals(currentUser)).FirstOrDefault();
-                if (korisnik == null)
-                    return BadRequest("Korisnik ne postoji u bazi!");
+        //[HttpGet("{token}/getAllModels")]
+        //public async Task<ActionResult<string>> GetSavedModels(string token)
+        //{
+        //    try
+        //    {
+        //        var currentUser = ValidateToken(token, configuration);
+        //        if (currentUser.IsNullOrEmpty())
+        //            return BadRequest("Greska pri validaciji tokena");
 
-                List<SavedModelsModel> allSavedModels = new List<SavedModelsModel>();
-                allSavedModels = _context.SavedModels.FromSqlRaw("SELECT * FROM savedmodels WHERE UserID = "+korisnik.ID).ToList();
-                var modelsToJSON = JsonConvert.SerializeObject(allSavedModels);
-                return Ok(modelsToJSON);
-            }
-            catch (Exception ex)
-            {
+        //        Korisnik korisnik = _context.Korisnici.Where(x => x.Username.Equals(currentUser)).FirstOrDefault();
+        //        if (korisnik == null)
+        //            return BadRequest("Korisnik ne postoji u bazi!");
 
-                return BadRequest(ex);
-            }
+        //        List<SavedModelsModel> allSavedModels = new List<SavedModelsModel>();
+        //        allSavedModels = _context.SavedModels.FromSqlRaw("SELECT * FROM savedmodels WHERE UserID = "+korisnik.ID).ToList();
+        //        var modelsToJSON = JsonConvert.SerializeObject(allSavedModels);
+        //        return Ok(modelsToJSON);
+        //    }
+        //    catch (Exception ex)
+        //    {
+
+        //        return BadRequest(ex);
+        //    }
            
-        }
+        //}
         private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
             using (var hmac = new HMACSHA512())

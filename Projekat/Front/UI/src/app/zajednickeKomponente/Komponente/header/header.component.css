@@ -104,5 +104,8 @@
     background-color: red;
 }
 #logo{
-    max-width: 30%;
+    max-width: 25%;
+}
+#logo:hover{
+    cursor: pointer;
 }

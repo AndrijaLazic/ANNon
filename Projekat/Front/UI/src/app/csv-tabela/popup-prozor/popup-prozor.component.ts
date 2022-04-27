@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { MdbModalRef } from 'mdb-angular-ui-kit/modal';
 
 @Component({
@@ -8,6 +8,7 @@ import { MdbModalRef } from 'mdb-angular-ui-kit/modal';
 })
 export class PopupProzorComponent implements OnInit {
   fajl:any;
+  @Output() newItemEvent = new EventEmitter<any>();
   constructor(public modalRef: MdbModalRef<PopupProzorComponent>) {}
 
   ngOnInit(): void {
@@ -19,6 +20,7 @@ export class PopupProzorComponent implements OnInit {
 
     this.fajl=target.files[0];
     console.log(this.fajl.name)
+    this.newItemEvent.emit(evt);
 
     
   
