@@ -139,7 +139,10 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str):
                 model["BrojEpoha"],
                 model["UlazneKolone"],
                 model["IzlaznaKolona"])
-            model,train,val,test=make_regression_model(fajl,hiperparametri)
+            if hiperparametri.tip_problema == 'regresija':
+                model,train,val,test=make_regression_model(fajl,hiperparametri)
+            elif hiperparametri.tip_problema == 'klasifikacija':
+                model,train,val,test=make_classification_model(fajl,hiperparametri)
             await manager.addTestSet(client_id,test,hiperparametri.izlazna_kolona)
             filename=await sync_to_async(train_model)(model,train,val,hiperparametri.izlazna_kolona,client_id,hiperparametri.broj_epoha)
             await manager.addModel(client_id,model)
