@@ -14,8 +14,6 @@ import { DemoFilePickerAdapter } from './UploadAdapter.adapter';
 import { FilePreviewModel, UploaderCaptions, UploadResponse, UploadStatus, ValidationError } from 'ngx-awesome-uploader';
 import { catchError, delay, map, Observable, of } from 'rxjs';
 import { UploadFajlServisService } from './upload-fajl-servis.service';
-import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
-import { PopupProzorComponent } from './popup-prozor/popup-prozor.component';
 
 export class DataModel
 {
@@ -49,9 +47,8 @@ export class CsvTabelaComponent implements OnInit {
   public adapter = new DemoFilePickerAdapter(this.http,this.spinner,this.toastr);
   public UploadServis=new UploadFajlServisService(this.http,this.toastr,this.spinner);
 
-  popupProzor: MdbModalRef<PopupProzorComponent> | null = null;
   
-  constructor(private modalService: MdbModalService,private spinner:NgxSpinnerService,private papa:Papa,private http:HttpClient,private toastr:ToastrService,private route:Router,private shared: SharedService 
+  constructor(private spinner:NgxSpinnerService,private papa:Papa,private http:HttpClient,private toastr:ToastrService,private route:Router,private shared: SharedService 
     ) {
       this.model = new DataModel();
       
@@ -71,6 +68,8 @@ export class CsvTabelaComponent implements OnInit {
   onComponentStateChanged(event: ComponentStateChangedEvent){
     this.spinner.hide("Spiner1");
   }
+
+
   onFileSelected(fajl: FilePreviewModel)
   {
     
@@ -320,11 +319,5 @@ export class CsvTabelaComponent implements OnInit {
     
   }
 
-  //POPUP prozor
-  public openPopupProzor() {
-    this.popupProzor = this.modalService.open(PopupProzorComponent,{
-      data: { title: 'Custom title' },
-      modalClass: 'modal-dialog-centered'
-    });
-  }
+
 }
