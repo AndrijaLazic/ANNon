@@ -135,7 +135,7 @@ default_classification_loss = tf.keras.losses.BinaryCrossentropy(from_logits=Tru
 default_regression_loss = 'mean_squared_error' #'mean_absolute_error'
 #model = get_model(data, predicted_feature_name, 'one_hot', 2, 10, "relu", classification_loss)
 
-data = pd.read_csv("titanic/train.csv")
+data = pd.read_csv("datasets/titanic/train.csv")
 
 # categorical_feature_names = ['cut','color']
 # numeric_feature_names = ['x', 'y', 'z', 'carat']

@@ -213,11 +213,11 @@ def make_classification_model(data, hiperparametri:Hiperparametri):
 # train_model(model,train,val,target,1)
 # test_model(model,test,target)
 
-slojevi = [Sloj(64, 'relu'), Sloj(20, 'relu'), Sloj(32, 'relu')]
-hiperparametri = Hiperparametri('klasifikacija', 0.1, slojevi, 'categorical_crossentropy', 'Accuracy', 20, 
-['Type', 'Gender', 'Color1', 'Color2', 'MaturitySize', 'FurLength', 'Vaccinated', 'Sterilized', 'Health', 'Age', 'Fee', 'PhotoAmt'],
-'AdoptionSpeed')
-data = pd.read_csv('petfinder-mini.csv')
-regression_model, regression_train, regression_val, regression_test  = make_regression_model(data, hiperparametri)
+# slojevi = [Sloj(64, 'relu'), Sloj(20, 'relu'), Sloj(32, 'relu')]
+# hiperparametri = Hiperparametri('klasifikacija', 0.1, slojevi, 'sparse_categorical_crossentropy', 'Accuracy', 20, 
+# ['Type', 'Gender', 'Color1', 'Color2', 'MaturitySize', 'FurLength', 'Vaccinated', 'Sterilized', 'Health', 'Age', 'Fee', 'PhotoAmt'],
+# 'AdoptionSpeed')
+# data = pd.read_csv('datasets/petfinder-mini.csv')
+# classification_model, classification_train, classification_val, classification_test = make_classification_model(data, hiperparametri)
 
-train_model(regression_model, regression_train, regression_val, hiperparametri.izlazna_kolona, 1, 5)
+#train_model(classification_model, classification_train, classification_val, hiperparametri.izlazna_kolona, 1, 5)
