@@ -41,6 +41,7 @@
     "ngx": "^2.3.0",
     "ngx-awesome-uploader": "^13.0.1",
     "ngx-cookie-service": "^13.1.2",
+    "ngx-csv": "^0.3.2",
     "ngx-number-spinner": "^2.2.1",
     "ngx-pagination": "^5.1.1",
     "ngx-papaparse": "^5.0.0",

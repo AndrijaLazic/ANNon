@@ -14,6 +14,8 @@ import { statisticModel } from '../shared/statistic-model.model';
 import { Router } from '@angular/router';
 import { Model } from '../shared/statistic-model.model';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { ObjekatZaPreuzimanje } from './ObjekatZaPreuzimanje.model';
+import { ngxCsv } from 'ngx-csv';
 @Component({
   selector: 'app-trening',
   templateUrl: './trening.component.html',
@@ -32,6 +34,8 @@ export class TreningComponent implements OnInit {
   xOsa=true;
   BrojEpoha=0;
   StanjeDugmeta=false;
+  StanjeDugmeta2=true;
+  moj=[];
   @ViewChild(IzborParametaraComponent, {static : true}) child : IzborParametaraComponent;
   linija=shape.curveBasis;
   readonly osnovniUrl=Konfiguracija.KonfiguracijaServera.osnovniURL;
@@ -56,11 +60,12 @@ export class TreningComponent implements OnInit {
         poruka=>{
           if(poruka==this.BrojEpoha){
             this.StanjeDugmeta=false;
+            this.StanjeDugmeta2=false;
             return;
           }
           this.spinner.hide("Spiner1");
           this.StanjeDugmeta=true;
-          
+          this.StanjeDugmeta2=true;
           
         }
       );
@@ -106,6 +111,36 @@ export class TreningComponent implements OnInit {
       formData.append("parametri",JSON.stringify(item));
       this.http.post(this.osnovniUrl+"api/wsCommunication/user",formData).subscribe();
     }
+  }
+
+  prikaziRezultate()
+  {
+  
+    for(let i=0;i<this.signalR.podaciZaGrafik.length-1;i++)
+    {
+      for(let j=0;j<this.signalR.podaciZaGrafik[i].series.length;j++)
+      {
+          let broj_epohe=j+1;
+          let loss=this.signalR.podaciZaGrafik[i].series[j].value;
+          let val_loss=this.signalR.podaciZaGrafik[i+1].series[j].value;
+          this.moj.push(new ObjekatZaPreuzimanje(broj_epohe,loss,val_loss));
+        
+      }
+      
+    }
+    console.log(this.moj);
+    var options = { 
+      fieldSeparator: ',',
+      quoteStrings: '"',
+      decimalseparator: '.',
+      showLabels: true, 
+      showTitle: false,
+      title: 'Rezultati treniranja',
+      useBom: true,
+      headers: ["Broj epohe", "Loss", "Val_loss"]
+    };
+    new ngxCsv(this.moj,"Rezultati",options)
+    this.moj=[];
   }
 }
 

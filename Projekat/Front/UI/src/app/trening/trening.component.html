@@ -57,6 +57,7 @@
         <div class="row justify-content-center" style="margin-top: 20px;">
             <div class="col-md-auto justify-content-center">
                 <button class="dugme dugmeAnimacija" mat-raised-button color="primary" (click)=SendtoBack() [disabled]="StanjeDugmeta">Pocni sa treniranjem</button>
+                <button class="dugme dugmeAnimacija" mat-raised-button color="primary" id="cuvajDugme" (click)="prikaziRezultate()" [hidden]="StanjeDugmeta2">Sacuvaj rezultate</button>
             </div>
         </div>
     </div>
