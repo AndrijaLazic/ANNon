@@ -1,172 +1,111 @@
-body
-{
-    margin: 0;
-    padding:0 ;
-    
-}
-header{
+#header{
     background-image: linear-gradient(to bottom right, #023E8A, #002e4c);
+   
+}
+#moj{
     
+    text-align: center;
 }
-.header
-{
-    height: 75px;
-    width: 100%;
+#moj li a{
+    color: white;
+   
 }
-.menu{
-    margin-top: 20px;
-  
+#moj li a:hover{
+    background-color: #3E5E86;
+    transition: 1s;
+    opacity: 1;
+    
+    
 }
 .logo{
-    width: 74px;
-    height: 74px;
-    background-image: url(LogoAnnon.png);
-    background-size: 100%;
+    width: 57px;
+    height: 56px;
     position: absolute;
     top:0px;
     left:0px;
+    object-fit: scale-down;
 }
+
+
 .logo-text{
-    position:absolute ;
-    top:19px;
-    left:126px;
+    position: relative;
+    left:47px;
     color: white;
 }
 
-.menu ul{
-    padding: 0;
-    margin: 0;
+.logo1{
+    width: 94px;
+    height: 96px;
+    position: absolute;
+    top:0px;
+    left:0px;
+    
 }
-.menu ul li{
-    list-style-type: none;
-    display: inline-block;
-
-}
-.menu li a{
-    color:white;
-    font-size: 20px;
-    margin-left: 32px;
-    text-decoration: none;
-}
-
-.menu ul li a:hover{
-    color:rgb(185, 63, 63);
-}
-
-.naziv{
-    color:black;
-}
-
-@media only screen and (max-width: 991px) {
-    header{
-        padding:25px;
-    }
-
-   .menu{
-       position: fixed;
-       right: -280px;
-       top: 64px;
-        width: 280px;
-        height: 100%;
-       background:#413d3d;
-   }
-   .menu ul li
-   {
-       display: block;
-       text-align: left;
-       margin: 0;
-       padding:10px 0 10px 26px ;
-       border-bottom: 1px solid #6d6666;
-   }
-   .menu_icon{
-    display: inline-block;
+.logo-text1{
     position: relative;
-    right: -28px;
-    top: 0px;
-   }
-   .menu_icon span{
-    width: 32px;
-    height: 3px;
-    background:white;
-    display: block;
-   }
-   .menu_icon span:nth-child(2){
-       margin:4px 0 ;
-   }
-   .menuClass{
-       right: 0;
-       margin-top: 67px;
-   }
-  }
-  .menu-container{
-      margin-top: 3px;
-      
-  }
-  .username{
-      float: right;
-      margin-top: 23px;
-  }
-  .profile{
-      width: 70px;
-      height: 70px;
-      right: 60px;
-      position: absolute;
-      float: right;
-  }
-  .profile img{
-      width: 100%;
-      height: 100%;
-      clip-path: circle();
-      cursor: pointer;
-  }
-  .username a{
-      text-decoration: none;
-      color: white;
-      cursor: pointer;
-      font-size: 17px;
-  }
-
- 
-  .dropdown-content{
-      
-     margin-top:72px;
-      background: #F4FAFF;
-      width: 200px;
-      transition: 2s;
-      float:right;
-      border-radius: 7px;
-  }
-  .dropdown-content ul{
-      padding: 0;
-      margin: 0;
-  }
-  .dropdown-content ul li{
-      list-style: none;
-      padding:15px 15px 15px 15px;
-      border-top: 2px solid rgba(0,0,0,0.05);
-      align-items: center;
-      display: flex;
-  }
-  .dropdown-content ul li img{
-      max-width: 30px;
-      margin-right: 5px;
-      opacity: 0.5;
-      transition: 0.5s;
-      cursor: pointer;
-  }
-  .dropdown-content ul li a{
-     text-align: center;
-      text-decoration: none;
-      color: grey;
-      font-weight: 700;
-      transition: 0.5s;
-      cursor: pointer;
-  }
-  .dropdown-content ul li:hover img{
-      opacity: 1;
-  }
-  .dropdown-content ul li:hover a{
-    color:#002e4c;
+    left:86px;
+    color: white;
 }
 
-  
+
+#isti img{
+    height: 80px;
+    width: 80px;
+    float: right;
+    clip-path: circle();
+    cursor: pointer;
+}
+
+.dropdown-content{
+      
+    position: absolute;
+     background: #F4FAFF;
+     width: 200px;
+     transition: 2s;
+     float:right;
+     border-radius: 7px;
+     top:94px;
+     right:10px;
+     
+ }
+ .dropdown-content ul{
+     padding: 0;
+     margin: 0;
+ }
+ .dropdown-content ul li{
+     list-style: none;
+     padding:15px 15px 15px 15px;
+     border-top: 2px solid rgba(0,0,0,0.05);
+     align-items: center;
+     display: flex;
+ }
+ .dropdown-content ul li img{
+     max-width: 30px;
+     margin-right: 5px;
+     opacity: 0.5;
+     transition: 0.5s;
+     cursor: pointer;
+ }
+ .dropdown-content ul li a{
+    text-align: center;
+     text-decoration: none;
+     color: grey;
+     font-weight: 700;
+     transition: 0.5s;
+     cursor: pointer;
+ }
+ .dropdown-content ul li:hover img{
+     opacity: 1;
+ }
+ .dropdown-content ul li:hover a{
+   color:#002e4c;
+}
+.username a:hover{
+    background-color: red;
+}
+#logo{
+    max-width: 25%;
+}
+#logo:hover{
+    cursor: pointer;
+}

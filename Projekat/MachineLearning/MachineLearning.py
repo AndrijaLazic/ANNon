@@ -168,13 +168,13 @@ async def start_testing(
     ret=ResponseModel(0,json.dumps(recnik)).toJSON()
     return ret
     
-
+#promeni da se ne prima ovaj testrequest nego samo userid neka bude string ili sta god
 @app.post("/save")
 async def saveModel(req: TestRequest):
     try:
-        model = await manager.getModel(req.userID)
-        model_handling.save_model(model)
-        return ResponseModel(0, "Proslo")
+        #model = await manager.getModel(req.userID)
+        #model_handling.save_model(model)
+        return ResponseModel(0, "Proslo").toJSON()
     except :
-        return ResponseModel(1,"Greska pri cuvanju modela!")
+        return ResponseModel(1,"Greska pri cuvanju modela!").toJSON()
     

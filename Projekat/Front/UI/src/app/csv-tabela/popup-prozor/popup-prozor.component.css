@@ -1,0 +1,16 @@
+::ng-deep .cdk-overlay-container{
+}
+
+#dugmeZaIzbor{
+    width: 50%;
+}
+#dugmeZaBrisanje{
+    width: 30%;
+}
+.modal-footer {
+    justify-content: center;
+}
+
+#url{
+    width: 50%;
+}

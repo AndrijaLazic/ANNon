@@ -60,5 +60,13 @@ namespace Projekat.Clients
             return JsonConvert.DeserializeObject<string>(result);
         }
 
+        public async Task<string> SaveModel(string jsonString)
+        {
+            var content = new StringContent(jsonString, Encoding.UTF8, "application/json");
+            HttpResponseMessage httpResponse = await _client.PostAsync(_configuration.GetSection("ML_Server_Config:http").Value + _configuration.GetSection("ML_Server_Config:host").Value + ":" + _configuration.GetSection("ML_Server_Config:port").Value + "/" + "save", content);
+            var result = await httpResponse.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<string>(result);
+        }
+
     }
 }

@@ -81,6 +81,26 @@ namespace Projekat.Migrations
 
                     b.ToTable("Korisnici");
                 });
+
+            modelBuilder.Entity("Projekat.Modeli.SavedModelsModel", b =>
+                {
+                    b.Property<int>("UserID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ModelID")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<DateTime>("DateSaved")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("ModelName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("UserID", "ModelID", "DateSaved");
+
+                    b.ToTable("SavedModels");
+                });
 #pragma warning restore 612, 618
         }
     }

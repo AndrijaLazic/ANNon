@@ -3,6 +3,7 @@
     flex-direction: column;
     height: 100%;
     width: 100vw;
+
 }
 
 .Sadrzaj{
@@ -38,3 +39,15 @@
     padding: 20px;
 
   }
+
+
+@media (max-width:767px) {
+    #myVideo{
+        display: none;
+    }
+    .Sadrzaj{
+        background: url("../../../assets/image/mainbackground.jpg");
+        background-size: cover;
+    }
+
+}

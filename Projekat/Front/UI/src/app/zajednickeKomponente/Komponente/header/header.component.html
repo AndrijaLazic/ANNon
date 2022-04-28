@@ -1,44 +1,49 @@
 
-<header>
-    <div class="row justify-content-center">
-        <div class="row header">
-            <div class="col-md-3 col-sm-3 col-3">
-                <div class="logo"></div>
-                <a routerLink="/" class="naziv"><h3 class="logo-text">IgrANNonica</h3></a>    
+<nav class="navbar navbar-expand-lg navbar-light bg-light" id="header">
+     
+    
+    <div class="container-fluid" *ngIf="!login_ind">
+      
+      <img routerLink="/" src="../../../../assets/image/igrANNOnica.png" class="img-fluid" id="logo" >  
+      
+      <button class="navbar-toggler" type="button" (click)="NavBarOpen()" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="moj1" [ngClass]="{'show':navOpen}">
+        <div class="navbar-nav me-auto">
+        </div>
+        <ul class="navbar-nav navbar-right" id="moj">
+            <li class="nav-item">
+              <a class="nav-link" routerLink="/login">Login</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" routerLink="/signup">Register</a>
+            </li>
+          </ul>
+      </div>
+    
+    </div>
+    <div class="container-fluid" *ngIf="login_ind">
+        
+        <img routerLink="/" src="../../../../assets/image/igrANNOnica.png" class="img-fluid" id="logo" >  
+        
+        
+        
+        <div class="menu-container" clickOutside (clickOutside)="clickedOutside()" >
+           
+                
+            <div class="profile" id="isti" >
+                <img [src]="url" (click)="openMenu()"  >
             </div>
-            <div class="col-md-9 col-sm-9 col-9 text-end">
-                <div class="menu_icon" (click)="Funkcija()">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-                <div class="menu" [class.menuClass]="menuInd" *ngIf="!login_ind">
-                    <ul>
-                        <li><a routerLink="/login">Login</a></li>
-                        <li><a routerLink="/signup">Register</a></li>
-                    </ul>
-                </div>
-                <div *ngIf="login_ind">
-                    <div class="menu-container" clickOutside (clickOutside)="clickedOutside()" >
-                       
-                            <div class="username" id="isti">
-                                <a class="menu-toggler" (click)="openMenu()">{{username}}</a> 
-                            </div>
-                        <div class="profile" id="isti" >
-                            <img [src]="url" (click)="openMenu()"  >
-                        </div>
-                        
-                        
-                        <div class="dropdown-content" *ngIf="isMenuOpened" >
-                            <ul>
-                                <li><img src="assets/image/mojprofil.png"><a routerLink="/MojNalog">Moj profil</a></li>
-                                <li><img src="assets/image/odjava2.png"><a (click)="logout()">Odjavi se</a></li>
-                            </ul>
-                          
-                        </div>
-                      </div>
-                </div>
+            
+            
+            <div class="dropdown-content" *ngIf="isMenuOpened" >
+                <ul>
+                    <li><img src="assets/image/mojprofil.png"><a routerLink="/MojNalog">Moj profil</a></li>
+                    <li><img src="assets/image/odjava2.png"><a (click)="logout()">Odjavi se</a></li>
+                </ul>
+              
             </div>
         </div>
     </div>
-</header>
+  </nav>
