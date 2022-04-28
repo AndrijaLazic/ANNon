@@ -105,10 +105,12 @@ export class TreningComponent implements OnInit {
       pom=Object.assign(new statisticModel(),JSON.parse(this.cookieService.get('params')));
       item.IzlaznaKolona=pom.izlazna;
       item.UlazneKolone=pom.nizUlaznih;
+      item.NizPromena=pom.nizPromena;
       this.BrojEpoha=item.BrojEpoha;
       formData.append("userID",sessionStorage.getItem("userId"));
       formData.append("connectionID",sessionStorage.getItem("connectionID"));
       formData.append("parametri",JSON.stringify(item));
+      console.log(item)
       this.http.post(this.osnovniUrl+"api/wsCommunication/user",formData).subscribe();
     }
   }
