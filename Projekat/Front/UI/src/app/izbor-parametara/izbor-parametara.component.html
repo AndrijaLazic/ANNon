@@ -20,16 +20,16 @@
         <!-- Ako je regresija -->
         <div class="col-md-auto" *ngIf="TipProblema.value=='regresija'">
           <mat-form-field appearance="fill" class="selektorAktivacioneFje">
-            <mat-label>Mera greske</mat-label>
+            <mat-label>Metrika gubitka</mat-label>
             <mat-select formControlName="MeraGreske">
-              <mat-option value="mse">
-                mse
+              <mat-option value="mean_squared_error">
+                srednja kvadratna greška
               </mat-option>
-              <mat-option value="rmse">
-                rmse
+              <mat-option value="mean_absolute_percentage_error">
+                srednja apsolutna procentna greška
               </mat-option>
-              <mat-option value="mae">
-                mae
+              <mat-option value="mean_absolute_error">
+                srednja apsolutna greška
               </mat-option>
             </mat-select>
             <mat-error *ngIf="MeraGreske && MeraGreske.invalid">Izaberite tip problema</mat-error>
@@ -37,38 +37,35 @@
         </div>
         <div class="col-md-auto" *ngIf="TipProblema.value=='regresija'">
           <mat-form-field appearance="fill" class="selektorAktivacioneFje">
-            <mat-label>Mera uspeha</mat-label>
+            <mat-label>Dodatna metrika</mat-label>
             <mat-select formControlName="MeraUspeha">
-              <mat-option value="mse">
-                mse
+              <mat-option value="mean_squared_error">
+                srednja kvadratna greška
               </mat-option>
-              <mat-option value="rmse">
-                rmse
+              <mat-option value="mean_absolute_percentage_error">
+                srednja apsolutna procentna greška
               </mat-option>
-              <mat-option value="mae">
-                mae
+              <mat-option value="cosine_similarity">
+                kosinusna sličnost
               </mat-option>
             </mat-select>
             <mat-error *ngIf="MeraUspeha && MeraUspeha.invalid">Izaberite tip problema</mat-error>
           </mat-form-field>
         </div>
 
-        <!-- Ako je regresija -->
+        <!-- Ako je klasifikacija -->
         <div class="col-md-auto" *ngIf="TipProblema.value=='klasifikacija'">
           <mat-form-field appearance="fill" class="selektorAktivacioneFje">
-            <mat-label>Mera greske</mat-label>
+            <mat-label>Metrika gubitka</mat-label>
             <mat-select formControlName="MeraGreske">
-              <mat-option value="accuracy">
-                accuracy
+              <mat-option value="binary_crossentropy">
+                binarna krosentropija
               </mat-option>
-              <mat-option value="precision">
-                precision
+              <mat-option value="categorical_crossentropy">
+                kategorijska krosentropija
               </mat-option>
-              <mat-option value="recall">
-                recall
-              </mat-option>
-              <mat-option value="f1">
-                f1
+              <mat-option value="poisson">
+                poasonov gubitak
               </mat-option>
             </mat-select>
             <mat-error *ngIf="MeraGreske && MeraGreske.invalid">Izaberite tip problema</mat-error>
@@ -76,19 +73,16 @@
         </div>
         <div class="col-md-auto" *ngIf="TipProblema.value=='klasifikacija'">
           <mat-form-field appearance="fill" class="selektorAktivacioneFje">
-            <mat-label>Mera uspeha</mat-label>
+            <mat-label>Dodatna metrika</mat-label>
             <mat-select formControlName="MeraUspeha">
-              <mat-option value="accuracy">
-                accuracy
+              <mat-option value="binary_accuracy">
+                binarna tačnost
               </mat-option>
-              <mat-option value="precision">
-                precision
+              <mat-option value="catetgorical_accuracy">
+                kategorijska tačnost
               </mat-option>
-              <mat-option value="recall">
-                recall
-              </mat-option>
-              <mat-option value="f1">
-                f1
+              <mat-option value="top_k_categorical_accuracy">
+                kategorijska tačnost prvih k
               </mat-option>
             </mat-select>
             <mat-error *ngIf="MeraUspeha && MeraUspeha.invalid">Izaberite tip problema</mat-error>
