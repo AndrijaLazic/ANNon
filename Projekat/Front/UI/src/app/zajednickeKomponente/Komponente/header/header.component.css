@@ -1,6 +1,5 @@
 #header{
-    background-image: linear-gradient(to bottom right, #023E8A, #002e4c);
-   
+    backdrop-filter:blur(15px) brightness(90%);
 }
 #moj{
     
@@ -17,35 +16,9 @@
     
     
 }
-.logo{
-    width: 57px;
-    height: 56px;
-    position: absolute;
-    top:0px;
-    left:0px;
-    object-fit: scale-down;
-}
 
 
-.logo-text{
-    position: relative;
-    left:47px;
-    color: white;
-}
 
-.logo1{
-    width: 94px;
-    height: 96px;
-    position: absolute;
-    top:0px;
-    left:0px;
-    
-}
-.logo-text1{
-    position: relative;
-    left:86px;
-    color: white;
-}
 
 
 #isti img{
@@ -108,4 +81,20 @@
 }
 #logo:hover{
     cursor: pointer;
+}
+.navbar-toggler{
+    color: rgba(255, 255, 255, 0);
+    border: 1px solid white;
+}
+.navbar-toggler span{
+    background-image:url("../../../../assets/image/meniIkona.png");
+
+}
+@media (max-width:767px){
+    #logo{
+        max-width: 45%;
+    }
+    #header{
+        backdrop-filter:blur(30px) brightness(50%);
+    }
 }

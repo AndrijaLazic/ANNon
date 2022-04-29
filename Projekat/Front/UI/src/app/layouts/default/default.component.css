@@ -45,9 +45,11 @@
     #myVideo{
         display: none;
     }
-    .Sadrzaj{
-        background: url("../../../assets/image/mainbackground.jpg");
+    ::ng-deep body{
+        background: url("../../../assets/image/mainbackground.jpg") no-repeat center center fixed; 
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
         background-size: cover;
     }
-
 }
