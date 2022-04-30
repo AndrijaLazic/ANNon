@@ -13,8 +13,6 @@
     background-color: #3E5E86;
     transition: 1s;
     opacity: 1;
-    
-    
 }
 
 
@@ -90,11 +88,26 @@
     background-image:url("../../../../assets/image/meniIkona.png");
 
 }
+#dropDownMojNalog{
+    background-color: #013054;
+    
+}
+.nav-link.dropdown-toggle.show{
+    background-color: #013054;
+}
+
+
+
+
+
 @media (max-width:767px){
     #logo{
         max-width: 45%;
     }
     #header{
-        backdrop-filter:blur(30px) brightness(50%);
+        backdrop-filter:blur(30px) brightness(40%);
+    }
+    #dropDownMojNalog{
+        text-align: center;
     }
 }

@@ -38,7 +38,9 @@
               "node_modules/angular2-multiselect-dropdown/themes/dark.theme.scss"
             ],
             "scripts": [
-              "./node_modules/chart.js/dist/Chart.js"
+              "./node_modules/chart.js/dist/Chart.js",
+              "./node_modules/@popperjs/core/dist/umd/popper.min.js",
+              "./node_modules/bootstrap/dist/js/bootstrap.min.js"
             ]
           },
           "configurations": {

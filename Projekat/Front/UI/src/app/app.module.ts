@@ -46,6 +46,7 @@ import { FilePickerModule } from  'ngx-awesome-uploader';
 import { FilePickerAdapter } from 'ngx-awesome-uploader';
 
 import { MojNalogComponent } from './moj-nalog/moj-nalog.component';
+import { PoredjenjeModelaComponent } from './poredjenje-modela/poredjenje-modela.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -64,7 +65,8 @@ import { MojNalogComponent } from './moj-nalog/moj-nalog.component';
     PocetnatestComponent,
     ClickOutsideDirective,
     TeamComponent,
-    MojNalogComponent
+    MojNalogComponent,
+    PoredjenjeModelaComponent
     
   ],
   imports: [
