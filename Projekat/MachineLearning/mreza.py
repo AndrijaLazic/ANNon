@@ -4,6 +4,7 @@ import tensorflow as tf
 import pandas as pd
 from CustomCallback import CustomCallback
 from keras.models import load_model
+from keras.callbacks import LearningRateScheduler
 import model_handling
 
 class Hiperparametri:
@@ -164,15 +165,21 @@ def make_model(all_inputs,encoded_features,layers:List[Sloj],loss_metric,success
     output = tf.keras.layers.Dense(1)(x)
 
   model = tf.keras.Model(all_inputs, output)
-
-  model.compile(optimizer='Adam',
+  initial_learning_rate = 1.0
+  lr_schedule = tf.keras.optimizers.schedules.ExponentialDecay(
+      initial_learning_rate,
+      decay_steps=500,
+      decay_rate=0.96,
+      staircase=True)
+  model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=lr_schedule),
                 loss=loss_metric,
                 metrics=success_metric)
+  model.summary()
   return model
 
 
 def train_model(model,train_data,validation_data,target,client_id,epoch_number=20):
-  model.fit(df_to_dataset(train_data,target,shuffle=False), epochs=epoch_number, validation_data=df_to_dataset(validation_data,target,shuffle=False),callbacks=CustomCallback(root="http://localhost:8000",path="/publish/epoch/end",send_as_json=True,to_send=client_id))
+  model.fit(df_to_dataset(train_data,target,shuffle=False), epochs=epoch_number, validation_data=df_to_dataset(validation_data,target,shuffle=False),callbacks=[CustomCallback(root="http://localhost:8000",path="/publish/epoch/end",send_as_json=True,to_send=client_id)])
 
 def test_model(model,test_data,target):
   return model.evaluate(df_to_dataset(test_data,target,shuffle=False))
@@ -201,6 +208,17 @@ def make_classification_model(data, hiperparametri:Hiperparametri):
   all_inputs,encoded_features=prepare_preprocess_layers(data,hiperparametri.izlazna_kolona,train)
   model=make_model(all_inputs,encoded_features,hiperparametri.slojevi,hiperparametri.mera_greske,hiperparametri.mera_uspeha, broj_klasa)
   return model,train,val,test
+
+def step_decay_schedule(initial_lr=1e-3, decay_factor=0.75, step_size=10):
+    '''
+    Wrapper function to create a LearningRateScheduler with step decay schedule.
+    '''
+    def schedule(epoch):
+        return initial_lr * (decay_factor ** np.floor(epoch/step_size))
+    
+    return LearningRateScheduler(schedule)
+
+
 
 # data=load_data("titanic/train.csv")
 # target="Survived"
