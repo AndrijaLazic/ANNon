@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { ChartModel } from 'ag-grid-community';
 import{webSocket} from 'rxjs/webSocket'
 import { SignalRService } from '../shared/signal-r.service';
@@ -14,8 +14,6 @@ import { statisticModel } from '../shared/statistic-model.model';
 import { Router } from '@angular/router';
 import { Model } from '../shared/statistic-model.model';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { ObjekatZaPreuzimanje } from './ObjekatZaPreuzimanje.model';
-import { ngxCsv } from 'ngx-csv';
 @Component({
   selector: 'app-trening',
   templateUrl: './trening.component.html',
@@ -35,6 +33,7 @@ export class TreningComponent implements OnInit {
   BrojEpoha=0;
   StanjeDugmeta=false;
   StanjeDugmeta2=true;
+  izabraniParametri:ObjekatZaSlanje;
   moj=[];
   @ViewChild(IzborParametaraComponent, {static : true}) child : IzborParametaraComponent;
   linija=shape.curveBasis;
@@ -76,15 +75,32 @@ export class TreningComponent implements OnInit {
   }
   uporediModele()
   {
-    console.log(sessionStorage.getItem("userId"));
-    const formData = new FormData();
-    formData.append("userID",sessionStorage.getItem("userId"));
-    formData.append("metric","mse");
-    console.log(formData);
-    this.http.post(this.osnovniUrl+"api/MachineLearning/compare",formData).subscribe(
-      res => console.log(res),
-      err => console.log(err)
-    )
+    // console.log(sessionStorage.getItem("userId"));
+    // const formData = new FormData();
+    // formData.append("userID",sessionStorage.getItem("userId"));
+    // formData.append("metric","mse");
+    // console.log(formData);
+    // this.http.post(this.osnovniUrl+"api/MachineLearning/compare",formData).subscribe(
+    //   res => console.log(res),
+    //   err => console.log(err)
+    // )
+    for(let i=0;i<this.signalR.podaciZaGrafik.length-1;i++)
+    {
+      for(let j=0;j<this.signalR.podaciZaGrafik[i].series.length;j++)
+      {
+          let loss=this.signalR.podaciZaGrafik[i].series[j].value;
+          this.izabraniParametri.loss.push(loss);
+          let val_loss=this.signalR.podaciZaGrafik[i+1].series[j].value;
+          this.izabraniParametri.val_loss.push(val_loss);
+        
+      }
+      
+    }
+    localStorage.setItem('izabrani-parametri',JSON.stringify(this.izabraniParametri));
+    this.route.navigate (['poredjenjeModela']);
+
+
+
   }
   promenaCurve(event:any){
     if(event.value=="curveBasis"){
@@ -110,39 +126,48 @@ export class TreningComponent implements OnInit {
       formData.append("userID",sessionStorage.getItem("userId"));
       formData.append("connectionID",sessionStorage.getItem("connectionID"));
       formData.append("parametri",JSON.stringify(item));
-      console.log(item)
+      this.izabraniParametri=item;
       this.http.post(this.osnovniUrl+"api/wsCommunication/user",formData).subscribe();
     }
   }
 
   prikaziRezultate()
   {
-  
+    
     for(let i=0;i<this.signalR.podaciZaGrafik.length-1;i++)
     {
       for(let j=0;j<this.signalR.podaciZaGrafik[i].series.length;j++)
       {
-          let broj_epohe=j+1;
           let loss=this.signalR.podaciZaGrafik[i].series[j].value;
+          this.izabraniParametri.loss.push(loss);
           let val_loss=this.signalR.podaciZaGrafik[i+1].series[j].value;
-          this.moj.push(new ObjekatZaPreuzimanje(broj_epohe,loss,val_loss));
+          this.izabraniParametri.val_loss.push(val_loss);
         
       }
       
     }
-    console.log(this.moj);
-    var options = { 
-      fieldSeparator: ',',
-      quoteStrings: '"',
-      decimalseparator: '.',
-      showLabels: true, 
-      showTitle: false,
-      title: 'Rezultati treniranja',
-      useBom: true,
-      headers: ["Broj epohe", "Loss", "Val_loss"]
-    };
-    new ngxCsv(this.moj,"Rezultati",options)
-    this.moj=[];
+    //this.moj.push(this.izabraniParametri);
+    console.log(this.izabraniParametri);
+    var saveData = (function () {
+      var a = document.createElement("a");
+      document.body.appendChild(a);
+      //a.style = "display: none";
+      return function (data, fileName) {
+          var json = JSON.stringify(data),
+              blob = new Blob([json], {type: "octet/stream"}),
+              url = window.URL.createObjectURL(blob);
+          a.href = url;
+          a.download = fileName;
+          a.click();
+          window.URL.revokeObjectURL(url);
+      };
+  }());
+  
+  var data = this.izabraniParametri,
+      fileName = "Rezultati.json";
+  
+  saveData(data, fileName);
+    
   }
 }
 

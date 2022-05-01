@@ -16,6 +16,7 @@ import { TreningComponent } from './trening/trening.component';
 import { PocetnatestComponent } from './pocetnatest/pocetnatest.component';
 import { TeamComponent } from './team/team.component';
 import { MojNalogComponent } from './moj-nalog/moj-nalog.component';
+import { PoredjenjeModelaComponent } from './poredjenje-modela/poredjenje-modela.component';
 const routes: Routes = [
   {
     path:'',
@@ -36,12 +37,15 @@ const routes: Routes = [
   {
     path:'success-login',component:LoginParentComponent,canActivate:[AuthGuard]
   },
-  
+  {
+    path:'poredjenjeModela',component:PoredjenjeModelaComponent
+  },
   {
     path:'statistic',component:StatisticComponent
   },
   {
     path:'training',component:TreningComponent
+    
   }]
   },
   {

@@ -138,7 +138,7 @@ export class IzborParametaraComponent implements OnInit {
         var ParametriZaSlanje=new ObjekatZaSlanje(); 
         ParametriZaSlanje=Object.assign(new ObjekatZaSlanje(), this.forma.value);
         ParametriZaSlanje.BrojSlojeva=this.ListaSkrivenihSlojeva.length;
-        
+        //console.log(ParametriZaSlanje)
         this.newItemEvent.emit(ParametriZaSlanje);
       }
 
