@@ -13,19 +13,14 @@
         <div class="navbar-nav me-auto">
         </div>
         <ul class="navbar-nav navbar-right" id="moj">
-            <!-- <li class="nav-item">
-              <a class="nav-link" routerLink="/login">Login</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" routerLink="/signup">Register</a>
-            </li> -->
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Moj nalog
+              <a class="nav-link" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <p class="dropdown-toggle" id="mojNalog"><img style="width: 2em;height: 2em;" src="../../../../assets/image/pocetna1.png" /> Moj nalog</p>
+                
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink" id="dropDownMojNalog">
-                <a class="dropdown-item" routerLink="/login">Prijavljivanje</a>
-                <a class="dropdown-item" routerLink="/signup">Registracija</a>
+                <a class="dropdown-item razmak" routerLink="/login"><p  id="dropDownElement">Prijavljivanje</p></a>
+                <a class="dropdown-item" routerLink="/signup"><p   id="dropDownElement">Registracija</p></a>
               </div>
             </li>
         </ul>
@@ -38,23 +33,25 @@
     <div class="container-fluid" *ngIf="login_ind">
         
         <img routerLink="/" src="../../../../assets/image/igrANNOnica.png" class="img-fluid" id="logo" >  
-        
-        
-        
-        <div class="menu-container" clickOutside (clickOutside)="clickedOutside()" >
-           
-                
-            <div class="profile" id="isti" >
-                <img [src]="url" (click)="openMenu()"  >
-            </div>
-            
-            
-            <div class="dropdown-content" *ngIf="isMenuOpened" >
-                <ul>
-                    <li><img src="assets/image/mojprofil.png"><a routerLink="/MojNalog">Moj profil</a></li>
-                    <li><img src="assets/image/odjava2.png"><a (click)="logout()">Odjavi se</a></li>
-                </ul>
-            </div>
+        <button class="navbar-toggler" type="button" (click)="NavBarOpen()" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="moj1" [ngClass]="{'show':navOpen}">
+          <div class="navbar-nav me-auto">
+          </div>
+          <ul class="navbar-nav navbar-right" id="moj">
+            <li class="nav-item dropdown">
+              <a class="nav-link" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <p  class="dropdown-toggle" id="mojNalog"><img [src]="url" /> {{username}}</p>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink" id="dropDownMojNalog">
+                <a class="dropdown-item razmak"routerLink="/MojNalog"><p  id="dropDownElement"><img src="assets/image/mojprofil.png"/>  Moj profil</p></a>
+                <a class="dropdown-item" (click)="logout()"><p   id="dropDownElement"><img src="assets/image/odjava2.png"/>  Odjavi se</p></a>
+              </div>
+            </li>
+          </ul>
         </div>
+        
+        
     </div>
   </nav>
