@@ -15,6 +15,8 @@ export class ObjekatZaSlanje {
     //niz val_loss i lo
     val_loss=[];
     loss=[];
+    ImeFajla: string;
+    Naziv: string;
 }
 
 export interface ListaSkrivenihSlojeva {

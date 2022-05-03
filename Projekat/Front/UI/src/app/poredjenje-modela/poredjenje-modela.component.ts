@@ -9,7 +9,13 @@ import { ObjekatZaSlanje } from '../trening/ObjekatZaSlanje.model';
 })
 export class PoredjenjeModelaComponent implements OnInit {
   izbraniParametri:ObjekatZaSlanje;
-  constructor(public signalR:SignalRService){}
+  modeliZaPoredjenje:ObjekatZaSlanje[] = [];
+  constructor(){
+    if(localStorage.getItem('izabrani-parametri')!=null){
+      this.modeliZaPoredjenje.push(JSON.parse(localStorage.getItem('izabrani-parametri')));
+      
+    }
+  }
 
   ngOnInit(): void {
     this.izbraniParametri=JSON.parse(localStorage.getItem('izabrani-parametri'));

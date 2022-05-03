@@ -94,8 +94,9 @@ export class TreningComponent implements OnInit {
           this.izabraniParametri.val_loss.push(val_loss);
         
       }
-      
+
     }
+    this.izabraniParametri.ImeFajla=sessionStorage.getItem("imeFajla");
     localStorage.setItem('izabrani-parametri',JSON.stringify(this.izabraniParametri));
     this.route.navigate (['poredjenjeModela']);
 
