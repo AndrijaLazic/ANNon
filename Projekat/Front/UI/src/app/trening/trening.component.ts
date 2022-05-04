@@ -147,6 +147,7 @@ export class TreningComponent implements OnInit {
       }
       
     }
+    this.izabraniParametri.ImeFajla=sessionStorage.getItem("imeFajla");
     //this.moj.push(this.izabraniParametri);
     console.log(this.izabraniParametri);
     var saveData = (function () {
