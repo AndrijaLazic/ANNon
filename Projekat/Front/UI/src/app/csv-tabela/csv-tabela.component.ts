@@ -201,6 +201,8 @@ export class CsvTabelaComponent implements OnInit {
       res=>{
         this.received=true;
         this.statistika = res as Object;
+        localStorage.setItem("statistic", JSON.stringify(this.statistika));
+        console.log(localStorage.getItem("statistic"));
         if(this.received)
         {
           console.log(this.statistika);

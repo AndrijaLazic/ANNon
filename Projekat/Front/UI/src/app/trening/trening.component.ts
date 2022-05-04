@@ -128,7 +128,9 @@ export class TreningComponent implements OnInit {
       formData.append("connectionID",sessionStorage.getItem("connectionID"));
       formData.append("parametri",JSON.stringify(item));
       this.izabraniParametri=item;
+      localStorage.setItem("parametars",JSON.stringify(item));
       this.http.post(this.osnovniUrl+"api/wsCommunication/user",formData).subscribe();
+      
     }
   }
 
