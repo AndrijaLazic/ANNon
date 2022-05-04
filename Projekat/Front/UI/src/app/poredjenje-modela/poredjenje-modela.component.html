@@ -1,81 +1,94 @@
 <div class="container" id="Container1">
-    <div class="row justify-content-center gx-2" style="margin-top: 20px;">
-        <div class="col-md-5 justify-content-center opcijeModela" *ngFor="let item of modeliZaPoredjenje;index as i;">
-            <div class="OpisModela" *ngIf="modeliZaPoredjenje[i].Naziv">
-                Naziv modela: {{modeliZaPoredjenje[i].Naziv}}<br>
-                Dataset modela:{{modeliZaPoredjenje[i].ImeFajla}}
+    <div class="row justify-content-center gx-5 gy-5" style="margin-top: 20px;">
+        <div class="col-md-5 justify-content-center" *ngFor="let item of modeliZaPoredjenje;index as i;">
+            <div class="opcijeModela">
+                <div class="OpisModela" *ngIf="modeliZaPoredjenje[i].Naziv">
+                    Naziv modela: {{modeliZaPoredjenje[i].Naziv}}<br>
+                    Dataset modela:{{modeliZaPoredjenje[i].ImeFajla}}
+                </div>
+                <div class="OpisModela" *ngIf="!modeliZaPoredjenje[i].Naziv">
+                    Naziv modela: Model {{i+1}}<br>
+                    Dataset modela:{{modeliZaPoredjenje[i].ImeFajla}}
+                </div>
+                <div class="parent">
+                    <div class="div1">Tip problema</div>
+                    <div class="div2">{{modeliZaPoredjenje[i].TipProblema}}</div>
+                    <div class="div3">Mera greške</div>
+                    <div class="div4">{{modeliZaPoredjenje[i].MeraGreske}}</div>
+                    <div class="div5">Mera uspeha</div>
+                    <div class="div6">{{modeliZaPoredjenje[i].MeraUspeha}}</div>
+                    <div class="div7">Broj epoha</div>
+                    <div class="div8">{{modeliZaPoredjenje[i].BrojEpoha}}</div>
+                    <div class="div9">Procenat podataka za testiranje</div>
+                    <div class="div10">{{modeliZaPoredjenje[i].odnosPodataka}}%</div>
+                    <div class="div11">Broj slojeva</div>
+                    <div class="div12">{{modeliZaPoredjenje[i].BrojSlojeva}}</div>
+                    <div class="div13">Izlazna kolona</div>
+                    <div class="div14">{{modeliZaPoredjenje[i].IzlaznaKolona}}</div>
+                    <div class="div15">UlazneKolone</div>
+                    <div class="div16"> 
+                        <p *ngFor="let item of modeliZaPoredjenje[i].UlazneKolone;index as j;">
+                            {{modeliZaPoredjenje[i].UlazneKolone[j]}}
+                        </p>
+                    </div>
+                    <div class="div17">Skriveni slojevi</div>
+                    <div class="div18"> 
+                        <p *ngFor="let item of modeliZaPoredjenje[i].ListaSkrivenihSlojeva;index as j;">
+                            Broj neurona: {{modeliZaPoredjenje[i].ListaSkrivenihSlojeva[j].BrojNeurona}}<br>Aktivaciona funkcija: {{modeliZaPoredjenje[i].ListaSkrivenihSlojeva[j].AktivacionaFunkcija}}
+                        </p>
+                    </div>
+                </div>
             </div>
-            <div class="OpisModela" *ngIf="!modeliZaPoredjenje[i].Naziv">
-                Dataset modela:{{modeliZaPoredjenje[i].ImeFajla}}
-            </div>
-            <div class="parent">
-                <div class="div1">Tip problema</div>
-                <div class="div2">{{modeliZaPoredjenje[i].TipProblema}}</div>
-                <div class="div3">Mera greške</div>
-                <div class="div4">{{modeliZaPoredjenje[i].MeraGreske}}</div>
-                <div class="div5">Mera uspeha</div>
-                <div class="div6">{{modeliZaPoredjenje[i].MeraUspeha}}</div>
-                <div class="div7">Broj epoha</div>
-                <div class="div8">{{modeliZaPoredjenje[i].BrojEpoha}}</div>
-                <div class="div9">Procenat podataka za testiranje</div>
-                <div class="div10">{{modeliZaPoredjenje[i].odnosPodataka}}%</div>
-                <div class="div11">Broj slojeva</div>
-                <div class="div12">{{modeliZaPoredjenje[i].BrojSlojeva}}</div>
-                <div class="div13">Izlazna kolona</div>
-                <div class="div14">{{modeliZaPoredjenje[i].IzlaznaKolona}}</div>
-                <div class="div15">UlazneKolone</div>
-                <div class="div16"> 
-                    <p *ngFor="let item of modeliZaPoredjenje[i].UlazneKolone;index as j;">
-                        {{modeliZaPoredjenje[i].UlazneKolone[j]}}
-                    </p>
-                </div>
-                <div class="div17">Skriveni slojevi</div>
-                <div class="div18"> 
-                    <p *ngFor="let item of modeliZaPoredjenje[i].ListaSkrivenihSlojeva;index as j;">
-                        Broj neurona: {{modeliZaPoredjenje[i].ListaSkrivenihSlojeva[j].BrojNeurona}}<br>Aktivaciona funkcija: {{modeliZaPoredjenje[i].ListaSkrivenihSlojeva[j].AktivacionaFunkcija}}
-                    </p>
-                </div>
-                </div>
         </div>
         <div class="col-md-5 justify-content-center" *ngFor="let item of [].constructor(2-modeliZaPoredjenje.length);index as i;">
-            
+            <ngx-awesome-uploader  id="PoljeZaUnos"
+            #uploader
+            [adapter]="adapter"
+            [fileMaxCount]="1"
+            [fileMaxSize]="MaksVelicinaFajla"
+            [uploadType]="'Single'"
+            [enableCropper]="true"
+            [cropperOptions]="cropperOptions"
+            (validationError)="onValidationError($event)"
+            [fileExtensions]="['json']"
+            (uploadSuccess)="onUploadSuccess($event)"
+            (removeSuccess)="onRemoveSuccess($event)"
+            (fileAdded)="onFileAdded($event)"
+            [captions]="captions"
+            [accept]="'.json'">
+            <div class="dropzoneTemplate">
+            <div class="d-flex justify-content-center">
+                <img src="../../assets/image/drag-and-drop-Ikonica.png" class="img-fluid" alt="Responsive image">
+            </div>
+            <div class="d-flex justify-content-center" id="KlikniZaIzborDugme">
+                <button class="dugme2 dugmeAnimacija" mat-raised-button color="primary">
+                <img src="../../assets/image/klikni za izbor dugme.png" class="img-fluid" alt="Responsive image">
+                </button>
+            </div>
+            </div>
+            </ngx-awesome-uploader>
         </div>
     </div>
     <div class="row justify-content-center">
-        <div class="col-md-9 m-1">
-            <!-- <ngx-charts-line-chart
-                [results]="signalR.podaciZaGrafik"
-                [legend]="legenda"
-                [showXAxisLabel]="prikaziXlabel"
-                [showYAxisLabel]="prikaziYlabel"
-                [xAxisLabel]="xLabela"
-                [yAxisLabel]="yLabela"
-                [yAxis]="yOsa"
-                [xAxis]="xOsa"
-                [curve]="linija"
-                [showGridLines]="signalR.PrikaziLinije"
-                [autoScale]="true"
-                [animations]="false"
-            >
-            </ngx-charts-line-chart>
+        <div class="col-md-11" *ngIf="podaciZaGrafik.length>0">
+            <div class="grafik">
+                <ngx-charts-line-chart 
+                    [results]="podaciZaGrafik"
+                    [legend]="legenda"
+                    [showXAxisLabel]="prikaziXlabel"
+                    [showYAxisLabel]="prikaziYlabel"
+                    [xAxisLabel]="xLabela"
+                    [yAxisLabel]="yLabela"
+                    [yAxis]="yOsa"
+                    [xAxis]="xOsa"
+                    [curve]="linija"
+                    [showGridLines]="PrikaziLinije"
+                    [autoScale]="true"
+                    [animations]="false"
+                >
+                </ngx-charts-line-chart>
+            </div>
         </div>
-        <div class="col-md-9 m-1" style="height: 400px;background-color: #16355D;">
-            <ngx-charts-line-chart
-                [results]="signalR.podaciZaGrafik"
-                [legend]="legenda"
-                [showXAxisLabel]="prikaziXlabel"
-                [showYAxisLabel]="prikaziYlabel"
-                [xAxisLabel]="xLabela"
-                [yAxisLabel]="yLabela"
-                [yAxis]="yOsa"
-                [xAxis]="xOsa"
-                [curve]="linija"
-                [showGridLines]="signalR.PrikaziLinije"
-                [autoScale]="true"
-                [animations]="false"
-            >
-            </ngx-charts-line-chart>
-        </div> -->
     </div>
 
 </div>
