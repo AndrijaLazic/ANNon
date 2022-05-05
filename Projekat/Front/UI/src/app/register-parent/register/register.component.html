@@ -46,7 +46,7 @@
                       Username is required.
                     </p>
                     <p class="alert alert-danger" *ngIf="username.errors?.['pattern']">
-                      Username can not start with numbers.
+                      Username can not start with numbers or contain special characters.
                     </p>
                     <p class="alert alert-danger" *ngIf="username.errors?.['minlength']">
                       Username must contain at least 5 characters.

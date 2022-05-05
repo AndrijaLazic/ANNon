@@ -7,7 +7,7 @@
         public string Username { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Nije unet Email")]
-        [StringLength(maximumLength: 50, ErrorMessage = "Maksimalna duzina je 50")]
+        [StringLength(maximumLength: 320, ErrorMessage = "Maksimalna duzina je 320")]
         [RegularExpression("^[a-zA-Z0-9_\\.-]+@([a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$", ErrorMessage = "Nije uneta valida Email adresa")]
         public string Email { get; set; } = string.Empty;
 

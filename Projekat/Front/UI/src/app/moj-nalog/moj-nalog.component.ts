@@ -24,10 +24,10 @@ export class MojNalogComponent implements OnInit {
   hide2 = true;
   forma=new FormGroup({
     Slika:new FormControl(''),
-    Username:new FormControl(this.jwtHelper.decodeToken(this.token)['username']),
+    Username:new FormControl(this.jwtHelper.decodeToken(this.token)['username'],[Validators.pattern(/^[a-zA-Z][a-zA-Z0-9\.]*$/),Validators.minLength(5),Validators.maxLength(20)]),
     StariPassword:new FormControl('',[Validators.required]),
     NoviPassword:new FormControl('',[Validators.minLength(5)]),
-    Email:new FormControl(this.jwtHelper.decodeToken(this.token)['email']),
+    Email:new FormControl(this.jwtHelper.decodeToken(this.token)['email'],[Validators.pattern(/^[a-zA-Z0-9]+([\.\-\+][a-zA-Z0-9]+)*\@([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}$/)]),
     token:new FormControl('')
     // BrojEpoha:new FormControl(5,[Validators.required,Validators.min(),Validators.max()]),
     //odnosPodataka:new FormControl(25)
@@ -141,6 +141,32 @@ export class MojNalogComponent implements OnInit {
         
     )
   }
-  
+  getErrorMessage() {
+    if (this.Username.hasError('required')) {
+      return 'Korisničko ime je obavezno';
+    }
+    if (this.Username.hasError('pattern')) {
+      return 'Korisničko ime ne sme da sadrži specijalne karaktere i da počinje brojem';
+    }
+    if (this.Username.hasError('minlength')) {
+      return 'Korisničko ime mora da sadrži najmanje 5 karaktera';
+    }
+    if (this.Username.hasError('maxlength')) {
+      return 'Korisničko ime mora da sadrži najviše od 20 karaktera';
+    }
+  }
+  getErrorMessage2() {
+    if (this.Email.hasError('required')) {
+      return 'Email je obavezan';
+    }
+    if (this.Email.hasError('pattern')) {
+      return 'Email nije validan';
+    }
+  }
+  getErrorMessage3() {
+    if (this.StariPassword.hasError('required')) {
+      return 'Šifra je obavezna';
+    }
+  }
 
 }

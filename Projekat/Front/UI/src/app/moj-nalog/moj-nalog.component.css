@@ -38,8 +38,10 @@
     
 }
 
-
-
+.FormaZaIzmenuPodatakaOKorisniku ::ng-deep .mat-form-field-invalid{
+    height: 100px;
+    
+}
 
 
 /* Input kada se klikne na njega */
