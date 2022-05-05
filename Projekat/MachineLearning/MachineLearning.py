@@ -144,7 +144,7 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str):
             elif hiperparametri.tip_problema == 'klasifikacija':
                 model,train,val,test=make_classification_model(fajl,hiperparametri)
             await manager.addTestSet(client_id,test,hiperparametri.izlazna_kolona)
-            filename=await sync_to_async(train_model)(model,train,val,hiperparametri.izlazna_kolona,client_id,hiperparametri.broj_epoha)
+            filename=await sync_to_async(train_model)(model,train,val,client_id,hiperparametri.broj_epoha)
             await manager.addModel(client_id,model)
             #testiranje
             #await sync_to_async(test_model)(filename,train,hiperparametri.izlazna_kolona)

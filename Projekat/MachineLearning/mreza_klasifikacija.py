@@ -46,25 +46,14 @@ broj_klasa = data['AdoptionSpeed'].nunique()
 train, val, test = split_data(data)
 
 @tf.autograph.experimental.do_not_convert
-def get_category_encoding_layer(name, dataset, dtype, max_tokens=None):
-  # Create a layer that turns strings into integer indices.
+def get_category_encoding_layer(feature_ds, dtype, max_tokens=None):
   if dtype == 'string':
     index = tf.keras.layers.StringLookup(max_tokens=max_tokens)
-  # Otherwise, create a layer that turns integer values into integer indices.
   else:
     index = tf.keras.layers.IntegerLookup(max_tokens=max_tokens)
-
-  # Prepare a `tf.data.Dataset` that only yields the feature.
-  feature_ds = dataset.map(lambda x, y: x[name])
-
-  # Learn the set of possible values and assign them a fixed integer index.
   index.adapt(feature_ds)
 
-  # Encode the integer indices.
   encoder = tf.keras.layers.CategoryEncoding(num_tokens=index.vocabulary_size())
-
-  # Apply multi-hot encoding to the indices. The lambda function captures the
-  # layer, so you can use them, or include them in the Keras Functional model later.
   return lambda feature: encoder(index(feature))
 
 
@@ -81,7 +70,7 @@ def get_normalization_layer(name, dataset):
   return normalizer
 
 #get_one_hot_target(target)
-def df_to_dataset(dataframe, target, shuffle=True, one_hot_label=False, combine_in_batches=True, batch_size=32):
+def df_to_dataset(dataframe, target, shuffle=True, one_hot_label=False, batch_size=32):
   df = dataframe.copy()
   if one_hot_label:
     target = get_one_hot_target(target)
@@ -89,9 +78,8 @@ def df_to_dataset(dataframe, target, shuffle=True, one_hot_label=False, combine_
   ds = tf.data.Dataset.from_tensor_slices((dict(df), target))
   if shuffle:
     ds = ds.shuffle(buffer_size=len(dataframe))
-  if combine_in_batches:
-    ds = ds.batch(batch_size)
-    ds = ds.prefetch(batch_size)
+  ds = ds.batch(batch_size)
+  ds = ds.prefetch(batch_size)
   return ds
 
 def get_one_hot_target(target):
@@ -133,10 +121,10 @@ for header in categorical_feature_names:
   tip = train.dtypes[header]
   if tip == 'object':
     tip='string'
-  print(header, ":", tip)
+  #print(header, ":", tip)
+  feature_ds = ds.map(lambda x, y: x[header])
   categorical_col = tf.keras.Input(shape=(1,), name=header, dtype=tip)
-  encoding_layer = get_category_encoding_layer(name=header,
-                                              dataset=ds,
+  encoding_layer = get_category_encoding_layer(feature_ds=feature_ds,
                                               dtype=tip,
                                               max_tokens=5)
   encoded_categorical_col = encoding_layer(categorical_col)
@@ -144,7 +132,6 @@ for header in categorical_feature_names:
   encoded_features.append(encoded_categorical_col)
 
 
-data
 all_features = tf.keras.layers.concatenate(encoded_features)
 
 x = layers.Dense(64, "relu")(all_features)
@@ -166,19 +153,19 @@ model.summary()
 val_target = val.pop("AdoptionSpeed")
 history = model.fit(ds, epochs=20, validation_data=df_to_dataset(val, val_target, False, True, batch_size=16))
 
-test_target = test.pop("AdoptionSpeed")
-y_pred = model.predict(df_to_dataset(test, test_target, False, True, batch_size=16))
+#test_target = test.pop("AdoptionSpeed")
+#y_pred = model.predict(df_to_dataset(test, test_target, False, True, batch_size=16))
 
-predictions = [np.argmax(i) for i in y_pred]
+#predictions = [np.argmax(i) for i in y_pred]
 
-def print_cat(predictions):
-  print("0: ", predictions.count(0))
-  print("1: ", predictions.count(1))
-  print("2: ", predictions.count(2))
-  print("3: ", predictions.count(3))
-  print("4: ", predictions.count(4))
+# def print_cat(predictions):
+#   print("0: ", predictions.count(0))
+#   print("1: ", predictions.count(1))
+#   print("2: ", predictions.count(2))
+#   print("3: ", predictions.count(3))
+#   print("4: ", predictions.count(4))
 
-len(predictions)
+# len(predictions)
 
-print_cat(predictions)
-test_target.value_counts()
+# print_cat(predictions)
+# test_target.value_counts()
