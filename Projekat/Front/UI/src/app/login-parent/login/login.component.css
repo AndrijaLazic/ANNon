@@ -70,3 +70,23 @@ hr{
     
     color:white;
   }
+
+
+  .FormaZaIzmenuPodatakaOKorisniku{
+    min-width: 235px;
+    max-width: 10vw;
+    
+}
+
+@media (max-width:767px) {
+    #myVideo{
+        display: none;
+    }
+    ::ng-deep body{
+        background: url("../../../assets/image/mainbackground.jpg") no-repeat center center fixed; 
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+    }
+}

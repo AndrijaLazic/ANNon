@@ -73,8 +73,6 @@ hr{
     text-align:center;
     border-radius:20px;
     backdrop-filter:blur(20px) brightness(60%);
-    
-    
     color:white;
   }
 
@@ -105,3 +103,24 @@ hr{
     background-image: linear-gradient(to bottom, #03045e, #011167, #001d70, #002778, #003180, #003a88, #00438f, #004c96, #00579f, #0062a7, #006caf, #0077b6);
     object-fit: cover;
 }
+
+.FormaZaIzmenuPodatakaOKorisniku{
+    min-width: 265px;
+    max-width: 12vw;
+    
+}
+
+@media (max-width:767px) {
+    #myVideo{
+        display: none;
+    }
+    ::ng-deep body{
+        background: url("../../../assets/image/mainbackground.jpg") no-repeat center center fixed; 
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+    }
+}
+
+ 
