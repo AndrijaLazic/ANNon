@@ -41,6 +41,9 @@ table{
     
 
     background: rgba(196, 196, 196, 0.7);
+
+    /*backdrop-filter:blur(15px) brightness(90%);
+  color:white;*/
     
  }
  #tabela{
@@ -169,4 +172,8 @@ section {
 }
 :host ::ng-deep  .mat-slide-toggle .mat-slide-toggle-thumb {
   background-color: #003781 ;
+}
+input[type=checkbox] {
+  transform: scale(1.5);
+
 }

@@ -12,4 +12,6 @@ export class statisticModel{
     izlazna:string;
     nizIzabranihUlaza: Array<any>;
     nizIzabranihIzlaza: Array<any>;
+    kategorije: Array<any>;
+    tipovi:Array<any>;
 }

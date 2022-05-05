@@ -70,7 +70,38 @@
                       </ng-template> 
                     <tr>
                         <td class="veciFont">{{kolone[i]}}</td>
-                        <td class="veciFont">{{kategorije[i]}}</td>
+                        <td>
+                          <div class="col-md-auto">
+                              <mat-form-field appearance="fill" id="TipEnkodiranjaSelektor2">
+                                <mat-select id="tip{{i}}" [(value)]="kategorije[i]" placeholder="Mode">
+                                  <mat-option value="Numericki">
+                                      Numericki
+                                  </mat-option>
+                                  <mat-option value="Kategorijski">
+                                    Kategorijski
+                                    </mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                              <!-- {{SelektovanaVrednost}} -->
+                            </div>
+                            <div class="col-md-auto" *ngIf="kategorije[i]=='Kategorijski'">
+                              <mat-form-field appearance="fill" id="TipEnkodiranjaSelektor2" >
+                                <mat-label>Tip enkodiranja</mat-label>
+                                <mat-select  id="TipEnkodiranjaSelektor" [(ngModel)]="selected[i]" >
+                                  <mat-option value="one_hot">
+                                      one hot
+                                  </mat-option>
+                                  <mat-option  value="multi_hot">
+                                      multi hot
+                                    </mat-option>
+                                    <mat-option  value="count">
+                                      count
+                                  </mat-option >
+                                </mat-select>
+                              </mat-form-field>
+                              <!-- {{SelektovanaVrednost}} -->
+                            </div>
+                      </td>
                         <td class="veciFont">{{prazna[i]}}</td>
                         <td><input type="checkbox" id={{i}} (click)="dajUlazne(i)" [checked]="cekiranaUlazna[i]" [disabled]="cekiranaIzlazna[i]"></td>
                         <td><input type="checkbox" id="izlazna{{i}}" (click)="dajIzlaznu(i)" [checked]="cekiranaIzlazna[i]" [disabled]="cekiranaUlazna[i]"></td>
@@ -83,35 +114,6 @@
                             <table class="table table-striped">
                                 <tbody>
                                     <tr>
-                                        <td *ngIf="kategorije[i]=='Kategorijski'">
-                                            <div class="col-md-auto">
-                                                <mat-form-field appearance="fill" id="TipEnkodiranjaSelektor2">
-                                                  <mat-label>Tip enkodiranja</mat-label>
-                                                  <mat-select id="TipEnkodiranjaSelektor" [(ngModel)]="selected">
-                                                    <mat-option value="one_hot">
-                                                        one hot
-                                                    </mat-option>
-                                                    <mat-option value="multi_hot">
-                                                        multi hot
-                                                      </mat-option>
-                                                      <mat-option value="count">
-                                                        count
-                                                    </mat-option >
-                                                  </mat-select>
-                                                </mat-form-field>
-                                                <!-- {{SelektovanaVrednost}} -->
-                                              </div>
-                                              <div>
-                                                  <p>Zelite li da promenite tip u numericki?</p>
-                                                  <button class="dugme" mat-raised-button color="primary" (click)="promeniUNumericki(i)">Da</button>
-                                              </div>
-                                        </td>
-                                        <td *ngIf="kategorije[i]=='Numericki'">
-                                            <div>
-                                                <p>Zelite li da promenite tip u kategorijski?</p>
-                                                <button class="dugme" mat-raised-button color="primary" (click)="promeniUKategorijski(i)">Da</button>
-                                            </div>
-                                        </td>
                                         <td [innerHTML]="stats[i]"></td>
                                         <td>
                                           <mat-slide-toggle [checked]="checked1" (change)="iscrtajGraf(kolone[i],$event,1)">Prikazi Linijski grafik za datu kolonu</mat-slide-toggle>

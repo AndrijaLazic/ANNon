@@ -7,7 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { v4 as uuidv4 } from 'uuid';
 import {SharedService} from "../shared-statistic/shared.service";
-
+import { CookieService } from 'ngx-cookie-service';
 import { default as Konfiguracija } from '../../../KonfiguracioniFajl.json';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DemoFilePickerAdapter } from './UploadAdapter.adapter';
@@ -48,7 +48,7 @@ export class CsvTabelaComponent implements OnInit {
   public adapter = new DemoFilePickerAdapter(this.http,this.spinner,this.toastr);
 
   
-  constructor(public servisZaSlanjeFajla:UploadFajlServisService,private spinner:NgxSpinnerService,private papa:Papa,private http:HttpClient,private toastr:ToastrService,private route:Router,private shared: SharedService 
+  constructor(public servisZaSlanjeFajla:UploadFajlServisService,private cookie:CookieService,private spinner:NgxSpinnerService,private papa:Papa,private http:HttpClient,private toastr:ToastrService,private route:Router,private shared: SharedService 
     ) {
       this.model = new DataModel();
       
@@ -93,6 +93,7 @@ export class CsvTabelaComponent implements OnInit {
 
   IspisTabele()
   {
+    this.cookie.delete('params');
     if (this.podaci.length > 0) this.zaglavlja = Object.getOwnPropertyNames(this.podaci[0]); 
     this.KoloneDef = [];
     this.RedoviPodaci = [];
@@ -137,7 +138,9 @@ export class CsvTabelaComponent implements OnInit {
 
   procenatUploada=0;
   public uploadFile(){
+    
     this.spinner.show("Spiner2");
+    
     const params:CsvExportParams = {suppressQuotes: true,columnSeparator:"|"};
     let file = new File([this.gridApi.getDataAsCsv(params)],this.imeFajla ,{type: 'application/vnd.ms-excel'});
 
