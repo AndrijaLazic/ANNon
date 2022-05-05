@@ -9,11 +9,9 @@ from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect,HTTPExcepti
 from fastapi.responses import HTMLResponse
 from fastapi import Body
 import statistics as stats
-from matplotlib import testing
 import pandas as pd
 from pydantic import BaseModel, Json
 from requests.api import request
-from example import fja
 from asgiref.sync import sync_to_async
 import requests
 import statistics as stats

@@ -25,7 +25,6 @@ builder.Services.AddSignalR();
 
 //BAZA mySql
 var KonekcioniStringZaMySql = builder.Configuration.GetConnectionString("DefaultConnection");
-
 builder.Services.AddDbContext<MySqlDbContext>(options =>
 {
     options.UseMySql(KonekcioniStringZaMySql, ServerVersion.AutoDetect(KonekcioniStringZaMySql));
@@ -37,14 +36,16 @@ var myAllowSpecificOrigins = "_myAllowSpecificOrigins";
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy",
-        builder =>
+        builder1 =>
         {
-            builder.WithOrigins("http://localhost:4200")
+            builder1.WithOrigins((string)builder.Configuration.GetValue<string>("ML_Server_Config:http")+ (string)builder.Configuration.GetValue<string>("ML_Server_Config:host") +":"+ (string)builder.Configuration.GetValue<string>("ML_Server_Config:port"),
+                (string)builder.Configuration.GetValue<string>("Front_Server_Config:http") + (string)builder.Configuration.GetValue<string>("Front_Server_Config:host") + ":" + (string)builder.Configuration.GetValue<string>("Front_Server_Config:port"))
             .AllowAnyMethod()
             .AllowAnyHeader()
             .AllowCredentials();
         });
 });
+
 
 
 
@@ -62,7 +63,15 @@ app.UseRouting();
 app.UseAuthorization();
 app.UseCors("CorsPolicy");
 
-
+/*
+ * za server
+ * migracija pri pokretanju
+using (var scope = app.Services.CreateScope())
+{
+    var dataContext = scope.ServiceProvider.GetRequiredService<MySqlDbContext>();
+    dataContext.Database.Migrate();
+}
+*/
 app.UseEndpoints(endpoints => {
     app.MapControllers();
     endpoints.MapHub<EpochHub>("/hub");

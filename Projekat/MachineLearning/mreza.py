@@ -1,3 +1,4 @@
+import json
 from typing import List
 import numpy as np
 import tensorflow as tf
@@ -34,6 +35,9 @@ class Kolona:
 class Pretprocesiranje:
   def __init__(self, kolone):
       self.kolone = kolone
+
+f = open('KonfiguracioniFajl.json')
+Konfiguracija = json.load(f)
 
 def determine_variable_types(data, label):
     nunique = data.nunique()
@@ -154,7 +158,7 @@ def prepare_preprocess_layers(data,target,train):
   encoded_features=encoded_features+all_num_inputs
   return all_inputs,encoded_features
 
-def make_model(all_inputs,encoded_features,layers:List[Sloj],loss_metric,success_metric, number_of_classes=0):
+def make_model(all_inputs,encoded_features,layers:List[Sloj],loss_metric,success_metric, number_of_classes=0,mean_value=1):
   all_features = tf.keras.layers.concatenate(encoded_features)
   x=tf.keras.layers.Normalization(axis=-1)(all_features)
   for layer in layers:
@@ -166,20 +170,21 @@ def make_model(all_inputs,encoded_features,layers:List[Sloj],loss_metric,success
 
   model = tf.keras.Model(all_inputs, output)
   initial_learning_rate = 1.0
+  if mean_value<5000:
+      initial_learning_rate=0.1
   lr_schedule = tf.keras.optimizers.schedules.ExponentialDecay(
       initial_learning_rate,
-      decay_steps=500,
+      decay_steps=1000,
       decay_rate=0.96,
       staircase=True)
   model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=lr_schedule),
                 loss=loss_metric,
                 metrics=success_metric)
-  model.summary()
   return model
 
 
 def train_model(model,train_data,validation_data,target,client_id,epoch_number=20):
-  model.fit(df_to_dataset(train_data,target,shuffle=False), epochs=epoch_number, validation_data=df_to_dataset(validation_data,target,shuffle=False),callbacks=[CustomCallback(root="http://localhost:8000",path="/publish/epoch/end",send_as_json=True,to_send=client_id)])
+  model.fit(df_to_dataset(train_data,target,shuffle=False), epochs=epoch_number, validation_data=df_to_dataset(validation_data,target,shuffle=False),callbacks=CustomCallback(root=Konfiguracija["KonfiguracijaServera"]["mlURL"],path="publish/epoch/end",send_as_json=True,to_send=client_id))
 
 def test_model(model,test_data,target):
   return model.evaluate(df_to_dataset(test_data,target,shuffle=False))
@@ -193,7 +198,7 @@ def make_regression_model(data,hiperparametri:Hiperparametri):
   train,val,test=split_data(data,(100-hiperparametri.test_skup-10)/100,hiperparametri.test_skup/100,0.1)
 
   all_inputs,encoded_features=prepare_preprocess_layers(data,hiperparametri.izlazna_kolona,train)
-  model=make_model(all_inputs,encoded_features,hiperparametri.slojevi,hiperparametri.mera_greske,hiperparametri.mera_uspeha)
+  model=make_model(all_inputs,encoded_features,hiperparametri.slojevi,hiperparametri.mera_greske,hiperparametri.mera_uspeha,mean_value=data[hiperparametri.izlazna_kolona].mean())
   return model,train,val,test
 
 def make_classification_model(data, hiperparametri:Hiperparametri):
@@ -208,17 +213,6 @@ def make_classification_model(data, hiperparametri:Hiperparametri):
   all_inputs,encoded_features=prepare_preprocess_layers(data,hiperparametri.izlazna_kolona,train)
   model=make_model(all_inputs,encoded_features,hiperparametri.slojevi,hiperparametri.mera_greske,hiperparametri.mera_uspeha, broj_klasa)
   return model,train,val,test
-
-def step_decay_schedule(initial_lr=1e-3, decay_factor=0.75, step_size=10):
-    '''
-    Wrapper function to create a LearningRateScheduler with step decay schedule.
-    '''
-    def schedule(epoch):
-        return initial_lr * (decay_factor ** np.floor(epoch/step_size))
-    
-    return LearningRateScheduler(schedule)
-
-
 
 # data=load_data("titanic/train.csv")
 # target="Survived"
