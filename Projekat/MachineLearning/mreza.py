@@ -225,27 +225,3 @@ def make_classification_model(data, hiperparametri:Hiperparametri):
   test_ds = df_to_dataset(test, test_target, one_hot_label=one_hot_label)
   model=make_model(all_inputs,encoded_features,hiperparametri.slojevi,hiperparametri.mera_greske,hiperparametri.mera_uspeha, broj_klasa)
   return model,train_ds,val_ds,test_ds
-
-data=load_data("datasets/diamonds.csv")
-slojevi = [Sloj(20, 'relu'), Sloj(20, 'relu'), Sloj(20, 'relu')]
-hiperparametri = Hiperparametri('regresija', 0.1, slojevi, 'mae', 'mae', 10, 
-['carat', 'cut', 'color', 'clarity', 'depth', 'X', 'Y', 'Z'],
-'price')
-regression_model, regression_train, regression_val, regression_test = make_regression_model(data, hiperparametri)
-train_model(regression_model, regression_train, regression_val, 1, 15)
-
-# slojevi = [Sloj(64, 'relu'), Sloj(20, 'relu'), Sloj(32, 'relu')]
-# hiperparametri = Hiperparametri('klasifikacija', 0.1, slojevi, 'categorical_crossentropy', 'Accuracy', 20, 
-# ['Type', 'Gender', 'Color1', 'Color2', 'MaturitySize', 'FurLength', 'Vaccinated', 'Sterilized', 'Health', 'Age', 'Fee', 'PhotoAmt'],
-# 'AdoptionSpeed')
-# data = pd.read_csv('datasets/petfinder-mini.csv')
-
-# data=load_data("datasets/titanic/train.csv")
-# slojevi = [Sloj(20, 'relu'), Sloj(20, 'relu'), Sloj(10, 'relu')]
-# hiperparametri = Hiperparametri('klasifikacija', 0.1, slojevi, tf.keras.losses.BinaryCrossentropy(from_logits=True), 'Accuracy', 10, 
-# ['Pclass', 'Sex', 'Age', 'SibSp', 'Parch', 'Fare', 'Cabin', 'Embarked'],
-# 'Survived')
-
-# classification_model, classification_train, classification_val, classification_test = make_classification_model(data, hiperparametri)
-
-# train_model(classification_model, classification_train, classification_val, 1, 15)
