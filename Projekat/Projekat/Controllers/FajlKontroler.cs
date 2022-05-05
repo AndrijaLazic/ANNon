@@ -48,12 +48,12 @@ namespace Projekat.Controllers
 
                 if (RadSaFajlovima.IzbrisiKolonu(pathBuilt, idKolone))
                 {
-                    return Ok("Uspesno izbrisana kolona");
+                    return Ok("Uspešno izbrisana kolona");
                 }
-                return BadRequest("Neuspesno brisanje kolone");
+                return BadRequest("Neuspešno brisanje kolone");
 
             }
-            return Ok("Dati fajl nepostoji");
+            return Ok("Dati fajl ne postoji");
         }
     }
 }

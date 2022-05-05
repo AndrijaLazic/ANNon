@@ -41,7 +41,24 @@ export class LoginComponent implements OnInit {
         }
         else
         {
-          this.toastr.error('došlo je do greške pri komunikaciji sa serverom,pokušajte ponovo kasnije')
+          switch(err['status'])
+          {
+            case 400:
+            {
+              this.toastr.error(err['error'],"Greška");
+              break;
+            }
+            case 500:
+            {
+              this.toastr.error('došlo je do greške pri komunikaciji sa serverom,pokušajte ponovo kasnije',"Greška");
+              break;
+            }
+            default:
+            {
+              this.toastr.error('Greška prilikom prijave!',"Greška");
+            }
+          }
+          
         }
       }
       

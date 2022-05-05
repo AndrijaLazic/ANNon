@@ -77,9 +77,9 @@ namespace Projekat.Clients
                             await _context.SaveChangesAsync();
                             return Ok(true);
                         }
-                        return BadRequest("Greska pri upisivanju fajla");
+                        return BadRequest("Greška pri čuvanju fajla");
                     }
-                    return BadRequest("Fajl nije csv");
+                    return BadRequest("Uneti fajl nije u CSV formatu");
 
                 }
                 else

@@ -11,7 +11,7 @@ using Projekat.Data;
 namespace Projekat.Migrations
 {
     [DbContext(typeof(MySqlDbContext))]
-    [Migration("20220427124124_InitialCreate")]
+    [Migration("20220505094109_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

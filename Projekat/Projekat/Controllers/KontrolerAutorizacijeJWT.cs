@@ -70,7 +70,7 @@ namespace Projekat.Controllers
                         success = true,
                         data = new
                         {
-                            message = "Uspesna registracija"
+                            message = "Uspešna registracija"
                         }
                     });
                 }
@@ -78,15 +78,15 @@ namespace Projekat.Controllers
                 {
 
                     if (ex.InnerException.Message.Contains("IX_Korisnici_Email"))
-                        return BadRequest("Email je vec povezan sa drugim nalogom");
+                        return BadRequest("Email je već povezan sa drugim nalogom");
 
                     if (ex.InnerException.Message.Contains("IX_Korisnici_Username"))
-                        return BadRequest("Vec postoji korisnik sa datim username-om");
+                        return BadRequest("Već postoji korisnik sa datim username-om");
 
 
                 }
             }
-            return BadRequest("Neuspesna registracija");
+            return BadRequest("Neuspešna registracija");
         }
 
         [HttpPost("login")]
@@ -99,7 +99,7 @@ namespace Projekat.Controllers
             }
             else if (!VerifyPasswordHash(zahtev.Password, korisnik.PasswordHash, korisnik.PasswordSalt))
             {
-                return BadRequest("Pogresna sifra");
+                return BadRequest("Pogrešna šifra");
             }
             else if (korisnik.EmailPotvrdjen == false)
             {
@@ -119,14 +119,14 @@ namespace Projekat.Controllers
             {
                 string? name = ValidateToken(izmene.token, this.configuration);
                 if (name == null)
-                    return BadRequest("Los token/ ne postoji");
+                    return BadRequest("Loš token/ ne postoji");
                 Debug.WriteLine(name);
                 Korisnik korisnik = _context.Korisnici.Where(x => x.Username.Equals(name)).FirstOrDefault();
                 if (korisnik == null)
                     return BadRequest("Dati korisnik ne postoji");
                 if (!VerifyPasswordHash(izmene.StariPassword, korisnik.PasswordHash, korisnik.PasswordSalt))
                 {
-                    return BadRequest("Pogresna sifra");
+                    return BadRequest("Pogrešna sifra");
                 }
 
                 Korisnik revertKorisnik = new Korisnik();
@@ -142,7 +142,7 @@ namespace Projekat.Controllers
                     if (korisnik2 != null && korisnik.ID!=korisnik2.ID)
                     {
                         korisnik = revertKorisnik;
-                        return BadRequest("Vec postoji korisnik sa datim username-om");
+                        return BadRequest("Već postoji korisnik sa datim username-om");
                     }
                     if(korisnik.Username!=izmene.Username)
                     {
@@ -162,7 +162,7 @@ namespace Projekat.Controllers
                     if (korisnik2 != null && korisnik.ID != korisnik2.ID)
                     {
                         korisnik = revertKorisnik;
-                        return BadRequest("Vec postoji korisnik sa datim Email-om");
+                        return BadRequest("Već postoji korisnik sa datim Email-om");
                     }
                     if(korisnik.Email!=izmene.Email)
                     {
@@ -186,9 +186,9 @@ namespace Projekat.Controllers
                     korisnik.ProfileImage = RadSaFajlovima.upisiSliku(korisnik.ID,izmene.image);
                 }
                 await _context.SaveChangesAsync();
-                return Ok("Uspesna izmena naloga");
+                return Ok("Uspešna izmena naloga");
             }
-            return BadRequest("Neuspesna izmena");
+            return BadRequest("Neuspešna izmena");
             
         }
         [HttpGet("{username}/dajsliku")]
@@ -281,7 +281,7 @@ namespace Projekat.Controllers
            {
                string currentUser = ValidateToken(token,configuration);
                if (currentUser.IsNullOrEmpty())
-                   return BadRequest("Vasa sesija je istekla!");
+                   return BadRequest("Vaša sesija je istekla!");
 
                var jsonObject = new {userID = currentUser,metric = "prazno"};//promeni u py delu da se ne salje ovaj model nego samo UID
                var objectToJson = JsonConvert.SerializeObject(jsonObject);
@@ -289,7 +289,7 @@ namespace Projekat.Controllers
 
                var response = JsonConvert.DeserializeObject<ResponseModel>(answer);
                if (response.Status == 1)
-                   return BadRequest("Neuspesno cuvanje modela!");
+                   return BadRequest("Neuspešno cuvanje modela!");
 
                Korisnik korisnik = _context.Korisnici.Where(x => x.Username.Equals(currentUser)).FirstOrDefault();
                if (korisnik == null)
@@ -306,7 +306,7 @@ namespace Projekat.Controllers
                _context.SavedModels.Add(saveModel);
                await _context.SaveChangesAsync();
 
-               return Ok("Model sacuvan");
+               return Ok("Model sačuvan");
                }
            catch (Exception ex)
            {
@@ -323,11 +323,11 @@ namespace Projekat.Controllers
            {
                var currentUser = ValidateToken(token, configuration);
                if (currentUser.IsNullOrEmpty())
-                   return BadRequest("Greska pri validaciji tokena");
+                   return BadRequest("Greška pri validaciji tokena");
 
                Korisnik korisnik = _context.Korisnici.Where(x => x.Username.Equals(currentUser)).FirstOrDefault();
                if (korisnik == null)
-                   return BadRequest("Korisnik ne postoji u bazi!");
+                   return BadRequest("Korisnik nije pronadjen!");
 
                List<SavedModelsModel> allSavedModels = new List<SavedModelsModel>();
                allSavedModels = _context.SavedModels.FromSqlRaw("SELECT * FROM savedmodels WHERE UserID = "+korisnik.ID).ToList();

@@ -46,7 +46,7 @@ namespace Projekat.Controllers
                         success = true,
                         data = new
                         {
-                            message = "Uspesno verifikovana Email adresa za korisnika " + korisnik.Username
+                            message = "Uspešno verifikovana Email adresa za korisnika " + korisnik.Username
                         }
                     });
                 }
