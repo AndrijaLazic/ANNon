@@ -14,6 +14,7 @@ import { DemoFilePickerAdapter } from './UploadAdapter.adapter';
 import { FilePreviewModel, UploaderCaptions, UploadResponse, UploadStatus, ValidationError } from 'ngx-awesome-uploader';
 import { catchError, delay, map, Observable, of } from 'rxjs';
 import { UploadFajlServisService } from './upload-fajl-servis.service';
+import { HttpResponse } from '@angular/common/http';
 
 export class DataModel
 {
@@ -45,10 +46,9 @@ export class CsvTabelaComponent implements OnInit {
   @Output() public onUploadFinished = new EventEmitter();
   
   public adapter = new DemoFilePickerAdapter(this.http,this.spinner,this.toastr);
-  public UploadServis=new UploadFajlServisService(this.http,this.toastr,this.spinner);
 
   
-  constructor(private spinner:NgxSpinnerService,private papa:Papa,private http:HttpClient,private toastr:ToastrService,private route:Router,private shared: SharedService 
+  constructor(public servisZaSlanjeFajla:UploadFajlServisService,private spinner:NgxSpinnerService,private papa:Papa,private http:HttpClient,private toastr:ToastrService,private route:Router,private shared: SharedService 
     ) {
       this.model = new DataModel();
       
@@ -134,69 +134,63 @@ export class CsvTabelaComponent implements OnInit {
     sessionStorage.setItem('userId',uuidv4());
   }
   */
-  posaljiFajl()
-  {
-      this.spinner.show("Spiner2");
-      
-      //this.setSession();
-      const formData = new FormData();
-      const params:CsvExportParams = {suppressQuotes: true,columnSeparator:"|"};
-      let file = new File([this.gridApi.getDataAsCsv(params)],this.imeFajla ,{type: 'application/vnd.ms-excel'});
-      formData.append("uploadedFile",file);
-      
-      formData.append("userID",sessionStorage.getItem("userId"));
-      this.http.post(this.baseURL+"api/MachineLearning/uploadFile",formData)
-      .subscribe(
-        res=>{
-           this.sent = true;
-           this.model = res as DataModel;
-           if(this.sent)
-           {
-             this.getStatistic();
-           }
-              
-           
-        },
-        err=>{
-          console.log(err);
-          this.toastr.error("Greška pri slanju fajla!","Greška")
-          this.spinner.hide("Spiner2");
-          
-        }
-       
-      );
-      
-  }
 
   procenatUploada=0;
   public uploadFile(){
     this.spinner.show("Spiner2");
     const params:CsvExportParams = {suppressQuotes: true,columnSeparator:"|"};
     let file = new File([this.gridApi.getDataAsCsv(params)],this.imeFajla ,{type: 'application/vnd.ms-excel'});
-    const form = new FormData();
+
     
-    
-    form.append("uploadedFile",file);
-    form.append("userID",sessionStorage.getItem("userId"));
-    const baseURL=Konfiguracija.KonfiguracijaServera.osnovniURL
-    const api = baseURL+"api/MachineLearning/uploadFile";
-    
-    this.http.post(api, form, {reportProgress: true, observe: 'events'})
-      .subscribe(event => {
-        if (event.type === HttpEventType.UploadProgress){
+    // this.http.post(api, form, {reportProgress: true, observe: 'events'})
+    //   .subscribe(event => {
+    //     if (event.type === HttpEventType.UploadProgress){
+    //       this.procenatUploada = Math.round(100 * event.loaded / event.total);
+    //       if(this.procenatUploada==100){
+    //         this.spinner.hide("Spiner2");
+    //         this.spinner.show("Spiner3");
+    //       }
+    //     }
+    //     else if (event.type === HttpEventType.Response) {
+    //       this.message = 'Upload success.';
+    //       this.spinner.show("Spiner3");
+    //       this.getStatistic();
+    //       this.onUploadFinished.emit(event.body);
+    //     }
+    //   });
+
+    this.servisZaSlanjeFajla.upload(file).subscribe({
+      next: (event: any) => {
+        if (event.type === HttpEventType.UploadProgress) {
           this.procenatUploada = Math.round(100 * event.loaded / event.total);
           if(this.procenatUploada==100){
             this.spinner.hide("Spiner2");
             this.spinner.show("Spiner3");
           }
+        } else if (event instanceof HttpResponse) {
+          if(event.ok){
+            this.getStatistic();
+          }
+          else{
+            this.spinner.hide("Spiner2");
+            this.spinner.hide("Spiner3");
+            this.toastr.error("Greška prilikom slanja fajla!","Greška");
+          }
         }
-        else if (event.type === HttpEventType.Response) {
-          this.message = 'Upload success.';
-          this.spinner.show("Spiner3");
-          this.getStatistic();
-          this.onUploadFinished.emit(event.body);
-        }
-      });
+      },
+      error: (err: any) => {
+        this.spinner.hide("Spiner2");
+        this.spinner.hide("Spiner3");
+        console.log(err);
+        this.progress = 0;
+        this.toastr.error("Greška prilikom slanja fajla!","Greška");
+        // if (err.error && err.error.message) {
+        //   this.message = err.error.message;
+        // } else {
+        //   this.message = 'Could not upload the file!';
+        // }
+      }
+    });
   }
   getStatistic()
   {
@@ -207,6 +201,8 @@ export class CsvTabelaComponent implements OnInit {
       res=>{
         this.received=true;
         this.statistika = res as Object;
+        localStorage.setItem("statistic", JSON.stringify(this.statistika));
+        console.log(localStorage.getItem("statistic"));
         if(this.received)
         {
           console.log(this.statistika);
@@ -218,6 +214,8 @@ export class CsvTabelaComponent implements OnInit {
         
       },
       err=>{
+        this.spinner.hide("Spiner2");
+        this.spinner.hide("Spiner3");
         console.log(err);
         switch(err["status"])
         {

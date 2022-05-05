@@ -48,7 +48,6 @@ import {
           }
         }),
         catchError(er => {
-          this.toastr.error("Neuspešna konekcija sa serverom!","Greška");
           this.spinner.hide("Spiner2");
           console.log(er);
           return of({ status: UploadStatus.ERROR, body: er });

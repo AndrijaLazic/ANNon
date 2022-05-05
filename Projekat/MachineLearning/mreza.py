@@ -1,9 +1,11 @@
+import json
 from typing import List
 import numpy as np
 import tensorflow as tf
 import pandas as pd
 from CustomCallback import CustomCallback
 from keras.models import load_model
+from keras.callbacks import LearningRateScheduler
 import model_handling
 
 class Hiperparametri:
@@ -33,6 +35,9 @@ class Kolona:
 class Pretprocesiranje:
   def __init__(self, kolone):
       self.kolone = kolone
+
+f = open('KonfiguracioniFajl.json')
+Konfiguracija = json.load(f)
 
 def determine_variable_types(data, label):
     nunique = data.nunique()
@@ -152,7 +157,7 @@ def prepare_preprocess_layers(data,target,train, one_hot_label=False):
   encoded_features=encoded_features+all_num_inputs
   return all_inputs, encoded_features, train_ds
 
-def make_model(all_inputs,encoded_features,layers:List[Sloj],loss_metric,success_metric, broj_klasa=0):
+def make_model(all_inputs,encoded_features,layers:List[Sloj],loss_metric,success_metric, broj_klasa=0, mean_value=1):
   all_features = tf.keras.layers.concatenate(encoded_features)
   x=tf.keras.layers.Normalization(axis=-1)(all_features)
   for layer in layers:
@@ -163,15 +168,22 @@ def make_model(all_inputs,encoded_features,layers:List[Sloj],loss_metric,success
     output = tf.keras.layers.Dense(broj_klasa+1, activation="softmax")(x)
 
   model = tf.keras.Model(all_inputs, output)
-
-  model.compile(optimizer='Adam',
+  initial_learning_rate = 1.0
+  if mean_value<5000:
+      initial_learning_rate=0.1
+  lr_schedule = tf.keras.optimizers.schedules.ExponentialDecay(
+      initial_learning_rate,
+      decay_steps=1000,
+      decay_rate=0.96,
+      staircase=True)
+  model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=lr_schedule),
                 loss=loss_metric,
                 metrics=success_metric)
   return model
 
 
 def train_model(model,train_data,validation_data,client_id,epoch_number=20):
-  model.fit(train_data, epochs=epoch_number, validation_data=validation_data)#,callbacks=CustomCallback(root="http://localhost:8000",path="/publish/epoch/end",send_as_json=True,to_send=client_id))
+  model.fit(train_data, epochs=epoch_number, validation_data=validation_data,callbacks=CustomCallback(root=Konfiguracija["KonfiguracijaServera"]["mlURL"],path="publish/epoch/end",send_as_json=True,to_send=client_id))
 
 def test_model(model,test_data):
   return model.evaluate(test_data)

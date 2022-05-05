@@ -36,12 +36,12 @@ export class LoginComponent implements OnInit {
          // let currentUrl = this.route.url;
       //this.route.routeReuseStrategy.shouldReuseRoute = () => false;
      // this.route.onSameUrlNavigation = 'reload';
-      this.route.navigate(['success-login']);
+          this.route.navigate(['success-login']);
           
         }
         else
         {
-          this.toastr.error(err['error'])
+          this.toastr.error('došlo je do greške pri komunikaciji sa serverom,pokušajte ponovo kasnije')
         }
       }
       

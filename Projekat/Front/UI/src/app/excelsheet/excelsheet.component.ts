@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import {SharedService} from "../shared-statistic/shared.service";
 import { v4 as uuidv4 } from 'uuid';
+import { default as Konfiguracija } from '../../../KonfiguracioniFajl.json';
 export class DataModel
 {
   fileName:string="";
@@ -155,7 +156,7 @@ export class ExcelsheetComponent implements OnInit {
     this.model = new DataModel();
    }
 
-  readonly baseURL='https://localhost:7286/';
+  readonly baseURL=Konfiguracija.KonfiguracijaServera.osnovniURL;
 
 
   ngOnInit(): void {

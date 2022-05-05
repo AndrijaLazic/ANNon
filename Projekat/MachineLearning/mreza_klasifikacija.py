@@ -3,7 +3,6 @@ from tensorflow.python import keras
 from keras import layers
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
 
 data = pd.read_csv("datasets/petfinder-mini.csv", sep=',')
 data.tail()

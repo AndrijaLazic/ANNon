@@ -1,6 +1,7 @@
 {
   "KonfiguracijaServera": {
-    "backURL": "https://localhost:7286/"
+    "backURL": "https://localhost:7286/",
+    "mlURL":"http://localhost:8000/"
     
   }
 }

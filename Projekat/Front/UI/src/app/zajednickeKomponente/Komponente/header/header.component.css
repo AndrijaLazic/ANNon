@@ -13,8 +13,6 @@
     background-color: #3E5E86;
     transition: 1s;
     opacity: 1;
-    
-    
 }
 
 
@@ -22,22 +20,21 @@
 
 
 #isti img{
-    height: 80px;
-    width: 80px;
-    float: right;
     clip-path: circle();
-    cursor: pointer;
 }
-
+#isti{
+    cursor: pointer;
+    color: white;
+}
 .dropdown-content{
       
-    position: absolute;
+    position: relative;
      background: #F4FAFF;
      width: 200px;
      transition: 2s;
      float:right;
      border-radius: 7px;
-     top:94px;
+     top:50px;
      right:10px;
      
  }
@@ -90,11 +87,63 @@
     background-image:url("../../../../assets/image/meniIkona.png");
 
 }
+#dropDownMojNalog{
+    background-color: #013054;
+    margin: auto;
+    position: absolute;
+    min-width: 100%;
+    padding: 0;
+}
+#dropDownMojNalog a{
+    padding: 0.5em;
+    width: fit-content;
+    min-width: 100%;
+}
+.nav-link.dropdown-toggle.show{
+    background-color: #013054;
+}
+.razmak{
+    border-bottom: 1px solid white;
+}
+
+#mojNalog{
+    margin: auto;
+}
+#mojNalog img{
+    margin-right: 3px;
+    width: 2em;height: 2em;
+}
+#mojNalogDropdown{
+    text-align: center;
+}
+
+#dropDownElement{
+    margin: auto;
+    text-overflow: ellipsis;
+    width: fit-content;
+}
+#dropDownElement img{
+    margin-right: 3px;
+    width: 1.5em;height: 1.5em;
+    filter: invert(1);
+}
+
 @media (max-width:767px){
     #logo{
         max-width: 45%;
     }
     #header{
-        backdrop-filter:blur(30px) brightness(50%);
+        backdrop-filter:blur(30px) brightness(40%);
+    }
+    #dropDownMojNalog{
+        text-align: center;
+        position: static;
+    }
+    #dropDownMojNalog a p{
+        margin: auto;
+    }
+    #navbarDropdownMenuLink{
+        margin: auto;
+        width: auto;
     }
 }

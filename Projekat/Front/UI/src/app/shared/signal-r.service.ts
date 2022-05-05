@@ -8,6 +8,7 @@ import { vrednostiZaGrafikKlasa,podatakZaGrafikKlasa } from '../trening/podatakZ
 import { Subject } from 'rxjs';
 import { default as Konfiguracija } from '../../../KonfiguracioniFajl.json';
 import { ToastrService } from 'ngx-toastr';
+import { ObjekatZaSlanje } from '../trening/ObjekatZaSlanje.model';
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +24,7 @@ export class SignalRService {
   private hubConnection: signalR.HubConnection
   public PrikaziLinije=true;
   private poruka=new Subject<number>();
+  izabraniParametri:ObjekatZaSlanje;
   porukaObservable$=this.poruka.asObservable();
 
   constructor(private http: HttpClient, private toastr: ToastrService) { }
@@ -55,7 +57,6 @@ export class SignalRService {
           this.podaciZaGrafik.push(new podatakZaGrafikKlasa("loss"));
           this.podaciZaGrafik.push(new podatakZaGrafikKlasa("val_loss"));
           this.brojEpoha=1;
-          
         }
         this.poruka.next(this.brojEpoha);
         this.data=res.replaceAll("'", '"');
@@ -71,6 +72,6 @@ export class SignalRService {
         
       })
     }
-    
   
+    
 }

@@ -9,11 +9,9 @@ from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect,HTTPExcepti
 from fastapi.responses import HTMLResponse
 from fastapi import Body
 import statistics as stats
-from matplotlib import testing
 import pandas as pd
 from pydantic import BaseModel, Json
 from requests.api import request
-from example import fja
 from asgiref.sync import sync_to_async
 import requests
 import statistics as stats
@@ -65,6 +63,8 @@ class ConnectionManager:
     def disconnect(self,client_id:str):
         self.active_connections.pop(client_id,True)
         self.filePaths.pop(client_id,True)
+        self.models.pop(client_id,True)
+        self.testSets.pop(client_id,True)
 
     async def receive_text(self,client_id:str):
         return await self.active_connections[client_id].receive_text()

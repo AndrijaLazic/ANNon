@@ -11,6 +11,12 @@ export class ObjekatZaSlanje {
     odnosPodataka:number;
     NizPromena:Array<Model>;
     BrojEpoha:number;
+
+    //niz val_loss i lo
+    val_loss=[];
+    loss=[];
+    ImeFajla: string;
+    Naziv: string;
 }
 
 export interface ListaSkrivenihSlojeva {
