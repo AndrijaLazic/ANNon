@@ -112,15 +112,24 @@
     >
     </ng-template>
 
-    <div class="grid-wrapper" *ngIf="podaci.length>0">
-      <button type="button" class="btn btn-dark" (click)="izbrisiSelektovano()">Obrisi selektovano</button>
-      <button type="button" class="btn btn-dark" (click)="skiniFajl()">Download</button>
-      <br>
+    <div class="grid-wrapper" *ngIf="podaci.length>0" [formGroup]="forma" id="tabela">
+      <div class="row justify-content-center" style="margin-top: 10px;">
+        <div class="col-md-auto justify-content-center m-1">
+          <button class="dugme2 dugmeAnimacija" mat-raised-button color="primary" (click)="izbrisiSelektovano()">Obrisi selektovano</button>
+        </div>
+        <div class="col-md-auto justify-content-center m-1">
+          <button class="dugme2 dugmeAnimacija" mat-raised-button color="primary" (click)="skiniFajl()">Download</button>
+        </div>
+      </div>
       <ag-grid-angular style="height: 520px;" class="ag-theme-alpine-dark" [rowData]="RedoviPodaci"
         [columnDefs]="KoloneDef" [pagination]="true" [paginationPageSize]="brojElemenataNaStrani"
         [rowSelection]="rowSelection" [animateRows]="true" (gridReady)="onGridReady($event)"
         (gridColumnsChanged)="onGridColumnsChanged($event)">
       </ag-grid-angular>
+      <div id="brojacStrane">
+        Trenutna strana <input matInput  type="number" formControlName="trenutnaStrana" [min]="minStrana" [max]="maxStrana" (ngModelChange)="PromenaStrane($event)">
+      </div>
+      
     </div>
   </div>
 </div>

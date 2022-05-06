@@ -15,6 +15,7 @@ import { FilePreviewModel, UploaderCaptions, UploadResponse, UploadStatus, Valid
 import { catchError, delay, map, Observable, of } from 'rxjs';
 import { UploadFajlServisService } from './upload-fajl-servis.service';
 import { HttpResponse } from '@angular/common/http';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 export class DataModel
 {
@@ -43,6 +44,19 @@ export class CsvTabelaComponent implements OnInit {
   public VelicinaFajla:number;
   model:DataModel;
   statistika:Object;
+
+  minStrana=0;
+  maxStrana=0;
+
+  forma=new FormGroup({
+    trenutnaStrana:new FormControl('1',[Validators.required])
+  })
+  get trenutnaStrana(){
+    return this.forma.get('trenutnaStrana');
+  }
+
+
+
   @Output() public onUploadFinished = new EventEmitter();
   
   public adapter = new DemoFilePickerAdapter(this.http,this.spinner,this.toastr);
@@ -63,6 +77,8 @@ export class CsvTabelaComponent implements OnInit {
 }
   onGridReady(params: GridReadyEvent) {
     this.gridApi = params.api;
+    this.minStrana=1;
+    this.maxStrana=this.gridApi.paginationGetTotalPages();
     this.spinner.hide("Spiner1");
   }
   onComponentStateChanged(event: ComponentStateChangedEvent){
@@ -320,5 +336,16 @@ export class CsvTabelaComponent implements OnInit {
     
   }
 
+
+  public PromenaStrane(event){
+    if(event>this.maxStrana){
+      this.forma.controls['trenutnaStrana'].setValue(this.maxStrana);
+    }
+    else if(event<this.minStrana){
+      this.forma.controls['trenutnaStrana'].setValue(this.minStrana);
+    }
+    this.gridApi.paginationGoToPage(this.trenutnaStrana.value-1)
+    console.log(this.maxStrana+" "+ this.minStrana)
+  }
 
 }
