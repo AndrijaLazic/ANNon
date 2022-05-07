@@ -4,7 +4,8 @@ using Projekat.Data;
 using Projekat.Modeli;
 using Projekat.SignalRCommunication.Hubs;
 using WebSocketSharp.Server;
-
+using Projekat.Ostalo;
+using Projekat.Servisi;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,7 +20,8 @@ builder.Services.AddHttpClient<MachineLearningClient>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+builder.Services.Configure<MailPodesavanja>(builder.Configuration.GetSection(nameof(MailPodesavanja)));
+builder.Services.AddTransient<IMailService, MailService>();
 //konfigurisanje SignalR
 builder.Services.AddSignalR();
 

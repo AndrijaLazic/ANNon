@@ -6,6 +6,7 @@ using MailKit.Net.Smtp;
 using MimeKit;
 using Projekat.Modeli;
 using System.IdentityModel.Tokens.Jwt;
+using MailKit.Security;
 
 namespace Projekat.Controllers
 {
@@ -72,22 +73,16 @@ namespace Projekat.Controllers
             poruka.To.Add(MailboxAddress.Parse(EmailPrimaoca));
 
             poruka.Subject = Naslov;
-
-
-
-            poruka.Body = new TextPart("plain")
-            {
-                Text = tekstPoruke
-                
-            };
+            poruka.Body = new TextPart(MimeKit.Text.TextFormat.Html) { Text = "<h1>"+ tekstPoruke + "</h1>" };
             
-            SmtpClient client = new SmtpClient();
+            using SmtpClient client = new SmtpClient();
 
             try
             {
-                client.Connect(konfiguracija.GetSection("EmailKonfiguracija:SmtpServer").Value, 465, true);
+                client.Connect(konfiguracija.GetSection("EmailKonfiguracija:SmtpServer").Value,int.Parse(konfiguracija.GetSection("EmailKonfiguracija:Port").Value), SecureSocketOptions.StartTls);
                 client.Authenticate(konfiguracija.GetSection("EmailKonfiguracija:Email").Value, konfiguracija.GetSection("EmailKonfiguracija:Sifra").Value);
                 client.Send(poruka);
+                client.Disconnect(true);
 
             }
             catch (Exception ex)
@@ -103,4 +98,8 @@ namespace Projekat.Controllers
             return false;
         }
     }
+
+
+
+
 }
