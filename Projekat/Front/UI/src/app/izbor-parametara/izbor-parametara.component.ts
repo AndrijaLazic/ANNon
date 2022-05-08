@@ -6,6 +6,7 @@ import { FormGroup,FormControl,Validators, FormBuilder, FormArray } from '@angul
 import { any } from 'bluebird';
 import {ObjekatZaSlanje} from '../trening/ObjekatZaSlanje.model'
 import { Options } from '@angular-slider/ngx-slider';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-izbor-parametara',
@@ -15,7 +16,8 @@ import { Options } from '@angular-slider/ngx-slider';
 
 
 export class IzborParametaraComponent implements OnInit {
-
+  klasifikacija:boolean=false;
+  regresija:boolean=false;
   MinBrojEpoha=5;
   MaxBrojEpoha=300;
   //slajder
@@ -63,7 +65,7 @@ export class IzborParametaraComponent implements OnInit {
     MeraGreske:new FormControl('',[Validators.required]),
     MeraUspeha:new FormControl('',[Validators.required]),
     BrojEpoha:new FormControl(5,[Validators.required,Validators.min(this.MinBrojEpoha),Validators.max(this.MaxBrojEpoha)]),
-    odnosPodataka:new FormControl(25),
+    odnosPodataka:new FormControl(),
     ListaSkrivenihSlojeva:this.fb.array([
     ])
   })
@@ -85,12 +87,42 @@ export class IzborParametaraComponent implements OnInit {
 
 
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder,private cookie:CookieService) { }
   trenutniBrojSkrivenihSlojeva=0;
 
   
 
     ngOnInit(){ 
+      let pom=JSON.parse(this.cookie.get('params'));
+      for(let i=0;i<pom['nizIzabranihIzlaza'].length;i++)
+      {
+        if(pom['nizIzabranihIzlaza'][i])
+        {
+          if(pom['kategorije'][i]=="Numericki")
+          {
+              this.forma.patchValue({
+                TipProblema:'regresija',
+                MeraGreske:'mean_squared_error',
+                MeraUspeha:'mean_squared_error',
+                odnosPodataka:25
+              });
+              this.klasifikacija=true;
+          }
+          else
+          {
+            this.forma.patchValue({
+              TipProblema:'klasifikacija',
+              MeraGreske:'binary_crossentropy',
+              MeraUspeha:'binary_accuracy',
+              odnosPodataka:25
+            });
+            this.regresija=true;
+          }
+          return;
+        }
+      }
+      
+      
     }
 
 

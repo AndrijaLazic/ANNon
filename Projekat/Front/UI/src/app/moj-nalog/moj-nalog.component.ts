@@ -67,12 +67,17 @@ export class MojNalogComponent implements OnInit {
       this.toastr.error('Forma nije validna')
     }
     else{
-      if(this.jwtHelper.decodeToken(this.token)['username']==this.forma.value['Username'] && this.jwtHelper.decodeToken(this.token)['email']==this.forma.value['Email'] && !this.selectedFile )
+      if(this.jwtHelper.decodeToken(this.token)['username']==this.forma.value['Username'] && this.jwtHelper.decodeToken(this.token)['email']==this.forma.value['Email'] && !this.selectedFile && this.forma.value['NoviPassword']=="")
       {
         this.toastr.error("Niste uneli nijednu promenu");
       }
       else
       {
+        if(this.forma.value['NoviPassword']==this.forma.value['StariPassword'])
+        {
+          this.toastr.error('Nova sifra ne moze biti ista kao trenutna');
+          return;
+        }
         const formazaslanje=new FormData();
           if(this.selectedFile)
           {

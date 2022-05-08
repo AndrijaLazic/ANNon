@@ -7,10 +7,10 @@
           <mat-form-field appearance="fill" class="selektorAktivacioneFje">
             <mat-label>Tip problema</mat-label>
             <mat-select formControlName="TipProblema">
-              <mat-option value="regresija">
+              <mat-option value="regresija" [disabled]="regresija">
                 Regresija
               </mat-option>
-              <mat-option value="klasifikacija">
+              <mat-option value="klasifikacija" [disabled]="klasifikacija">
                 Klasifikacija
               </mat-option>
             </mat-select>

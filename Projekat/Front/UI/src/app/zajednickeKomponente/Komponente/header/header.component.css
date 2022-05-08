@@ -121,6 +121,7 @@
     margin: auto;
     text-overflow: ellipsis;
     width: fit-content;
+    cursor: pointer;
 }
 #dropDownElement img{
     margin-right: 3px;
