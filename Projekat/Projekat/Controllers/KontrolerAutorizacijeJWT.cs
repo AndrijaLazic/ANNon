@@ -308,9 +308,9 @@ namespace Projekat.Controllers
             }
 
         }
-        //[Authorize]
+        //pored tokena mora da stigne i nazivfajla koji korisnik unese
         [HttpPost("{token}/save")]
-        public async Task<ActionResult<string>> validate(string token)
+        public async Task<ActionResult<string>> validate(string token,string fileName)//[fromform ako zatreba vidi na frontu]
         {
            try
            {
@@ -333,9 +333,9 @@ namespace Projekat.Controllers
                SavedModelsModel saveModel = new SavedModelsModel
                {
                    UserID = korisnik.ID,
-                   ModelID = "model",
+                   ModelID = response.Content,
                    DateSaved = DateTime.Now,
-                   ModelName = "imeModela"
+                   ModelName = fileName
                };
 
                _context.SavedModels.Add(saveModel);
@@ -376,6 +376,26 @@ namespace Projekat.Controllers
            }
            
         }
+        [HttpGet("getmodelbyid")]
+        public async Task<ActionResult<string>> GetModelByID(string token,string modelID)
+        {
+            var currentUser = ValidateToken(token, this.configuration);
+            if (currentUser.IsNullOrEmpty())
+                return BadRequest("Pristup odbijen!");
+
+            Korisnik korisnik = _context.Korisnici.Where(x => x.Username.Equals(currentUser)).FirstOrDefault();
+            if (korisnik == null)
+                return BadRequest("Korisnik nije pronadjen!");
+
+            SavedModelsModel model = (SavedModelsModel)_context.SavedModels.FromSqlRaw("SELECT * FROM savedmodels WHERE UserID = " + korisnik.ID + " AND ModelID =" + modelID);
+            if (model == null)
+                return BadRequest("Model nije pronadjen!");
+
+            return Ok(JsonConvert.SerializeObject(model));
+        }
+        //FJA KOJA PRIHVATA TOKEN I ID FAJLA KOJI KORISNIK ZELI DA UCITA I VRACA MU SE NAZAD
+        //U PYCLIENTU FJA KOJA SALJE TAJ ID KAO JSON STRING 
+
         private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
             using (var hmac = new HMACSHA512())
