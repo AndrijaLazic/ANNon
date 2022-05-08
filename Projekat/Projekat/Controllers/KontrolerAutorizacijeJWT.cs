@@ -15,6 +15,9 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
 using Projekat.Clients;
 using Newtonsoft.Json;
+using Microsoft.Extensions.Options;
+using Projekat.Servisi;
+
 namespace Projekat.Controllers
 {
     [Route("api/[controller]")]
@@ -25,11 +28,16 @@ namespace Projekat.Controllers
 
         private readonly IConfiguration configuration;
         private readonly MachineLearningClient _client;
-        public KontrolerAutorizacije(IConfiguration configuration, MySqlDbContext context, MachineLearningClient client)
+        private readonly Servisi.IMailService _mail;
+        private readonly MailPodesavanja _settings;
+
+        public KontrolerAutorizacije(IConfiguration configuration, MySqlDbContext context, MachineLearningClient client, Servisi.IMailService mail, IOptions<MailPodesavanja> settings)
         {
             this.configuration = configuration;
             _context = context;
             _client = client;
+            _mail = mail;
+            _settings = settings.Value;
         }
 
 
@@ -45,7 +53,7 @@ namespace Projekat.Controllers
                     CreatePasswordHash(zahtev.Password, out byte[] passwordHash, out byte[] passwordSalt);
                     korisnik = new Korisnik();
                     korisnik.Username = zahtev.Username;
-                   korisnik.Email = zahtev.Email;
+                    korisnik.Email = zahtev.Email;
                     korisnik.PasswordHash = passwordHash;
                     korisnik.PasswordSalt = passwordSalt;
                     string EmailToken = CreateToken(korisnik, int.Parse(configuration.GetSection("AppSettings:TrajanjeEmailTokenaUMinutima").Value.ToString()));
@@ -61,22 +69,49 @@ namespace Projekat.Controllers
                         korisnik.ProfileImage = RadSaFajlovima.upisiSliku(korisnik.ID,zahtev.image);
                         await _context.SaveChangesAsync();
                     }
+                    //List<string> pomLista = new List<string>();
+                    //pomLista.Add(zahtev.Email);
+
+                    string url = configuration.GetSection("Front_Server_Config:host").Value + ":" + configuration.GetSection("Front_Server_Config:port").Value;
+                    MailPotvrdeRegistracije mail=new MailPotvrdeRegistracije();
+                    mail.Name = zahtev.Username;
+                    mail.Email = zahtev.Email;
+                    mail.UrlZaRegistraciju ="http://"+ url + "/verifikacija?token=" + EmailToken;
+
+                    MailData mailData = new MailData(
+                    new List<string> { zahtev.Email },
+                    "Potvrda registracije",
+                    _mail.GetEmailTemplate("PotvrdaRegistracije", mail));
+                    bool sendResult = await _mail.SendAsync(mailData, new CancellationToken());
 
 
-                    EmailKontroler.PosaljiEmail("Kliknite na link za potvrdu registracije:http://localhost:4200/verifikacija?token=" + EmailToken, "Potvrda registracije", zahtev.Email, configuration);
+                    //string url = configuration.GetSection("Front_Server_Config:host").Value +":"+ configuration.GetSection("Front_Server_Config:port").Value;
+                    //string tekst = "Kliknite na link za potvrdu registracije:http://"+ url + "/verifikacija?token=" + EmailToken + "</h1>";
+                    //MailData poruka = new MailData(pomLista, "Potvrda registracije",body: tekst);
+                    //bool result = await _mail.SendAsync(poruka, new CancellationToken());
 
-                    return Ok(new
+
+                    //EmailKontroler.PosaljiEmail("Kliknite na link za potvrdu registracije:http://localhost:4200/verifikacija?token=" + EmailToken, "Potvrda registracije", zahtev.Email, configuration);
+                    if (sendResult)
                     {
-                        success = true,
-                        data = new
+                        return Ok(new
                         {
-                            message = "Uspešna registracija"
-                        }
-                    });
+                            success = true,
+                            data = new
+                            {
+                                message = "Uspešna registracija"
+                            }
+                        });
+                    }
+                    else
+                    {
+                        return StatusCode(StatusCodes.Status500InternalServerError, "Došlo je do greške prilikom slanja email-a.");
+                    }
+                    
                 }
                 catch (Exception ex)
                 {
-
+                    Console.WriteLine(ex);
                     if (ex.InnerException.Message.Contains("IX_Korisnici_Email"))
                         return BadRequest("Email je već povezan sa drugim nalogom");
 

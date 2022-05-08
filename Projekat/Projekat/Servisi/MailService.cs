@@ -4,8 +4,8 @@ using Projekat.Modeli;
 using Projekat.Ostalo;
 using Microsoft.Extensions.Options;
 using MimeKit;
-
-
+using RazorEngineCore;
+using System.Text;
 
 namespace Projekat.Servisi
 {
@@ -16,6 +16,7 @@ namespace Projekat.Servisi
         {
             _settings = settings.Value;
         }
+
         public async Task<bool> SendAsync(MailData mailData, CancellationToken ct = default)
         {
             try
@@ -72,10 +73,32 @@ namespace Projekat.Servisi
                 #endregion
                 return true;
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                Console.WriteLine(e);
                 return false;
             }
         }
+
+
+        public string GetEmailTemplate<T>(string emailTemplate, T emailTemplateModel)
+        {
+            string mailTemplate = LoadTemplate(emailTemplate);
+            IRazorEngine razorEngine = new RazorEngine();
+            IRazorEngineCompiledTemplate modifiedMailTemplate = razorEngine.Compile(mailTemplate);
+            return modifiedMailTemplate.Run(emailTemplateModel);
+        }
+        public string LoadTemplate(string emailTemplate)
+        {
+            string baseDir = Directory.GetCurrentDirectory();
+            string templateDir = Path.Combine(baseDir, "Ostalo/EmailTemplejt");
+            string templatePath = Path.Combine(templateDir, $"{emailTemplate}.cshtml");
+            using FileStream fileStream = new FileStream(templatePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+            using StreamReader streamReader = new StreamReader(fileStream, Encoding.Default);
+            string mailTemplate = streamReader.ReadToEnd();
+            streamReader.Close();
+            return mailTemplate;
+        }
+
     }
 }
