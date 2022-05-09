@@ -14,14 +14,15 @@ import { statisticModel } from '../shared/statistic-model.model';
 import { Router } from '@angular/router';
 import { Model } from '../shared/statistic-model.model';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 @Component({
   selector: 'app-trening',
   templateUrl: './trening.component.html',
   styleUrls: ['./trening.component.css']
 })
 export class TreningComponent implements OnInit {
-  
   checked1=true;
+  nazivFajla:any;
   ind=false; 
   legenda=true;
   prikaziXlabel=true;
@@ -39,12 +40,13 @@ export class TreningComponent implements OnInit {
   linija=shape.curveBasis;
   readonly osnovniUrl=Konfiguracija.KonfiguracijaServera.osnovniURL;
   
-  constructor(private spinner:NgxSpinnerService,public signalR:SignalRService, private http: HttpClient,private cookieService:CookieService,private route:Router) { 
+  constructor(private modalService: NgbModal,private spinner:NgxSpinnerService,public signalR:SignalRService, private http: HttpClient,private cookieService:CookieService,private route:Router) { 
   }
 
   
 
   ngOnInit(): void {
+   
     this.signalR.podaciZaGrafik=[];
     if(!this.cookieService.check('params')){
       this.route.navigate(["./statistic"]);
@@ -134,44 +136,76 @@ export class TreningComponent implements OnInit {
     }
   }
 
-  prikaziRezultate()
+  prikaziRezultate(content)
   {
-    
-    for(let i=0;i<this.signalR.podaciZaGrafik.length-1;i++)
+    if(this.cookieService.get('token'))
     {
-      for(let j=0;j<this.signalR.podaciZaGrafik[i].series.length;j++)
+      this.modalService.open(content);
+    }
+    else if(!this.cookieService.get('token'))
+    {
+      this.preuzmiModel();
+    }
+    
+    
+  }
+
+  preuzmiModel()
+  {
+      for(let i=0;i<this.signalR.podaciZaGrafik.length-1;i++)
       {
-          let loss=this.signalR.podaciZaGrafik[i].series[j].value;
-          this.izabraniParametri.loss.push(loss);
-          let val_loss=this.signalR.podaciZaGrafik[i+1].series[j].value;
-          this.izabraniParametri.val_loss.push(val_loss);
+        for(let j=0;j<this.signalR.podaciZaGrafik[i].series.length;j++)
+        {
+            let loss=this.signalR.podaciZaGrafik[i].series[j].value;
+            this.izabraniParametri.loss.push(loss);
+            let val_loss=this.signalR.podaciZaGrafik[i+1].series[j].value;
+            this.izabraniParametri.val_loss.push(val_loss);
+          
+        }
         
       }
-      
-    }
-    this.izabraniParametri.ImeFajla=sessionStorage.getItem("imeFajla");
-    //this.moj.push(this.izabraniParametri);
-    console.log(this.izabraniParametri);
-    var saveData = (function () {
-      var a = document.createElement("a");
-      document.body.appendChild(a);
-      //a.style = "display: none";
-      return function (data, fileName) {
-          var json = JSON.stringify(data),
-              blob = new Blob([json], {type: "octet/stream"}),
-              url = window.URL.createObjectURL(blob);
-          a.href = url;
-          a.download = fileName;
-          a.click();
-          window.URL.revokeObjectURL(url);
-      };
-  }());
-  
-  var data = this.izabraniParametri,
-      fileName = "Rezultati.json";
-  
-  saveData(data, fileName);
+      this.izabraniParametri.ImeFajla=sessionStorage.getItem("imeFajla");
+      //this.moj.push(this.izabraniParametri);
+      console.log(this.izabraniParametri);
+      var saveData = (function () {
+        var a = document.createElement("a");
+        document.body.appendChild(a);
+        //a.style = "display: none";
+        return function (data, fileName) {
+            var json = JSON.stringify(data),
+                blob = new Blob([json], {type: "octet/stream"}),
+                url = window.URL.createObjectURL(blob);
+            a.href = url;
+            a.download = fileName;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        };
+    }());
     
+    var data = this.izabraniParametri,
+        fileName = "Rezultati.json";
+    
+    saveData(data, fileName);
+  }
+
+  cuvajModelNaNalogu(content)
+  {
+    this.modalService.open(content);
+  }
+
+  cuvajModelNaNalogu2()
+  {
+    var formData = new FormData();
+    formData.append("token",this.cookieService.get('token'));
+    formData.append("filename",this.nazivFajla);
+    this.http.post(this.osnovniUrl+"api/KontrolerAutorizacije/"+`${this.cookieService.get('token')}`+'/save',formData).subscribe(
+      res=>{
+        console.log(res);
+      },
+      err=>{
+        console.log(err);
+      }
+    );
   }
 }
 

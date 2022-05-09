@@ -310,7 +310,7 @@ namespace Projekat.Controllers
         }
         //pored tokena mora da stigne i nazivfajla koji korisnik unese
         [HttpPost("{token}/save")]
-        public async Task<ActionResult<string>> validate(string token,string fileName)//[fromform ako zatreba vidi na frontu]
+        public async Task<ActionResult<string>> validate([FromForm]string token,[FromForm]string fileName)//[fromform ako zatreba vidi na frontu]
         {
            try
            {
