@@ -95,7 +95,7 @@ def get_one_hot_target(target):
   labels = lookup(target2)
   return labels
 
-@tf.autograph.experimental.do_not_convert
+
 def get_normalization_layer(name, dataset):
   # Create a Normalization layer for the feature.
   normalizer = tf.keras.layers.Normalization(axis=None)
@@ -108,7 +108,7 @@ def get_normalization_layer(name, dataset):
 
   return normalizer
 
-@tf.autograph.experimental.do_not_convert
+
 def get_category_encoding_layer(feature_ds, dtype, max_tokens=None):
   if dtype == 'string':
     index = tf.keras.layers.StringLookup(max_tokens=max_tokens)
@@ -119,7 +119,7 @@ def get_category_encoding_layer(feature_ds, dtype, max_tokens=None):
   encoder = tf.keras.layers.CategoryEncoding(num_tokens=index.vocabulary_size())
   return lambda feature: encoder(index(feature))
 
-@tf.autograph.experimental.do_not_convert
+
 def prepare_preprocess_layers(data,target,train, one_hot_label=False):
   categorical_column_names,numerical_column_names=determine_variable_types(data,target)
 
@@ -208,6 +208,10 @@ def make_classification_model(data, hiperparametri:Hiperparametri):
   relevant_columns=hiperparametri.ulazne_kolone+[hiperparametri.izlazna_kolona]
   data=data[relevant_columns]
 
+  mera_greske = hiperparametri.mera_greske
+  if hiperparametri.mera_greske == "binary_crossentropy":
+    mera_greske = hiperparametri.mera_greske = tf.keras.losses.BinaryCrossentropy(from_logits=True)
+  
   data.drop_duplicates()
   data.dropna(inplace=True)
   broj_klasa = data[hiperparametri.izlazna_kolona].nunique()
@@ -223,5 +227,5 @@ def make_classification_model(data, hiperparametri:Hiperparametri):
   val_ds = df_to_dataset(val, val_target, one_hot_label=one_hot_label)
   test_target = test.pop(hiperparametri.izlazna_kolona)
   test_ds = df_to_dataset(test, test_target, one_hot_label=one_hot_label)
-  model=make_model(all_inputs,encoded_features,hiperparametri.slojevi,hiperparametri.mera_greske,hiperparametri.mera_uspeha, broj_klasa)
+  model=make_model(all_inputs,encoded_features,hiperparametri.slojevi,mera_greske,hiperparametri.mera_uspeha, broj_klasa)
   return model,train_ds,val_ds,test_ds
