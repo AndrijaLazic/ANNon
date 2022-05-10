@@ -323,11 +323,6 @@ export class CsvTabelaComponent implements OnInit {
     this.onFileSelected(file);
   }
 
-
-  public myCustomValidator(file: File): Observable<boolean> {
-    this.spinner.show("Spiner1");
-    return of(true);
-  }
   public izbrisiFajl(){
     this.podaci=[];
     

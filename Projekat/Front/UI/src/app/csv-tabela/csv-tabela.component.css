@@ -144,16 +144,17 @@
 #fajl{
     max-width: 25vh;
     min-width: 250px;
-    background: white;
+    background: #063966;
     border-radius: 20px;
     padding: 10px; 
     margin: auto;
+    color: white;
 }
 
 #fajl .parent {
     
     display: grid;
-    background: white;
+    background: #00294c;
     border-radius: 15px;
     border: gray 2px dashed;
     overflow: hidden;
@@ -208,6 +209,16 @@
 }
 #tabela ::ng-deep .ag-theme-alpine-dark .ag-row-odd{
     background-color: #063966;
+}
+#dugmeIznadTabele{
+    min-width: fit-content;
+    width: 13vw;
+}
+
+@media (max-width:767px) {
+    #dugmeIznadTabele{
+        width: 100%;
+    }
 }
 
 
