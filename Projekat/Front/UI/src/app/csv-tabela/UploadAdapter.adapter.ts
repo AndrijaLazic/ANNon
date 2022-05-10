@@ -29,6 +29,7 @@ import {
       
       return this.http.request(req).pipe(
         map((res: HttpEvent<any>) => {
+          this.spinner.show("Spiner1");
           if (res.type === HttpEventType.Response) {
             const responseFromBackend = res.body;
             console.log(String(responseFromBackend))
@@ -48,7 +49,7 @@ import {
           }
         }),
         catchError(er => {
-          this.spinner.hide("Spiner2");
+          this.spinner.hide("Spiner1");
           console.log(er);
           return of({ status: UploadStatus.ERROR, body: er });
         })
