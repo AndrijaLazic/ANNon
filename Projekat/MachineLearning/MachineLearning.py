@@ -123,12 +123,13 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str):
     await manager.connect(websocket,client_id)
     try:
         while True:
+            print("uslo u websocket "+client_id)
             data = await websocket.receive_text()
             model=json.loads(data)
             s=requests.get(await manager.getFilePath(client_id),verify=False).content
             fajl=pd.read_csv(io.StringIO(s.decode('utf-8')),sep='|')
             if(fajl.empty):
-                raise HTTPException(status_code=404, detail="Fajl ne postoji")
+                raise HTTPException(status_code=404, detail="Fajl ne postoji") 
 
             slojevi=[Sloj(sloj["BrojNeurona"],sloj["AktivacionaFunkcija"]) for sloj in model["ListaSkrivenihSlojeva"]]
             hiperparametri=Hiperparametri(
@@ -140,11 +141,11 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str):
                 model["UlazneKolone"],
                 model["IzlaznaKolona"])
             if hiperparametri.tip_problema == 'regresija':
-                model,train,val,test=make_regression_model(fajl,hiperparametri)
+                model,train,val,test=await sync_to_async(make_regression_model,thread_sensitive=False)(fajl,hiperparametri)
             elif hiperparametri.tip_problema == 'klasifikacija':
                 model,train,val,test=make_classification_model(fajl,hiperparametri)
             await manager.addTestSet(client_id,test,hiperparametri.izlazna_kolona)
-            filename=await sync_to_async(train_model)(model,train,val,client_id,hiperparametri.broj_epoha)
+            filename=await sync_to_async(train_model,thread_sensitive=False)(model,train,val,client_id,hiperparametri.broj_epoha)
             await manager.addModel(client_id,model)
             #testiranje
             #await sync_to_async(test_model)(filename,train,hiperparametri.izlazna_kolona)
@@ -154,7 +155,9 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str):
 
 @app.post("/publish/epoch/end")
 async def post_data(request:Request):
+    
     result=await request.json()
+    print("salje zahteve "+result["to_send"])
     await manager.send_text(result['to_send'],str(result))
     await manager.receive_text(result['to_send'])
     print(result)
