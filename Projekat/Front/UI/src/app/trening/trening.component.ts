@@ -15,6 +15,7 @@ import { Router } from '@angular/router';
 import { Model } from '../shared/statistic-model.model';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-trening',
   templateUrl: './trening.component.html',
@@ -40,7 +41,7 @@ export class TreningComponent implements OnInit {
   linija=shape.curveBasis;
   readonly osnovniUrl=Konfiguracija.KonfiguracijaServera.osnovniURL;
   
-  constructor(private modalService: NgbModal,private spinner:NgxSpinnerService,public signalR:SignalRService, private http: HttpClient,private cookieService:CookieService,private route:Router) { 
+  constructor(private modalService: NgbModal,private spinner:NgxSpinnerService,public signalR:SignalRService, private http: HttpClient,private cookieService:CookieService,private route:Router,private toastr:ToastrService) { 
   }
 
   
@@ -191,10 +192,16 @@ export class TreningComponent implements OnInit {
   cuvajModelNaNalogu(content)
   {
     this.modalService.open(content);
+    
   }
 
   cuvajModelNaNalogu2()
   {
+    if(!this.nazivFajla)
+    {
+      this.toastr.error("Niste uneli naziv fajla");
+      return;
+    }
     var formData = new FormData();
     formData.append("token",this.cookieService.get('token'));
     formData.append("filename",this.nazivFajla);
