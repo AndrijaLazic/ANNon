@@ -319,18 +319,15 @@ export class CsvTabelaComponent implements OnInit {
     this.podaci=[];
   }
   public onFileAdded(file: FilePreviewModel) {
-    this.spinner.show("Spiner1");
+    
     this.onFileSelected(file);
   }
 
 
   public myCustomValidator(file: File): Observable<boolean> {
-    if (!file.name.includes('uploader')) {
-      return of(true).pipe(delay(2000));
-    }
-    return of(false).pipe(delay(2000));
+    this.spinner.show("Spiner1");
+    return of(true);
   }
-
   public izbrisiFajl(){
     this.podaci=[];
     
