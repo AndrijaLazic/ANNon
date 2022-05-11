@@ -229,3 +229,19 @@ def make_classification_model(data, hiperparametri:Hiperparametri):
   test_ds = df_to_dataset(test, test_target, one_hot_label=one_hot_label)
   model=make_model(all_inputs,encoded_features,hiperparametri.slojevi,mera_greske,hiperparametri.mera_uspeha, broj_klasa)
   return model,train_ds,val_ds,test_ds
+
+#missing values: mode, median, mean, none
+def handle_missing_values(methods, columns, data):
+  if methods[0] == None:
+    data.dropna()
+    return
+  
+  for i in range(len(columns)):
+    if methods[i] == "MODE":
+      data[columns[i]].fillna(value=data[columns[i]].mode()[0], inplace=True)
+    elif methods[i] == "MEDIAN":
+      data[columns[i]].fillna(value=data[columns[i]].median()[0], inplace=True)
+    elif methods[i] == "MEAN":
+      data[columns[i]].fillna(value=data[columns[i]].mean()[0], inplace=True)
+
+
