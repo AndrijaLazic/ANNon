@@ -45,7 +45,7 @@ export class StatisticComponent implements OnInit {
   izlaznaKolona;
   dropdownSettings2={};
   statistika:Object;
-    /*statistika={
+   /* statistika={
     "numericke_kolone": [
         {
             "ime_kolone": "Carat",
@@ -283,17 +283,13 @@ listaKolona=[];
         for(let i=0;i<Object.keys(this.statistika['numericke_kolone']).length;i++)
         {
             this.kolone.push(this.statistika['numericke_kolone'][i]['ime_kolone']);
-            this.cekiranaUlazna.push(false);
-            this.cekiranaIzlazna.push(false);
             
         }
         for(let i=0;i<Object.keys(this.statistika['kategoricke_kolone']).length;i++)
         {
             this.kolone.push(this.statistika['kategoricke_kolone'][i]['ime_kolone']);
-            this.cekiranaUlazna.push(false);
-            this.cekiranaIzlazna.push(false);
         }
-
+        this.pocetnoStanje();
         if(this.cookie.check("params"))
         {
             var params = Object.assign(new statisticModel(),JSON.parse(this.cookie.get('params')));
@@ -855,22 +851,33 @@ listaKolona=[];
       }
 
 
-    dajUlazne(event:any){
-        let element = <HTMLInputElement> document.getElementById(event);  
-        if (element.checked) { this.cekiranaUlazna[event]=true}
+    dajUlazne(event:any,event2:any){ 
+        if (event2.checked) { this.cekiranaUlazna[event]=true
+                                this.cekiranaIzlazna[event]=false}
         else {this.cekiranaUlazna[event]=false}
         console.log(this.cekiranaUlazna);
         
     }
-    dajIzlaznu(event:any){
-        let element = <HTMLInputElement> document.getElementById("izlazna"+event);  
-        if (element.checked) {
+    dajIzlaznu(event:any,event2:any){
+        if (event2.checked) {
              this.cekiranaIzlazna[event]=true;
+             this.cekiranaUlazna[event]=false;
              for(let i=0;i<this.cekiranaIzlazna.length;i++)
                 if(i!=event) this.cekiranaIzlazna[i]=false;
         }
         else {this.cekiranaIzlazna[event]=false}
 
+    }
+
+    pocetnoStanje()
+    {
+        for(let i = 0;i<this.kolone.length-1;i++)
+        {
+            this.cekiranaUlazna[i]=true;
+            this.cekiranaIzlazna[i]=false;
+        }
+        this.cekiranaUlazna[this.kolone.length-1]=false;
+        this.cekiranaIzlazna[this.kolone.length-1]=true;
     }
 
 
