@@ -5,6 +5,9 @@ import { CookieService } from 'ngx-cookie-service';
 import { ToastrService } from 'ngx-toastr';
 import { RegisterServiceService } from 'src/app/shared/register-service.service';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { DemoFilePickerAdapter } from './UploadAdapter.adapter';
+import { HttpClient } from '@angular/common/http';
+import { FilePreviewModel, UploaderCaptions, ValidationError } from 'ngx-awesome-uploader';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -12,9 +15,9 @@ import { NgxSpinnerService } from 'ngx-spinner';
 })
 export class RegisterComponent implements OnInit {
 
-  selectedFile:File=null;
+  selectedFile:any=null;
 
-  constructor(private spinner:NgxSpinnerService,public service:RegisterServiceService,private toastr:ToastrService,private route:Router,private cookie:CookieService) { }
+  constructor(private http:HttpClient,private spinner:NgxSpinnerService,public service:RegisterServiceService,private toastr:ToastrService,private route:Router,private cookie:CookieService) { }
 
 
 
@@ -69,4 +72,88 @@ export class RegisterComponent implements OnInit {
     
   }
 
+
+  
+
+
+
+  public imeFajla:string;
+  public VelicinaFajla:number;
+  public adapter = new DemoFilePickerAdapter(this.http,this.spinner,this.toastr);
+
+  MaksVelicinaFajla=5;
+
+  public myFiles: FilePreviewModel[] = [];
+
+  public captions: UploaderCaptions = {
+    dropzone: {
+      title: '',
+      or: '',
+      browse: '',
+    },
+    cropper: {
+      crop: 'Iseci',
+      cancel: 'Prekini',
+    },
+    previewCard: {
+      remove: 'Izbriši',
+      uploadError: 'Greška pri ucitavanju fajla',
+    },
+  };
+
+  public cropperOptions = {
+    minContainerWidth: '300',
+    minContainerHeight: '300',
+  };
+
+  public onValidationError(error: ValidationError): void {
+    if("FILE_MAX_SIZE"==error.error && this.myFiles.length==0){
+      alert("Maksimalna velicina fajla je "+this.MaksVelicinaFajla+" Mb")
+    }
+    else if("FILE_MAX_COUNT"==error.error){
+      alert("Izaberite samo jedan fajl")
+    }
+    else{
+      alert(`Izaberite sliku sa jednom od sledecih ekstenzija: jpg,png,gif`);
+    }
+    // ${error.error}
+  }
+
+  public onUploadSuccess(e: FilePreviewModel): void {
+
+    console.log(this.myFiles.length);
+  }
+
+  public onRemoveSuccess(e: FilePreviewModel) {
+    
+    console.log(this.myFiles.length);
+    this.myFiles.pop();
+    this.selectedFile=null;
+  }
+  public onFileAdded(file: FilePreviewModel) {
+    
+    this.onFileSelected(file);
+  }
+
+  onFileSelected(fajl: FilePreviewModel)
+  {
+    
+    if (fajl) 
+    {
+      var file = fajl.file;
+      this.imeFajla=fajl.fileName;
+      this.VelicinaFajla=fajl.file.size;
+      this.selectedFile=file;
+      let reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (event: any) => {
+        this.url = event.target.result;
+      };
+    }
+  }
+
+  IzbrisiSliku(){
+    this.selectedFile=null;
+    this.url="";
+  }
 }

@@ -13,22 +13,45 @@
     </div>
     <hr>
     <div class="row justify-content-center">
-      <div class="col-md-auto">
-        
-          <div id="slika">
-            
-          <img [src]="url" title="Profile Picture" height="150px" width="150px" src="" />
-            <input
-              type="file"
-              id="img"
-              style="display:none"
-              accept="image/*"
-              (change)="onSelect($event)"
-              
-            />
-              <label class="dugme" for="img">Choose image</label> 
+      <div class="col-md-auto FormaZaIzmenuPodatakaOKorisniku" *ngIf="selectedFile==null">
+        <ngx-awesome-uploader  id="PoljeZaUnos"
+          #uploader
+          [adapter]="adapter"
+          [fileMaxCount]="1"
+          [fileMaxSize]="MaksVelicinaFajla"
+          [uploadType]="'Single'"
+          [enableCropper]="true"
+          [cropperOptions]="cropperOptions"
+          (validationError)="onValidationError($event)"
+          [fileExtensions]="['jpg','png','gif','jpeg']"
+          (uploadSuccess)="onUploadSuccess($event)"
+          (removeSuccess)="onRemoveSuccess($event)"
+          (fileAdded)="onFileAdded($event)"
+          [captions]="captions"
+          [accept]="'.jpg, .png,.gif,.jpeg'"
+          [itemTemplate]="myItemTemplate"
+          [enableAutoUpload]="false"
+          >
+          <div class="dropzoneTemplate">
+            <div class="d-flex justify-content-center">
+              <img src="../../assets/image/drag-and-drop-Za-Sliku.png" class="img-fluid" alt="Responsive image">
+            </div>
           </div>
+        </ngx-awesome-uploader>
+        <ng-template
+          #myItemTemplate
+          let-fileItem="fileItem"
+          let-uploadProgress="uploadProgress"
+          style="height: 0px;"
+        >
+        </ng-template>
       </div>
+      <div class="col-md-auto FormaZaIzmenuPodatakaOKorisniku" *ngIf="selectedFile!=null" id="KorisnickaSlika">
+        <img src="{{url}}" class="img-fluid">
+      </div>
+    </div>
+    <div class="row justify-content-center" *ngIf="selectedFile!=null" style="margin-top: 10px;">
+      <button type="button" id="dugme2" class="btn btn-primary dugmeAnimacija" (click)="IzbrisiSliku()">Izbriši sliku</button><br>
     </div>  
     <form novalidate #form="ngForm" (submit)="onSubmit1(form)">
       <div class="row justify-content-center">
@@ -94,8 +117,8 @@
             
             
             <div class="akaunt">
-              <button type="submit" id="dugme" class="btn btn-primary" [disabled]="form.invalid">Sign Up</button><br>
-              Already have an account?<a routerLink="/login">Log in</a>
+              <button type="submit" id="dugme" class="btn btn-primary" [disabled]="form.invalid">Registruj se</button><br>
+              Već imate nalog?<a routerLink="/login">Prijavi se</a>
             </div>
           
         </div>

@@ -64,8 +64,8 @@ hr{
   }
 
   .window{
+    max-width: 90vw;
     min-width: fit-content;
-    max-width: 30%;
     margin: auto;
     padding:30px;
     padding-left: 7%;
@@ -109,6 +109,44 @@ hr{
     max-width: 12vw;
     
 }
+
+ngx-awesome-uploader{
+    width: fit-content;
+   
+}
+#PoljeZaUnos ::ng-deep .custom-drag{
+    padding: 0;
+    
+    
+    border: white 0px solid;
+}
+
+#PoljeZaUnos{
+    border-radius: 9999px;
+    border: #008ab9 3px solid;
+    padding: 3px;
+    background-color: white;
+}
+#PoljeZaUnos ::ng-deep .cropperJsOverlay{
+    background: rgba(0,0,0,.82);
+    width: 100%;
+    height: 100%;
+}
+#PoljeZaUnos ::ng-deep .file-drop-wrapper{
+    padding: 10px;
+}
+
+
+#KorisnickaSlika{
+    border-radius: 9999px;
+    border: #008ab9 3px solid;
+    overflow: hidden;
+}
+#dugme2{
+    width: fit-content;
+}
+
+
 
 @media (max-width:767px) {
     #myVideo{
