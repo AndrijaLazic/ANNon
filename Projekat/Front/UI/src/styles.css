@@ -89,3 +89,61 @@ label{
      border-radius: 10px;
      display: block;
    }
+/* STRELICA */
+.wrapper-left, .wrapper-right {
+    position: absolute;
+    top: 50vh;
+}
+.wrapper-left
+{
+    left: 0%;
+}
+.wrapper-right
+{
+    right: 1%;
+}
+.wrapper-arrow svg {
+    width: 80px;
+    height: auto;
+    margin: 0 0.5rem;
+    cursor: pointer;
+    overflow: visible;
+}
+
+.wrapper-arrow svg polygon, .wrapper-arrow svg path {
+    transition: all 0.5s cubic-bezier(0.2, 1, 0.3, 1);
+    fill: #ffffff;
+}
+.wrapper-arrow svg:hover polygon, .wrapper-arrow svg:hover path {
+    transition: all 1s cubic-bezier(0.2, 1, 0.3, 1);
+}
+.wrapper-arrow svg:hover .arrow {
+    animation: arrow-anim 2.5s cubic-bezier(0.2, 1, 0.3, 1) infinite;
+}
+div svg:hover .arrow-fixed {
+    animation: arrow-fixed-anim 2.5s cubic-bezier(0.2, 1, 0.3, 1) infinite;
+}
+@keyframes arrow-anim {
+    0% {
+        opacity: 1;
+        transform: translateX(0);
+   }
+    5% {
+        transform: translateX(-0.1rem);
+   }
+    100% {
+        transform: translateX(1rem);
+        opacity: 0;
+   }
+}
+@keyframes arrow-fixed-anim {
+    5% {
+        opacity: 0;
+   }
+    20% {
+        opacity: 0.4;
+   }
+    100% {
+        opacity: 1;
+   }
+}

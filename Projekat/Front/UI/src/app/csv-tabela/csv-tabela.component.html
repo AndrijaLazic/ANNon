@@ -40,7 +40,7 @@
   </svg>
 </div>
 -->
-<div class="wrapper wrapper-right" *ngIf="podaci && podaci.length>0" (click)="uploadFile()">
+<div class="wrapper-arrow wrapper-right" *ngIf="podaci && podaci.length>0" (click)="uploadFile()">
   <svg width="18px" height="17px" viewBox="-1 0 18 17" version="1.1" >
       <g>
           <polygon class="arrow" points="16.3746667 8.33860465 7.76133333 15.3067621 6.904 14.3175671 14.2906667 8.34246869 6.908 2.42790698 7.76 1.43613596"></polygon>
@@ -124,10 +124,10 @@
     <div class="grid-wrapper" *ngIf="podaci.length>0" [formGroup]="forma" id="tabela">
       <div class="row justify-content-center" style="margin-top: 10px;">
         <div class="col-md-auto m-1 d-flex justify-content-center">
-          <button class="dugme2 dugmeAnimacija" id="dugmeIznadTabele" mat-raised-button color="primary" (click)="izbrisiSelektovano()">Obrisi selektovano</button>
+          <button class="dugme2 dugmeAnimacija" id="dugmeIznadTabele" mat-raised-button color="primary" (click)="izbrisiSelektovano()">Obriši selektovano</button>
         </div>
         <div class="col-md-auto m-1 d-flex justify-content-center">
-          <button class="dugme2 dugmeAnimacija" id="dugmeIznadTabele" mat-raised-button color="primary" (click)="skiniFajl()">Download</button>
+          <button class="dugme2 dugmeAnimacija" id="dugmeIznadTabele" mat-raised-button color="primary" (click)="skiniFajl()">Preuzmi fajl</button>
         </div>
       </div>
       <ag-grid-angular style="height: 520px;" class="ag-theme-alpine-dark" [rowData]="RedoviPodaci"
