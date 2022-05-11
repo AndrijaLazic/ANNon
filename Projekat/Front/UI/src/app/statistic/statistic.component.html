@@ -120,8 +120,8 @@
                             </div>
                       </td>
                         <td class="veciFont">{{prazna[i]}}</td>
-                        <td><input type="checkbox" id={{i}} (click)="dajUlazne(i)" [checked]="cekiranaUlazna[i]" [disabled]="cekiranaIzlazna[i]"></td>
-                        <td><input type="checkbox" id="izlazna{{i}}" (click)="dajIzlaznu(i)" [checked]="cekiranaIzlazna[i]" [disabled]="cekiranaUlazna[i]"></td>
+                        <td><mat-slide-toggle id={{i}} (change)="dajUlazne(i,$event)" [checked]="cekiranaUlazna[i]" ></mat-slide-toggle></td>
+                        <td><mat-slide-toggle id="izlazna{{i}}" (change)="dajIzlaznu(i,$event)" [checked]="cekiranaIzlazna[i]"></mat-slide-toggle></td>
                         <td><button class="dugme prikaz" mat-raised-button color="primary" *ngIf="collapse[i]==0" (click)="prikazi(i);" >Više</button>
                         <button class="dugme prikaz" mat-raised-button color="primary" *ngIf="collapse[i]==1" (click)="smanji(i)" >Manje</button></td>
                         <!--<td><button class="dugme prikaz" mat-raised-button color="primary" (click)="openModalDialogCustomClass(content)">Brisi!</button></td> -->
