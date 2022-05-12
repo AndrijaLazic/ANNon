@@ -165,12 +165,16 @@ def make_model(all_inputs,encoded_features,layers:List[Sloj],loss_metric,success
   if (broj_klasa == 0):
     output = tf.keras.layers.Dense(1)(x)
   else:
-    output = tf.keras.layers.Dense(broj_klasa+1, activation="softmax")(x)
+    output = tf.keras.layers.Dense(broj_klasa+1, activation=None)(x)
 
   model = tf.keras.Model(all_inputs, output)
   initial_learning_rate = 1.0
-  if mean_value<5000:
+  if 100<mean_value<5000:
       initial_learning_rate=0.1
+  elif mean_value<=10:
+      initial_learning_rate=0.001
+  elif mean_value>10:
+      initial_learning_rate=0.01
   lr_schedule = tf.keras.optimizers.schedules.ExponentialDecay(
       initial_learning_rate,
       decay_steps=1000,
@@ -202,6 +206,7 @@ def make_regression_model(data,hiperparametri:Hiperparametri):
   val_ds = df_to_dataset(val, val_target)
   test_ds = df_to_dataset(test, test_target)
   model=make_model(all_inputs,encoded_features,hiperparametri.slojevi,hiperparametri.mera_greske,hiperparametri.mera_uspeha)
+  
   return model,train_ds,val_ds,test_ds
 
 def make_classification_model(data, hiperparametri:Hiperparametri):
@@ -209,19 +214,20 @@ def make_classification_model(data, hiperparametri:Hiperparametri):
   data=data[relevant_columns]
 
   mera_greske = hiperparametri.mera_greske
+
+  one_hot_label=True
   if hiperparametri.mera_greske == "binary_crossentropy":
     mera_greske = hiperparametri.mera_greske = tf.keras.losses.BinaryCrossentropy(from_logits=True)
+  elif hiperparametri.mera_greske == "categorical_crossentropy":
+    mera_greske = hiperparametri.mera_greske = tf.keras.losses.CategoricalCrossentropy(from_logits=True)
   
   data.drop_duplicates()
   data.dropna(inplace=True)
   broj_klasa = data[hiperparametri.izlazna_kolona].nunique()
-  if broj_klasa > 20 or broj_klasa == 2:
+  if broj_klasa > 20:
     broj_klasa=0
   train,val,test=split_data(data,(100-hiperparametri.test_skup-10)/100,hiperparametri.test_skup/100,0.1)
-  if (hiperparametri.mera_greske=='categorical_crossentropy'):
-    one_hot_label=True
-  else:
-    one_hot_label=False
+  
   all_inputs, encoded_features, train_ds=prepare_preprocess_layers(data,hiperparametri.izlazna_kolona,train, one_hot_label)
   val_target = val.pop(hiperparametri.izlazna_kolona)
   val_ds = df_to_dataset(val, val_target, one_hot_label=one_hot_label)
