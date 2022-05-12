@@ -3,19 +3,37 @@
         <form [formGroup]="forma">
             <div class="row justify-content-center" style="margin-bottom: 10px;">
                 <div class="col-md-auto">
-                    
-                        <img id="profileimage" [src]="url" title="Profile Picture" height="150px" width="150px"  />
-                        <input
-                        type="file"
-                        id="img"
-                        style="display:none"
-                        accept="image/*"
-                        (change)="onSelect($event)"
-                        
-                        />
-                        <br>
-              <label class="dugme btn" mat-raised-button color="primary" for="img">Change image</label> 
-                    
+                    <ngx-awesome-uploader  id="PoljeZaUnos"
+                    #uploader
+                    [adapter]="adapter"
+                    [fileMaxCount]="1"
+                    [fileMaxSize]="MaksVelicinaFajla"
+                    [uploadType]="'Single'"
+                    [enableCropper]="true"
+                    [cropperOptions]="cropperOptions"
+                    (validationError)="onValidationError($event)"
+                    [fileExtensions]="['jpg','png','gif','jpeg']"
+                    (uploadSuccess)="onUploadSuccess($event)"
+                    (removeSuccess)="onRemoveSuccess($event)"
+                    (fileAdded)="onFileAdded($event)"
+                    [captions]="captions"
+                    [accept]="'.jpg, .png,.gif,.jpeg'"
+                    [itemTemplate]="myItemTemplate"
+                    [enableAutoUpload]="false"
+                    >
+                    <div class="dropzoneTemplate">
+                        <div class="d-flex justify-content-center">
+                        <img src="../../assets/image/drag-and-drop-Za-Sliku.png" class="img-fluid" alt="Responsive image">
+                        </div>
+                    </div>
+                    </ngx-awesome-uploader>
+                    <ng-template
+                    #myItemTemplate
+                    let-fileItem="fileItem"
+                    let-uploadProgress="uploadProgress"
+                    style="height: 0px;"
+                    >
+                    </ng-template>
                 </div>
             </div>
             <div class="row justify-content-center" style="height: fit-content;">

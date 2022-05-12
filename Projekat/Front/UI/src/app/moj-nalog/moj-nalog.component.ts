@@ -6,6 +6,9 @@ import { CookieService } from 'ngx-cookie-service';
 import { ToastrService } from 'ngx-toastr';
 import { LoginServiceService } from '../shared/login-service.service';
 import { MojNalogModel } from '../shared/mojnalog.model';
+import { DemoFilePickerAdapter } from './UploadAdapter.adapter';
+import { HttpClient } from '@angular/common/http';
+import { FilePreviewModel, UploaderCaptions, ValidationError } from 'ngx-awesome-uploader';
 
 
 @Component({
@@ -19,7 +22,7 @@ export class MojNalogComponent implements OnInit {
   username:string;
   colorControl="primary";
   url:any = 'assets/image/pocetna1.png';
-  selectedFile:File=null;
+  selectedFile:any=null;
   hide1 = true;
   hide2 = true;
   forma=new FormGroup({
@@ -128,7 +131,7 @@ export class MojNalogComponent implements OnInit {
     
   }
 
-  constructor(private toastr:ToastrService,private servis:LoginServiceService,private cookie:CookieService,private route:Router) { }
+  constructor(private http:HttpClient,private toastr:ToastrService,private servis:LoginServiceService,private cookie:CookieService,private route:Router) { }
 
   ngOnInit(): void {
     this.servis.dajSlikuZahtev(this.jwtHelper.decodeToken(this.token)['username']).subscribe(
@@ -172,6 +175,98 @@ export class MojNalogComponent implements OnInit {
     if (this.StariPassword.hasError('required')) {
       return 'Šifra je obavezna';
     }
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+  public imeFajla:string;
+  public VelicinaFajla:number;
+  public adapter = new DemoFilePickerAdapter(this.http,this.toastr);
+
+  MaksVelicinaFajla=5;
+
+  public myFiles: FilePreviewModel[] = [];
+
+  public captions: UploaderCaptions = {
+    dropzone: {
+      title: '',
+      or: '',
+      browse: '',
+    },
+    cropper: {
+      crop: 'Iseci',
+      cancel: 'Prekini',
+    },
+    previewCard: {
+      remove: 'Izbriši',
+      uploadError: 'Greška pri ucitavanju fajla',
+    },
+  };
+
+  public cropperOptions = {
+    minContainerWidth: '300',
+    minContainerHeight: '300',
+  };
+
+  public onValidationError(error: ValidationError): void {
+    if("FILE_MAX_SIZE"==error.error && this.myFiles.length==0){
+      alert("Maksimalna velicina fajla je "+this.MaksVelicinaFajla+" Mb")
+    }
+    else if("FILE_MAX_COUNT"==error.error){
+      alert("Izaberite samo jedan fajl")
+    }
+    else{
+      alert(`Izaberite sliku sa jednom od sledecih ekstenzija: jpg,png,gif`);
+    }
+    // ${error.error}
+  }
+
+  public onUploadSuccess(e: FilePreviewModel): void {
+
+    console.log(this.myFiles.length);
+  }
+
+  public onRemoveSuccess(e: FilePreviewModel) {
+    
+    console.log(this.myFiles.length);
+    this.myFiles.pop();
+    this.selectedFile=null;
+  }
+  public onFileAdded(file: FilePreviewModel) {
+    
+    this.onFileSelected(file);
+  }
+
+  onFileSelected(fajl: FilePreviewModel)
+  {
+    
+    if (fajl) 
+    {
+      var file = fajl.file;
+      this.imeFajla=fajl.fileName;
+      this.VelicinaFajla=fajl.file.size;
+      this.selectedFile=file;
+      let reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (event: any) => {
+        this.url = event.target.result;
+      };
+    }
+  }
+
+  IzbrisiSliku(){
+    this.selectedFile=null;
+    this.url="";
   }
 
 }
