@@ -1,8 +1,8 @@
 <div class="jumbotron vertical-center">
     <div class="window FormaZaIzmenuPodatakaOKorisniku">
         <form [formGroup]="forma">
-            <div class="row justify-content-center" style="margin-bottom: 10px;">
-                <div class="col-md-auto">
+            <div class="row justify-content-center" style="margin-bottom: 10px;" >
+                <div class="col-md-auto kolona" *ngIf="selectedFile==null">
                     <ngx-awesome-uploader  id="PoljeZaUnos"
                     #uploader
                     [adapter]="adapter"
@@ -35,28 +35,34 @@
                     >
                     </ng-template>
                 </div>
+                <div class="col-md-auto kolona" *ngIf="selectedFile!=null" id="kolonaZaSliku">
+                    <img src="{{url}}" class="img-fluid" id="KorisnickaSlika">
+                </div>
             </div>
+            <div class="row justify-content-center" *ngIf="selectedFile!=null" style="margin-top: 10px;">
+                <button type="button" id="dugme2" class="btn btn-primary dugmeAnimacija" (click)="IzbrisiSliku()">Promeni sliku</button><br>
+            </div> 
             <div class="row justify-content-center" style="height: fit-content;">
-                
+                <div class="col-md-auto kolona">
                     <mat-form-field appearance="fill">
                         <mat-label>Username</mat-label>
                         <input  matInput formControlName="Username" (cdkAutofill)="false" >
                         <mat-error *ngIf="Username.invalid">{{getErrorMessage()}}</mat-error>
                     </mat-form-field>
-                    
+                </div>    
             </div>
             <div class="row justify-content-center" >
-                
+                <div class="col-md-auto kolona">
                     <mat-form-field appearance="fill">
                         <mat-label>Email</mat-label>
                         <input matInput formControlName="Email">
                         <mat-error *ngIf="Email.invalid">{{getErrorMessage2()}}</mat-error>
                     </mat-form-field>
-                    
+                </div>
                 
             </div>
             <div class="row justify-content-center">
-                
+                <div class="col-md-auto kolona">
                     <mat-form-field appearance="fill">
                         <mat-label>Unesite novu sifru</mat-label>
                         <input matInput [type]="hide1 ? 'password' : 'text'" formControlName="NoviPassword">
@@ -64,10 +70,10 @@
                           <mat-icon>{{hide1 ? 'visibility_off' : 'visibility'}}</mat-icon>
                         </button>
                     </mat-form-field>
-                
+                </div>
             </div>
             <div class="row justify-content-center">
-                
+                <div class="col-md-auto kolona">
                     <mat-form-field appearance="fill">
                         <mat-label>Unesite staru sifru</mat-label>
                         <input matInput [type]="hide2 ? 'password' : 'text'" formControlName="StariPassword">
@@ -76,7 +82,7 @@
                         </button>
                         <mat-error *ngIf="StariPassword.invalid">{{getErrorMessage3()}}</mat-error>
                     </mat-form-field>
-                
+                </div>
             </div>
             <hr>
             <button class="dugme btn" mat-raised-button color="primary" (click)="posaljiZahtev()" >Sacuvaj izmene</button>

@@ -33,8 +33,7 @@
     color: white;
 }
 .FormaZaIzmenuPodatakaOKorisniku ::ng-deep mat-form-field{
-    min-width: 265px;
-    max-width: 50vw;
+    width: 100%;
     
 }
 
@@ -125,3 +124,77 @@
   #profileimage{
       clip-path: circle();
   }
+
+
+
+
+
+
+  ngx-awesome-uploader{
+    width: fit-content;
+   
+}
+#PoljeZaUnos ::ng-deep .custom-drag{
+    padding: 0;
+    
+    
+    border: white 0px solid;
+}
+
+#PoljeZaUnos{
+    border-radius: 9999px;
+    border: #008ab9 3px solid;
+    padding: 3px;
+    background-color: white;
+}
+#PoljeZaUnos ::ng-deep .cropperJsOverlay{
+    background: rgba(0,0,0,.82);
+    width: 100%;
+    height: 100%;
+}
+#PoljeZaUnos ::ng-deep .file-drop-wrapper{
+    padding: 10px;
+}
+
+.kolona{
+    min-width: 265px;
+    width: 10vw;
+}
+
+#KorisnickaSlika{
+    
+    
+}
+#dugme2{
+    width: fit-content;
+    margin-bottom: 10px;
+}
+
+.img-fluid{
+    /* width: 100%;
+    max-height: 100%; */
+}
+
+#kolonaZaSliku{
+    padding-top: 100%; /* 1:1 Aspect Ratio */
+    position: relative;
+    border-radius: 9999px;
+    border: #008ab9 3px solid;
+    overflow: hidden;
+}
+#kolonaZaSliku #KorisnickaSlika{
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    
+}
+
+
+@media (max-width:767px) {
+    .kolona{
+        min-width: 265px;
+        width: 80vw;
+    }
+}

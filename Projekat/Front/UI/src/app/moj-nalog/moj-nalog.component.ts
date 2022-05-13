@@ -139,9 +139,9 @@ export class MojNalogComponent implements OnInit {
           let reader = new FileReader();
           reader.addEventListener("load", () => {
           this.url = reader.result;
-         
         }, false);
         reader.readAsDataURL(res.body);
+        this.selectedFile=res.body;
         },
         err=>{
 
