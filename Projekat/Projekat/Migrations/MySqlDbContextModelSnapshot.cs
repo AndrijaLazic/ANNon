@@ -31,6 +31,10 @@ namespace Projekat.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<string>("VremeUploada")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.HasKey("userID", "FileName");
 
                     b.ToTable("Files");

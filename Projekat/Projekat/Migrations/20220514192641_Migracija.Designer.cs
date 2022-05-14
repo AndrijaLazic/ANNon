@@ -11,8 +11,8 @@ using Projekat.Data;
 namespace Projekat.Migrations
 {
     [DbContext(typeof(MySqlDbContext))]
-    [Migration("20220505094109_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20220514192641_Migracija")]
+    partial class Migracija
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -30,6 +30,10 @@ namespace Projekat.Migrations
                         .HasColumnType("varchar(255)");
 
                     b.Property<string>("Putanja")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("VremeUploada")
                         .IsRequired()
                         .HasColumnType("longtext");
 

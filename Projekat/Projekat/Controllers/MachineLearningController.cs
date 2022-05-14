@@ -71,8 +71,9 @@ namespace Projekat.Clients
                             {
                                 userID = userID,
                                 FileName = imeFajla,
-                                Putanja = "put"
-                            };
+                                Putanja = "put",
+                                VremeUploada= DateTime.Now.ToString("h:mm:ss tt")
+                        };
                             _context.Files.Add(dataModel);
                             await _context.SaveChangesAsync();
                             return Ok(true);
