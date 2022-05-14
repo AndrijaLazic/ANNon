@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { v4 as uuidv4 } from 'uuid';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-pocetnastrana',
   templateUrl: './pocetnastrana.component.html',
@@ -7,14 +8,10 @@ import { v4 as uuidv4 } from 'uuid';
 })
 export class PocetnastranaComponent implements OnInit {
 
-  constructor() { }
+  constructor(private router: Router) { }
 
-  setSession()
-  {
-    sessionStorage.setItem('userId',uuidv4());
-  }
   ngOnInit(): void {
-    this.setSession();
+    sessionStorage.setItem('redirectTo',this.router.url);
   }
 
 

@@ -8,6 +8,7 @@ import { HttpClient } from '@angular/common/http';
 import { FilePreviewModel, UploaderCaptions, ValidationError } from 'ngx-awesome-uploader';
 import * as shape from 'd3-shape';
 import { vrednostiZaGrafikKlasa,podatakZaGrafikKlasa } from '../trening/podatakZaGrafik.model';
+import { Route, Router } from '@angular/router';
 @Component({
   selector: 'app-poredjenje-modela',
   templateUrl: './poredjenje-modela.component.html',
@@ -49,13 +50,14 @@ export class PoredjenjeModelaComponent implements OnInit {
   ///////
 
 
-  constructor(private spinner:NgxSpinnerService,private http:HttpClient,private toastr:ToastrService){
+  constructor(private spinner:NgxSpinnerService,private http:HttpClient,private toastr:ToastrService,private route: Router){
     if(localStorage.getItem('izabrani-parametri')!=null){
       this.dodajModel(JSON.parse(localStorage.getItem('izabrani-parametri')))
     }
   }
   public adapter = new DemoFilePickerAdapter(this.http,this.spinner,this.toastr);
   ngOnInit(): void {
+    sessionStorage.setItem("redirectTo",this.route.url)
   }
 
   public dodajModel(pom:ObjekatZaSlanje){

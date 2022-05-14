@@ -48,6 +48,7 @@ export class TreningComponent implements OnInit {
 
   ngOnInit(): void {
    
+    sessionStorage.setItem("redirectTo",this.route.url);
     this.signalR.podaciZaGrafik=[];
     if(!this.cookieService.check('params')){
       this.route.navigate(["./statistic"]);

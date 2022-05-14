@@ -36,7 +36,11 @@ export class LoginComponent implements OnInit {
          // let currentUrl = this.route.url;
       //this.route.routeReuseStrategy.shouldReuseRoute = () => false;
      // this.route.onSameUrlNavigation = 'reload';
-          this.route.navigate(['success-login']);
+     if(sessionStorage.getItem("redirectTo") == null)
+        this.route.navigate(["success-login"]);
+     
+
+    this.route.navigate([sessionStorage.getItem("redirectTo")]);
           
         }
         else

@@ -277,6 +277,7 @@ listaKolona=[];
   ngOnInit(): void {
 
     this.statistika=JSON.parse(localStorage.getItem("statistic"));
+    sessionStorage.setItem("redirectTo",this.route.url);
     if(this.statistika){
        
         

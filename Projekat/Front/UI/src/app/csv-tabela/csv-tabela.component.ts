@@ -85,10 +85,14 @@ export class CsvTabelaComponent implements OnInit {
     this.spinner.hide("Spiner1");
   }
 
-
+  
+  setSession()
+  {
+    sessionStorage.setItem('userId',uuidv4());
+  }
   onFileSelected(fajl: FilePreviewModel)
   {
-    
+    this.setSession();
     if (fajl) 
     {
       this.spinner.show("Spiner1")

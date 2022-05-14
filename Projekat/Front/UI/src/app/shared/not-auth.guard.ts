@@ -13,8 +13,8 @@ export class NotAuthGuard implements CanActivate {
     {
       return true;
     }
-    alert("You are already loggin");
-    this.route.navigate(['success-login']);
+    //alert("You are already loggin");
+    //this.route.navigate(['success-login']);
     return false;
   }
     
