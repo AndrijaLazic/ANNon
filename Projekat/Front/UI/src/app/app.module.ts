@@ -47,6 +47,8 @@ import { FilePickerAdapter } from 'ngx-awesome-uploader';
 
 import { MojNalogComponent } from './moj-nalog/moj-nalog.component';
 import { PoredjenjeModelaComponent } from './poredjenje-modela/poredjenje-modela.component';
+
+import {MatTooltipModule} from '@angular/material/tooltip';
 @NgModule({
   declarations: [
     AppComponent,
@@ -94,7 +96,8 @@ import { PoredjenjeModelaComponent } from './poredjenje-modela/poredjenje-modela
     MatFormFieldModule,
     MatSlideToggleModule,
     MatIconModule,
-    FilePickerModule
+    FilePickerModule,
+    MatTooltipModule
   ],
   providers: [],
   bootstrap: [AppComponent],

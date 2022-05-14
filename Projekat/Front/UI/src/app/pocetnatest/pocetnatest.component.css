@@ -75,3 +75,33 @@
     height: 400px;
 }
 
+/*tooltip*/
+
+#tool-tip-pocetna
+{
+    padding: 10px;
+    border-radius: 20px 0px;
+    background-color: transparent;
+    border: 1px solid white;
+    color: white;
+    text-align: center;
+}
+#tool-tip-pocetna:hover
+{
+    background-color: #0d6efd;
+    border: 0;
+    transition: 500ms;
+}
+#tool-tip-pocetna img
+{
+    width: 32px;
+    height: 32px;
+    padding: 2px 5px 5px 5px;
+}
+::ng-deep .mat-tooltip {
+    font-size: 0.75rem !important;
+}
+.current-page
+{
+    height: 100px;
+}
