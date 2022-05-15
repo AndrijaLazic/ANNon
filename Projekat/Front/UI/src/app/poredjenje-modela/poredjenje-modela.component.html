@@ -70,7 +70,7 @@
         </div>
     </div>
     <div class="row justify-content-center">
-        <div class="col-md-11" *ngIf="podaciZaGrafik.length>0">
+        <div class="col-xxl-9" *ngIf="podaciZaGrafik.length>0">
             <div class="grafik">
                 <ngx-charts-line-chart 
                     [results]="podaciZaGrafik"
@@ -88,7 +88,31 @@
                 >
                 </ngx-charts-line-chart>
             </div>
+        </div>    
+        <div class="col-xxl-2 m-1" *ngIf="podaciZaGrafik.length>0">
+            <div id="OpcijeZaGrafikDiv">
+            <div class="col-md-auto">
+                <label>Opcije za grafik</label>
+            </div> 
+            <div class="col-md-auto">
+                <mat-slide-toggle [checked]="checked1" (change)="cekiranPrikazGridLinije($event)">Prikazi grid linije</mat-slide-toggle>
+            </div>
+            <div class="col-md-auto">
+                <mat-form-field appearance="fill" class="selektorAktivacioneFje">
+                    <mat-label>Curve tip</mat-label>
+                    <mat-select (selectionChange)="promenaCurve($event)">
+                        <mat-option value="curveBasis">
+                        curveBasis
+                        </mat-option>
+                        <mat-option value="curveLinear">
+                        curveLinear
+                        </mat-option>
+                    </mat-select>
+                    </mat-form-field>
+            </div>
+            </div>
         </div>
+        
     </div>
 
 </div>

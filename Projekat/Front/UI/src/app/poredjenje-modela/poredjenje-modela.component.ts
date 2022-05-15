@@ -37,6 +37,7 @@ export class PoredjenjeModelaComponent implements OnInit {
   };
 
   //opcije za grafik
+  checked1=true;
   legenda=true;
   prikaziXlabel=true;
   prikaziYlabel=true;
@@ -122,4 +123,16 @@ export class PoredjenjeModelaComponent implements OnInit {
     }
     fileReader.readAsText(file);
 }
+
+promenaCurve(event:any){
+  if(event.value=="curveBasis"){
+    this.linija=shape.curveBasis;
+    return;
+  }
+  this.linija=shape.curveLinear;
+}
+cekiranPrikazGridLinije(value:any){
+  this.PrikaziLinije=value.checked;
+}
+
 }

@@ -117,7 +117,40 @@
 
 .grafik{
     background-image: linear-gradient(to bottom right, #023E8A, #002e4c);
-    height: 460px;
+    min-height: 360px;
     margin-top: 20px;
+    height: 60vh;
+    max-height: 800px;
+    width: 100%;
+}
+
+#OpcijeZaGrafikDiv{
+    background-color: #16355D;
     
+    
+    padding: 10px;
+    margin-top: 16px;
+}
+#OpcijeZaGrafikDiv div{
+    padding: 3px; 
+}
+.modal-body,.modal-header,.modal-footer {
+    background-image: linear-gradient(to left top, #013054,#013054, #013054, #013054, #013054, #013054, #013054, #013054, #013054,#013054, #013054, #013054);
+    color: white;
+  }
+  .modal-footer #preuzmiModel {
+    float: left;
+  }
+
+
+::ng-deep .selektorAktivacioneFje{
+    width: 100%;
+}
+
+::ng-deep .selektorAktivacioneFje .mat-form-field-infix{
+    background-color: white;
+}
+::ng-deep .selektorAktivacioneFje .mat-form-field-flex{
+    background-color: white;
+    margin-top: 2px;
 }
