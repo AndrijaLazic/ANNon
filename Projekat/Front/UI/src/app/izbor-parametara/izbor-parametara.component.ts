@@ -118,6 +118,11 @@ export class IzborParametaraComponent implements OnInit {
             });
             this.regresija=true;
           }
+          this.trenutniBrojSkrivenihSlojeva=1;
+          this.ListaSkrivenihSlojeva.push(this.fb.group({
+            BrojNeurona: [1],
+            AktivacionaFunkcija: ['relu', Validators.required]
+        }))
           return;
         }
       }

@@ -23,14 +23,12 @@
 .modal-content{
     background-color: red;
 }
-
-#preuzmiModel{
-    float: left;
-}
 .modal-body,.modal-header,.modal-footer {
     background-image: linear-gradient(to left top, #013054,#013054, #013054, #013054, #013054, #013054, #013054, #013054, #013054,#013054, #013054, #013054);
     color: white;
   }
-  .modal-footer #preuzmiModel {
-    float: left;
-  }
+
+#preuzmiModel{
+    position: fixed;
+    left: -2%;
+}
