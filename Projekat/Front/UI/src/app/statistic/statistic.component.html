@@ -1,5 +1,5 @@
 
-<ng-template #content2 let-modal class="modal-content">
+<!--<ng-template #content2 let-modal class="modal-content">
                         <div class="modal-header">
                           <h4 class="modal-title">Upozorenje</h4>
                           <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
@@ -10,7 +10,7 @@
                         <div class="modal-footer">
                           <button type="button" class="btn btn-light" (click)="modal.close('Close click');next()">Potvrdi</button>
                         </div>
-                      </ng-template> 
+                      </ng-template> -->
 
   <div class="wrapper-arrow wrapper-left" (click)="previous()">
   <svg width="18px" height="17px" viewBox="0 0 18 17" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -20,9 +20,9 @@
           <path d="M-1.48029737e-15,0.56157424 L-1.48029737e-15,16.1929159 L9.708,8.33860465 L-2.66453526e-15,0.56157424 L-1.48029737e-15,0.56157424 Z M1.33333333,3.30246869 L7.62533333,8.34246869 L1.33333333,13.4327013 L1.33333333,3.30246869 L1.33333333,3.30246869 Z"></path>
       </g>
   </svg>
-</div>
+</div> 
 
-<div class="wrapper-arrow wrapper-right" (click)="openModalDialogCustomClass(content2)">
+<div class="wrapper-arrow wrapper-right" (click)="next()">
   <svg width="18px" height="17px" viewBox="-1 0 18 17" version="1.1" >
       <g>
           <polygon class="arrow" points="16.3746667 8.33860465 7.76133333 15.3067621 6.904 14.3175671 14.2906667 8.34246869 6.908 2.42790698 7.76 1.43613596"></polygon>
@@ -30,35 +30,13 @@
           <path d="M-4.58892184e-16,0.56157424 L-4.58892184e-16,16.1929159 L9.708,8.33860465 L-1.64313008e-15,0.56157424 L-4.58892184e-16,0.56157424 Z M1.33333333,3.30246869 L7.62533333,8.34246869 L1.33333333,13.4327013 L1.33333333,3.30246869 L1.33333333,3.30246869 Z"></path>
       </g>
   </svg>
-</div>
+</div> 
 
 
 <div class="container" style="height: 100%;">
     <br>
-   <!-- <div class="row justify-content-center">
-        <div class="col-md-auto">
-            <label>Izaberi ulazne kolone</label>
-            <angular2-multiselect id="MultiselectUlaznihKolona" [data]="dropdownList" [(ngModel)]="selectedItems" 
-                [settings]="dropdownSettings" 
-                (onSelect)="onItemSelect($event)" 
-                (onDeSelect)="OnItemDeSelect($event)"
-                (onSelectAll)="onSelectAll($event)"
-                (onDeSelectAll)="onDeSelectAll($event)"
-                >
-            </angular2-multiselect>
-          </div>
-          <div class="col-md-auto">
-            <label>Izaberi izlaznu kolonu</label>
-            <angular2-multiselect id="MultiselectIzlazneKolone" [data]="dropdownList2" [(ngModel)]="izlaznaKolona" 
-                [settings]="dropdownSettings2" 
-                (onSelect)="onItemSelect2($event)" 
-                (onDeSelect)="OnItemDeSelect2($event)"
-                >
-            </angular2-multiselect>
-          </div>
-    </div> -->
-    <div class="row justify-content-center" style="margin-top: 20px;">
-        <div class="col-md-auto">
+
+        <div class="table-responsive" >
             <table id="tabela" class="table table-condensed table-striped" >
                 <thead>
                     <tr>
@@ -126,30 +104,117 @@
                         <button class="dugme prikaz" mat-raised-button color="primary" *ngIf="collapse[i]==1" (click)="smanji(i)" >Manje</button></td>
                         <!--<td><button class="dugme prikaz" mat-raised-button color="primary" (click)="openModalDialogCustomClass(content)">Brisi!</button></td> -->
                     </tr>
-                    <tr *ngIf="collapse[i]==1">
-                        <td colspan="5"><div id="demo1">
-                            <table class="table table-striped">
-                                <tbody>
-                                    <tr>
-                                        <td [innerHTML]="stats[i]"></td>
-                                        <td>
-                                          <mat-slide-toggle [checked]="checked1" (change)="iscrtajGraf(kolone[i],$event,1)">Prikazi Linijski grafik za datu kolonu</mat-slide-toggle>
-                                          <mat-slide-toggle [checked]="checked2" (change)="iscrtajGraf(kolone[i],$event,2)">Prikazi stubicasti grafik za datu kolonu</mat-slide-toggle>
-                                            <!--<button class="dugme" mat-raised-button color="primary" (click)="iscrtajGraf(kolone[i])" >Prikazi graf!</button>  -->               
-                                                <div id="divChart">
-                                                    <canvas  id={{kolone[i]}}></canvas>
-                                                </div> 
-                                        </td>
-                                    </tr>
-                                </tbody>
-
-                            </table>
-                        </div></td>
-                    </tr>
+                    
             </tbody>
             </table>
+            <div *ngFor="let pr of prazna;let item of kolone;let tip of kategorije;let st of stats;index as i">
+              <div *ngIf="collapse[i]==1" class="table-responsive">
+                <table *ngIf="kategorije[i]=='Numericki'" id="tabela2" class="table table-condensed table-striped">
+                  <tr>
+                    <td>
+                      Srednja vrednost
+                    </td>
+                    <td>
+                      {{statistika['numericke_kolone'][i]['prosek']}}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      Standardna devijacija
+                    </td>
+                    <td>
+                      {{statistika['numericke_kolone'][i]['standardna_devijacija']}}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      Minimum
+                    </td>
+                    <td>
+                      {{statistika['numericke_kolone'][i]['minimum']}}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      Prvi kvartal
+                    </td>
+                    <td>
+                      {{statistika['numericke_kolone'][i]['prvi_kvartal']}}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      Medijana
+                    </td>
+                    <td>
+                      {{statistika['numericke_kolone'][i]['drugi_kvartal']}}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      Treci kvartal
+                    </td>
+                    <td>
+                      {{statistika['numericke_kolone'][i]['treci_kvartal']}}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      Maximum
+                    </td>
+                    <td>
+                      {{statistika['numericke_kolone'][i]['maximum']}}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      Broj autlajera
+                    </td>
+                    <td>
+                      {{statistika['numericke_kolone'][i]['broj_autlajera']}}
+                    </td>
+                  </tr>
+                </table>
+                <table *ngIf="kategorije[i]=='Kategorijski'" id="tabela2" class="table table-condensed table-striped">
+                  <tr>
+                    <td>
+                      Broj jedinstvenih polja
+                    </td>
+                    <td>
+                      {{statistika['kategoricke_kolone'][i-statistika['numericke_kolone'].length]['broj_jedinstvenih_polja']}}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      Najcesca vrednost
+                    </td>
+                    <td>
+                      {{statistika['kategoricke_kolone'][i-statistika['numericke_kolone'].length]['najcesca_vrednost']}}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      Najveci broj ponavljanja
+                    </td>
+                    <td>
+                      {{statistika['kategoricke_kolone'][i-statistika['numericke_kolone'].length]['najveci_broj_ponavljanja']}}
+                    </td>
+                  </tr>
+                </table>
+                <div>
+                  <mat-slide-toggle [checked]="checked1" (change)="iscrtajGraf(kolone[i],$event,1)">Prikazi Linijski grafik za datu kolonu</mat-slide-toggle>
+                  <mat-slide-toggle [checked]="checked2" (change)="iscrtajGraf(kolone[i],$event,2)">Prikazi stubicasti grafik za datu kolonu</mat-slide-toggle>
+                    <!--<button class="dugme" mat-raised-button color="primary" (click)="iscrtajGraf(kolone[i])" >Prikazi graf!</button>  -->               
+                        <div id="divChart">
+                            <canvas  id={{kolone[i]}}></canvas>
+                        </div> 
+                      </div>
+              </div>
+
+            </div>
+            
         </div>
-    </div>
+    
     <br>   
 </div>
 

@@ -264,7 +264,7 @@ export class StatisticComponent implements OnInit {
             }
         }
     ]
-};*/
+}; */
   
   constructor(private shared: SharedService,private route:Router,private elementRef: ElementRef,private cookie:CookieService,private modalService: NgbModal,
     private toastr:ToastrService) { }

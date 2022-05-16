@@ -47,15 +47,15 @@ table{
     
  }
  #tabela{
+  max-width: 75%;
   overflow-y:scroll;
   display: block;
-  
-
-
  }
- th,td{
-     height: 50px;
-     width: 300px;
+ #tabela2{
+   max-width: 25%;
+ }
+ th{
+     width: 50%;
  }
  td{
      font-size: 15px; 
