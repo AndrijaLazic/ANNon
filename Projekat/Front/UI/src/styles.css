@@ -147,3 +147,27 @@ div svg:hover .arrow-fixed {
         opacity: 1;
    }
 }
+#custom-tooltip
+{
+    backdrop-filter: blur(10px);
+    font-size: 1rem;
+    /*box-shadow: 2px 2px 3px white, -2px 2px 3px white;*/
+}
+#custom-tooltip
+{
+    padding: 10px;
+    border-radius: 0px 0px 20px 20px;
+    background-color: transparent;
+    color: white;
+    text-align: center;
+}
+#custom-tooltip img
+{
+    width: 32px;
+    height: 32px;
+    padding: 2px 5px 5px 5px;
+}
+.mat-tooltip {
+    font-size: 0.75rem !important;
+    text-align: justify;
+}

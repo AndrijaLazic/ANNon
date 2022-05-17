@@ -63,7 +63,7 @@ namespace Projekat.Controllers
                     
                     _context.Korisnici.Add(korisnik);
                     await _context.SaveChangesAsync();
-                    var user_id = _context.Korisnici.FirstOrDefault(x => x.Username == zahtev.Username);
+                    var user_id  = _context.Korisnici.FirstOrDefault(x => x.Username == zahtev.Username);
                     if (zahtev.image != null)
                     {
                         korisnik.ProfileImage = RadSaFajlovima.upisiSliku(korisnik.ID,zahtev.image);
