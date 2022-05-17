@@ -36,6 +36,8 @@ export class TreningComponent implements OnInit {
   StanjeDugmeta=false;
   StanjeDugmeta2=true;
   izabraniParametri:ObjekatZaSlanje;
+  loss=[];
+  val_loss=[];
   moj=[];
   @ViewChild(IzborParametaraComponent, {static : true}) child : IzborParametaraComponent;
   linija=shape.curveBasis;
@@ -154,6 +156,7 @@ export class TreningComponent implements OnInit {
 
   preuzmiModel()
   {
+    console.log(this.signalR.podaciZaGrafik);
       for(let i=0;i<this.signalR.podaciZaGrafik.length-1;i++)
       {
         for(let j=0;j<this.signalR.podaciZaGrafik[i].series.length;j++)
@@ -214,6 +217,24 @@ export class TreningComponent implements OnInit {
         console.log(err);
       }
     );
+  }
+
+  pomocnaFunkcija()
+  {
+    this.loss=[];
+    this.val_loss=[];
+    for(let i=0;i<this.signalR.podaciZaGrafik.length-1;i++)
+      {
+        for(let j=0;j<this.signalR.podaciZaGrafik[i].series.length;j++)
+        {
+            let loss=this.signalR.podaciZaGrafik[i].series[j].value;
+            this.loss.push(loss);
+            let val_loss=this.signalR.podaciZaGrafik[i+1].series[j].value;
+            this.val_loss.push(val_loss);
+          
+        }
+        
+      }
   }
 }
 

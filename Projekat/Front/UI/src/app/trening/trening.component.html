@@ -82,6 +82,24 @@
         </div>  
         
         <div class="row justify-content-center gx-3" style="margin-top: 20px;">
+          <div id="tabela" *ngIf="!StanjeDugmeta2">
+            {{pomocnaFunkcija()}}
+            <label id="label" for="table">Rezultati treniranja</label>
+            <table class="table" id="customTable">
+                <thead><th>Broj epohe</th><th>Loss</th><th>Val loss</th></thead>
+              <tbody>
+            <tr class="table-active"  *ngFor="let pom1 of loss;index as i">
+                <td>{{i+1}}</td>
+                <td>{{pom1}}</td>
+                <td>{{val_loss[i]}}</td>
+              </tr>
+            
+
+          </tbody>
+          </table>
+        </div>
+
+
             <div class="col-md-auto justify-content-center">
               <button class="dugme dugmeAnimacija" mat-raised-button color="primary" (click)=SendtoBack() [disabled]="StanjeDugmeta">Pocni sa treniranjem</button>
             </div>

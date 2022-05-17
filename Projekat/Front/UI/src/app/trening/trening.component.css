@@ -32,3 +32,18 @@
     position: fixed;
     left: -2%;
 }
+#customTable{
+    background-color:#023E8A;
+    border: 2px solid black;
+    text-align: center;
+}
+
+#customTable td{
+    border: 2px solid black;
+    color: white;
+}
+#customTable th{
+    border: 2px solid black;
+    color: white;
+}
+
