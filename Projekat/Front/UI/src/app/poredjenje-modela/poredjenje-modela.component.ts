@@ -9,6 +9,8 @@ import { FilePreviewModel, UploaderCaptions, ValidationError } from 'ngx-awesome
 import * as shape from 'd3-shape';
 import { vrednostiZaGrafikKlasa,podatakZaGrafikKlasa } from '../trening/podatakZaGrafik.model';
 import { Route, Router } from '@angular/router';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ColDef, GridApi, GridColumnsChangedEvent, GridReadyEvent } from 'ag-grid-community';
 @Component({
   selector: 'app-poredjenje-modela',
   templateUrl: './poredjenje-modela.component.html',
@@ -135,4 +137,51 @@ cekiranPrikazGridLinije(value:any){
   this.PrikaziLinije=value.checked;
 }
 
+
+
+
+
+  //tabela
+
+  forma=new FormGroup({
+    trenutnaStrana:new FormControl('1',[Validators.required])
+  })
+  get trenutnaStrana(){
+    return this.forma.get('trenutnaStrana');
+  }
+
+  RedoviPodaci:any = [];
+  KoloneDef: ColDef[] = [];
+  public brojElemenataNaStrani = 10;
+  public rowSelection = 'multiple';
+  private gridApi!: GridApi;
+  minStrana=0;
+  maxStrana=0;
+
+
+
+  onGridReady(params: GridReadyEvent) {
+    this.gridApi = params.api;
+    this.minStrana=1;
+    this.maxStrana=this.gridApi.paginationGetTotalPages();
+    this.spinner.hide("Spiner1");
+  }
+  onGridColumnsChanged(event: GridColumnsChangedEvent){
+    this.spinner.hide("Spiner1");
+  }
+  public PromenaStrane(event){
+    if(event>this.maxStrana){
+      this.forma.controls['trenutnaStrana'].setValue(this.maxStrana);
+    }
+    else if(event<this.minStrana){
+      this.forma.controls['trenutnaStrana'].setValue(this.minStrana);
+    }
+    this.gridApi.paginationGoToPage(this.trenutnaStrana.value-1)
+    console.log(this.maxStrana+" "+ this.minStrana)
+  }
+
+
 }
+
+
+
