@@ -35,7 +35,124 @@
 
 <div class="container" style="height: 100%;">
     <br>
+    <div class="table-responsive">
+      <table  id="tabela3" class="table table-condensed table-striped" > 
+        <tr >
+          <th *ngFor="let item of kolone;index as i">{{kolone[i]}}</th>
+        </tr>
+        <tr>
+          <td  *ngFor="let pr of prazna;let item of kolone;let tip of kategorije;let st of stats;index as i"> 
+            <table *ngIf="kategorije[i]=='Numericki'" id="tabela2" class="table table-condensed table-striped">
+              <tr>
+                <td>
+                  Srednja vrednost
+                </td>
+                <td>
+                  {{statistika['numericke_kolone'][i]['prosek']}}
+                </td>
+              </tr>
 
+              <tr>
+                <td>
+                  Standardna devijacija
+                </td>
+                <td>
+                  {{statistika['numericke_kolone'][i]['standardna_devijacija']}}
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  Minimum
+                </td>
+                <td>
+                  {{statistika['numericke_kolone'][i]['minimum']}}
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  Prvi kvartal
+                </td>
+                <td>
+                  {{statistika['numericke_kolone'][i]['prvi_kvartal']}}
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  Medijana
+                </td>
+                <td>
+                  {{statistika['numericke_kolone'][i]['drugi_kvartal']}}
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  Treci kvartal
+                </td>
+                <td>
+                  {{statistika['numericke_kolone'][i]['treci_kvartal']}}
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  Maximum
+                </td>
+                <td>
+                  {{statistika['numericke_kolone'][i]['maximum']}}
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  Broj autlajera
+                </td>
+                <td>
+                  {{statistika['numericke_kolone'][i]['broj_autlajera']}}
+                </td>
+              </tr>
+            </table>
+            <table *ngIf="kategorije[i]=='Kategorijski'" id="tabela2" class="table table-condensed table-striped">
+              <tr>
+                <td>
+                  Broj jedinstvenih polja
+                </td>
+                <td>
+                  {{statistika['kategoricke_kolone'][i-statistika['numericke_kolone'].length]['broj_jedinstvenih_polja']}}
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  Najcesca vrednost
+                </td>
+                <td>
+                  {{statistika['kategoricke_kolone'][i-statistika['numericke_kolone'].length]['najcesca_vrednost']}}
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  Najveci broj ponavljanja
+                </td>
+                <td>
+                  {{statistika['kategoricke_kolone'][i-statistika['numericke_kolone'].length]['najveci_broj_ponavljanja']}}
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td *ngFor="let item of kolone;index as i">
+            <div>
+              <!--<mat-slide-toggle [checked]="checked1" (change)="iscrtajGraf(kolone[i],$event,1)">Prikazi Linijski grafik za datu kolonu</mat-slide-toggle>
+              <mat-slide-toggle [checked]="checked2" (change)="iscrtajGraf(kolone[i],$event,2)">Prikazi stubicasti grafik za datu kolonu</mat-slide-toggle>      -->       
+                    <div id="divChart">
+                        <canvas  id={{kolone[i]}}></canvas>
+                    </div> 
+                  </div>
+          </td>
+        </tr>
+
+        
+      </table>
+
+    </div>
         <div class="table-responsive" >
             <table id="tabela" class="table table-condensed table-striped" >
                 <thead>
@@ -46,7 +163,6 @@
                         <th>Broj Praznih polja</th>
                         <th>Ulazne kolone:</th>
                         <th>Izlazna kolona:</th>
-                        <th colspan="2">Opcije</th>
                         
                     </tr>
                 </thead>
@@ -100,118 +216,13 @@
                         <td class="veciFont">{{prazna[i]}}</td>
                         <td><mat-slide-toggle id={{i}} (change)="dajUlazne(i,$event)" [checked]="cekiranaUlazna[i]" ></mat-slide-toggle></td>
                         <td><mat-slide-toggle id="izlazna{{i}}" (change)="dajIzlaznu(i,$event)" [checked]="cekiranaIzlazna[i]"></mat-slide-toggle></td>
-                        <td><button class="dugme prikaz" mat-raised-button color="primary" *ngIf="collapse[i]==0" (click)="prikazi(i);" >Više</button>
+                             <!--   <td><button class="dugme prikaz" mat-raised-button color="primary" *ngIf="collapse[i]==0" (click)="prikazi(i);" >Više</button>
                         <button class="dugme prikaz" mat-raised-button color="primary" *ngIf="collapse[i]==1" (click)="smanji(i)" >Manje</button></td>
-                        <!--<td><button class="dugme prikaz" mat-raised-button color="primary" (click)="openModalDialogCustomClass(content)">Brisi!</button></td> -->
+                <td><button class="dugme prikaz" mat-raised-button color="primary" (click)="openModalDialogCustomClass(content)">Brisi!</button></td> -->
                     </tr>
                     
             </tbody>
             </table>
-            <div *ngFor="let pr of prazna;let item of kolone;let tip of kategorije;let st of stats;index as i">
-              <div *ngIf="collapse[i]==1" class="table-responsive">
-                <table *ngIf="kategorije[i]=='Numericki'" id="tabela2" class="table table-condensed table-striped">
-                  <tr>
-                    <td>
-                      Srednja vrednost
-                    </td>
-                    <td>
-                      {{statistika['numericke_kolone'][i]['prosek']}}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      Standardna devijacija
-                    </td>
-                    <td>
-                      {{statistika['numericke_kolone'][i]['standardna_devijacija']}}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      Minimum
-                    </td>
-                    <td>
-                      {{statistika['numericke_kolone'][i]['minimum']}}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      Prvi kvartal
-                    </td>
-                    <td>
-                      {{statistika['numericke_kolone'][i]['prvi_kvartal']}}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      Medijana
-                    </td>
-                    <td>
-                      {{statistika['numericke_kolone'][i]['drugi_kvartal']}}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      Treci kvartal
-                    </td>
-                    <td>
-                      {{statistika['numericke_kolone'][i]['treci_kvartal']}}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      Maximum
-                    </td>
-                    <td>
-                      {{statistika['numericke_kolone'][i]['maximum']}}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      Broj autlajera
-                    </td>
-                    <td>
-                      {{statistika['numericke_kolone'][i]['broj_autlajera']}}
-                    </td>
-                  </tr>
-                </table>
-                <table *ngIf="kategorije[i]=='Kategorijski'" id="tabela2" class="table table-condensed table-striped">
-                  <tr>
-                    <td>
-                      Broj jedinstvenih polja
-                    </td>
-                    <td>
-                      {{statistika['kategoricke_kolone'][i-statistika['numericke_kolone'].length]['broj_jedinstvenih_polja']}}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      Najcesca vrednost
-                    </td>
-                    <td>
-                      {{statistika['kategoricke_kolone'][i-statistika['numericke_kolone'].length]['najcesca_vrednost']}}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      Najveci broj ponavljanja
-                    </td>
-                    <td>
-                      {{statistika['kategoricke_kolone'][i-statistika['numericke_kolone'].length]['najveci_broj_ponavljanja']}}
-                    </td>
-                  </tr>
-                </table>
-                <div>
-                  <mat-slide-toggle [checked]="checked1" (change)="iscrtajGraf(kolone[i],$event,1)">Prikazi Linijski grafik za datu kolonu</mat-slide-toggle>
-                  <mat-slide-toggle [checked]="checked2" (change)="iscrtajGraf(kolone[i],$event,2)">Prikazi stubicasti grafik za datu kolonu</mat-slide-toggle>
-                    <!--<button class="dugme" mat-raised-button color="primary" (click)="iscrtajGraf(kolone[i])" >Prikazi graf!</button>  -->               
-                        <div id="divChart">
-                            <canvas  id={{kolone[i]}}></canvas>
-                        </div> 
-                      </div>
-              </div>
-
-            </div>
             
         </div>
     
