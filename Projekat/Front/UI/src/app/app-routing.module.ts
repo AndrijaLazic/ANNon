@@ -46,6 +46,12 @@ const routes: Routes = [
   {
     path:'training',component:TreningComponent
     
+  },
+  {
+    path:"team",component:TeamComponent
+  },
+  {
+    path:"test",component:PocetnatestComponent
   }]
   },
   {
@@ -56,12 +62,6 @@ const routes: Routes = [
   },
   {
     path:'verifikacija',component:VerifikacijaComponent
-  },
-  {
-    path:"test",component:PocetnatestComponent
-  },
-  {
-    path:"team",component:TeamComponent
   },
   {
     path:'success-register',component:RegisterParentComponent

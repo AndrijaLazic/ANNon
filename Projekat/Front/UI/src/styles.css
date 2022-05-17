@@ -149,7 +149,7 @@ div svg:hover .arrow-fixed {
 }
 #custom-tooltip
 {
-    backdrop-filter: blur(10px);
+    backdrop-filter:blur(15px) brightness(90%);
     font-size: 1rem;
     /*box-shadow: 2px 2px 3px white, -2px 2px 3px white;*/
 }

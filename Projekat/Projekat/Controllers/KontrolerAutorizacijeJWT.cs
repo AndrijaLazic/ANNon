@@ -330,7 +330,7 @@ namespace Projekat.Controllers
                if (korisnik == null)
                    return BadRequest("Korisnik nije pronadjen!");
 
-               SavedModelsModel saveModel = new SavedModelsModel
+               SavedModelsModel saveModel = new SavedModelsModel//DODAJ I OPIS ZA DATI MODEL
                {
                    UserID = korisnik.ID,
                    ModelID = response.Content,
@@ -365,7 +365,7 @@ namespace Projekat.Controllers
                    return BadRequest("Korisnik nije pronadjen!");
 
                List<SavedModelsModel> allSavedModels = new List<SavedModelsModel>();
-               allSavedModels = _context.SavedModels.FromSqlRaw("SELECT * FROM savedmodels WHERE UserID = "+korisnik.ID).ToList();
+               allSavedModels = _context.SavedModels.FromSqlRaw("SELECT * FROM savedmodels WHERE UserID = "+korisnik.ID).ToList();//NA FRONT SE SALJE SAMO IME OPIS I DATUM!!!
                var modelsToJSON = JsonConvert.SerializeObject(allSavedModels);
                return Ok(modelsToJSON);
            }

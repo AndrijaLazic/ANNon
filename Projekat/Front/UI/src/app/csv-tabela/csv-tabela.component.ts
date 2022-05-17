@@ -90,9 +90,23 @@ export class CsvTabelaComponent implements OnInit {
   {
     sessionStorage.setItem('userId',uuidv4());
   }
+  deleteSessionStorage()
+  {
+    if(localStorage.getItem("parametars") != null)
+      localStorage.removeItem("parametars");
+    if(localStorage.getItem("izabrani-parametri") != null)
+      localStorage.removeItem("izabrani-parametri");
+    if(localStorage.getItem("statistic") != null)
+     localStorage.removeItem("statistic");
+  }
   onFileSelected(fajl: FilePreviewModel)
   {
     this.setSession();
+
+    //brisanje session storage-a
+    this.deleteSessionStorage();
+
+
     if (fajl) 
     {
       this.spinner.show("Spiner1")
@@ -219,7 +233,6 @@ export class CsvTabelaComponent implements OnInit {
   {
     const params = new HttpParams()
     .set('userID',sessionStorage.getItem("userId"));
-    console.log(params.get("userID"));
     this.http.get(this.baseURL+"api/MachineLearning/getStatistic",{params:params}).subscribe(
       res=>{
         this.received=true;
