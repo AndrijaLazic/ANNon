@@ -45,8 +45,8 @@ export class StatisticComponent implements OnInit, AfterViewInit {
   dropdownList2 = [];
   izlaznaKolona;
   dropdownSettings2={};
-  statistika:Object;
-    /*statistika={
+  //statistika:Object;
+    statistika={
     "numericke_kolone": [
         {
             "ime_kolone": "Carat",
@@ -265,7 +265,7 @@ export class StatisticComponent implements OnInit, AfterViewInit {
             }
         }
     ]
-}; */
+}; 
   
   constructor(private shared: SharedService,private route:Router,private elementRef: ElementRef,private cookie:CookieService,private modalService: NgbModal,
     private toastr:ToastrService) { }
@@ -280,7 +280,7 @@ ngAfterViewInit(): void {
   }
   ngOnInit(): void {
 
-    this.statistika=JSON.parse(localStorage.getItem("statistic"));
+    //this.statistika=JSON.parse(localStorage.getItem("statistic"));
     sessionStorage.setItem("redirectTo",this.route.url);
     if(this.statistika){
        

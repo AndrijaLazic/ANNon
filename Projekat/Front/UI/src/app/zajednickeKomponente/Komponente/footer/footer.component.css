@@ -1,8 +1,8 @@
 
 footer{
-    background-image: linear-gradient(to bottom right, #023E8A, #002e4c);
+    backdrop-filter:blur(15px) brightness(90%);
     height: 70px;
-    color: #1e5aaf;
+    color: white;
 }
 .copyright{
     text-align: center;

@@ -35,7 +35,15 @@
   <p style="font-size: 20px; color: white">Zagrevanje pred trening...</p>
 </ngx-spinner>
 
-
+<div class="row h-auto pb-3 m-0 current-page text-center w-100">
+  <div class="col">
+      <button id="custom-tooltip" mat-raised-button matTooltip=
+        "Ukoliko želite da isprobate aplikaciju igrANNONica i prođete kroz sve korake treniranja neuronske mreže prvi korak ka tome je unošenje CSV fajla."
+            matTooltipPosition="below">
+        Izbor parametara i treniranje neuronske mreže<img src="assets/image/info_icon.png">
+    </button>
+  </div>
+</div>
 <div class="container" id="Container1">
     <app-izbor-parametara (newItemEvent)="ispis($event)"></app-izbor-parametara>
     
