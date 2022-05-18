@@ -130,7 +130,7 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str):
             fajl=pd.read_csv(io.StringIO(s.decode('utf-8')),sep='|')
             if(fajl.empty):
                 raise HTTPException(status_code=404, detail="Fajl ne postoji") 
-
+            kolone=[Kolona(kolona["nazivKolone"],kolona["tipPodataka"],kolona["tipEnkodiranja"]) for kolona in model["NizPromena"]]
             slojevi=[Sloj(sloj["BrojNeurona"],sloj["AktivacionaFunkcija"]) for sloj in model["ListaSkrivenihSlojeva"]]
             hiperparametri=Hiperparametri(
                 model["TipProblema"],
@@ -139,7 +139,8 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str):
                 model["MeraUspeha"],
                 model["BrojEpoha"],
                 model["UlazneKolone"],
-                model["IzlaznaKolona"])
+                model["IzlaznaKolona"],
+                kolone)
             if hiperparametri.tip_problema == 'regresija':
                 model,train,val,test=await sync_to_async(make_regression_model,thread_sensitive=False)(fajl,hiperparametri)
             elif hiperparametri.tip_problema == 'klasifikacija':

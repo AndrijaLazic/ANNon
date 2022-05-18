@@ -9,10 +9,10 @@ from keras.callbacks import LearningRateScheduler
 import model_handling
 
 class Hiperparametri:
-  def __init__(self,tip_problema,test_skup,slojevi, mera_greske,mera_uspeha,broj_epoha,ulazne_kolone,izlazna_kolona):
+  def __init__(self,tip_problema,test_skup,slojevi, mera_greske,mera_uspeha,broj_epoha,ulazne_kolone,izlazna_kolona,kolone=None):
     self.tip_problema=tip_problema
     self.test_skup=test_skup
-    #self.kolone=kolone
+    self.kolone=kolone
     self.slojevi=slojevi
     self.mera_greske = mera_greske
     self.mera_uspeha=mera_uspeha
@@ -26,7 +26,7 @@ class Sloj:
     self.aktivaciona_funkcija=aktivaciona_funkcija
 
 class Kolona:
-  def __init__(self,naziv, tip_podataka, enkodiranje):
+  def __init__(self,naziv, tip_podataka, enkodiranje=None):
     self.naziv=naziv
     self.tip_podataka = tip_podataka
     self.enkodiranje = enkodiranje
@@ -109,18 +109,19 @@ def get_normalization_layer(name, dataset):
   return normalizer
 
 
-def get_category_encoding_layer(feature_ds, dtype, max_tokens=None):
+def get_category_encoding_layer(feature_ds, dtype, max_tokens=None,encoding=None):
   if dtype == 'string':
     index = tf.keras.layers.StringLookup(max_tokens=max_tokens)
   else:
     index = tf.keras.layers.IntegerLookup(max_tokens=max_tokens)
   index.adapt(feature_ds)
-
-  encoder = tf.keras.layers.CategoryEncoding(num_tokens=index.vocabulary_size())
+  if(encoding==None):
+    encoding="one_hot"
+  encoder = tf.keras.layers.CategoryEncoding(num_tokens=index.vocabulary_size(),output_mode=encoding)
   return lambda feature: encoder(index(feature))
 
 
-def prepare_preprocess_layers(data,target,train, one_hot_label=False):
+def prepare_preprocess_layers(data,target,train,kolone=None, one_hot_label=False):
   categorical_column_names,numerical_column_names=determine_variable_types(data,target)
 
   if(target in categorical_column_names):
@@ -142,6 +143,10 @@ def prepare_preprocess_layers(data,target,train, one_hot_label=False):
       all_num_inputs.append(numeric_col)
 
   for header in categorical_column_names:
+      for kol in kolone:
+        if(kol.naziv==header):
+          enkodiranje=kol.enkodiranje
+          break
       if(data.dtypes[header]!=object):
           tip="int64"
       else:
@@ -149,7 +154,7 @@ def prepare_preprocess_layers(data,target,train, one_hot_label=False):
       feature_ds = train_ds.map(lambda x, y: x[header])
       categorical_col = tf.keras.Input(shape=(1,), name=header, dtype=tip)
       encoding_layer = get_category_encoding_layer(feature_ds=feature_ds,
-                                                  dtype=tip)
+                                                  dtype=tip,encoding=enkodiranje)
       encoded_categorical_col = encoding_layer(categorical_col)
       all_inputs.append(categorical_col)
       encoded_features.append(encoded_categorical_col)
@@ -157,7 +162,7 @@ def prepare_preprocess_layers(data,target,train, one_hot_label=False):
   encoded_features=encoded_features+all_num_inputs
   return all_inputs, encoded_features, train_ds
 
-def make_model(all_inputs,encoded_features,layers:List[Sloj],loss_metric,success_metric, broj_klasa=0, mean_value=1):
+def make_model(all_inputs,encoded_features,layers:List[Sloj],loss_metric,success_metric,broj_klasa=0, mean_value=1):
   all_features = tf.keras.layers.concatenate(encoded_features)
   x=tf.keras.layers.Normalization(axis=-1)(all_features)
   for layer in layers:
@@ -200,7 +205,7 @@ def make_regression_model(data,hiperparametri:Hiperparametri):
   data.dropna(inplace=True)
   train,val,test=split_data(data,(100-hiperparametri.test_skup-10)/100,hiperparametri.test_skup/100,0.1)
 
-  all_inputs, encoded_features, train_ds=prepare_preprocess_layers(data,hiperparametri.izlazna_kolona,train, one_hot_label=False)
+  all_inputs, encoded_features, train_ds=prepare_preprocess_layers(data,hiperparametri.izlazna_kolona,train,hiperparametri.kolone, one_hot_label=False)
   val_target = val.pop(hiperparametri.izlazna_kolona)
   test_target = test.pop(hiperparametri.izlazna_kolona)
   val_ds = df_to_dataset(val, val_target)
@@ -228,7 +233,7 @@ def make_classification_model(data, hiperparametri:Hiperparametri):
     broj_klasa=0
   train,val,test=split_data(data,(100-hiperparametri.test_skup-10)/100,hiperparametri.test_skup/100,0.1)
   
-  all_inputs, encoded_features, train_ds=prepare_preprocess_layers(data,hiperparametri.izlazna_kolona,train, one_hot_label)
+  all_inputs, encoded_features, train_ds=prepare_preprocess_layers(data,hiperparametri.izlazna_kolona,train,hiperparametri.kolone, one_hot_label)
   val_target = val.pop(hiperparametri.izlazna_kolona)
   val_ds = df_to_dataset(val, val_target, one_hot_label=one_hot_label)
   test_target = test.pop(hiperparametri.izlazna_kolona)
