@@ -54,7 +54,7 @@
   <div class="container statistic">
     
     <div class="row justify-content-center">
-      <div class="col-md-4" *ngIf="podaci.length<1">
+      <div class="col-md-auto" *ngIf="podaci.length<1">
         <ngx-awesome-uploader  id="PoljeZaUnos"
         #uploader
         [adapter]="adapter"
