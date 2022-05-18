@@ -32,7 +32,7 @@ const routes: Routes = [
       component:MojNalogComponent
     },
   {
-    path:'pocetna',component:PocetnastranaComponent,canActivate:[NotAuthGuard]
+    path:'pocetna',component:PocetnastranaComponent
   },
   {
     path:'success-login',component:LoginParentComponent,canActivate:[AuthGuard]

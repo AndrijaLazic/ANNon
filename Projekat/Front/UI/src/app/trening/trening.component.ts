@@ -1,5 +1,5 @@
 import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
-import { ChartModel } from 'ag-grid-community';
+import { ChartModel, GridApi, GridColumnsChangedEvent, GridReadyEvent } from 'ag-grid-community';
 import{webSocket} from 'rxjs/webSocket'
 import { SignalRService } from '../shared/signal-r.service';
 import { Chart } from 'chart.js';
@@ -16,6 +16,7 @@ import { Model } from '../shared/statistic-model.model';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 @Component({
   selector: 'app-trening',
   templateUrl: './trening.component.html',
@@ -39,10 +40,27 @@ export class TreningComponent implements OnInit {
   loss=[];
   val_loss=[];
   moj=[];
+  KoloneDef=[];
+  RedoviPodaci=[];
+  zaglavlja=["Broj epohe","Loss","Val loss"];
+  public brojElemenataNaStrani = 3;
+  public rowSelection = 'multiple';
+  private gridApi!: GridApi;
+  minStrana=0;
+  maxStrana=0;
+  opis:any;
+  p:number=1;
   @ViewChild(IzborParametaraComponent, {static : true}) child : IzborParametaraComponent;
   linija=shape.curveBasis;
   readonly osnovniUrl=Konfiguracija.KonfiguracijaServera.osnovniURL;
-  
+
+  forma=new FormGroup({
+    trenutnaStrana:new FormControl('1',[Validators.required])
+  })
+  get trenutnaStrana(){
+    return this.forma.get('trenutnaStrana');
+  }
+
   constructor(private modalService: NgbModal,private spinner:NgxSpinnerService,public signalR:SignalRService, private http: HttpClient,private cookieService:CookieService,private route:Router,private toastr:ToastrService) { 
   }
 
@@ -206,15 +224,30 @@ export class TreningComponent implements OnInit {
       this.toastr.error("Niste uneli naziv fajla");
       return;
     }
+    if(!this.opis)
+    {
+      this.toastr.error("Niste uneli opis za model");
+      return;
+    }
     var formData = new FormData();
     formData.append("token",this.cookieService.get('token'));
+    formData.append("userID",sessionStorage.getItem('userId'));
     formData.append("filename",this.nazivFajla);
+    formData.append("description",this.opis);
+    formData.append("parametars",localStorage.getItem('parametars'));
     this.http.post(this.osnovniUrl+"api/KontrolerAutorizacije/"+`${this.cookieService.get('token')}`+'/save',formData).subscribe(
       res=>{
         console.log(res);
       },
       err=>{
-        console.log(err);
+        if(err['status']==200)
+        {
+          this.toastr.success(err['error']['text']);
+        }
+        else
+        {
+          this.toastr.error(err['error']['text'])
+        }
       }
     );
   }
@@ -235,6 +268,67 @@ export class TreningComponent implements OnInit {
         }
         
       }
+  }
+
+  IspisTabele()
+  {
+    this.KoloneDef = [];
+    this.RedoviPodaci = [];
+    let pom=[];
+    for(let header of this.zaglavlja)
+    {
+      var col = {
+        flex: 1,
+        field: header,
+        sortable: true,
+        filter: true,
+        editable: true,
+        resizable:true,
+        minWidth: 100
+      }
+      this.KoloneDef.push(col);
+    }
+    this.pomocnaFunkcija();
+    //for(let i=0;i<this.loss.length;i++)
+    //{
+     // jsonString='{"Parametri":"'+this.prvaKolona[i]+'","'+this.KoloneDef[1].field+'":"'+matrica[i][0]+'"}'
+      //let pom2=i+1;
+      //let jsonString2='{'+this.zaglavlja[0]+'":"'+pom2+'","'+this.zaglavlja[1]+'":"'+this.loss[i]+'","'+this.zaglavlja[2]+'":"'+this.val_loss[i]+'}';
+      //let obj=JSON.parse(jsonString2);
+      //this.RedoviPodaci.push(obj);
+    //}
+
+  }
+
+  onGridReady(params: GridReadyEvent) {
+    this.gridApi = params.api;
+    this.minStrana=1;
+    this.maxStrana=this.gridApi.paginationGetTotalPages();
+    this.spinner.hide("Spiner1");
+  }
+
+  onGridColumnsChanged(event: GridColumnsChangedEvent){
+    this.spinner.hide("Spiner1");
+  }
+
+  public PromenaStrane(event){
+    if(event>this.maxStrana){
+      this.forma.controls['trenutnaStrana'].setValue(this.maxStrana);
+    }
+    else if(event<this.minStrana){
+      this.forma.controls['trenutnaStrana'].setValue(this.minStrana);
+    }
+    this.gridApi.paginationGoToPage(this.trenutnaStrana.value-1)
+    console.log(this.maxStrana+" "+ this.minStrana)
+  }
+  key:string='id';
+  reverse:boolean=false;
+  
+  sort(key)
+  {
+    this.key=key;
+    this.reverse=!this.reverse;
+
   }
 }
 

@@ -14,11 +14,12 @@
 
 <ng-template #content3 let-modal1 class="modal-content">
   <div class="modal-header">
-    <h4 class="modal-title">Unesite naziv fajla koji želite da sačuvate</h4>
+    <h4 class="modal-title">Unesite potrebne parametre</h4>
     <button type="button" class="btn-close" aria-label="Close" (click)="modal1.dismiss('Cross click')"></button>
   </div>
   <div class="modal-body" id="unosFajla">
-   <input type="text" [(ngModel)]="nazivFajla">
+   Naziv fajla:<input type="text" [(ngModel)]="nazivFajla" id="dugmeSpecijalno"><br>
+   Opis:<input type="text" [(ngModel)]="opis">
   </div>
   <div class="modal-footer">
     <button type="button" class="dugme dugmeAnimacija" mat-raised-button color="primary" (click)="modal1.dismiss('Cross click');cuvajModelNaNalogu2()">Sacuvaj</button>
@@ -90,6 +91,7 @@
         </div>  
         
         <div class="row justify-content-center gx-3" style="margin-top: 20px;">
+
           <div id="tabela" *ngIf="!StanjeDugmeta2">
             {{pomocnaFunkcija()}}
             <label id="label" for="table">Rezultati treniranja</label>
@@ -102,7 +104,6 @@
                 <td>{{val_loss[i]}}</td>
               </tr>
             
-
           </tbody>
           </table>
         </div>

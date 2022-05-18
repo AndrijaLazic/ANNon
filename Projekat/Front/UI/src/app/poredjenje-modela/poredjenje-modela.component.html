@@ -45,6 +45,14 @@
             </div>
             </ngx-awesome-uploader>
         </div>
+
+        <div class="col-md-auto justify-content-center" *ngIf="modeliZaUlogovanogKorisnika.length>0" [formGroup]="forma" id="tabela">
+            <ag-grid-angular id="agTabela" class="ag-theme-alpine-dark" [rowData]="RedoviPodaci1"
+                [columnDefs]="KoloneDef1" [pagination]="true" [paginationPageSize]="brojElemenataNaStrani1"
+                [rowSelection]="rowSelection1" [animateRows]="true" (gridReady)="onGridReady1($event)"
+                (gridColumnsChanged)="onGridColumnsChanged1($event)"  (rowSelected)="onRowSelected($event)">
+            </ag-grid-angular>
+        </div>
     </div>
     <div class="row justify-content-center">
         <div class="col-xxl-9" *ngIf="podaciZaGrafik.length>0">

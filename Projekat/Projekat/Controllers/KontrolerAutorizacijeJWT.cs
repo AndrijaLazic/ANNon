@@ -314,6 +314,9 @@ namespace Projekat.Controllers
         {
            try
            {
+                Debug.WriteLine(fileName);
+                Debug.WriteLine(description);
+                Debug.WriteLine(parametars);
                string currentUser = ValidateToken(token,configuration);
                if (currentUser.IsNullOrEmpty())
                    return BadRequest("Vaša sesija je istekla!");
@@ -358,6 +361,7 @@ namespace Projekat.Controllers
         {
            try
            {
+                Debug.WriteLine(token);
                var currentUser = ValidateToken(token, configuration);
                if (currentUser.IsNullOrEmpty())
                    return BadRequest("Greška pri validaciji tokena");
@@ -390,9 +394,10 @@ namespace Projekat.Controllers
             return JsonConvert.SerializeObject(necessaryData);
         }
 
-        [HttpGet("{token}/getmodelbyid")]
-        public async Task<ActionResult<string>> GetModelByID(string token,string modelID)
+        [HttpPost("{token}/getmodelbyid")]
+        public async Task<ActionResult<string>> GetModelByID([FromForm]string token,[FromForm]string modelID)
         {
+            Debug.WriteLine(modelID);
             var currentUser = ValidateToken(token, this.configuration);
             if (currentUser.IsNullOrEmpty())
                 return BadRequest("Pristup odbijen!");
