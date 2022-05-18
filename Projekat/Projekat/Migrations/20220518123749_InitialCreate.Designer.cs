@@ -11,7 +11,7 @@ using Projekat.Data;
 namespace Projekat.Migrations
 {
     [DbContext(typeof(MySqlDbContext))]
-    [Migration("20220517140949_InitialCreate")]
+    [Migration("20220518123749_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -98,6 +98,10 @@ namespace Projekat.Migrations
 
                     b.Property<DateTime>("DateSaved")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<string>("ModelName")
                         .IsRequired()

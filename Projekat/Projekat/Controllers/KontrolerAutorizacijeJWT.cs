@@ -310,7 +310,7 @@ namespace Projekat.Controllers
         }
         //pored tokena mora da stigne i nazivfajla koji korisnik unese
         [HttpPost("{token}/save")]
-        public async Task<ActionResult<string>> validate([FromForm]string token,[FromForm]string fileName)//[fromform ako zatreba vidi na frontu]
+        public async Task<ActionResult<string>> SaveModel([FromForm]string token,[FromForm] string userID, [FromForm]string fileName, [FromForm] string description, [FromForm] string parametars)//[fromform ako zatreba vidi na frontu]
         {
            try
            {
@@ -318,24 +318,26 @@ namespace Projekat.Controllers
                if (currentUser.IsNullOrEmpty())
                    return BadRequest("Vaša sesija je istekla!");
 
-               var jsonObject = new {userID = currentUser,metric = "prazno"};//promeni u py delu da se ne salje ovaj model nego samo UID
+               var jsonObject = new {userID = userID,metric = parametars};
                var objectToJson = JsonConvert.SerializeObject(jsonObject);
-               var answer = await _client.SaveModel(objectToJson);
+                //slanje podataka mikroservisu
+               //var answer = await _client.SaveModel(objectToJson);
 
-               var response = JsonConvert.DeserializeObject<ResponseModel>(answer);
-               if (response.Status == 1)
-                   return BadRequest("Neuspešno cuvanje modela!");
+               //var response = JsonConvert.DeserializeObject<ResponseModel>(answer);
+               //if (response.Status == 1)
+                 //  return BadRequest("Neuspešno cuvanje modela!");
 
                Korisnik korisnik = _context.Korisnici.Where(x => x.Username.Equals(currentUser)).FirstOrDefault();
                if (korisnik == null)
                    return BadRequest("Korisnik nije pronadjen!");
 
-               SavedModelsModel saveModel = new SavedModelsModel//DODAJ I OPIS ZA DATI MODEL
+               SavedModelsModel saveModel = new SavedModelsModel
                {
                    UserID = korisnik.ID,
-                   ModelID = response.Content,
+                   ModelID = "Model"+korisnik.ID,//kontent sadrzi modelid koji microservis vraca 
                    DateSaved = DateTime.Now,
-                   ModelName = fileName
+                   ModelName = fileName,
+                   Description = description
                };
 
                _context.SavedModels.Add(saveModel);
@@ -366,8 +368,8 @@ namespace Projekat.Controllers
 
                List<SavedModelsModel> allSavedModels = new List<SavedModelsModel>();
                allSavedModels = _context.SavedModels.FromSqlRaw("SELECT * FROM savedmodels WHERE UserID = "+korisnik.ID).ToList();//NA FRONT SE SALJE SAMO IME OPIS I DATUM!!!
-               var modelsToJSON = JsonConvert.SerializeObject(allSavedModels);
-               return Ok(modelsToJSON);
+                string neccessaryData = this.GetNeccessaryDataFromModels(allSavedModels);
+               return Ok(neccessaryData);
            }
            catch (Exception ex)
            {
@@ -376,7 +378,19 @@ namespace Projekat.Controllers
            }
            
         }
-        [HttpGet("getmodelbyid")]
+
+        private string GetNeccessaryDataFromModels(List<SavedModelsModel> models)
+        {
+            List<NecessaryDataModel> necessaryData = new List<NecessaryDataModel>();
+            foreach (var model in models)
+            {
+                necessaryData.Add(new NecessaryDataModel(model.ModelID,model.DateSaved, model.ModelName, model.Description));
+            }
+
+            return JsonConvert.SerializeObject(necessaryData);
+        }
+
+        [HttpGet("{token}/getmodelbyid")]
         public async Task<ActionResult<string>> GetModelByID(string token,string modelID)
         {
             var currentUser = ValidateToken(token, this.configuration);
@@ -387,11 +401,13 @@ namespace Projekat.Controllers
             if (korisnik == null)
                 return BadRequest("Korisnik nije pronadjen!");
 
-            SavedModelsModel model = (SavedModelsModel)_context.SavedModels.FromSqlRaw("SELECT * FROM savedmodels WHERE UserID = " + korisnik.ID + " AND ModelID =" + modelID);
-            if (model == null)
-                return BadRequest("Model nije pronadjen!");
+            var model = _context.SavedModels.FromSqlRaw("SELECT * FROM savedmodels WHERE UserID = " + korisnik.ID + " AND ModelID =\"" + modelID+"\"");
+            
 
-            return Ok(JsonConvert.SerializeObject(model));
+            var dataToSend = JsonConvert.SerializeObject(model);
+            if (dataToSend == "[]")//pogledaj kako moze lepse da se resi
+                return BadRequest("Model nije pronadjen!");
+            return Ok(dataToSend);
         }
         //FJA KOJA PRIHVATA TOKEN I ID FAJLA KOJI KORISNIK ZELI DA UCITA I VRACA MU SE NAZAD
         //U PYCLIENTU FJA KOJA SALJE TAJ ID KAO JSON STRING 

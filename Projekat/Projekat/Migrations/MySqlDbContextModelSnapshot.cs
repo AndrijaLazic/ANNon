@@ -97,6 +97,10 @@ namespace Projekat.Migrations
                     b.Property<DateTime>("DateSaved")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<string>("ModelName")
                         .IsRequired()
                         .HasColumnType("longtext");
