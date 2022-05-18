@@ -137,7 +137,7 @@ ngAfterViewInit(): void {
                 this.kategorije2.push('Numericki');
                 this.prazna.push(this.statistika['numericke_kolone'][i]['broj_praznih_polja']);
                 this.collapse.push(0);
-                this.selected.push('OneHot');
+                this.selected.push('one_hot');
 
                 }
 
@@ -152,7 +152,7 @@ ngAfterViewInit(): void {
             this.kategorije2.push('Kategorijski');
             this.prazna.push(this.statistika['kategoricke_kolone'][i]['broj_praznih_polja']);
             this.collapse.push(0);
-            this.selected.push('OneHot');
+            this.selected.push('one_hot');
         }
       }
     }
