@@ -129,6 +129,7 @@ export class CsvTabelaComponent implements OnInit {
   {
     this.cookie.delete('params');
     if (this.podaci.length > 0) this.zaglavlja = Object.getOwnPropertyNames(this.podaci[0]); 
+    
     this.KoloneDef = [];
     this.RedoviPodaci = [];
     for(let header of this.zaglavlja)

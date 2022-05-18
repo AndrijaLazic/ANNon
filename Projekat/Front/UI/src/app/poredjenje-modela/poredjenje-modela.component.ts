@@ -17,6 +17,7 @@ import { ColDef, GridApi, GridColumnsChangedEvent, GridReadyEvent } from 'ag-gri
   styleUrls: ['./poredjenje-modela.component.css']
 })
 export class PoredjenjeModelaComponent implements OnInit {
+  MaksBrojFajlova=2;
   izbraniParametri:ObjekatZaSlanje;
   modeliZaPoredjenje:ObjekatZaSlanje[] = [];
   MaksVelicinaFajla=3;
@@ -64,11 +65,12 @@ export class PoredjenjeModelaComponent implements OnInit {
   }
 
   public dodajModel(pom:ObjekatZaSlanje){
+    this.MaksBrojFajlova=this.MaksBrojFajlova-1;
     this.modeliZaPoredjenje.push(pom);
     this.podaciZaGrafik=[];
     var k=0;
     for(var j=0;j<this.modeliZaPoredjenje.length;j++){
-      console.log(this.modeliZaPoredjenje[j])
+      
       if(this.modeliZaPoredjenje[j].Naziv){
         this.podaciZaGrafik.push(new podatakZaGrafikKlasa("loss za "+this.modeliZaPoredjenje[j].Naziv));
         this.podaciZaGrafik.push(new podatakZaGrafikKlasa("val_loss "+this.modeliZaPoredjenje[j].Naziv));
@@ -85,8 +87,8 @@ export class PoredjenjeModelaComponent implements OnInit {
       }
       k=k+2;
     }
-    console.log(this.podaciZaGrafik)
     
+    this.IspisTabele();
   }
 
 
@@ -95,7 +97,7 @@ export class PoredjenjeModelaComponent implements OnInit {
       this.toastr.error("Maksimalna velicina fajla je "+this.MaksVelicinaFajla+" Mb");
     }
     else if("FILE_MAX_COUNT"==error.error){
-      this.toastr.error("Izaberite samo jedan fajl");
+      this.toastr.error("Izaberite samo "+this.MaksBrojFajlova+" fajla");
     }
     else{
       this.toastr.error(`Fajl nije .csv`);
@@ -117,7 +119,7 @@ export class PoredjenjeModelaComponent implements OnInit {
   ucitajFajl(file) {
     let fileReader = new FileReader();
     fileReader.onload = (e) => {
-      console.log(fileReader.result);
+      
       let pom = JSON.parse(fileReader.result as string);
       let objekat=pom as ObjekatZaSlanje;
       this.dodajModel(pom);
@@ -142,7 +144,9 @@ cekiranPrikazGridLinije(value:any){
 
 
   //tabela
-
+  prvaKolona:any=["Tip problema","Mera greske","Mera uspeha","Broj slojeva","Ulazne kolone","Izlazna kolona",
+  "Odnos podataka","Broj epoha"]
+  
   forma=new FormGroup({
     trenutnaStrana:new FormControl('1',[Validators.required])
   })
@@ -157,8 +161,8 @@ cekiranPrikazGridLinije(value:any){
   private gridApi!: GridApi;
   minStrana=0;
   maxStrana=0;
-
-
+  zaglavlja:any[] = [];
+ 
 
   onGridReady(params: GridReadyEvent) {
     this.gridApi = params.api;
@@ -177,9 +181,130 @@ cekiranPrikazGridLinije(value:any){
       this.forma.controls['trenutnaStrana'].setValue(this.minStrana);
     }
     this.gridApi.paginationGoToPage(this.trenutnaStrana.value-1)
-    console.log(this.maxStrana+" "+ this.minStrana)
+    
   }
+  IspisTabele()
+  {
+    this.KoloneDef = [];
+    this.RedoviPodaci = [];
+    var matrica:any[][];
+    var col = {
+      flex: 1,
+      field: "Parametri",
+      sortable: true,
+      filter: true,
+      editable: false,
+      resizable:true,
+      minWidth: 100
+    }
+    this.KoloneDef.push(col);
 
+    var brojRedova=this.prvaKolona.length;
+    for(let i=0;i<this.modeliZaPoredjenje.length;i++){
+      if(!this.modeliZaPoredjenje[i].Naziv){
+        var col = {
+          flex: 1,
+          field: "Model"+(i+1),
+          sortable: true,
+          filter: true,
+          editable: false,
+          resizable:true,
+          minWidth: 100
+        }
+        this.KoloneDef.push(col);
+      }
+      else{
+        var col = {
+          flex: 1,
+          field: this.modeliZaPoredjenje[i].Naziv,
+          sortable: true,
+          filter: true,
+          editable: false,
+          resizable:true,
+          minWidth: 100
+        }
+        this.KoloneDef.push(col);
+      }
+      if(this.modeliZaPoredjenje[i].BrojSlojeva+this.prvaKolona.length>brojRedova)
+        brojRedova=this.modeliZaPoredjenje[i].BrojSlojeva+this.prvaKolona.length;
+      
+    }
+    // inicijalizovanje matrice
+    matrica=[brojRedova]
+    this.brojElemenataNaStrani=brojRedova;
+    for(let i=0;i<brojRedova;i++){
+      matrica[i]=[this.KoloneDef.length-1]
+    }
+    //
+    var pom=0;
+    for(let i=0;i<this.modeliZaPoredjenje.length;i++){
+        matrica[0][i]=this.modeliZaPoredjenje[i].TipProblema;
+        matrica[1][i]=this.modeliZaPoredjenje[i].MeraGreske;
+        matrica[2][i]=this.modeliZaPoredjenje[i].MeraUspeha;
+        matrica[3][i]=this.modeliZaPoredjenje[i].BrojSlojeva;
+        matrica[4][i]=this.modeliZaPoredjenje[i].UlazneKolone;
+        matrica[5][i]=this.modeliZaPoredjenje[i].IzlaznaKolona;
+        matrica[6][i]=this.modeliZaPoredjenje[i].odnosPodataka;
+        matrica[7][i]=this.modeliZaPoredjenje[i].BrojEpoha;
+        pom=8;
+        for(let j=0;j<this.modeliZaPoredjenje[i].BrojSlojeva;j++){
+          matrica[pom][i]=this.modeliZaPoredjenje[i].ListaSkrivenihSlojeva[j].AktivacionaFunkcija+"/"+this.modeliZaPoredjenje[i].ListaSkrivenihSlojeva[j].BrojNeurona;
+          pom++;
+        }
+      
+        for(let j=pom;j<brojRedova;j++){
+          console.log(pom+" "+brojRedova+" "+i)
+          matrica[j][i]="";
+        }
+    }
+    
+    console.log(matrica)
+    var jsonString:string;
+    let obj: any;
+
+    if(this.modeliZaPoredjenje.length==1){
+      var j=1;
+      for(let i=0;i<brojRedova-this.modeliZaPoredjenje[0].BrojSlojeva;i++){
+        
+        jsonString='{"Parametri":"'+this.prvaKolona[i]+'","'+this.KoloneDef[1].field+'":"'+matrica[i][0]+'"}'
+        
+        
+        obj= JSON.parse(jsonString);
+        
+        this.RedoviPodaci.push(obj);
+      }
+      for(let i=brojRedova-this.modeliZaPoredjenje[0].BrojSlojeva;i<brojRedova;i++){
+        jsonString='{"Parametri":"'+'Sloj_'+j+'","'+this.KoloneDef[1].field+'":"'+matrica[i][0]+'"}'
+        obj= JSON.parse(jsonString);
+        this.RedoviPodaci.push(obj);
+        j++;
+      }
+    }
+
+    if(this.modeliZaPoredjenje.length==2){
+      var j=1;
+      var pom=this.modeliZaPoredjenje[0].BrojSlojeva;
+      if(this.modeliZaPoredjenje[1].BrojSlojeva>pom)
+        pom=this.modeliZaPoredjenje[1].BrojSlojeva;
+      for(let i=0;i<brojRedova-pom;i++){
+        
+        jsonString='{"Parametri":"'+this.prvaKolona[i]+'","'+this.KoloneDef[1].field+'":"'+matrica[i][0]+'","'+this.KoloneDef[2].field+'":"'+matrica[i][1]+'"}'
+        
+        
+        obj= JSON.parse(jsonString);
+        
+        this.RedoviPodaci.push(obj);
+      }
+      for(let i=brojRedova-pom;i<brojRedova;i++){
+        jsonString='{"Parametri":"'+'Sloj_'+j+'","'+this.KoloneDef[1].field+'":"'+matrica[i][0]+'","'+this.KoloneDef[2].field+'":"'+matrica[i][1]+'"}'
+        obj= JSON.parse(jsonString);
+        this.RedoviPodaci.push(obj);
+        j++;
+      }
+    }
+
+    
+  }
 
 }
 
