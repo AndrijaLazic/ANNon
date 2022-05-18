@@ -1,17 +1,4 @@
 
-<!--<ng-template #content2 let-modal class="modal-content">
-                        <div class="modal-header">
-                          <h4 class="modal-title">Upozorenje</h4>
-                          <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
-                        </div>
-                        <div class="modal-body">
-                          <p>Da li ste sigurni da zelite da predjete na sledecu stranu,izmene koje ste napravili ce biti sacuvane?</p>
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-light" (click)="modal.close('Close click');next()">Potvrdi</button>
-                        </div>
-                      </ng-template> -->
-
   <div class="wrapper-arrow wrapper-left" (click)="previous()">
   <svg width="18px" height="17px" viewBox="0 0 18 17" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
       <g id="prev" transform="translate(8.500000, 8.500000) scale(-1, 1) translate(-8.500000, -8.500000)">
@@ -43,13 +30,14 @@
   </div>
     <br>
     <div class="table-responsive ">
-      <table  id="tabela3" class="table table-condensed table-striped" > 
+      <table  id="tabela3" class="table table-bordered border-primary"> 
         <tr >
           <th *ngFor="let item of kolone;index as i">{{kolone[i]}}</th>
         </tr>
         <tr>
-          <td  *ngFor="let pr of prazna;let item of kolone;let tip of kategorije;let st of stats;index as i"> 
-            <table *ngIf="kategorije[i]=='Numericki'" id="tabela2" class="table table-condensed table-striped">
+          <td  *ngFor="let pr of prazna;let item of kolone;let tip of kategorije2;index as i"> 
+            <!--<table *ngIf="kategorije[i]=='Numericki'" id="tabela2" class="table table-condensed table-striped"> -->
+            <div *ngIf="kategorije2[i]=='Numericki'">
               <tr>
                 <td>
                   Srednja vrednost
@@ -115,8 +103,9 @@
                   {{statistika['numericke_kolone'][i]['broj_autlajera']}}
                 </td>
               </tr>
-            </table>
-            <table *ngIf="kategorije[i]=='Kategorijski'" id="tabela2" class="table table-condensed table-striped">
+            </div>
+            <!--</table> -->
+            <div *ngIf="kategorije2[i]=='Kategorijski'">
               <tr>
                 <td>
                   Broj jedinstvenih polja
@@ -141,25 +130,22 @@
                   {{statistika['kategoricke_kolone'][i-statistika['numericke_kolone'].length]['najveci_broj_ponavljanja']}}
                 </td>
               </tr>
-            </table>
+            </div>
           </td>
         </tr>
         <tr>
           <td *ngFor="let item of kolone;index as i">
             <div>
-              <!--<mat-slide-toggle [checked]="checked1" (change)="iscrtajGraf(kolone[i],$event,1)">Prikazi Linijski grafik za datu kolonu</mat-slide-toggle>
-              <mat-slide-toggle [checked]="checked2" (change)="iscrtajGraf(kolone[i],$event,2)">Prikazi stubicasti grafik za datu kolonu</mat-slide-toggle>      -->       
                     <div id="divChart">
-                        <canvas  id={{kolone[i]}}></canvas>
+                        <canvas  id={{kolone[i]}} ></canvas>
                     </div> 
                   </div>
           </td>
-        </tr>
-
-        
+        </tr>  
       </table>
-
+      
     </div>
+    <br>
         <div class="table-responsive " >
             <table id="tabela" class="table table-condensed table-striped" >
                 <thead>
@@ -173,25 +159,13 @@
                         
                     </tr>
                 </thead>
-                <tbody *ngFor="let pr of prazna;let item of kolone;let tip of kategorije;let st of stats;index as i">
-                    <ng-template #content let-modal class="modal-content">
-                        <div class="modal-header">
-                          <h4 class="modal-title">Upozorenje</h4>
-                          <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
-                        </div>
-                        <div class="modal-body">
-                          <p>Da li ste sigurni da zelite da obrisete ovaj red?</p>
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-light" (click)="obrisi(i);modal.close('Close click')">Potvrdi</button>
-                        </div>
-                      </ng-template> 
+                <tbody *ngFor="let pr of prazna;let tip of kategorije;let item of kolone;index as i">
                     <tr>
-                        <td class="veciFont">{{kolone[i]}}</td>
+                        <td class="veciFont" style="color:white">{{kolone[i]}}</td>
                         <td>
                           <div class="col-md-auto">
                               <mat-form-field appearance="fill" id="TipEnkodiranjaSelektor2">
-                                <mat-select id="tip{{i}}" [(value)]="kategorije[i]" placeholder="Mode">
+                                <mat-select id="TipEnkodiranjaSelektor" [(value)]="kategorije[i]" placeholder="Mode">
                                   <mat-option value="Numericki">
                                       Numericki
                                   </mat-option>
@@ -204,28 +178,24 @@
                             </div>
                             <div class="col-md-auto" *ngIf="kategorije[i]=='Kategorijski'">
                               <mat-form-field appearance="fill" id="TipEnkodiranjaSelektor2" >
-                                <mat-label>Tip enkodiranja</mat-label>
-                                <mat-select  id="TipEnkodiranjaSelektor" [(ngModel)]="selected[i]" >
-                                  <mat-option value="one_hot">
-                                      one hot
+                                <mat-select  id="TipEnkodiranjaSelektor" [(value)]="selected[i]" >
+                                  <mat-option value="OneHot">
+                                      OneHot
                                   </mat-option>
-                                  <mat-option  value="multi_hot">
-                                      multi hot
+                                  <mat-option  value="MultiHot">
+                                      MultiHot
                                     </mat-option>
-                                    <mat-option  value="count">
-                                      count
+                                    <mat-option  value="Count">
+                                      Count
                                   </mat-option >
                                 </mat-select>
                               </mat-form-field>
                               <!-- {{SelektovanaVrednost}} -->
                             </div>
                       </td>
-                        <td class="veciFont">{{prazna[i]}}</td>
+                        <td class="veciFont" style="color:white">{{prazna[i]}}</td>
                         <td><mat-slide-toggle id={{i}} (change)="dajUlazne(i,$event)" [checked]="cekiranaUlazna[i]" ></mat-slide-toggle></td>
                         <td><mat-slide-toggle id="izlazna{{i}}" (change)="dajIzlaznu(i,$event)" [checked]="cekiranaIzlazna[i]"></mat-slide-toggle></td>
-                             <!--   <td><button class="dugme prikaz" mat-raised-button color="primary" *ngIf="collapse[i]==0" (click)="prikazi(i);" >Više</button>
-                        <button class="dugme prikaz" mat-raised-button color="primary" *ngIf="collapse[i]==1" (click)="smanji(i)" >Manje</button></td>
-                <td><button class="dugme prikaz" mat-raised-button color="primary" (click)="openModalDialogCustomClass(content)">Brisi!</button></td> -->
                     </tr>
                     
             </tbody>

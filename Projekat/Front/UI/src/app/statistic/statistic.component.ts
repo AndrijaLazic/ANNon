@@ -19,6 +19,8 @@ export class StatisticComponent implements OnInit, AfterViewInit {
   checked1=false;
   checked2=false;
   kategorije=new Array();
+  kategorije2=new Array();
+
   cekiranaUlazna=new Array();
   cekiranaIzlazna=new Array();
   prazna=new Array();
@@ -358,17 +360,10 @@ ngAfterViewInit(): void {
                 if(this.kolone[j]==this.statistika['numericke_kolone'][i]['ime_kolone'])
                 {
                 this.kategorije.push('Numericki');
+                this.kategorije2.push('Numericki');
                 this.prazna.push(this.statistika['numericke_kolone'][i]['broj_praznih_polja']);
                 this.collapse.push(0);
-
-
-                this.strStat='';
-                this.strStat+='Srednja vrednost: '
-                +this.statistika['numericke_kolone'][i]['prosek']+'<br>Standardna devijacija: ' +this.statistika['numericke_kolone'][i]['standardna_devijacija']+'<br>Minimum: '
-                +this.statistika['numericke_kolone'][i]['minimum']+'<br>Prvi kvartal: ' +this.statistika['numericke_kolone'][i]['prvi_kvartal']+'<br>Medijana: '
-                +this.statistika['numericke_kolone'][i]['drugi_kvartal']+'<br>Treci kvartal: ' +this.statistika['numericke_kolone'][i]['treci_kvartal']+'<br>Maximum: '
-                +this.statistika['numericke_kolone'][i]['maximum']+'<br>Broj autlajera: ' +this.statistika['numericke_kolone'][i]['broj_autlajera'];
-                this.stats.push(this.strStat);
+                this.selected.push('OneHot');
 
                 }
 
@@ -380,15 +375,10 @@ ngAfterViewInit(): void {
         if(this.kolone[j]==this.statistika['kategoricke_kolone'][i]['ime_kolone'])
         {
             this.kategorije.push('Kategorijski');
+            this.kategorije2.push('Kategorijski');
             this.prazna.push(this.statistika['kategoricke_kolone'][i]['broj_praznih_polja']);
             this.collapse.push(0);
-
-          this.strStat='';
-          this.strStat+='Broj jedinstvenih polja: '
-          +this.statistika['kategoricke_kolone'][i]['broj_jedinstvenih_polja']+'<br>Najcesca vrednost: ' +this.statistika['kategoricke_kolone'][i]['najcesca_vrednost']+'<br>Najveci broj ponavljanja: '
-          +this.statistika['kategoricke_kolone'][i]['najveci_broj_ponavljanja'];
-          this.stats.push(this.strStat);
-
+            this.selected.push('OneHot');
         }
       }
     }
@@ -419,16 +409,17 @@ ngAfterViewInit(): void {
                     datasets: [{
                         label: 'Broj redova',
                         data: Object.values(this.statistika['numericke_kolone'][i]['column_chart_data']),
+                        
                     }  
                 ]
                 },
                 options: {
                     scales: {
-                        
                         y: {
-                            beginAtZero: true
-                        }
-                    }
+                            beginAtZero: true,
+                        },
+                    },
+                    color: 'rgba(255,255,255, 1)',
                 }
             });
           
@@ -635,97 +626,6 @@ ngAfterViewInit(): void {
   promeniUKategorijski(id:any){
     this.kategorije[id]='Kategorijski';
 }
-
-    /*loadDataSet1() {
-        this.dropdownSettings = { 
-        singleSelection: false, 
-        text:"",
-        selectAllText:'Select All',
-        unSelectAllText:'UnSelect All',
-        enableSearchFilter: true,
-        classes:"myclass custom-class",
-        badgeShowLimit:"3",
-        limitSelection: this.listaKolona.length-1
-        
-        };
-
-        // this.sortirajListuKolona();
-        this.dropdownList = [];
-        for (let i = 0; i < this.listaKolona.length; ++i) {
-        if(this.izlaznaKolona){
-            if(this.izlaznaKolona[0]){
-            if(this.listaKolona[i].id==this.izlaznaKolona[0].id){
-                continue;
-            }
-            }
-        }
-            
-        this.dropdownList.push(this.listaKolona[i]);
-        }
-    }
-    loadDataSet2() {
-    this.dropdownSettings2 = { 
-        singleSelection: true, 
-        text:"",
-        selectAllText:'Select All',
-        unSelectAllText:'UnSelect All',
-        enableSearchFilter: true,
-        classes:"myclass custom-class",
-        showCheckbox:false
-
-        
-    };
-        this.dropdownList2 = [];
-        // this.sortirajListuKolona();
-
-        for (let i = 0; i < this.listaKolona.length; ++i) {
-        var stanje=true;
-        for (let j = 0; j < this.selectedItems.length; ++j){
-            if(this.selectedItems[j].id==this.listaKolona[i].id){
-            stanje=false;
-            break;
-            }
-        }
-        if(stanje)
-            this.dropdownList2.push(this.listaKolona[i]);
-        }
-    }
-
-    // brisanjeElementaIzListe(item:any){
-    //   this.listaKolona.forEach((element,index)=>{
-    //     if(element.id==item.id) this.listaKolona.splice(index,1);
-    //   });
-    // }
-
-    onItemSelect(item:any){
-        
-        
-        this.loadDataSet2();
-    }
-    OnItemDeSelect(item:any){
-        
-        this.loadDataSet2();
-    }
-
-    onSelectAll(items: any){
-        
-        this.loadDataSet2();
-    }
-    onDeSelectAll(items: any){
-        
-        this.loadDataSet2();
-    }
-    
-
-    onItemSelect2(item:any){
-        
-        this.loadDataSet1();
-    }
-    OnItemDeSelect2(item:any){
-
-        this.loadDataSet1();
-    } */
-
     dodajUlazne(){
         for(let i=0;i<this.selectedItems.length;i++)
         {
