@@ -22,7 +22,7 @@
   <div class="row h-auto pb-3 m-0 current-page text-center w-100">
     <div class="col">
         <button id="custom-tooltip" mat-raised-button matTooltip=
-          "Na strani Statistika korisnik moze ..."
+          "Na strani Statistika korisnik može da pogleda statistiku po kolonama kao i da odabere ulazne i izlaznu kolonu kao i tip enkodiranja za kategorijske kolone koje će biti potrebne u daljem procesu treniranja."
               matTooltipPosition="below">
           Pregled statistike i izbor ulaznih/izlaznih kolona<img src="assets/image/info_icon.png">
       </button>
@@ -36,23 +36,22 @@
         </tr>
         <tr>
           <td  *ngFor="let pr of prazna;let item of kolone;let tip of kategorije2;index as i"> 
-            <!--<table *ngIf="kategorije[i]=='Numericki'" id="tabela2" class="table table-condensed table-striped"> -->
             <div *ngIf="kategorije2[i]=='Numericki'">
               <tr>
                 <td>
-                  Srednja vrednost
+                  Srednja vrednost   
                 </td>
                 <td>
-                  {{statistika['numericke_kolone'][i]['prosek']}}
+                  &nbsp;&nbsp;{{statistika['numericke_kolone'][i]['prosek']}}
                 </td>
               </tr>
 
               <tr>
                 <td>
-                  Standardna devijacija
+                  Standardna devijacija  
                 </td>
-                <td>
-                  {{statistika['numericke_kolone'][i]['standardna_devijacija']}}
+                <td >
+                  &nbsp;&nbsp;{{statistika['numericke_kolone'][i]['standardna_devijacija']}}
                 </td>
               </tr>
               <tr>
@@ -60,7 +59,7 @@
                   Minimum
                 </td>
                 <td>
-                  {{statistika['numericke_kolone'][i]['minimum']}}
+                  &nbsp;&nbsp;{{statistika['numericke_kolone'][i]['minimum']}}
                 </td>
               </tr>
               <tr>
@@ -68,7 +67,7 @@
                   Prvi kvartal
                 </td>
                 <td>
-                  {{statistika['numericke_kolone'][i]['prvi_kvartal']}}
+                  &nbsp;&nbsp;{{statistika['numericke_kolone'][i]['prvi_kvartal']}}
                 </td>
               </tr>
               <tr>
@@ -76,23 +75,23 @@
                   Medijana
                 </td>
                 <td>
-                  {{statistika['numericke_kolone'][i]['drugi_kvartal']}}
+                  &nbsp;&nbsp;{{statistika['numericke_kolone'][i]['drugi_kvartal']}}
                 </td>
               </tr>
               <tr>
                 <td>
-                  Treci kvartal
+                  Treći kvartal
                 </td>
                 <td>
-                  {{statistika['numericke_kolone'][i]['treci_kvartal']}}
+                  &nbsp;&nbsp;{{statistika['numericke_kolone'][i]['treci_kvartal']}}
                 </td>
               </tr>
               <tr>
                 <td>
-                  Maximum
+                  Maksimum
                 </td>
                 <td>
-                  {{statistika['numericke_kolone'][i]['maximum']}}
+                  &nbsp;&nbsp;{{statistika['numericke_kolone'][i]['maximum']}}
                 </td>
               </tr>
               <tr>
@@ -100,7 +99,7 @@
                   Broj autlajera
                 </td>
                 <td>
-                  {{statistika['numericke_kolone'][i]['broj_autlajera']}}
+                  &nbsp;&nbsp;{{statistika['numericke_kolone'][i]['broj_autlajera']}}
                 </td>
               </tr>
             </div>
@@ -111,23 +110,23 @@
                   Broj jedinstvenih polja
                 </td>
                 <td>
-                  {{statistika['kategoricke_kolone'][i-statistika['numericke_kolone'].length]['broj_jedinstvenih_polja']}}
+                  &nbsp;&nbsp;{{statistika['kategoricke_kolone'][i-statistika['numericke_kolone'].length]['broj_jedinstvenih_polja']}}
                 </td>
               </tr>
               <tr>
                 <td>
-                  Najcesca vrednost
+                  Najčešća vrednost
                 </td>
                 <td>
-                  {{statistika['kategoricke_kolone'][i-statistika['numericke_kolone'].length]['najcesca_vrednost']}}
+                  &nbsp;&nbsp;{{statistika['kategoricke_kolone'][i-statistika['numericke_kolone'].length]['najcesca_vrednost']}}
                 </td>
               </tr>
               <tr>
                 <td>
-                  Najveci broj ponavljanja
+                  Najveći broj ponavljanja
                 </td>
                 <td>
-                  {{statistika['kategoricke_kolone'][i-statistika['numericke_kolone'].length]['najveci_broj_ponavljanja']}}
+                  &nbsp;&nbsp;{{statistika['kategoricke_kolone'][i-statistika['numericke_kolone'].length]['najveci_broj_ponavljanja']}}
                 </td>
               </tr>
             </div>
@@ -153,7 +152,7 @@
                         
                         <th>Naziv kolone</th>
                         <th>Tip podataka</th>
-                        <th>Broj Praznih polja</th>
+                        <th>Broj praznih polja</th>
                         <th>Ulazne kolone:</th>
                         <th>Izlazna kolona:</th>
                         
@@ -163,11 +162,11 @@
                     <tr>
                         <td class="veciFont" style="color:white">{{kolone[i]}}</td>
                         <td>
-                          <div class="col-md-auto">
-                              <mat-form-field appearance="fill" id="TipEnkodiranjaSelektor2">
-                                <mat-select id="TipEnkodiranjaSelektor" [(value)]="kategorije[i]" placeholder="Mode">
-                                  <mat-option value="Numericki">
-                                      Numericki
+                          <div class="col-md-auto" >
+                              <mat-form-field appearance="fill" class="TipEnkodiranjaSelektor2">
+                                <mat-select  id="TipEnkodiranjaSelektor" [(value)]="kategorije[i]" placeholder="Mode">
+                                  <mat-option  value="Numericki">
+                                      Numerički
                                   </mat-option>
                                   <mat-option value="Kategorijski">
                                     Kategorijski
@@ -177,7 +176,7 @@
                               <!-- {{SelektovanaVrednost}} -->
                             </div>
                             <div class="col-md-auto" *ngIf="kategorije[i]=='Kategorijski'">
-                              <mat-form-field appearance="fill" id="TipEnkodiranjaSelektor2" >
+                              <mat-form-field appearance="fill" class="TipEnkodiranjaSelektor2" >
                                 <mat-select  id="TipEnkodiranjaSelektor" [(value)]="selected[i]" >
                                   <mat-option value="OneHot">
                                       OneHot

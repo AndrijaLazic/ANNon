@@ -38,19 +38,15 @@
   transition: 0.4s;
 }
 table{
-    backdrop-filter:blur(15px) brightness(90%);
+  background-image: linear-gradient(to bottom right, #023E8A, #002e4c);
   color:white;
     
  }
  #tabela{
   max-width: 75%;
+  margin-left: 12.5%;
  }
- #tabela2{
-   max-width: 25%;
- }
- th{
-     width: 50%;
- }
+
  td{
      font-size: 15px; 
  }
@@ -171,3 +167,7 @@ input[type=checkbox] {
   transform: scale(1.5);
 
 }
+::ng-deep .mat-select-value{    
+  color: white!important;  }
+
+
