@@ -32,8 +32,8 @@ export class LoginComponent implements OnInit {
         this.spinner.hide("Spiner1");
         if(err['status']==200)
         {
-          this.cookie.set('token',err['error']['text']);
-          this.toastr.success("Successfully login")
+          this.cookie.set('token',err['error']['text'],1/24);
+          this.toastr.success("Uspešna prijava")
          // let currentUrl = this.route.url;
       //this.route.routeReuseStrategy.shouldReuseRoute = () => false;
      // this.route.onSameUrlNavigation = 'reload';

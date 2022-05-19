@@ -137,15 +137,31 @@ ngx-awesome-uploader{
 }
 
 
-#KorisnickaSlika{
+#kolonaZaSliku{
+    padding-top: 100%; /* 1:1 Aspect Ratio */
+    position: relative;
     border-radius: 9999px;
     border: #008ab9 3px solid;
     overflow: hidden;
+    
+}
+#kolonaZaSliku #KorisnickaSlika{
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    
 }
 #dugme2{
     width: fit-content;
 }
 
+.kolona{
+    min-width: 265px;
+    width: 10vw;
+}
 
 
 @media (max-width:767px) {
@@ -158,6 +174,10 @@ ngx-awesome-uploader{
         -moz-background-size: cover;
         -o-background-size: cover;
         background-size: cover;
+    }
+    .kolona{
+        min-width: 265px;
+        width: 80vw;
     }
 }
 

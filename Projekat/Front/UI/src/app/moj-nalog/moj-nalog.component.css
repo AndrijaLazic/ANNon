@@ -156,10 +156,6 @@
     padding: 10px;
 }
 
-.kolona{
-    min-width: 265px;
-    width: 10vw;
-}
 
 #KorisnickaSlika{
     
@@ -193,6 +189,10 @@
     
 }
 
+.kolona{
+    min-width: 265px;
+    width: 10vw;
+}
 
 @media (max-width:767px) {
     .kolona{

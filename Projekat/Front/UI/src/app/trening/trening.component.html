@@ -19,7 +19,7 @@
   </div>
   <div class="modal-body" id="unosFajla">
    Naziv fajla<input type="text" [(ngModel)]="nazivFajla" id="dugmeSpecijalno"><br>
-   Opis<input type="text area" [(ngModel)]="opis">
+   <p class="mb-0">Opis</p><textarea cols="25" rows="5" [(ngModel)]="opis"></textarea >
   </div>
   <div class="modal-footer">
     <button type="button" class="dugme dugmeAnimacija" mat-raised-button color="primary" (click)="modal1.dismiss('Cross click');cuvajModelNaNalogu2()">Sacuvaj</button>
@@ -91,7 +91,7 @@
         </div> 
         <div class="row m-auto w-100 d-flex justify-content-center">
         <div class="col-md-auto justify-content-center" *ngIf="!StanjeDugmeta2" [formGroup]="forma" id="tabela">
-          <ag-grid-angular style="height: 250px; width: 350px;" id="agTabela" class="ag-theme-alpine-dark" [rowData]="RedoviPodaci"
+          <ag-grid-angular id="agTabela" class="ag-theme-alpine-dark" [rowData]="RedoviPodaci"
               [columnDefs]="KoloneDef" [pagination]="false" [paginationPageSize]="brojElemenataNaStrani"
               [rowSelection]="rowSelection" [animateRows]="true" (gridReady)="onGridReady($event)"
               (gridColumnsChanged)="onGridColumnsChanged($event)"
