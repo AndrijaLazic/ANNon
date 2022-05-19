@@ -347,7 +347,7 @@ cekiranPrikazGridLinije(value:any){
 
 
 
-  //dukilin(los)deo
+  
   mojaFunkcija()
   {
     this.ispisTabele1();
@@ -442,14 +442,42 @@ cekiranPrikazGridLinije(value:any){
       alert(event.data.ModelID);
       form.append("token",this.cookieService.get('token'));
       form.append("modelID",event.data.ModelID)
+      form.append("userID",sessionStorage.getItem('userId'));
       this.http.post(this.osnovniUrl+"api/KontrolerAutorizacije/"+`${this.cookieService.get('token')}`+'/getmodelbyid',form).subscribe(
         res=>{
+          let pom=JSON.parse(res as string);
           console.log(res);
+          let objekat=pom as ObjekatZaSlanje;
+          objekat.Naziv=event.data['Naziv modela'];
+          //console.log(res);
+          //console.log(JSON.stringify(res))
+          this.modeliZaPoredjenje.push(objekat);
+          console.log(this.modeliZaPoredjenje.length)
+          this.IspisTabele();
         },
         err=>{
           console.log(err);
         }
       )
+    }
+    else
+    {
+      
+      console.log(event.data);
+      for(let i=0;i<this.modeliZaPoredjenje.length;i++)
+      {
+        console.log(this.modeliZaPoredjenje[i])
+        let pom=event.data as ObjekatZaSlanje;
+        if(this.modeliZaPoredjenje[i].Naziv==event.data['Naziv modela'])
+        {
+          //console.log(this.modeliZaPoredjenje[i]);
+          alert("Dukila2");
+          this.modeliZaPoredjenje.splice(i,1);
+          console.log(this.modeliZaPoredjenje.length);
+          this.IspisTabele();
+          return;
+        }
+      }
     }
   
   }

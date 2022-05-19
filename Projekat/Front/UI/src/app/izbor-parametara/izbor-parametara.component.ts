@@ -145,7 +145,7 @@ export class IzborParametaraComponent implements OnInit {
           
           this.ListaSkrivenihSlojeva.push(this.fb.group({
                                                                     BrojNeurona: [1],
-                                                                    AktivacionaFunkcija: ['', Validators.required]
+                                                                    AktivacionaFunkcija: ['relu', Validators.required]
                                                                 }))
         }
         else{

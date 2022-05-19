@@ -1,5 +1,5 @@
 import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
-import { ChartModel, GridApi, GridColumnsChangedEvent, GridReadyEvent } from 'ag-grid-community';
+import { ChartModel, ColDef, GridApi, GridColumnsChangedEvent, GridReadyEvent } from 'ag-grid-community';
 import{webSocket} from 'rxjs/webSocket'
 import { SignalRService } from '../shared/signal-r.service';
 import { Chart } from 'chart.js';
@@ -40,9 +40,9 @@ export class TreningComponent implements OnInit {
   loss=[];
   val_loss=[];
   moj=[];
-  KoloneDef=[];
-  RedoviPodaci=[];
-  zaglavlja=["Broj epohe","Loss","Val loss"];
+  RedoviPodaci:any = [];
+  KoloneDef: ColDef[] = [];
+  zaglavlja:any=["Broj epohe","Loss","Val loss"];
   public brojElemenataNaStrani = 3;
   public rowSelection = 'multiple';
   private gridApi!: GridApi;
@@ -84,6 +84,7 @@ export class TreningComponent implements OnInit {
           if(poruka==this.BrojEpoha){
             this.StanjeDugmeta=false;
             this.StanjeDugmeta2=false;
+            this.pomocnaFunkcija();
             return;
           }
           this.spinner.hide("Spiner1");
@@ -268,6 +269,7 @@ export class TreningComponent implements OnInit {
         }
         
       }
+      this.IspisTabele();
   }
 
   IspisTabele()
@@ -288,15 +290,16 @@ export class TreningComponent implements OnInit {
       }
       this.KoloneDef.push(col);
     }
-    this.pomocnaFunkcija();
-    //for(let i=0;i<this.loss.length;i++)
-    //{
-     // jsonString='{"Parametri":"'+this.prvaKolona[i]+'","'+this.KoloneDef[1].field+'":"'+matrica[i][0]+'"}'
-      //let pom2=i+1;
-      //let jsonString2='{'+this.zaglavlja[0]+'":"'+pom2+'","'+this.zaglavlja[1]+'":"'+this.loss[i]+'","'+this.zaglavlja[2]+'":"'+this.val_loss[i]+'}';
-      //let obj=JSON.parse(jsonString2);
-      //this.RedoviPodaci.push(obj);
-    //}
+    var jsonString:string;
+    let obj: any;
+    for(let i=0;i<this.loss.length;i++)
+    {
+      jsonString='{"'+this.KoloneDef[0].field+'":"'+(i+1)+'","'+this.KoloneDef[1].field+'":"'+this.loss[i]+'","'+this.KoloneDef[2].field+'":"'+this.val_loss[i]+'"}'
+      
+      obj= JSON.parse(jsonString);
+      
+      this.RedoviPodaci.push(obj);
+    }
 
   }
 
@@ -321,15 +324,8 @@ export class TreningComponent implements OnInit {
     this.gridApi.paginationGoToPage(this.trenutnaStrana.value-1)
     console.log(this.maxStrana+" "+ this.minStrana)
   }
-  key:string='id';
-  reverse:boolean=false;
   
-  sort(key)
-  {
-    this.key=key;
-    this.reverse=!this.reverse;
-
-  }
+  
 }
 
 
