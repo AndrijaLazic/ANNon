@@ -48,7 +48,17 @@
         <div class="collapse navbar-collapse" id="moj1" [ngClass]="{'show':navOpen}">
           <div class="navbar-nav me-auto">
           </div>
+          
           <ul class="navbar-nav navbar-right" id="moj">
+            <li class="nav-item p-1 mx-lg-2">
+              <a class="nav-link text-light" routerLink="/test">Početna</a>
+            </li>
+            <li class="nav-item p-1 mx-lg-2">
+              <a class="nav-link text-light " routerLink="/pocetna">IgrANNONica</a>
+            </li>
+            <li class="nav-item p-1 mx-lg-2">
+              <a class="nav-link text-light" routerLink="/team">Tim ANNon</a>
+            </li>
             <li class="nav-item dropdown">
               <a class="nav-link" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <p  class="dropdown-toggle" id="mojNalog"><img [src]="url" /> {{username}}</p>
