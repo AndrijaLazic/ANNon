@@ -421,9 +421,9 @@ namespace Projekat.Controllers
             if (response.Status == 1)
                 return BadRequest("Doslo je do greske prilikom pronalazenja modela!");
 
-            var obj = new { parametars = response.Content, model = model };
+            //var obj = new { parametars = response.Content, model = model };
 
-            var dataToSend = JsonConvert.SerializeObject(obj);
+            var dataToSend = JsonConvert.SerializeObject(response.Content);
             return Ok(dataToSend);
         }
         //FJA KOJA PRIHVATA TOKEN I ID FAJLA KOJI KORISNIK ZELI DA UCITA I VRACA MU SE NAZAD

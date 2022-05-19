@@ -8,7 +8,7 @@
     </div>
   </div>
 <div class="container" id="Container1">
-    <div class="row justify-content-center gx-5 gy-5" style="margin-top: 20px;">
+    <div class="row justify-content-center" style="margin-top: 20px;">
         <div class="col-md-auto justify-content-center" *ngIf="modeliZaPoredjenje.length>0 && KoloneDef.length>0" [formGroup]="forma" id="tabela">
             <ag-grid-angular id="agTabela" class="ag-theme-alpine-dark" [rowData]="RedoviPodaci"
                 [columnDefs]="KoloneDef" [pagination]="false" [paginationPageSize]="brojElemenataNaStrani"
@@ -17,44 +17,56 @@
                 [suppressDragLeaveHidesColumns]="true" [defaultColDef]="defaultColDef">
             </ag-grid-angular>
         </div>
-
-        <div class="col-md-5 justify-content-center" *ngIf="modeliZaPoredjenje.length!=2">
-            <ngx-awesome-uploader  id="PoljeZaUnos"
-            #uploader
-            [adapter]="adapter"
-            [fileMaxCount]="2"
-            [fileMaxSize]="MaksVelicinaFajla"
-            [uploadType]="'Single'"
-            [enableCropper]="true"
-            [cropperOptions]="cropperOptions"
-            (validationError)="onValidationError($event)"
-            [fileExtensions]="['json']"
-            (uploadSuccess)="onUploadSuccess($event)"
-            (removeSuccess)="onRemoveSuccess($event)"
-            (fileAdded)="onFileAdded($event)"
-            [captions]="captions"
-            [accept]="'.json'">
-            <div class="dropzoneTemplate">
-            <div class="d-flex justify-content-center">
-                <img src="../../assets/image/drag-and-drop-Ikonica.png" class="img-fluid" alt="Responsive image">
+        <div class="col-md-auto justify-content-center" [hidden]="!(modeliZaPoredjenje.length!=2)">
+            <div class="row justify-content-center gx-5 gy-5" style="margin-top: 0px;">
+                <div class="col-md-auto" style="width: fit-content;margin-top: 0px;">
+                    <mat-slide-toggle id="slajderOnlineOffline" [checked]="checked2" (change)="promeniIzborFajlova($event)">{{IzborFajlova}}</mat-slide-toggle>
+                </div>
             </div>
-            <div class="d-flex justify-content-center" id="KlikniZaIzborDugme">
-                <button class="dugme2 dugmeAnimacija" mat-raised-button color="primary">
-                <img src="../../assets/image/klikni za izbor dugme.png" class="img-fluid" alt="Responsive image">
-                </button>
+            <div class="row justify-content-center gx-5 gy-5" style="margin-top:0px;">
+                <div class="col-md-auto justify-content-center" *ngIf="modeliZaPoredjenje.length!=2 && checked2==false">
+                    <ngx-awesome-uploader  id="PoljeZaUnos"
+                    #uploader
+                    [adapter]="adapter"
+                    [fileMaxCount]="2"
+                    [fileMaxSize]="MaksVelicinaFajla"
+                    [uploadType]="'Single'"
+                    [enableCropper]="true"
+                    [cropperOptions]="cropperOptions"
+                    (validationError)="onValidationError($event)"
+                    [fileExtensions]="['json']"
+                    (uploadSuccess)="onUploadSuccess($event)"
+                    (removeSuccess)="onRemoveSuccess($event)"
+                    (fileAdded)="onFileAdded($event)"
+                    [captions]="captions"
+                    [accept]="'.json'">
+                    <div class="dropzoneTemplate">
+                    <div class="d-flex justify-content-center">
+                        <img src="../../assets/image/drag-and-drop-Ikonica.png" class="img-fluid" alt="Responsive image">
+                    </div>
+                    <div class="d-flex justify-content-center" id="KlikniZaIzborDugme">
+                        <button class="dugme2 dugmeAnimacija" mat-raised-button color="primary">
+                        <img src="../../assets/image/klikni za izbor dugme.png" class="img-fluid" alt="Responsive image">
+                        </button>
+                    </div>
+                    </div>
+                    </ngx-awesome-uploader>
+                </div>
+        
+                <div class="col-md-auto justify-content-center" [hidden]="!(modeliZaUlogovanogKorisnika.length>0 && modeliZaPoredjenje.length!=2 && checked2==true)" [formGroup]="forma" id="tabela">
+                    <ag-grid-angular id="agTabela" class="ag-theme-alpine-dark" [rowData]="RedoviPodaci1"
+                        [columnDefs]="KoloneDef1" [pagination]="true" [paginationPageSize]="brojElemenataNaStrani1"
+                        [rowSelection]="rowSelection1" [animateRows]="true" (gridReady)="onGridReady1($event)"
+                        (gridColumnsChanged)="onGridColumnsChanged1($event)"  (rowSelected)="onRowSelected($event)">
+                    </ag-grid-angular>
+                </div>
             </div>
-            </div>
-            </ngx-awesome-uploader>
         </div>
-
-        <div class="col-md-auto justify-content-center" *ngIf="modeliZaUlogovanogKorisnika.length>0" [formGroup]="forma" id="tabela">
-            <ag-grid-angular id="agTabela" class="ag-theme-alpine-dark" [rowData]="RedoviPodaci1"
-                [columnDefs]="KoloneDef1" [pagination]="true" [paginationPageSize]="brojElemenataNaStrani1"
-                [rowSelection]="rowSelection1" [animateRows]="true" (gridReady)="onGridReady1($event)"
-                (gridColumnsChanged)="onGridColumnsChanged1($event)"  (rowSelected)="onRowSelected($event)">
-            </ag-grid-angular>
-        </div>
+        
+        
     </div>
+
+
     <div class="row justify-content-center">
         <div class="col-xxl-9" *ngIf="podaciZaGrafik.length>0">
             <div class="grafik">

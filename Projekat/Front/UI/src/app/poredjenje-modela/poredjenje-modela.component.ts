@@ -20,6 +20,8 @@ import { CookieService } from 'ngx-cookie-service';
   styleUrls: ['./poredjenje-modela.component.css']
 })
 export class PoredjenjeModelaComponent implements OnInit {
+  IzborFajlova="Offline fajlovi"
+  checked2=false;
   MaksBrojFajlova=2;
   izbraniParametri:ObjekatZaSlanje;
   modeliZaPoredjenje:ObjekatZaSlanje[] = [];
@@ -83,8 +85,11 @@ export class PoredjenjeModelaComponent implements OnInit {
   }
 
   public dodajModel(pom:ObjekatZaSlanje){
-    this.MaksBrojFajlova=this.MaksBrojFajlova-1;
-    this.modeliZaPoredjenje.push(pom);
+    if(pom){
+      this.MaksBrojFajlova=this.MaksBrojFajlova-1;
+      this.modeliZaPoredjenje.push(pom);
+    }
+    
     this.podaciZaGrafik=[];
     var k=0;
     for(var j=0;j<this.modeliZaPoredjenje.length;j++){
@@ -366,11 +371,10 @@ cekiranPrikazGridLinije(value:any){
     this.gridApi1 = params.api;
     this.minStrana1=1;
     this.maxStrana1=this.gridApi1.paginationGetTotalPages();
-    this.spinner.hide("Spiner1");
+    
   }
 
   onGridColumnsChanged1(event: GridColumnsChangedEvent){
-    this.spinner.hide("Spiner1");
   }
   
   ispisTabele1(){
@@ -391,7 +395,11 @@ cekiranPrikazGridLinije(value:any){
           filter: true,
           editable: false,
           resizable:true,
-          minWidth: 100
+          minWidth: 100,
+          lockPosition: true, 
+          lockPinned: true,
+          cellClass: 'lock-pinned',
+          pinned: 'right' 
         }
       }
       else
@@ -404,6 +412,9 @@ cekiranPrikazGridLinije(value:any){
           editable: false,
           resizable:true,
           minWidth: 100
+        }
+        if(this.zaglavlja1[i]=="Opis modela"){
+          col.hide=true;
         }
       }
       
@@ -426,7 +437,7 @@ cekiranPrikazGridLinije(value:any){
     for(let i=0;i<this.modeliZaUlogovanogKorisnika.length;i++)
     {
       jsonString='{"'+this.KoloneDef1[0].field+'":"'+this.modeliZaUlogovanogKorisnika[i].ModelName+'","'+this.KoloneDef1[1].field+'":"'+this.modeliZaUlogovanogKorisnika[i].Description+'","'+this.KoloneDef1[2].field+'":"'+this.modeliZaUlogovanogKorisnika[i].DateSaved+'","ModelID":"'+this.modeliZaUlogovanogKorisnika[i].ModelID+'"}'
-      
+
         obj= JSON.parse(jsonString);
         
         this.RedoviPodaci1.push(obj);
@@ -439,21 +450,19 @@ cekiranPrikazGridLinije(value:any){
     if(event.node.isSelected())
     {
       let form=new FormData();
-      alert(event.data.ModelID);
+      
       form.append("token",this.cookieService.get('token'));
       form.append("modelID",event.data.ModelID)
       form.append("userID",sessionStorage.getItem('userId'));
       this.http.post(this.osnovniUrl+"api/KontrolerAutorizacije/"+`${this.cookieService.get('token')}`+'/getmodelbyid',form).subscribe(
         res=>{
           let pom=JSON.parse(res as string);
-          console.log(res);
+          
           let objekat=pom as ObjekatZaSlanje;
           objekat.Naziv=event.data['Naziv modela'];
           //console.log(res);
           //console.log(JSON.stringify(res))
-          this.modeliZaPoredjenje.push(objekat);
-          console.log(this.modeliZaPoredjenje.length)
-          this.IspisTabele();
+          this.dodajModel(objekat);
         },
         err=>{
           console.log(err);
@@ -463,23 +472,33 @@ cekiranPrikazGridLinije(value:any){
     else
     {
       
-      console.log(event.data);
+      
       for(let i=0;i<this.modeliZaPoredjenje.length;i++)
       {
-        console.log(this.modeliZaPoredjenje[i])
+        
         let pom=event.data as ObjekatZaSlanje;
         if(this.modeliZaPoredjenje[i].Naziv==event.data['Naziv modela'])
         {
           //console.log(this.modeliZaPoredjenje[i]);
-          alert("Dukila2");
+          
           this.modeliZaPoredjenje.splice(i,1);
-          console.log(this.modeliZaPoredjenje.length);
-          this.IspisTabele();
+          
+          this.dodajModel(null);
           return;
         }
       }
     }
   
+  }
+  promeniIzborFajlova(value:any){
+    this.checked2=value.checked;
+    
+    if(value.checked==true){
+      this.IzborFajlova="Online fajlovi"
+      return;
+    }
+
+    this.IzborFajlova="Offline fajlovi"
   }
 }
 

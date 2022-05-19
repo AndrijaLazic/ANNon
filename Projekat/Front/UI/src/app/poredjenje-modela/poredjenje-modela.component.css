@@ -200,3 +200,10 @@
 #tabela ::ng-deep .locked-col {
     background: #002546;
   }
+
+
+#slajderOnlineOffline ::ng-deep .mat-slide-toggle-label{
+    background-image: linear-gradient(to left top, #03045e, #011167, #001d70, #002778, #003180, #003781, #003c82, #004183, #00437d, #004577, #004570, #044669);
+    padding: 10px;
+    border-radius: 7px;
+}
