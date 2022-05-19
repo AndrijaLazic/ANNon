@@ -10,7 +10,7 @@ import * as shape from 'd3-shape';
 import { vrednostiZaGrafikKlasa,podatakZaGrafikKlasa } from '../trening/podatakZaGrafik.model';
 import { Route, Router } from '@angular/router';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ColDef, GridApi, GridColumnsChangedEvent, GridReadyEvent, RowSelectedEvent, SelectionChangedEvent } from 'ag-grid-community';
+import { ColDef, ColumnApi, FirstDataRenderedEvent, GridApi, GridColumnsChangedEvent, GridReadyEvent, RowSelectedEvent, SelectionChangedEvent } from 'ag-grid-community';
 import { LoginServiceService } from '../shared/login-service.service';
 import { default as Konfiguracija } from '../../../KonfiguracioniFajl.json';
 import { CookieService } from 'ngx-cookie-service';
@@ -180,16 +180,27 @@ cekiranPrikazGridLinije(value:any){
   minStrana=0;
   maxStrana=0;
   zaglavlja:any[] = [];
- 
-
+  private gridColumnApi!: ColumnApi;
+  tabelaRenderovana=false;
+  public defaultColDef: ColDef = {
+    flex: 1,
+    lockPinned: true, // Dont allow pinning for this example
+  };
   onGridReady(params: GridReadyEvent) {
     this.gridApi = params.api;
     this.minStrana=1;
     this.maxStrana=this.gridApi.paginationGetTotalPages();
-    this.spinner.hide("Spiner1");
+    this.gridColumnApi = params.columnApi;
+    
   }
   onGridColumnsChanged(event: GridColumnsChangedEvent){
-    this.spinner.hide("Spiner1");
+    if(this.tabelaRenderovana){
+      this.autoSizeAll(false);
+    }
+  }
+  onFirstDataRendered(params: FirstDataRenderedEvent) {
+    this.tabelaRenderovana=true;
+    this.autoSizeAll(false);
   }
   public PromenaStrane(event){
     if(event>this.maxStrana){
@@ -206,16 +217,19 @@ cekiranPrikazGridLinije(value:any){
     this.KoloneDef = [];
     this.RedoviPodaci = [];
     var matrica:any[][];
-    var col = {
+    var col1 = {
       flex: 1,
       field: "Parametri",
       sortable: true,
       filter: true,
       editable: false,
       resizable:true,
-      minWidth: 100
+      minWidth: 100,
+      lockPosition: true, 
+      cellClass: 'locked-col'
+      
     }
-    this.KoloneDef.push(col);
+    this.KoloneDef.push(col1);
 
     var brojRedova=this.prvaKolona.length;
     for(let i=0;i<this.modeliZaPoredjenje.length;i++){
@@ -320,9 +334,19 @@ cekiranPrikazGridLinije(value:any){
         j++;
       }
     }
-
+    
     
   }
+  autoSizeAll(skipHeader: boolean) {
+    const allColumnIds: string[] = [];
+    this.gridColumnApi.getAllColumns()!.forEach((column) => {
+      allColumnIds.push(column.getId());
+    });
+    this.gridColumnApi.autoSizeColumns(allColumnIds, skipHeader);
+  }
+
+
+
   //dukilin(los)deo
   mojaFunkcija()
   {
