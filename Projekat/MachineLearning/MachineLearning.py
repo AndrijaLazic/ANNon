@@ -31,6 +31,10 @@ class TestRequest(BaseModel):
     userID:str
     metric:str
 
+class ModelRequest(BaseModel):
+    userID:str
+    modelName:str
+
 class FileWithStatistic:
     FileName:str
     Statistic:dict
@@ -193,4 +197,26 @@ async def saveModel(req: TestRequest):
         return ResponseModel(0, name).toJSON()
     except Exception as e:
         return ResponseModel(1,"Greska pri cuvanju modela!").toJSON()
+    
+#salje se samo naziv trazenog fajla u obliku stringa
+@app.post("/loadModel")
+async def loadModel(req:ModelRequest):
+    try:
+        model=model_handling.load(req.modelName)
+        params=model_handling.get_params(req.modelName)
+        await manager.addModel(req.userID,model)
+        return ResponseModel(0,params)
+    except Exception as e:
+        print(e)
+        return ResponseModel(1,"Greska pri ucitavanju modela")
+
+@app.post("/getParams")
+async def getParams(req:ModelRequest):
+    try:
+        params=model_handling.get_params(req.modelName)
+        return ResponseModel(0,params)
+    except Exception as e:
+        print(e)
+        return ResponseModel(1,"Greska pri vracanju parametara")        
+
     

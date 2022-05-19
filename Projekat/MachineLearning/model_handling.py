@@ -2,6 +2,7 @@ import json
 import tensorflow as tf
 import uuid
 import io,os
+from keras.models import load_model
 
 
 def save_model(model,params=None,history=None):
@@ -21,5 +22,14 @@ def save_parameters(params,path):
     f.write(params)
     f.close()
 
+def load(filename):
+    filepath = os.path.join("modeli",filename)
+    model=load_model(filepath)
+    return model
 
+def get_params(filename):
+    filepath = os.path.join("modeli",filename,"parametri.json")
+    f=open(filepath,"r")
+    content=f.read()
+    return content
 
