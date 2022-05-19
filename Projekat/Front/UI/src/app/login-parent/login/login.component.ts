@@ -18,6 +18,7 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     this.service.formData.username='';
     this.service.formData.password='';
+    this.spinner.hide("Spiner1")
   }
   onSubmit(form:NgForm)
   {
