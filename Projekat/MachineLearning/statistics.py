@@ -116,3 +116,6 @@ def getStats(data):
         recnik["column_chart_data"]=s.to_dict()
         analiza["numericke_kolone"].append(recnik) 
     return json.dumps(analiza,cls=NpEncoder,indent=4)
+
+def getCorrelationMatrix(data:pd.DataFrame):
+    print(data.corr().to_csv())

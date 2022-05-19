@@ -198,7 +198,7 @@ async def saveModel(req: TestRequest):
     except Exception as e:
         return ResponseModel(1,"Greska pri cuvanju modela!").toJSON()
     
-#salje se samo naziv trazenog fajla u obliku stringa
+
 @app.post("/loadModel")
 async def loadModel(req:ModelRequest):
     try:
