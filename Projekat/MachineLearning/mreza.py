@@ -213,7 +213,9 @@ def test_model(model,test_data):
 def make_regression_model(data,hiperparametri:Hiperparametri):
   relevant_columns=hiperparametri.ulazne_kolone+[hiperparametri.izlazna_kolona]
   data=data[relevant_columns]
-
+  data=adapt_header_names(data)
+  hiperparametri.ulazne_kolone=adapt_header_names(hiperparametri.ulazne_kolone,list=True)
+  hiperparametri.izlazna_kolona=adapt_header_names(hiperparametri.izlazna_kolona,single=True)
   data.drop_duplicates()
   data.dropna(inplace=True)
   broj_redova=data.shape[0]
@@ -231,7 +233,9 @@ def make_regression_model(data,hiperparametri:Hiperparametri):
 def make_classification_model(data, hiperparametri:Hiperparametri):
   relevant_columns=hiperparametri.ulazne_kolone+[hiperparametri.izlazna_kolona]
   data=data[relevant_columns]
-
+  data=adapt_header_names(data)
+  hiperparametri.ulazne_kolone=adapt_header_names(hiperparametri.ulazne_kolone,list=True)
+  hiperparametri.izlazna_kolona=adapt_header_names(hiperparametri.izlazna_kolona,single=True)
   mera_greske = hiperparametri.mera_greske
 
   one_hot_label=True
@@ -270,4 +274,12 @@ def handle_missing_values(methods, columns, data):
     elif methods[i] == "MEAN":
       data[columns[i]].fillna(value=data[columns[i]].mean()[0], inplace=True)
 
-
+def adapt_header_names(data,list=False,single=False):
+  if not list and not single:
+    data.rename(axis=1,mapper=lambda name: "_".join(name.split()),inplace=True)
+  elif not single:
+    for name in data:
+      name="_".join(name.split())
+  else:
+    data="_".join(data.split())
+  return data
