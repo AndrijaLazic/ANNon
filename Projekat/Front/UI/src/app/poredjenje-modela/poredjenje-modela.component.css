@@ -196,3 +196,7 @@
 #tabela ::ng-deep .ag-root-wrapper.ag-layout-normal.ag-ltr{
     width: fit-content;
 }
+
+#tabela ::ng-deep .locked-col {
+    background: #002546;
+  }
