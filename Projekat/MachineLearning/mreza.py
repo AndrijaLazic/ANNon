@@ -162,7 +162,7 @@ def prepare_preprocess_layers(data,target,train,kolone=None, one_hot_label=False
   encoded_features=encoded_features+all_num_inputs
   return all_inputs, encoded_features, train_ds
 
-def make_model(all_inputs,encoded_features,layers:List[Sloj],loss_metric,success_metric,broj_klasa=0, mean_value=1):
+def make_model(all_inputs,encoded_features,layers:List[Sloj],loss_metric,success_metric,nrows,broj_klasa=0, mean_value=1):
   all_features = tf.keras.layers.concatenate(encoded_features)
   x=tf.keras.layers.Normalization(axis=-1)(all_features)
   for layer in layers:
@@ -173,18 +173,32 @@ def make_model(all_inputs,encoded_features,layers:List[Sloj],loss_metric,success
     output = tf.keras.layers.Dense(broj_klasa+1, activation=None)(x)
 
   model = tf.keras.Model(all_inputs, output)
-  initial_learning_rate = 1.0
-  if 100<mean_value<5000:
-      initial_learning_rate=0.1
-  elif mean_value<=10:
-      initial_learning_rate=0.001
-  elif mean_value>10:
-      initial_learning_rate=0.01
-  lr_schedule = tf.keras.optimizers.schedules.ExponentialDecay(
-      initial_learning_rate,
-      decay_steps=1000,
-      decay_rate=0.96,
-      staircase=True)
+
+  if(broj_klasa>0):
+    initial_learning_rate = 0.001
+  else:
+    initial_learning_rate = 1.0
+    if 100<mean_value<5000:
+        initial_learning_rate=0.1
+    elif mean_value<=10:
+        initial_learning_rate=0.001
+    elif mean_value>10:
+        initial_learning_rate=0.01
+    
+  # lr_schedule = tf.keras.optimizers.schedules.ExponentialDecay(
+  #     initial_learning_rate,
+  #     decay_steps=1000,
+  #     decay_rate=0.96,
+  #     staircase=True)
+  batches=nrows//32
+  print(nrows)
+  print(batches)
+  print(mean_value)
+  boundaries = [5*batches, 8*batches]
+  values = [initial_learning_rate, 0.5*initial_learning_rate, 0.1*initial_learning_rate]
+  lr_schedule = tf.keras.optimizers.schedules.PiecewiseConstantDecay(
+      boundaries, values)
+
   model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=lr_schedule),
                 loss=loss_metric,
                 metrics=success_metric)
@@ -192,7 +206,7 @@ def make_model(all_inputs,encoded_features,layers:List[Sloj],loss_metric,success
 
 
 def train_model(model,train_data,validation_data,client_id,epoch_number=20):
-  model.fit(train_data, epochs=epoch_number, validation_data=validation_data,callbacks=CustomCallback(root=Konfiguracija["KonfiguracijaServera"]["mlURL"],path="publish/epoch/end",send_as_json=True,to_send=client_id))
+  model.fit(train_data, epochs=epoch_number,batch_size=32, validation_data=validation_data,callbacks=CustomCallback(root=Konfiguracija["KonfiguracijaServera"]["mlURL"],path="publish/epoch/end",send_as_json=True,to_send=client_id))
 
 def test_model(model,test_data):
   return model.evaluate(test_data)
@@ -203,6 +217,7 @@ def make_regression_model(data,hiperparametri:Hiperparametri):
 
   data.drop_duplicates()
   data.dropna(inplace=True)
+  broj_redova=data.shape[0]
   train,val,test=split_data(data,(100-hiperparametri.test_skup-10)/100,hiperparametri.test_skup/100,0.1)
 
   all_inputs, encoded_features, train_ds=prepare_preprocess_layers(data,hiperparametri.izlazna_kolona,train,hiperparametri.kolone, one_hot_label=False)
@@ -210,7 +225,7 @@ def make_regression_model(data,hiperparametri:Hiperparametri):
   test_target = test.pop(hiperparametri.izlazna_kolona)
   val_ds = df_to_dataset(val, val_target)
   test_ds = df_to_dataset(test, test_target)
-  model=make_model(all_inputs,encoded_features,hiperparametri.slojevi,hiperparametri.mera_greske,hiperparametri.mera_uspeha)
+  model=make_model(all_inputs,encoded_features,hiperparametri.slojevi,hiperparametri.mera_greske,hiperparametri.mera_uspeha,broj_redova,mean_value=data[hiperparametri.izlazna_kolona].mean())
   
   return model,train_ds,val_ds,test_ds
 
@@ -228,6 +243,7 @@ def make_classification_model(data, hiperparametri:Hiperparametri):
   
   data.drop_duplicates()
   data.dropna(inplace=True)
+  broj_redova=data.shape[0]
   broj_klasa = data[hiperparametri.izlazna_kolona].nunique()
   if broj_klasa > 20:
     broj_klasa=0
@@ -238,7 +254,7 @@ def make_classification_model(data, hiperparametri:Hiperparametri):
   val_ds = df_to_dataset(val, val_target, one_hot_label=one_hot_label)
   test_target = test.pop(hiperparametri.izlazna_kolona)
   test_ds = df_to_dataset(test, test_target, one_hot_label=one_hot_label)
-  model=make_model(all_inputs,encoded_features,hiperparametri.slojevi,mera_greske,hiperparametri.mera_uspeha, broj_klasa)
+  model=make_model(all_inputs,encoded_features,hiperparametri.slojevi,mera_greske,hiperparametri.mera_uspeha,broj_redova, broj_klasa=broj_klasa)
   return model,train_ds,val_ds,test_ds
 
 #missing values: mode, median, mean, none
