@@ -395,7 +395,7 @@ namespace Projekat.Controllers
         }
 
         [HttpPost("{token}/getmodelbyid")]
-        public async Task<ActionResult<string>> GetModelByID([FromForm]string token,[FromForm]string modelID)
+        public async Task<ActionResult<string>> GetModelByID([FromForm]string token,[FromForm]string modelID,[FromForm] string userID)
         {
             Debug.WriteLine(modelID);
             var currentUser = ValidateToken(token, this.configuration);
@@ -406,12 +406,22 @@ namespace Projekat.Controllers
             if (korisnik == null)
                 return BadRequest("Korisnik nije pronadjen!");
 
-            var model = _context.SavedModels.FromSqlRaw("SELECT * FROM savedmodels WHERE UserID = " + korisnik.ID + " AND ModelID =\"" + modelID+"\"");
-            
+            //var model = _context.SavedModels.FromSqlRaw("SELECT * FROM savedmodels WHERE UserID = " + korisnik.ID + " AND ModelID =\"" + modelID+"\"");
 
-            var dataToSend = JsonConvert.SerializeObject(model);
-            if (dataToSend == "[]")//pogledaj kako moze lepse da se resi
-                return BadRequest("Model nije pronadjen!");
+            SavedModelsModel model = (SavedModelsModel)_context.SavedModels.Where(model => model.ModelID == modelID && model.UserID == korisnik.ID).FirstOrDefault();
+            if (model == null)
+                return BadRequest("Model ne postoji!");
+
+            var jsonObject = new { userID = userID, modelName = modelID };
+
+            string jsonString = JsonConvert.SerializeObject(jsonObject);  
+            var answer = await _client.GetParametarsForModel(jsonString);
+
+            var response = JsonConvert.DeserializeObject<ResponseModel>(answer);
+            if (response.Status == 1)
+                return BadRequest("Doslo je do greske prilikom pronalazenja modela!");
+
+            var dataToSend = JsonConvert.SerializeObject(response.Content);
             return Ok(dataToSend);
         }
         //FJA KOJA PRIHVATA TOKEN I ID FAJLA KOJI KORISNIK ZELI DA UCITA I VRACA MU SE NAZAD
