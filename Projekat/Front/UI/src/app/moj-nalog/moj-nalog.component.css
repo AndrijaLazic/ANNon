@@ -181,6 +181,7 @@
     border-radius: 9999px;
     border: #008ab9 3px solid;
     overflow: hidden;
+    
 }
 #kolonaZaSliku #KorisnickaSlika{
     position: absolute;
@@ -188,6 +189,7 @@
     left: 0;
     bottom: 0;
     right: 0;
+    width: 100%;
     
 }
 
