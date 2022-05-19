@@ -206,7 +206,9 @@ def make_model(all_inputs,encoded_features,layers:List[Sloj],loss_metric,success
 
 
 def train_model(model,train_data,validation_data,client_id,epoch_number=20):
-  model.fit(train_data, epochs=epoch_number,batch_size=32, validation_data=validation_data,callbacks=CustomCallback(root=Konfiguracija["KonfiguracijaServera"]["mlURL"],path="publish/epoch/end",send_as_json=True,to_send=client_id))
+  history=model.fit(train_data, epochs=epoch_number,batch_size=32, validation_data=validation_data,callbacks=CustomCallback(root=Konfiguracija["KonfiguracijaServera"]["mlURL"],path="publish/epoch/end",send_as_json=True,to_send=client_id))
+  recnik={"loss":history.history["loss"],"val_loss":history.history["val_loss"]}
+  return recnik
 
 def test_model(model,test_data):
   return model.evaluate(test_data)

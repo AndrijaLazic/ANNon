@@ -324,7 +324,7 @@ namespace Projekat.Controllers
                var jsonObject = new {userID = userID,metric = parametars};
                var objectToJson = JsonConvert.SerializeObject(jsonObject);
                 //slanje podataka mikroservisu
-               //var answer = await _client.SaveModel(objectToJson);
+               var answer = await _client.SaveModel(objectToJson);
 
                //var response = JsonConvert.DeserializeObject<ResponseModel>(answer);
                //if (response.Status == 1)
@@ -337,7 +337,7 @@ namespace Projekat.Controllers
                SavedModelsModel saveModel = new SavedModelsModel
                {
                    UserID = korisnik.ID,
-                   ModelID = "Model"+korisnik.ID,//kontent sadrzi modelid koji microservis vraca 
+                   ModelID =answer,//kontent sadrzi modelid koji microservis vraca 
                    DateSaved = DateTime.Now,
                    ModelName = fileName,
                    Description = description

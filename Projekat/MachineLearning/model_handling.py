@@ -1,11 +1,25 @@
+import json
 import tensorflow as tf
 import uuid
 import io,os
 
 
-def save_model(model):
-    filename = os.path.join("modeli",str(uuid.uuid4()))
-    os.makedirs(filename)
-    model.save(filename)
+def save_model(model,params=None,history=None):
+    filename=str(uuid.uuid4())
+    filepath = os.path.join("modeli",filename)
+    os.makedirs(filepath)
+    model.save(filepath)
+    params_dict=json.loads(params)
+    params_dict["loss"]=history["loss"]
+    params_dict["val_loss"]=history["val_loss"]
+    save_parameters(json.dumps(params_dict),filepath)
     return filename
+
+def save_parameters(params,path):
+    filename=os.path.join(path,"parametri.json")
+    f = open(filename,"w")
+    f.write(params)
+    f.close()
+
+
 

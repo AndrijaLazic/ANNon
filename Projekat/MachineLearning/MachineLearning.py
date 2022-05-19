@@ -55,6 +55,7 @@ class ConnectionManager:
         self.filePaths:Dict={}
         self.testSets:Dict={}
         self.models:Dict={}
+        self.histories:Dict={}
 
     async def connect(self, websocket: WebSocket,client_id:str):
         await websocket.accept()
@@ -65,6 +66,7 @@ class ConnectionManager:
         self.filePaths.pop(client_id,True)
         self.models.pop(client_id,True)
         self.testSets.pop(client_id,True)
+        self.histories.pop(client_id,True)
 
     async def receive_text(self,client_id:str):
         return await self.active_connections[client_id].receive_text()
@@ -91,6 +93,11 @@ class ConnectionManager:
         self.models[client_id]=model
     async def getModel(self,client_id):
         return self.models[client_id]
+
+    async def addHistory(self,client_id:str,history):
+        self.histories[client_id]=history
+    async def getHistory(self,client_id):
+        return self.histories[client_id]
 
 
 manager = ConnectionManager()
@@ -146,7 +153,8 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str):
             elif hiperparametri.tip_problema == 'klasifikacija':
                 model,train,val,test=make_classification_model(fajl,hiperparametri)
             await manager.addTestSet(client_id,test,hiperparametri.izlazna_kolona)
-            filename=await sync_to_async(train_model,thread_sensitive=False)(model,train,val,client_id,hiperparametri.broj_epoha)
+            history=await sync_to_async(train_model,thread_sensitive=False)(model,train,val,client_id,hiperparametri.broj_epoha)
+            await manager.addHistory(client_id,history)
             await manager.addModel(client_id,model)
             #testiranje
             #await sync_to_async(test_model)(filename,train,hiperparametri.izlazna_kolona)
@@ -180,8 +188,11 @@ async def start_testing(
 async def saveModel(req: TestRequest):
     try:
         model = await manager.getModel(req.userID)
-        name = model_handling.save_model(model)
+        history=await manager.getHistory(req.userID)
+        print(model.summary())
+        name = model_handling.save_model(model,req.metric,history)
         return ResponseModel(0, name).toJSON()
-    except :
+    except Exception as e:
+        print(e)
         return ResponseModel(1,"Greska pri cuvanju modela!").toJSON()
     
