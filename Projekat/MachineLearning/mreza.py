@@ -191,9 +191,6 @@ def make_model(all_inputs,encoded_features,layers:List[Sloj],loss_metric,success
   #     decay_rate=0.96,
   #     staircase=True)
   batches=nrows//32
-  print(nrows)
-  print(batches)
-  print(mean_value)
   boundaries = [5*batches, 8*batches]
   values = [initial_learning_rate, 0.5*initial_learning_rate, 0.1*initial_learning_rate]
   lr_schedule = tf.keras.optimizers.schedules.PiecewiseConstantDecay(

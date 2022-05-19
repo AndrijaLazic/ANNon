@@ -189,10 +189,8 @@ async def saveModel(req: TestRequest):
     try:
         model = await manager.getModel(req.userID)
         history=await manager.getHistory(req.userID)
-        print(model.summary())
         name = model_handling.save_model(model,req.metric,history)
         return ResponseModel(0, name).toJSON()
     except Exception as e:
-        print(e)
         return ResponseModel(1,"Greska pri cuvanju modela!").toJSON()
     

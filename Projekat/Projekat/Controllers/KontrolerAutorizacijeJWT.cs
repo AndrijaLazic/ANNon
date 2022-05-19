@@ -326,9 +326,9 @@ namespace Projekat.Controllers
                 //slanje podataka mikroservisu
                var answer = await _client.SaveModel(objectToJson);
 
-               //var response = JsonConvert.DeserializeObject<ResponseModel>(answer);
-               //if (response.Status == 1)
-                 //  return BadRequest("Neuspešno cuvanje modela!");
+               var response = JsonConvert.DeserializeObject<ResponseModel>(answer);
+               if (response.Status == 1)
+                   return BadRequest("Neuspešno cuvanje modela!");
 
                Korisnik korisnik = _context.Korisnici.Where(x => x.Username.Equals(currentUser)).FirstOrDefault();
                if (korisnik == null)
@@ -337,7 +337,7 @@ namespace Projekat.Controllers
                SavedModelsModel saveModel = new SavedModelsModel
                {
                    UserID = korisnik.ID,
-                   ModelID =answer,//kontent sadrzi modelid koji microservis vraca 
+                   ModelID =response.Content,//kontent sadrzi modelid koji microservis vraca 
                    DateSaved = DateTime.Now,
                    ModelName = fileName,
                    Description = description
