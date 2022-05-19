@@ -1,3 +1,14 @@
+::ng-deep #myVideo{
+    display: none;
+}
+::ng-deep body{
+    background: url("/assets/image/pocetna_background.jpg") no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
 :host{
     display: flex;
     flex-direction: column;
@@ -17,7 +28,7 @@
     position: sticky; top: 0;
     z-index: 5;
 }
-
+/*
 #myVideo {
     position: fixed;
     right: 0;
@@ -28,7 +39,7 @@
     background-image: linear-gradient(to bottom, #03045e, #011167, #001d70, #002778, #003180, #003a88, #00438f, #004c96, #00579f, #0062a7, #006caf, #0077b6);
     object-fit: cover;
 }
-  
+  */
   /* Add some content at the bottom of the video/page */
   .content {
     position: fixed;
@@ -40,7 +51,7 @@
 
   }
 
-
+/*
 @media (max-width:767px) {
     #myVideo{
         display: none;
@@ -53,3 +64,4 @@
         background-size: cover;
     }
 }
+*/

@@ -2,7 +2,7 @@
     <div class="window FormaZaIzmenuPodatakaOKorisniku">
         <form [formGroup]="forma">
             <div class="row justify-content-center" style="margin-bottom: 10px;" >
-                <div class="col-md-auto kolona" *ngIf="selectedFile==null">
+                <div class="col-md-auto d-flex justify-content-center kolona" *ngIf="selectedFile==null">
                     <ngx-awesome-uploader  id="PoljeZaUnos"
                     #uploader
                     [adapter]="adapter"

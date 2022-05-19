@@ -92,7 +92,7 @@ label{
 /* STRELICA */
 .wrapper-left, .wrapper-right {
     position: absolute;
-    top: 50vh;
+    top: 50%;
 }
 .wrapper-left
 {
@@ -110,6 +110,14 @@ label{
     overflow: visible;
 }
 
+.sticky-arrow
+{
+    position: relative;
+    width: 100px;
+    height: 200px;
+    background-color: red;
+    right: 0;
+}
 .wrapper-arrow svg polygon, .wrapper-arrow svg path {
     transition: all 0.5s cubic-bezier(0.2, 1, 0.3, 1);
     fill: #ffffff;
