@@ -114,12 +114,27 @@ export class CsvTabelaComponent implements OnInit {
       this.imeFajla=fajl.fileName;
       this.VelicinaFajla=fajl.file.size;
       var parseResult : ParseResult = this.papa.parse(file,{
-        header: true,
+        header:false,
         skipEmptyLines:true,
+        dynamicTyping: true,
+        delimiter: "",
+        preview:1,
+        complete: (results) =>
+        {
+          this.zaglavlja = results.data[0]
+          
+        }
+      });
+      var parseResult : ParseResult = this.papa.parse(file,{
+        header:true,
+        skipEmptyLines:true,
+        dynamicTyping: true,
+        delimiter: "",
         complete: (results) =>
         {
           this.podaci = results.data
           this.IspisTabele()
+          
         }
       });
     }
@@ -128,14 +143,16 @@ export class CsvTabelaComponent implements OnInit {
   IspisTabele()
   {
     this.cookie.delete('params');
-    if (this.podaci.length > 0) this.zaglavlja = Object.getOwnPropertyNames(this.podaci[0]); 
     
+    
+
     this.KoloneDef = [];
     this.RedoviPodaci = [];
     for(let header of this.zaglavlja)
     {
       var col = {
         flex: 1,
+        headerName:header,
         field: header,
         sortable: true,
         filter: true,
@@ -149,7 +166,12 @@ export class CsvTabelaComponent implements OnInit {
     for(let row of this.podaci)
     {
       this.RedoviPodaci.push(row);
+      
     }
+
+    console.log(this.KoloneDef)
+    
+    
   }
 
   izbrisiSelektovano() {
