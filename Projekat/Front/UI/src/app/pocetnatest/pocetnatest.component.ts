@@ -10,6 +10,7 @@ export class PocetnatestComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    sessionStorage.removeItem("redirectTo");
   }
 
 }

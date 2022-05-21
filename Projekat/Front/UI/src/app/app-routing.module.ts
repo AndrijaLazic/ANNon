@@ -25,14 +25,14 @@ const routes: Routes = [
     component:DefaultComponent,
     children:[{
       path:'',
-      component:PocetnastranaComponent
+      component:PocetnatestComponent
     },
     {
       path:'MojNalog',
       component:MojNalogComponent
     },
   {
-    path:'pocetna',component:PocetnastranaComponent
+    path:'igrannonica',component:PocetnastranaComponent
   },
   {
     path:'success-login',component:LoginParentComponent,canActivate:[AuthGuard]
@@ -51,7 +51,7 @@ const routes: Routes = [
     path:"team",component:TeamComponent
   },
   {
-    path:"test",component:PocetnatestComponent
+    path:"pocetna",component:PocetnatestComponent
   }]
   },
   {

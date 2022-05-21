@@ -10,7 +10,20 @@
     max-height: 400px;
     min-width: 250px;
     min-height: 300px;
+    -webkit-animation: action 2s infinite  alternate;
+    animation: action 2s infinite  alternate;
 }
+
+@-webkit-keyframes action {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-40px); }
+}
+
+@keyframes action {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-40px); }
+}
+
 .current
 {
     background-color: #0d6efd;
@@ -46,6 +59,7 @@
 .content-text
 {
     font-size: 40px;
+    text-shadow: 2px 2px 5px #161280;
 }
 
 .about-app
@@ -97,4 +111,9 @@
 .current-page
 {
     height: 100px;
+}
+
+.button
+{
+    box-shadow: 0 0 10px 5px #0bb9fe;
 }

@@ -22,7 +22,7 @@
    <p class="mb-0">Opis</p><textarea cols="25" rows="5" [(ngModel)]="opis"></textarea >
   </div>
   <div class="modal-footer">
-    <button type="button" class="dugme dugmeAnimacija" mat-raised-button color="primary" (click)="modal1.dismiss('Cross click');cuvajModelNaNalogu2()">Sacuvaj</button>
+    <button type="button" class="dugme dugmeAnimacija" mat-raised-button color="primary" (click)="modal1.dismiss('Cross click');cuvajModelNaNalogu2()">Sačuvaj</button>
   </div>
 </ng-template> 
 
@@ -33,7 +33,7 @@
   type="line-scale"
   name="Spiner1"
 >
-  <p style="font-size: 20px; color: white">Zagrevanje pred trening...</p>
+  <p style="font-size: 20px; color: white">Treniranje će početi uskoro. Molimo Vas sačekajte!</p>
 </ngx-spinner>
 
 <div class="row h-auto pb-3 m-0 current-page text-center w-100">
@@ -102,10 +102,10 @@
         <div class="row justify-content-center gx-3" style="margin-top: 20px;">
 
             <div class="col-md-auto justify-content-center">
-              <button class="dugme dugmeAnimacija" mat-raised-button color="primary" (click)=SendtoBack() [disabled]="StanjeDugmeta">Pocni sa treniranjem</button>
+              <button class="dugme dugmeAnimacija" mat-raised-button color="primary" (click)=SendtoBack() [disabled]="StanjeDugmeta">Počni sa treniranjem</button>
             </div>
             <div class="col-md-auto justify-content-center">
-              <button class="dugme dugmeAnimacija" mat-raised-button color="primary" id="cuvajDugme" (click)="prikaziRezultate(content2)"  [hidden]="StanjeDugmeta2">Sacuvaj rezultate</button>
+              <button class="dugme dugmeAnimacija" mat-raised-button color="primary" id="cuvajDugme" (click)="prikaziRezultate(content2)"  [hidden]="StanjeDugmeta2">Sačuvaj rezultate</button>
             </div>
             <div class="col-md-auto justify-content-center">
               <button class="dugme dugmeAnimacija" mat-raised-button color="primary" (click)="uporediModele()" [hidden]="StanjeDugmeta2">Uporedi model</button>

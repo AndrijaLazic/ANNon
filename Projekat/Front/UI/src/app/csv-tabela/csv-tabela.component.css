@@ -91,6 +91,7 @@
     border: 1px solid #ffffff;
     border-width: 0 3px 3px 0;
     transform: scaleX(-1) rotate(45deg);
+    
 }
 #PoljeZaUnos ::ng-deep .ngx-checkmark-wrapper{
     opacity: 0;
@@ -106,6 +107,7 @@
     border-radius: 10px;
     margin: auto;
     height: auto;
+    box-shadow: 0px -1px 15px #5bfdf7;
 }
 
 #PoljeZaUnos ::ng-deep .files-preview-wrapper{
