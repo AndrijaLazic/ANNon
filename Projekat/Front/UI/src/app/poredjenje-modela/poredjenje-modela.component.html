@@ -18,12 +18,12 @@
             </ag-grid-angular>
         </div>
         <div class="col-md-auto justify-content-center" [hidden]="!(modeliZaPoredjenje.length!=2)">
-            <div class="row justify-content-center gx-5 gy-5" style="margin-top: 0px;">
+            <div class="row justify-content-center" style="margin-top: 0px;">
                 <div class="col-md-auto" style="width: fit-content;margin-top: 0px;">
                     <mat-slide-toggle id="slajderOnlineOffline" [checked]="checked2" (change)="promeniIzborFajlova($event)">{{IzborFajlova}}</mat-slide-toggle>
                 </div>
             </div>
-            <div class="row justify-content-center gx-5 gy-5" style="margin-top:0px;">
+            <div class="row justify-content-center" style="margin-top:0px;">
                 <div class="col-md-auto justify-content-center" *ngIf="modeliZaPoredjenje.length!=2 && checked2==false">
                     <ngx-awesome-uploader  id="PoljeZaUnos"
                     #uploader
@@ -59,6 +59,11 @@
                         [rowSelection]="rowSelection1" [animateRows]="true" (gridReady)="onGridReady1($event)"
                         (gridColumnsChanged)="onGridColumnsChanged1($event)"  (rowSelected)="onRowSelected($event)">
                     </ag-grid-angular>
+                </div>
+                <div class="col-md-auto justify-content-center dugme" [hidden]="!(loginService.isLoggeidin()==false && checked2==true)" style="padding: 5%;" id="prijaviSe">
+                    <p >Niste prijavljeni</p>
+                    <button class="dugme2 dugmeAnimacija dugmeZaPrijavu" mat-raised-button color="primary" (click)="predjiNaPrijavu()"
+                    >Prijavi se</button>
                 </div>
             </div>
         </div>

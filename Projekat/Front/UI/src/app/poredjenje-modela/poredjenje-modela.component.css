@@ -207,3 +207,37 @@
     padding: 10px;
     border-radius: 7px;
 }
+
+
+.dugmeZaPrijavu{
+    width: 100%;
+}
+
+#prijaviSe p{
+    color: white;
+    text-align: center;
+}
+#prijaviSe{
+    min-width: fit-content;
+    max-width: 30vw;
+    width: 15vw;
+    border-radius: 20px;
+}
+
+
+@media (max-width:767px) {
+    
+    #prijaviSe{
+        min-width: 70%;
+    }
+
+    #prijaviSe p{
+        font-size: 20px;
+        font-weight: 500;
+    }
+
+    #prijaviSe button{
+        font-size: 20px;
+        font-weight: 500;
+    }
+}

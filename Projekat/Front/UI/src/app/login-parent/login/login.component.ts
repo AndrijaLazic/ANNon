@@ -6,6 +6,7 @@ import { LoginServiceService } from 'src/app/shared/login-service.service';
 import { CookieService } from 'ngx-cookie-service';
 import { Router, Routes, RoutesRecognized } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
+import {Location} from '@angular/common';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -13,7 +14,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private spinner:NgxSpinnerService,public service:LoginServiceService,private toastr:ToastrService,private cookie:CookieService,private route:Router) { }
+  constructor(private _location: Location,private spinner:NgxSpinnerService,public service:LoginServiceService,private toastr:ToastrService,private cookie:CookieService,private route:Router) { }
   
   ngOnInit(): void {
     this.service.formData.username='';
@@ -40,7 +41,7 @@ export class LoginComponent implements OnInit {
      if(sessionStorage.getItem("redirectTo") == null)
         this.route.navigate(["pocetna"]);
      
-
+        
     this.route.navigate([sessionStorage.getItem("redirectTo")]);
           
         }

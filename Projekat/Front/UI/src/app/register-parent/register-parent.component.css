@@ -29,11 +29,3 @@
       background-color: #3E5E86;
   }
 
-
-  ::ng-deep body{
-    background: url(../../assets/image/PozadinaRegistracija.jpg) no-repeat center center fixed; 
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-   }

@@ -14,6 +14,7 @@ import { ColDef, ColumnApi, FirstDataRenderedEvent, GridApi, GridColumnsChangedE
 import { LoginServiceService } from '../shared/login-service.service';
 import { default as Konfiguracija } from '../../../KonfiguracioniFajl.json';
 import { CookieService } from 'ngx-cookie-service';
+import { stringify } from 'querystring';
 @Component({
   selector: 'app-poredjenje-modela',
   templateUrl: './poredjenje-modela.component.html',
@@ -60,7 +61,7 @@ export class PoredjenjeModelaComponent implements OnInit {
   ///////
   readonly osnovniUrl=Konfiguracija.KonfiguracijaServera.osnovniURL;
 
-  constructor(private spinner:NgxSpinnerService,private http:HttpClient,private toastr:ToastrService,private route: Router,private loginService:LoginServiceService,private cookieService:CookieService){
+  constructor(private spinner:NgxSpinnerService,private http:HttpClient,private toastr:ToastrService,private route: Router,public loginService:LoginServiceService,private cookieService:CookieService){
     if(localStorage.getItem('izabrani-parametri')!=null){
       this.dodajModel(JSON.parse(localStorage.getItem('izabrani-parametri')))
     }
@@ -82,6 +83,19 @@ export class PoredjenjeModelaComponent implements OnInit {
   public adapter = new DemoFilePickerAdapter(this.http,this.spinner,this.toastr);
   ngOnInit(): void {
     sessionStorage.setItem("redirectTo",this.route.url)
+    if(this.cookieService.check('PoredjenjeModelaKolac')){
+      var pomLista=[];
+      pomLista=JSON.parse(this.cookieService.get('PoredjenjeModelaKolac'));
+      
+      for(var i=0;i<pomLista.length;i++){
+        
+        this.dodajModel(pomLista[i]);
+      }
+      console.log(this.modeliZaPoredjenje)
+      this.cookieService.delete('PoredjenjeModelaKolac');
+    }
+    
+
   }
 
   public dodajModel(pom:ObjekatZaSlanje){
@@ -499,6 +513,12 @@ cekiranPrikazGridLinije(value:any){
     }
 
     this.IzborFajlova="Offline fajlovi"
+  }
+
+
+  predjiNaPrijavu(){
+    this.cookieService.set('PoredjenjeModelaKolac',JSON.stringify(this.modeliZaPoredjenje));
+    this.route.navigate(['login'])
   }
 }
 

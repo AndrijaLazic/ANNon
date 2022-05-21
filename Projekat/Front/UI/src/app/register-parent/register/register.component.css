@@ -76,13 +76,6 @@ hr{
     color:white;
   }
 
-   ::ng-deep body{
-    background: url(../../../assets/image/PozadinaRegistracija.jpg) no-repeat center center fixed; 
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-   }
 
    .vertical-center {
     min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
@@ -93,16 +86,6 @@ hr{
   }
   
 
-  #myVideo {
-    position: fixed;
-    right: 0;
-    bottom: 0;
-    width: 100%;
-    min-height: 100%;
-    z-index: -1;
-    background-image: linear-gradient(to bottom, #03045e, #011167, #001d70, #002778, #003180, #003a88, #00438f, #004c96, #00579f, #0062a7, #006caf, #0077b6);
-    object-fit: cover;
-}
 
 .FormaZaIzmenuPodatakaOKorisniku{
     min-width: 265px;
@@ -165,16 +148,7 @@ ngx-awesome-uploader{
 
 
 @media (max-width:767px) {
-    #myVideo{
-        display: none;
-    }
-    ::ng-deep body{
-        background: url("../../../assets/image/mainbackground.jpg") no-repeat center center fixed; 
-        -webkit-background-size: cover;
-        -moz-background-size: cover;
-        -o-background-size: cover;
-        background-size: cover;
-    }
+    
     .kolona{
         min-width: 265px;
         width: 80vw;
