@@ -67,7 +67,7 @@ export class RegisterComponent implements OnInit {
         
       };
     } else {
-      window.alert('Please select correct image format');
+      window.alert('Greška prilikom učitavanja slike');
     }
     
   }

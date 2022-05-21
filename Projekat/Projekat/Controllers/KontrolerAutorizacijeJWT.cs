@@ -116,7 +116,7 @@ namespace Projekat.Controllers
                         return BadRequest("Email je već povezan sa drugim nalogom");
 
                     if (ex.InnerException.Message.Contains("IX_Korisnici_Username"))
-                        return BadRequest("Već postoji korisnik sa datim username-om");
+                        return BadRequest("Već postoji korisnik sa datim korisničkim imenom-om");
 
 
                 }

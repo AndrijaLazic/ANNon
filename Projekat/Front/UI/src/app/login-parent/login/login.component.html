@@ -16,48 +16,43 @@
   <div class="window">
     <div class="row justify-content-center">
       <div class="col-md-auto">
-        <h1 style="font-size:3rem;">Login</h1>
+        <h1 style="font-size:3rem;">Prijava</h1>
       </div>
     </div>
     <hr>
     <form novalidate #form="ngForm" (submit)="onSubmit(form)">
       <div class="row justify-content-center">          
         <div class="col-md-auto FormaZaIzmenuPodatakaOKorisniku">
-            <label class="form-label">Username</label>
+            <label class="form-label">Korisničko ime</label>
             <input type="text" class="form-control" name="username" #username="ngModel" [(ngModel)]="service.formData.username"
             required pattern="^[a-zA-Z][a-zA-Z0-9\.]*" [class.invalid]="username.invalid && username.touched" placeholder="example:user123" minlength="5" maxlength="25">
             <div *ngIf="username.invalid && username.touched"
                   class="alert">
 
                 <p class="alert alert-danger" *ngIf="username.errors?.['required']">
-                  Username is required.
+                  Korisničko ime je obavezno.
                 </p>
-                <p class="alert alert-danger"  *ngIf="username.errors?.['pattern']">
-                  Username can not start with numbers.
+                <p class="alert alert-danger"  *ngIf="username.errors?.['pattern'] || username.errors?.['minlength'] ||username.errors?.['maxlength']">
+                  Neispravno korisničko ime.
                 </p>
-                <p class="alert alert-danger"  *ngIf="username.errors?.['minlength']">
-                    Username must contain at least 5 characters.
-                  </p>
-                  <p class="alert alert-danger"  *ngIf="username.errors?.['maxlength']">
-                    Username can not contain more than 25 characters.
-                  </p>
+                
 
               </div>
         </div>
       </div>
       <div class="row justify-content-center">          
         <div class="col-md-auto FormaZaIzmenuPodatakaOKorisniku">
-          <label class="form-label">Password</label>
+          <label class="form-label">Šifra</label>
           <input type="password" class="form-control" name="password" #password="ngModel" [(ngModel)]="service.formData.password" 
           required minlength="5" [class.invalid]="password.invalid && password.touched" placeholder="*****"
           >
           <div *ngIf="password.invalid && password.touched"
             class="alert">
             <p class="alert alert-danger"  *ngIf="password.errors?.['required']">
-              Password is required.
+              Šifra nije uneta.
             </p>
             <p class="alert alert-danger"  *ngIf="password.errors?.['minlength']">
-              Password must contains at least 5 characters.
+              Šifra nije validna.
             </p>
           </div>
         </div>  
@@ -65,8 +60,8 @@
       <div class="row justify-content-center">          
         <div class="col-md-auto">
           <div id="akaunt">
-            <button type="submit" id="dugme" class="btn btn-primary " [disabled]="form.invalid">Login</button><br>
-            Don't have an account?<a routerLink="/signup">Sign up</a>
+            <button type="submit" id="dugme" class="btn btn-primary " [disabled]="form.invalid">Prijava</button><br>
+            Nemate nalog?<a routerLink="/signup">Registracija</a>
           </div>
         </div>
       </div>
