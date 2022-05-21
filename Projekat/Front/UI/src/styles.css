@@ -92,7 +92,7 @@ label{
 /* STRELICA */
 .wrapper-left, .wrapper-right {
     position: absolute;
-    top: 50%;
+    top: 50vh;
 }
 .wrapper-left
 {
@@ -201,4 +201,26 @@ div svg:hover .arrow-fixed {
   /* Handle on hover */
   ::-webkit-scrollbar-thumb:hover {
     background: #003180; 
+  }
+
+
+
+  @media only screen and (max-width: 991px) {
+    .wrapper-arrow svg 
+    {
+        width: 60px;
+    }
+  }
+
+  @media only screen and (max-width: 767px) {
+    .wrapper-arrow svg 
+    {
+        width: 50px;
+    }
+  }
+  @media only screen and (max-width: 500px) {
+    .wrapper-arrow svg 
+    {
+        width: 40px;
+    }
   }
