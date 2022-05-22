@@ -37,7 +37,7 @@
               </div>
         </div>
       </div>
-      <div class="row justify-content-center">          
+      <div class="row justify-content-center" style="margin-top: 10px;">          
         <div class="col-md-auto FormaZaIzmenuPodatakaOKorisniku">
           <label class="form-label">Šifra</label>
           <input type="password" class="form-control" name="password" #password="ngModel" [(ngModel)]="service.formData.password" 
@@ -58,9 +58,14 @@
         <div class="col-md-auto">
           <div id="akaunt">
             <button type="submit" id="dugme" class="btn btn-primary " [disabled]="form.invalid">Prijava</button><br>
-            Nemate nalog?<a routerLink="/signup">Registracija</a>
+            <a routerLink="/signup">Zaboravili ste šifru?</a><br>
           </div>
         </div>
+      </div>
+      <div class="row justify-content-center" id="registracija"> 
+        
+        <button id="dugme2" class="btn btn-primary" (click)="idiNaRegist()">Registracija</button><br>
+        
       </div>
       
       

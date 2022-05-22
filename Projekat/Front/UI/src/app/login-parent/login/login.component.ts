@@ -70,6 +70,11 @@ export class LoginComponent implements OnInit {
       
     );
   }
+
+
+  idiNaRegist(){
+    this.route.navigate(["signup"]);
+  }
  
 
 }

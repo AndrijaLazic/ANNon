@@ -86,3 +86,22 @@ hr{
     -o-background-size: cover;
     background-size: cover;
 }
+
+#dugme2{
+    background-color: #00B38F;
+    font-weight: 500;
+    border-color:#00B38F ;
+    
+}
+
+
+#registracija{
+    padding-top: 20px;
+    margin-top: 10px;
+    border-top: white solid 1px;
+}
+
+#registracija button{
+    min-width: fit-content;
+    max-width: 80%;
+}

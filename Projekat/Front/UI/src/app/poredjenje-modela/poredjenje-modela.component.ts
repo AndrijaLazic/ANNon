@@ -82,17 +82,21 @@ export class PoredjenjeModelaComponent implements OnInit {
   }
   public adapter = new DemoFilePickerAdapter(this.http,this.spinner,this.toastr);
   ngOnInit(): void {
+    
     sessionStorage.setItem("redirectTo",this.route.url)
-    if(this.cookieService.check('PoredjenjeModelaKolac')){
-      var pomLista=[];
-      pomLista=JSON.parse(this.cookieService.get('PoredjenjeModelaKolac'));
+    var pomLista=[];
+    
+    if(sessionStorage.getItem('PoredjenjeModelaKolac')){
+      console.log("brzi jge")
+      this.modeliZaPoredjenje=[];
+      pomLista=JSON.parse(sessionStorage.getItem('PoredjenjeModelaKolac'));
       
       for(var i=0;i<pomLista.length;i++){
         
         this.dodajModel(pomLista[i]);
       }
-      console.log(this.modeliZaPoredjenje)
-      this.cookieService.delete('PoredjenjeModelaKolac');
+      
+      sessionStorage.removeItem('PoredjenjeModelaKolac');
     }
     
 
@@ -304,12 +308,12 @@ cekiranPrikazGridLinije(value:any){
         }
       
         for(let j=pom;j<brojRedova;j++){
-          console.log(pom+" "+brojRedova+" "+i)
+          
           matrica[j][i]="";
         }
     }
     
-    console.log(matrica)
+    
     var jsonString:string;
     let obj: any;
 
@@ -517,7 +521,7 @@ cekiranPrikazGridLinije(value:any){
 
 
   predjiNaPrijavu(){
-    this.cookieService.set('PoredjenjeModelaKolac',JSON.stringify(this.modeliZaPoredjenje));
+    sessionStorage.setItem('PoredjenjeModelaKolac',JSON.stringify(this.modeliZaPoredjenje));
     this.route.navigate(['login'])
   }
 }

@@ -146,7 +146,13 @@ ngx-awesome-uploader{
     width: 10vw;
 }
 
-
+.jumbotron{
+    background: url("/assets/image/pocetna_background.jpg") no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
 @media (max-width:767px) {
     
     .kolona{
@@ -154,5 +160,3 @@ ngx-awesome-uploader{
         width: 80vw;
     }
 }
-
- 
