@@ -22,6 +22,7 @@ import model_handling
 #uvicorn MachineLearning:app --reload
 
 
+
 class UploadedFile(BaseModel):
     userID:str
     FileName:str
@@ -217,6 +218,23 @@ async def getParams(req:ModelRequest):
         return ResponseModel(0,params)
     except Exception as e:
         print(e)
-        return ResponseModel(1,"Greska pri vracanju parametara")        
+        return ResponseModel(1,"Greska pri vracanju parametara")  
+
+@app.post("/getCorrMatrix")
+async def getCorrMatrix(req:Request):
+    try:
+        response=await req.json()
+        recnik=json.loads(response)
+        id=recnik["sessionID"]
+        s=requests.get(await manager.getFilePath(id),verify=False).content
+        fajl=pd.read_csv(io.StringIO(s.decode('utf-8')),sep='|')
+        if(fajl.empty):
+            raise HTTPException(status_code=404, detail="Fajl ne postoji") 
+        matrica=stats.getCorrMatrix(fajl)
+        return ResponseModel(0,matrica)
+    except Exception as e:
+        return ResponseModel(1,e.__str__())
+    
+
 
     

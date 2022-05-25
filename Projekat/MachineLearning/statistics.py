@@ -118,4 +118,4 @@ def getStats(data):
     return json.dumps(analiza,cls=NpEncoder,indent=4)
 
 def getCorrelationMatrix(data:pd.DataFrame):
-    print(data.corr().to_csv())
+    return data.corr().to_json()
