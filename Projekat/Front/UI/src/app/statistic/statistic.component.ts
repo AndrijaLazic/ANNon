@@ -8,6 +8,9 @@ import { CookieService } from 'ngx-cookie-service';
 import { NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { ContentObserver } from '@angular/cdk/observers';
+import { HttpClient } from '@angular/common/http';
+import { json } from 'express';
+import { default as Konfiguracija } from '../../../KonfiguracioniFajl.json';
 @Component({
   selector: 'app-statistic',
   templateUrl: './statistic.component.html',
@@ -49,8 +52,10 @@ export class StatisticComponent implements OnInit, AfterViewInit {
   dropdownSettings2={};
   statistika:Object;
     
+
+  readonly baseUrl = Konfiguracija.KonfiguracijaServera.osnovniURL;
   constructor(private shared: SharedService,private route:Router,private elementRef: ElementRef,private cookie:CookieService,private modalService: NgbModal,
-    private toastr:ToastrService) { }
+    private toastr:ToastrService, private http: HttpClient) { }
     
   
 listaKolona=[];
@@ -61,7 +66,8 @@ ngAfterViewInit(): void {
         this.iscrtajGraf(this.kolone[i]);
   }
   ngOnInit(): void {
-
+    this.getCorrelationMatrix();
+    this.drawCorrelationMatrix();
     this.statistika=JSON.parse(localStorage.getItem("statistic"));
     sessionStorage.setItem("redirectTo",this.route.url);
     if(this.statistika){
@@ -388,6 +394,42 @@ ngAfterViewInit(): void {
         this.cekiranaUlazna[this.kolone.length-1]=false;
         this.cekiranaIzlazna[this.kolone.length-1]=true;
     }
+
+    getCorrelationMatrix()
+    {
+        const formData = new FormData();
+        formData.append("sessionID",sessionStorage.getItem("userId"));
+        this.http.post(this.baseUrl+"api/MachineLearning/getCorrelationMatrix",formData).subscribe(
+            res => sessionStorage.setItem("correlationMatrix",JSON.stringify(res)),
+            err => this.toastr.error("Greška pri izračunavanju korelacione matrice","Greška")
+        );
+    }
+
+    drawCorrelationMatrix()
+    {
+        var getMatrix = sessionStorage.getItem("correlationMatrix");
+
+        var correlationMatrix = JSON.parse(getMatrix) as object
+        var headers = Object.keys(correlationMatrix);
+        for(let i = 0; i < headers.length; i++)
+        {
+            console.log(headers[i])
+            for(let j = 0; j < headers.length; j++)
+            {
+                if(i == 0)
+                    console.log(headers[j]);
+                else
+                {
+                    console.log(correlationMatrix[headers[i]][headers[j]]);
+                }
+            }
+            
+        }
+
+        console.log(getMatrix);
+        
+    }
+
 
 
 }

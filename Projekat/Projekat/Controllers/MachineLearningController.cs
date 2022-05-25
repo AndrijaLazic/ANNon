@@ -113,7 +113,7 @@ namespace Projekat.Clients
                     var jsonObject = JsonConvert.SerializeObject(model);
                     var answer = await _iCustomClient.sendData(jsonObject);
                     var statistic = JsonConvert.DeserializeObject<ResponseModel>(answer);
-                    Console.WriteLine(statistic);
+
                     if (statistic.Status == 1)
                     {
                         _context.Entry(model).State = EntityState.Deleted;
@@ -149,11 +149,31 @@ namespace Projekat.Clients
                 return BadRequest(jsonToObject.Content);
 
             return Ok(jsonToObject.Content);
-                     
 
+        }
+        [HttpPost("getCorrelationMatrix")]
+        public async Task<ActionResult<string>> GetCorrelationMatrix([FromForm] string sessionID)
+        {
+            try
+            {
+                var obj = new {sessionID = sessionID };
+                string dataToSend = JsonConvert.SerializeObject(obj);
+                var response = await _iCustomClient.GetCorrelationMatrix(dataToSend);
 
+                ResponseModel answer = JsonConvert.DeserializeObject<ResponseModel>(response);
+                if (answer.Status == 1)
+                    return BadRequest("Greska");
 
+                //string sendToFront = JsonConvert.SerializeObject(answer.Content);
 
+                return Ok(answer.Content);
+                
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
         }
 
 

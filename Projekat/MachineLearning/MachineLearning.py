@@ -8,13 +8,12 @@ from requests.models import Response
 from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect,HTTPException
 from fastapi.responses import HTMLResponse
 from fastapi import Body
-import statistics as stats
 import pandas as pd
 from pydantic import BaseModel, Json
 from requests.api import request
 from asgiref.sync import sync_to_async
 import requests
-import statistics as stats
+from statistika import getStats, getCorrelationMatrix
 from mreza import *
 import model_handling
 #vazno!!!!!!
@@ -127,7 +126,7 @@ async def update_item(
         raise HTTPException(status_code=404, detail="Fajl ne postoji")
     
     await manager.addFilePath(model.userID,Konfiguracija['KonfiguracijaServera']['backURL']+'api/FajlKontroler/DajFajl?NazivFajla='+model.FileName+'&imeKorisnika=Korisnik')
-    Statistic=stats.getStats(fajl)
+    Statistic= getStats(fajl)
     return ResponseModel(0,Statistic).toJSON()
 
 @app.websocket("/test/{client_id}")
@@ -224,14 +223,13 @@ async def getParams(req:ModelRequest):
 async def getCorrMatrix(req:Request):
     try:
         response=await req.json()
-        recnik=json.loads(response)
-        id=recnik["sessionID"]
+        id=response["sessionID"]
         s=requests.get(await manager.getFilePath(id),verify=False).content
         fajl=pd.read_csv(io.StringIO(s.decode('utf-8')),sep='|')
         if(fajl.empty):
             raise HTTPException(status_code=404, detail="Fajl ne postoji") 
-        matrica=stats.getCorrMatrix(fajl)
-        return ResponseModel(0,matrica)
+        matrica= getCorrelationMatrix(fajl)
+        return ResponseModel(0,matrica).toJSON()
     except Exception as e:
         return ResponseModel(1,e.__str__())
     
