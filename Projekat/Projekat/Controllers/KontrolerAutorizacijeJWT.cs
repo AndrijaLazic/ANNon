@@ -426,9 +426,67 @@ namespace Projekat.Controllers
             var dataToSend = JsonConvert.SerializeObject(response.Content);
             return Ok(dataToSend);
         }
-        //FJA KOJA PRIHVATA TOKEN I ID FAJLA KOJI KORISNIK ZELI DA UCITA I VRACA MU SE NAZAD
-        //U PYCLIENTU FJA KOJA SALJE TAJ ID KAO JSON STRING 
+        [HttpPut("updatepassword")]
+        public async Task<ActionResult<string>> UpdatePassword([FromForm] string jwt, [FromForm] string oldPassword, [FromForm] string newPassword)
+        {
+            try
+            {
+                var currentUser = ValidateToken(jwt, this.configuration);
+                Korisnik? user = _context.Korisnici.Where(k => k.Username == currentUser).FirstOrDefault();
+                if (user == null)
+                    return BadRequest("Korisnik nije pronadjen");
+                bool verifyUser = VerifyPasswordHash(oldPassword, user.PasswordHash, user.PasswordSalt);
+                if (!verifyUser )
+                    return BadRequest("Neispravna lozinka! Pokušajte ponovo");
 
+                CreatePasswordHash(newPassword, out byte[] passwordHash, out byte[] passwordSalt);
+                if (passwordSalt == null || passwordHash == null )
+                    return BadRequest("Greška pri ažuriranju lozinke");
+
+                user.PasswordHash = passwordHash;
+                user.PasswordSalt = passwordSalt;
+
+                await _context.SaveChangesAsync();
+
+                return Ok("Lozinka uspešno ažurirana");
+
+
+
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete("delete-model")]
+        public async Task<ActionResult<string>> DeletePassword([FromForm] string jwt, [FromForm] string modelID)
+        {
+            try
+            {
+                var currentUser = ValidateToken(jwt, this.configuration);
+
+                Korisnik? user = _context.Korisnici.Where(k => k.Username == currentUser).FirstOrDefault();
+
+                if (user == null)
+                    return BadRequest("Korisnik nije pronadjen");
+
+                SavedModelsModel? model = _context.SavedModels.Where(m => m.ModelID == modelID && m.UserID == user.ID).FirstOrDefault();
+                if (model == null)
+                    return BadRequest("Model ne postoji");
+
+                _context.SavedModels.Remove(model);
+                await _context.SaveChangesAsync();
+
+                return Ok("Model uspešno obrisan");
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
+        }
         private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
             using (var hmac = new HMACSHA512())
