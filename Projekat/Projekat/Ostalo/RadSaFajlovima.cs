@@ -45,7 +45,7 @@ namespace Projekat.Ostalo
                     Directory.CreateDirectory(pathBuilt);
                 }
 
-                var path = Path.Combine(Directory.GetCurrentDirectory(), "Upload\\csvFajlovi", imeFajla+"_"+userID);
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "Upload\\csvFajlovi", userID+"_"+imeFajla);
 
                 using (var stream = new FileStream(path, FileMode.Create))
                 {

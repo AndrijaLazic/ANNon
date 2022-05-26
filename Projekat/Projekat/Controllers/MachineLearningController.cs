@@ -72,7 +72,7 @@ namespace Projekat.Clients
                 DataModel dataModel = new DataModel
                 {
                     userID = userID,
-                    FileName = imeFajla+"_"+userID,
+                    FileName = userID+"_"+imeFajla,
                     Putanja = "put",
                     VremeUploada= DateTime.Now.ToString("h:mm:ss tt")
                     };
