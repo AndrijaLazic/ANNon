@@ -92,7 +92,7 @@
         <div class="row m-auto w-100 d-flex justify-content-center">
         <div class="col-md-auto justify-content-center" *ngIf="!StanjeDugmeta2" [formGroup]="forma" id="tabela">
           <ag-grid-angular id="agTabela" class="ag-theme-alpine-dark" [rowData]="RedoviPodaci"
-              [columnDefs]="KoloneDef" [pagination]="false" [paginationPageSize]="brojElemenataNaStrani"
+              [columnDefs]="KoloneDef" [pagination]="true" [paginationPageSize]="brojElemenataNaStrani"
               [rowSelection]="rowSelection" [animateRows]="true" (gridReady)="onGridReady($event)"
               (gridColumnsChanged)="onGridColumnsChanged($event)"
               [suppressDragLeaveHidesColumns]="true">

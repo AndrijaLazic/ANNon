@@ -43,7 +43,7 @@ export class TreningComponent implements OnInit {
   RedoviPodaci:any = [];
   KoloneDef: ColDef[] = [];
   zaglavlja:any=["Broj epohe","Loss","Val loss"];
-  public brojElemenataNaStrani = 3;
+  public brojElemenataNaStrani = 10;
   public rowSelection = 'multiple';
   private gridApi!: GridApi;
   minStrana=0;
@@ -76,8 +76,6 @@ export class TreningComponent implements OnInit {
 
     this.signalR.startConnection();
     this.signalR.addTransferChartDatalistener();
-    this.signalR.podaciZaGrafik.push(new podatakZaGrafikKlasa("loss"));
-    this.signalR.podaciZaGrafik.push(new podatakZaGrafikKlasa("val_loss"));
     this.signalR.porukaObservable$
       .subscribe(
         poruka=>{
@@ -257,19 +255,16 @@ export class TreningComponent implements OnInit {
   {
     this.loss=[];
     this.val_loss=[];
-    for(let i=0;i<this.signalR.podaciZaGrafik.length-1;i++)
-      {
-        for(let j=0;j<this.signalR.podaciZaGrafik[i].series.length;j++)
-        {
-            let loss=this.signalR.podaciZaGrafik[i].series[j].value;
-            this.loss.push(loss);
-            let val_loss=this.signalR.podaciZaGrafik[i+1].series[j].value;
-            this.val_loss.push(val_loss);
+    console.log(this.signalR.podaciZaGrafik)
+    for(let j=0;j<this.signalR.podaciZaGrafik[0].series.length;j++)
+    {
+      let loss=this.signalR.podaciZaGrafik[0].series[j].value;
+      this.loss.push(loss);
+      let val_loss=this.signalR.podaciZaGrafik[1].series[j].value;
+      this.val_loss.push(val_loss);
           
-        }
-        
-      }
-      this.IspisTabele();
+    }   
+    this.IspisTabele();
   }
 
   IspisTabele()
@@ -294,7 +289,7 @@ export class TreningComponent implements OnInit {
     let obj: any;
     for(let i=0;i<this.loss.length;i++)
     {
-      jsonString='{"'+this.KoloneDef[0].field+'":"'+(i+1)+'","'+this.KoloneDef[1].field+'":"'+this.loss[i]+'","'+this.KoloneDef[2].field+'":"'+this.val_loss[i]+'"}'
+      jsonString='{"'+this.KoloneDef[0].field+'":"'+parseInt((i+1).toString())+'","'+this.KoloneDef[1].field+'":"'+this.loss[i]+'","'+this.KoloneDef[2].field+'":"'+this.val_loss[i]+'"}'
       
       obj= JSON.parse(jsonString);
       
