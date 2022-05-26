@@ -61,30 +61,26 @@ namespace Projekat.Clients
             string imeFajla;
             try
             {
-                if (uploadedFile.Length > 0)
-                {
-                    if (RadSaFajlovima.ProveriAkoJeCsvFajl(uploadedFile))
-                    {
-                        if ((imeFajla = await RadSaFajlovima.UpisiFajl(uploadedFile))!=null)
-                        {
-                            DataModel dataModel = new DataModel
-                            {
-                                userID = userID,
-                                FileName = imeFajla,
-                                Putanja = "put",
-                                VremeUploada= DateTime.Now.ToString("h:mm:ss tt")
-                        };
-                            _context.Files.Add(dataModel);
-                            await _context.SaveChangesAsync();
-                            return Ok(true);
-                        }
-                        return BadRequest("Greška pri čuvanju fajla");
-                    }
-                    return BadRequest("Uneti fajl nije u CSV formatu");
-
-                }
-                else
+                if (uploadedFile.Length <= 0)
                     return BadRequest("Fajl ne postoji");
+                
+                if (!RadSaFajlovima.ProveriAkoJeCsvFajl(uploadedFile))
+                    return BadRequest("Uneti fajl nije u CSV formatu"); 
+                if ((imeFajla = await RadSaFajlovima.UpisiFajl(uploadedFile,userID))==null)
+                    return BadRequest("Greška pri čuvanju fajla");  
+                     
+                DataModel dataModel = new DataModel
+                {
+                    userID = userID,
+                    FileName = imeFajla+"_"+userID,
+                    Putanja = "put",
+                    VremeUploada= DateTime.Now.ToString("h:mm:ss tt")
+                    };
+                _context.Files.Add(dataModel);
+                await _context.SaveChangesAsync();
+                return Ok(true);
+                        
+                        
             }
             catch (Exception ex)
             {
