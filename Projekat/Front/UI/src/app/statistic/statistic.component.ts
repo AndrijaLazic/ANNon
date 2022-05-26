@@ -11,6 +11,7 @@ import { ContentObserver } from '@angular/cdk/observers';
 import { HttpClient } from '@angular/common/http';
 import { json } from 'express';
 import { default as Konfiguracija } from '../../../KonfiguracioniFajl.json';
+import { NumberValueAccessor } from '@angular/forms';
 @Component({
   selector: 'app-statistic',
   templateUrl: './statistic.component.html',
@@ -301,10 +302,9 @@ ngAfterViewInit(): void {
   }
   ngOnInit(): void {
     this.getCorrelationMatrix();
-    this.correlationMatrix = JSON.parse(sessionStorage.getItem("correlationMatrix"));
+    
     //this.drawCorrelationMatrix();
     this.statistika=JSON.parse(localStorage.getItem("statistic"));
-    this.podaciZaMatricu();
     sessionStorage.setItem("redirectTo",this.route.url);
     if(this.statistika){
        
@@ -464,7 +464,7 @@ ngAfterViewInit(): void {
   {
     if(window.confirm('Da li ste sigurni da zelite da se vratite na prethodnu stranu?'))
     {
-        this.route.navigate(['./pocetna']);
+        this.route.navigate(['./fileUpload']);
     }
     
   }
@@ -631,12 +631,18 @@ ngAfterViewInit(): void {
         this.cekiranaIzlazna[this.kolone.length-1]=true;
     }
 
+    VidljivostKorMatrice=false;
     getCorrelationMatrix()
     {
         const formData = new FormData();
         formData.append("sessionID",sessionStorage.getItem("userId"));
         this.http.post(this.baseUrl+"api/MachineLearning/getCorrelationMatrix",formData).subscribe(
-            res => sessionStorage.setItem("correlationMatrix",JSON.stringify(res)),
+            res => {
+                sessionStorage.setItem("correlationMatrix",JSON.stringify(res))
+                this.VidljivostKorMatrice=true;
+                this.correlationMatrix = JSON.parse(sessionStorage.getItem("correlationMatrix"));
+                this.podaciZaMatricu();
+        },
             err => this.toastr.error("Greška pri izračunavanju korelacione matrice","Greška")
         );
     }
@@ -673,8 +679,10 @@ ngAfterViewInit(): void {
         {
             //console.log(Object.values(this.correlationMatrix[Object.keys(this.correlationMatrix)[i]]));
             this.redMatrice.push(Object.keys(this.correlationMatrix)[i]);
-            for(let j=0;j<Object.values(this.correlationMatrix[Object.keys(this.correlationMatrix)[i]]).length;j++)
-                this.redMatrice.push(Object.values(this.correlationMatrix[Object.keys(this.correlationMatrix)[i]])[j]);
+            for(let j=0;j<Object.values(this.correlationMatrix[Object.keys(this.correlationMatrix)[i]]).length;j++){
+                var number = Object.values(this.correlationMatrix[Object.keys(this.correlationMatrix)[i]])[j] as number;
+                this.redMatrice.push(number.toFixed(3));
+            }
 
             this.matricaZaKor.push(this.redMatrice);
             this.redMatrice=[];

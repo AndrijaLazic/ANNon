@@ -32,7 +32,7 @@ const routes: Routes = [
       component:MojNalogComponent
     },
   {
-    path:'igrannonica',component:PocetnastranaComponent
+    path:'fileUpload',component:PocetnastranaComponent
   },
   {
     path:'success-login',component:LoginParentComponent,canActivate:[AuthGuard]
