@@ -26,7 +26,8 @@
 
   
   <div class="row container-fluid">
-    <div class="col-1">
+    <div class="col-1 position-relative">
+      <div class="fixed position-fixed h-100">
   <div class="wrapper-arrow wrapper-left" (click)="previous()">
   <svg width="18px" height="17px" viewBox="0 0 18 17" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
       <g id="prev" transform="translate(8.500000, 8.500000) scale(-1, 1) translate(-8.500000, -8.500000)">
@@ -35,9 +36,10 @@
           <path d="M-1.48029737e-15,0.56157424 L-1.48029737e-15,16.1929159 L9.708,8.33860465 L-2.66453526e-15,0.56157424 L-1.48029737e-15,0.56157424 Z M1.33333333,3.30246869 L7.62533333,8.34246869 L1.33333333,13.4327013 L1.33333333,3.30246869 L1.33333333,3.30246869 Z"></path>
       </g>
   </svg>
+</div>
 </div> 
 </div>
-<div class="">
+<div class="col-10">
 <div class="container" style="height: 100%;">
   <div class="row h-auto pb-3 m-0 current-page text-center w-100">
     <div class="col">
@@ -254,10 +256,11 @@
       </div>
     
     <br>   
+  </div>
 </div>
-</div>
-<div class="col-1">
-  <div class="wrapper-arrow wrapper-right" (click)="next()">
+<div class="col-1 position-relative">
+<div class="fixed position-fixed h-100">
+  <div class="wrapper-arrow center position-absolute top-50" (click)="next()">
     <svg width="18px" height="17px" viewBox="-1 0 18 17" version="1.1" >
         <g>
             <polygon class="arrow" points="16.3746667 8.33860465 7.76133333 15.3067621 6.904 14.3175671 14.2906667 8.34246869 6.908 2.42790698 7.76 1.43613596"></polygon>
@@ -267,5 +270,5 @@
     </svg>
   </div> 
 </div>
-
+</div>
 </div>
