@@ -284,7 +284,7 @@ export class StatisticComponent implements OnInit, AfterViewInit {
   "price":{"carat":0.9215913012,"depth":-0.0106474046,"table":0.1271339021,"price":1,"x":0.884435161,"y":0.8654208979,"z":0.8612494439},
   "x":{"carat":0.9750942267,"depth":-0.025289247,"table":0.195344281,"price":0.884435161,"x":1,"y":0.9747014797,"z":0.9707717986},
   "y":{"carat":0.951722199,"depth":-0.0293406707,"table":0.1837601471,"price":0.8654208979,"x":0.9747014797,"y":1,"z":0.9520057162},
-  "z":{"carat":0.9533873806,"depth":0.0949238824,"table":0.1509286916,"price":0.8612494439,"x":0.9707717986,"y":0.9520057162,"z":1}}; */
+  "z":{"carat":0.9533873806,"depth":0.0949238824,"table":0.1509286916,"price":0.8612494439,"x":0.9707717986,"y":0.9520057162,"z":1}};  */
 
     
 
@@ -302,6 +302,7 @@ ngAfterViewInit(): void {
   }
   ngOnInit(): void {
     this.getCorrelationMatrix();
+    
     
     //this.drawCorrelationMatrix();
     this.statistika=JSON.parse(localStorage.getItem("statistic"));
@@ -333,7 +334,7 @@ ngAfterViewInit(): void {
         
     
         this.selectChangeHandler();
-        
+        //this.podaciZaMatricu();
 
         var id=0;
         interface Kolona {
@@ -678,7 +679,7 @@ ngAfterViewInit(): void {
         for(let i=0;i<this.headers.length;i++)
         {
             //console.log(Object.values(this.correlationMatrix[Object.keys(this.correlationMatrix)[i]]));
-            this.redMatrice.push(Object.keys(this.correlationMatrix)[i]);
+            //this.redMatrice.push(Object.keys(this.correlationMatrix)[i]);
             for(let j=0;j<Object.values(this.correlationMatrix[Object.keys(this.correlationMatrix)[i]]).length;j++){
                 var number = Object.values(this.correlationMatrix[Object.keys(this.correlationMatrix)[i]])[j] as number;
                 this.redMatrice.push(number.toFixed(3));
@@ -690,6 +691,23 @@ ngAfterViewInit(): void {
         console.log(this.matricaZaKor);
         
         
+    }
+    dajBoju(vrednost:number): any {
+        if(vrednost==1 || vrednost == -1)
+            return '#000023';
+        else if(vrednost<=-0.8 && vrednost>-1 || vrednost>=0.8 && vrednost<1)
+            return '#1B1E63';
+        else if (vrednost>-0.8 && vrednost<=-0.6 || vrednost<0.8 && vrednost>=0.6)
+            return '#262A8D';
+        else if (vrednost>-0.6 && vrednost<=-0.4 || vrednost<0.6 && vrednost>=0.4)
+            return '#4B48ED';
+        else if (vrednost>-0.4 && vrednost<=-0.2 || vrednost<0.4 && vrednost>=0.2)
+            return '#4C5FFF';
+        else if(vrednost>-0.2 && vrednost<0.2)
+            return '#557CFF';
+        
+
+
     }
 
 

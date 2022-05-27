@@ -1,4 +1,29 @@
 
+<ng-template #content2 let-modal class="modal-content">
+                        <div class="modal-body table-responsive">
+                          <table id="korel" class="table m-0 table-condensed">
+                            <tbody>
+                                <tr >
+                                  <th> </th>
+                                  <th *ngFor="let item of headers" class="header-cell" >{{item}}</th>
+                                  
+                                </tr>
+                                <tr *ngFor="let row of matricaZaKor;index as i">
+                                  <th>
+                                    {{headers[i]}}
+                                  </th>
+                                    <td *ngFor="let cell of row;index as j " [ngStyle]="{'background-color': dajBoju(cell)}">
+                                      {{cell}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                            
+                        </table>
+                        <button class="dugme prikaz" id="napusti" mat-raised-button color="primary" (click)="modal.close('Close click')">Napusti</button>
+                        </div>
+</ng-template> 
+
+
   
   <div class="row container-fluid">
     <div class="col-1">
@@ -142,20 +167,28 @@
       
     </div>
   </div>
-  <div class="col-lg-4 col-md-5 col-sm-12 correlation-matrix table-responsive kortable" [hidden]="!VidljivostKorMatrice">
-    <table id="korel" class="table m-0 table-bordered border-primary">
+  <div class="col-lg-4 col-md-5 col-sm-12 correlation-matrix table-responsive kortable" [hidden]="!VidljivostKorMatrice"> <!-- -->
+    <p id="korelText">Korelaciona matrica</p>
+    <button class="dugme prikaz" mat-raised-button color="primary" id="dialog"  (click)="openModalDialogCustomClass(content2)" >Prikaži</button>
+    <table id="korel2" class="table m-0 table-condensed ">
       <tbody>
-          <tr >
+          <tr>
             <th> </th>
-            <th *ngFor="let item of headers" class="header-cell" >{{item}}</th>
+            <th class="header-cell" >{{headers[0]}}</th>
+            <th class="header-cell" >{{headers[1]}}</th>
             
           </tr>
           <tr *ngFor="let row of matricaZaKor;index as i">
-              <td *ngFor="let cell of row;index as j ">
-                {{cell}}
-              </td>
-          </tr>
-          
+            <th>
+              {{headers[i]}}
+            </th>
+            <td  [ngStyle]="{'background-color': dajBoju(matricaZaKor[i][0])}">
+              {{matricaZaKor[i][0]}}
+            </td>
+            <td  [ngStyle]="{'background-color': dajBoju(matricaZaKor[i][1])}">
+              {{matricaZaKor[i][1]}}
+            </td>
+        </tr>
       </tbody>
       
   </table>
