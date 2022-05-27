@@ -320,7 +320,14 @@ export class TreningComponent implements OnInit {
     console.log(this.maxStrana+" "+ this.minStrana)
   }
   
-  
+  previous()
+  {
+    this.route.navigate(["statistic"]);
+  }
+  next()
+  {
+    this.route.navigate(["poredjenjeModela"]);
+  }
 }
 
 

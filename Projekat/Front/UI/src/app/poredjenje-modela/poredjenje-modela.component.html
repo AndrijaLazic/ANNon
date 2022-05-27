@@ -1,121 +1,132 @@
 <div class="row h-auto pb-3 m-0 current-page text-center w-100">
-    <div class="col">
-        <button id="custom-tooltip" mat-raised-button matTooltip=
-          "Ukoliko želite da isprobate aplikaciju igrANNONica i prođete kroz sve korake treniranja neuronske mreže prvi korak ka tome je unošenje CSV fajla."
-              matTooltipPosition="below">
-          Poređenje modela<img src="assets/image/info_icon.png">
-      </button>
-    </div>
+  <div class="col">
+    <button id="custom-tooltip" mat-raised-button matTooltip="Na stranici za poredjenje modela korisnik može uporediti svoje trenirane modele. Korisnik ima dve opcije. Opcija 1 - učitavanje modela sa lokalne mašine (offline)
+          ili opcija2 - izborom modela koji je sačuvao na nalogu(online). Klikom na dugme korisnik bira jednu od dve opicije i u zavisnosti od izabrane otvara mu se prozor za 
+          izbor modela sa lokalne mašine ili prikazi tabele u kojoj se nalaze njegovi sačuvani modeli. U tabeli se ispisuju podaci koji su korišćeni za treniranje, a sa grafika
+          ispod korisnik može čitati vrednosti i uporediti dva modela." matTooltipPosition="below">
+      Poređenje modela<img src="assets/image/info_icon.png">
+    </button>
   </div>
-<div class="container" id="Container1">
-    <div class="row justify-content-center" style="margin-top: 20px;">
-        <div class="col-md-auto justify-content-center" *ngIf="modeliZaPoredjenje.length>0 && KoloneDef.length>0" [formGroup]="forma" id="tabela">
-            <ag-grid-angular id="agTabela" class="ag-theme-alpine-dark" [rowData]="RedoviPodaci"
-                [columnDefs]="KoloneDef" [pagination]="false" [paginationPageSize]="brojElemenataNaStrani"
-                [rowSelection]="rowSelection" [animateRows]="true" (gridReady)="onGridReady($event)"
-                (gridColumnsChanged)="onGridColumnsChanged($event)" (firstDataRendered)="onFirstDataRendered($event)"
-                [suppressDragLeaveHidesColumns]="true" [defaultColDef]="defaultColDef">
-            </ag-grid-angular>
+</div>
+<div class="row">
+  <div class="col-1">
+    <div class="wrapper-arrow wrapper-left" (click)="previous()">
+      <svg width="18px" height="17px" viewBox="0 0 18 17" version="1.1" xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink">
+        <g id="prev" transform="translate(8.500000, 8.500000) scale(-1, 1) translate(-8.500000, -8.500000)">
+          <polygon class="arrow"
+            points="16.3746667 8.33860465 7.76133333 15.3067621 6.904 14.3175671 14.2906667 8.34246869 6.908 2.42790698 7.76 1.43613596">
+          </polygon>
+          <polygon class="arrow-fixed"
+            points="16.3746667 8.33860465 7.76133333 15.3067621 6.904 14.3175671 14.2906667 8.34246869 6.908 2.42790698 7.76 1.43613596">
+          </polygon>
+          <path
+            d="M-1.48029737e-15,0.56157424 L-1.48029737e-15,16.1929159 L9.708,8.33860465 L-2.66453526e-15,0.56157424 L-1.48029737e-15,0.56157424 Z M1.33333333,3.30246869 L7.62533333,8.34246869 L1.33333333,13.4327013 L1.33333333,3.30246869 L1.33333333,3.30246869 Z">
+          </path>
+        </g>
+      </svg>
+    </div>
+
+  </div>
+  <div class="col-10">
+    <div class="container" id="Container1">
+      <div class="row justify-content-center" style="margin-top: 20px;">
+        <div class="col-md-auto justify-content-center" *ngIf="modeliZaPoredjenje.length>0 && KoloneDef.length>0"
+          [formGroup]="forma" id="tabela">
+          <ag-grid-angular id="agTabela" class="ag-theme-alpine-dark" [rowData]="RedoviPodaci" [columnDefs]="KoloneDef"
+            [pagination]="false" [paginationPageSize]="brojElemenataNaStrani" [rowSelection]="rowSelection"
+            [animateRows]="true" (gridReady)="onGridReady($event)" (gridColumnsChanged)="onGridColumnsChanged($event)"
+            (firstDataRendered)="onFirstDataRendered($event)" [suppressDragLeaveHidesColumns]="true"
+            [defaultColDef]="defaultColDef">
+          </ag-grid-angular>
         </div>
         <div class="col-md-auto justify-content-center" [hidden]="!(modeliZaPoredjenje.length!=2)">
-            <div class="row justify-content-center" style="margin-top: 0px;">
-                <div class="col-md-auto" style="width: fit-content;margin-top: 0px;">
-                    <mat-slide-toggle id="slajderOnlineOffline" [checked]="checked2" (change)="promeniIzborFajlova($event)">{{IzborFajlova}}</mat-slide-toggle>
-                </div>
+          <div class="row justify-content-center" style="margin-top: 0px;">
+            <div class="col-md-auto" style="width: fit-content;margin-top: 0px;">
+              <mat-slide-toggle id="slajderOnlineOffline" [checked]="checked2" (change)="promeniIzborFajlova($event)">
+                {{IzborFajlova}}</mat-slide-toggle>
             </div>
-            <div class="row justify-content-center" style="margin-top:0px;">
-                <div class="col-md-auto justify-content-center" *ngIf="modeliZaPoredjenje.length!=2 && checked2==false">
-                    <ngx-awesome-uploader  id="PoljeZaUnos"
-                    #uploader
-                    [adapter]="adapter"
-                    [fileMaxCount]="2"
-                    [fileMaxSize]="MaksVelicinaFajla"
-                    [uploadType]="'Single'"
-                    [enableCropper]="true"
-                    [cropperOptions]="cropperOptions"
-                    (validationError)="onValidationError($event)"
-                    [fileExtensions]="['json']"
-                    (uploadSuccess)="onUploadSuccess($event)"
-                    (removeSuccess)="onRemoveSuccess($event)"
-                    (fileAdded)="onFileAdded($event)"
-                    [captions]="captions"
-                    [accept]="'.json'">
-                    <div class="dropzoneTemplate">
-                    <div class="d-flex justify-content-center">
-                        <img src="../../assets/image/drag-and-drop-Ikonica.png" class="img-fluid" alt="Responsive image">
-                    </div>
-                    <div class="d-flex justify-content-center" id="KlikniZaIzborDugme">
-                        <button class="dugme2 dugmeAnimacija" mat-raised-button color="primary">
-                        <img src="../../assets/image/klikni za izbor dugme.png" class="img-fluid" alt="Responsive image">
-                        </button>
-                    </div>
-                    </div>
-                    </ngx-awesome-uploader>
+          </div>
+          <div class="row justify-content-center" style="margin-top:0px;">
+            <div class="col-md-auto justify-content-center" *ngIf="modeliZaPoredjenje.length!=2 && checked2==false">
+              <ngx-awesome-uploader id="PoljeZaUnos" #uploader [adapter]="adapter" [fileMaxCount]="2"
+                [fileMaxSize]="MaksVelicinaFajla" [uploadType]="'Single'" [enableCropper]="true"
+                [cropperOptions]="cropperOptions" (validationError)="onValidationError($event)"
+                [fileExtensions]="['json']" (uploadSuccess)="onUploadSuccess($event)"
+                (removeSuccess)="onRemoveSuccess($event)" (fileAdded)="onFileAdded($event)" [captions]="captions"
+                [accept]="'.json'">
+                <div class="dropzoneTemplate">
+                  <div class="d-flex justify-content-center">
+                    <img src="../../assets/image/drag-and-drop-Ikonica.png" class="img-fluid" alt="Responsive image">
+                  </div>
+                  <div class="d-flex justify-content-center" id="KlikniZaIzborDugme">
+                    <button class="dugme2 dugmeAnimacija" mat-raised-button color="primary">
+                      <img src="../../assets/image/klikni za izbor dugme.png" class="img-fluid" alt="Responsive image">
+                    </button>
+                  </div>
                 </div>
-        
-                <div class="col-md-auto justify-content-center" [hidden]="!(modeliZaUlogovanogKorisnika.length>0 && modeliZaPoredjenje.length!=2 && checked2==true)" [formGroup]="forma" id="tabela">
-                    <ag-grid-angular id="agTabela" class="ag-theme-alpine-dark" [rowData]="RedoviPodaci1"
-                        [columnDefs]="KoloneDef1" [pagination]="true" [paginationPageSize]="brojElemenataNaStrani1"
-                        [rowSelection]="rowSelection1" [animateRows]="true" (gridReady)="onGridReady1($event)"
-                        (gridColumnsChanged)="onGridColumnsChanged1($event)"  (rowSelected)="onRowSelected($event)">
-                    </ag-grid-angular>
-                </div>
-                <div class="col-md-auto justify-content-center dugme" [hidden]="!(loginService.isLoggeidin()==false && checked2==true)" style="padding: 5%;" id="prijaviSe">
-                    <p >Niste prijavljeni</p>
-                    <button class="dugme2 dugmeAnimacija dugmeZaPrijavu" mat-raised-button color="primary" (click)="predjiNaPrijavu()"
-                    >Prijavi se</button>
-                </div>
+              </ngx-awesome-uploader>
             </div>
+
+            <div class="col-md-auto justify-content-center"
+              [hidden]="!(modeliZaUlogovanogKorisnika.length>0 && modeliZaPoredjenje.length!=2 && checked2==true)"
+              [formGroup]="forma" id="tabela">
+              <ag-grid-angular id="agTabela" class="ag-theme-alpine-dark" [rowData]="RedoviPodaci1"
+                [columnDefs]="KoloneDef1" [pagination]="true" [paginationPageSize]="brojElemenataNaStrani1"
+                [rowSelection]="rowSelection1" [animateRows]="true" (gridReady)="onGridReady1($event)"
+                (gridColumnsChanged)="onGridColumnsChanged1($event)" (rowSelected)="onRowSelected($event)">
+              </ag-grid-angular>
+            </div>
+            <div class="col-md-auto justify-content-center dugme"
+              [hidden]="!(loginService.isLoggeidin()==false && checked2==true)" style="padding: 5%;" id="prijaviSe">
+              <p>Niste prijavljeni</p>
+              <button class="dugme2 dugmeAnimacija dugmeZaPrijavu" mat-raised-button color="primary"
+                (click)="predjiNaPrijavu()">Prijavi se</button>
+            </div>
+          </div>
         </div>
-        
-        
-    </div>
 
 
-    <div class="row justify-content-center">
+      </div>
+
+
+      <div class="row justify-content-center">
         <div class="col-xxl-9" *ngIf="podaciZaGrafik.length>0">
-            <div class="grafik">
-                <ngx-charts-line-chart 
-                    [results]="podaciZaGrafik"
-                    [legend]="legenda"
-                    [showXAxisLabel]="prikaziXlabel"
-                    [showYAxisLabel]="prikaziYlabel"
-                    [xAxisLabel]="xLabela"
-                    [yAxisLabel]="yLabela"
-                    [yAxis]="yOsa"
-                    [xAxis]="xOsa"
-                    [curve]="linija"
-                    [showGridLines]="PrikaziLinije"
-                    [autoScale]="true"
-                    [animations]="false"
-                >
-                </ngx-charts-line-chart>
-            </div>
-        </div>    
-        <div class="col-xxl-2 m-1" *ngIf="podaciZaGrafik.length>0">
-            <div id="OpcijeZaGrafikDiv">
-            <div class="col-md-auto">
-                <label>Opcije za grafik</label>
-            </div> 
-            <div class="col-md-auto">
-                <mat-slide-toggle [checked]="checked1" (change)="cekiranPrikazGridLinije($event)">Prikazi grid linije</mat-slide-toggle>
-            </div>
-            <div class="col-md-auto">
-                <mat-form-field appearance="fill" class="selektorAktivacioneFje">
-                    <mat-label>Curve tip</mat-label>
-                    <mat-select (selectionChange)="promenaCurve($event)">
-                        <mat-option value="curveBasis">
-                        curveBasis
-                        </mat-option>
-                        <mat-option value="curveLinear">
-                        curveLinear
-                        </mat-option>
-                    </mat-select>
-                    </mat-form-field>
-            </div>
-            </div>
+          <div class="grafik">
+            <ngx-charts-line-chart [results]="podaciZaGrafik" [legend]="legenda" [showXAxisLabel]="prikaziXlabel"
+              [showYAxisLabel]="prikaziYlabel" [xAxisLabel]="xLabela" [yAxisLabel]="yLabela" [yAxis]="yOsa"
+              [xAxis]="xOsa" [curve]="linija" [showGridLines]="PrikaziLinije" [autoScale]="true" [animations]="false">
+            </ngx-charts-line-chart>
+          </div>
         </div>
-        
-    </div>
+        <div class="col-xxl-2 m-1" *ngIf="podaciZaGrafik.length>0">
+          <div id="OpcijeZaGrafikDiv">
+            <div class="col-md-auto">
+              <label>Opcije za grafik</label>
+            </div>
+            <div class="col-md-auto">
+              <mat-slide-toggle [checked]="checked1" (change)="cekiranPrikazGridLinije($event)">Prikazi grid linije
+              </mat-slide-toggle>
+            </div>
+            <div class="col-md-auto">
+              <mat-form-field appearance="fill" class="selektorAktivacioneFje">
+                <mat-label>Curve tip</mat-label>
+                <mat-select (selectionChange)="promenaCurve($event)">
+                  <mat-option value="curveBasis">
+                    curveBasis
+                  </mat-option>
+                  <mat-option value="curveLinear">
+                    curveLinear
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
 
+      </div>
+
+    </div>
+  </div>
+  <div class="col-1"></div>
 </div>

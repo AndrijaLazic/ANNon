@@ -524,6 +524,11 @@ cekiranPrikazGridLinije(value:any){
     sessionStorage.setItem('PoredjenjeModelaKolac',JSON.stringify(this.modeliZaPoredjenje));
     this.route.navigate(['login'])
   }
+
+  previous()
+  {
+    this.route.navigate(["training"]);
+  }
 }
 
 
