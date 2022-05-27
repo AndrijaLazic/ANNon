@@ -102,6 +102,7 @@
     font-weight: 600;
     background-color: white;
     color: black;
+    margin-left: 5px;
 }
 #BrojSkrivenihSlojevaSelektor label{
     text-align: center;
@@ -111,7 +112,7 @@
 }
 
 #brojSkrivenihSlojeva{
-    text-align:center
+    text-align:center;
 }
 
 
@@ -148,4 +149,62 @@
 #Sloj ::ng-deep .wrapper div{
     display: none;
     width: 0px;
+}
+
+
+
+#RedZaBrojac{
+    margin-left: 15%;margin-right: 15%;margin-top: 10px;
+}
+
+@media (max-width:767px) {
+    #RedZaBrojac{
+        margin: 0px;
+    }
+
+
+}
+
+
+
+
+
+
+
+.col-xs-15,
+.col-sm-15,
+.col-md-15,
+.col-lg-15 {
+    position: relative;
+    min-height: 1px;
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+
+.col-xs-15 {
+    width: 18%;
+    float: left;
+    
+}
+@media (min-width: 768px) {
+.col-sm-15 {
+        width: 18%;
+        float: left;
+        
+    }
+}
+@media (min-width: 992px) {
+    .col-md-15 {
+        width: 18%;
+        float: left;
+        
+    }
+}
+@media (min-width: 1300px) {
+    .col-lg-15 {
+        width: 18%;
+        float: left;
+        
+    }
 }

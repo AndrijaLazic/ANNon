@@ -197,9 +197,13 @@
     background-color: #00294c;
     color: white; 
     padding: 5px;  
+    display: inline;
 }
 #brojacStrane input{
     background-color: white;
+    width: fit-content;
+    color: black; 
+    text-align:center
 }
 
 

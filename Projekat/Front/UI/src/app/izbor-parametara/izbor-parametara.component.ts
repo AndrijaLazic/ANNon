@@ -22,7 +22,7 @@ export class IzborParametaraComponent implements OnInit {
   MaxBrojEpoha=300;
   //slajder
   minBrojSkrivenihSlojeva:number=1;
-  maxBrojSkrivenihSlojeva:number=10;
+  maxBrojSkrivenihSlojeva:number=12;
   value: number = 12;
   options: Options = {
     floor: 10,

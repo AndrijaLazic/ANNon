@@ -116,7 +116,7 @@
     <div class="row justify-content-center" style="margin-top: 10px;">
       <div class="col-md-auto" id="BrojSkrivenihSlojevaSelektor">
         <label>Izaberi broj skrivenih slojeva</label>
-        <div class="row justify-content-center" style="margin-left: 20%;margin-right: 20%;margin-top: 10px;">
+        <div class="row justify-content-center" id="RedZaBrojac">
           <div class="col-6">
             <ngx-number-spinner class="Brojac" 
               [value]="trenutniBrojSkrivenihSlojeva.value"
@@ -135,7 +135,7 @@
     </div>
 
     <div class="row justify-content-center" id="TreciRed" formArrayName="ListaSkrivenihSlojeva">
-      <div id="Sloj" class="col-md-2 m-3" *ngFor="let item of ListaSkrivenihSlojeva.controls ;index as i;" >
+      <div id="Sloj" class="col-lg-15 col-md-auto m-1" *ngFor="let item of ListaSkrivenihSlojeva.controls ;index as i;" >
         <div [formGroupName]="i">
           <div class="row justify-content-center">
             <label>Sloj {{i+1}}</label> 
