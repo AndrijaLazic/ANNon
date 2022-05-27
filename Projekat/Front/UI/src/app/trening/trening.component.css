@@ -1,5 +1,7 @@
 #Container1{
-    background-image: linear-gradient(to bottom right, #023E8A, #002e4c);
+    background: #000428;  
+    background: -webkit-linear-gradient(to top, #004e92ed, #000428ed);  
+    background: linear-gradient(to top, #004e92ed, #000428ed);
     padding: 20px;
 }
 
@@ -12,7 +14,7 @@
 }
 
 #OpcijeZaGrafikDiv{
-    background-color: #16355D;
+    background-color: #000428ed;
     margin-left: 5px;
 }
 
@@ -86,3 +88,14 @@
 #tabela ::ng-deep .locked-col {
     background: #002546;
   }
+
+
+
+#grafik{
+    height: 400px;
+    
+    background-color: #000428ed;
+
+    border-radius: 10px;
+}
+

@@ -198,6 +198,11 @@
     color: white; 
     padding: 5px;  
 }
+#brojacStrane input{
+    background-color: white;
+}
+
+
 #tabela ::ng-deep .ag-theme-alpine-dark .ag-root-wrapper{
     background-color: #00294c;
 }
