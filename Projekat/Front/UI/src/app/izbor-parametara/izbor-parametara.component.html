@@ -118,9 +118,9 @@
         <label>Izaberi broj skrivenih slojeva</label>
         <div class="row justify-content-center" style="margin-left: 20%;margin-right: 20%;margin-top: 10px;">
           <div class="col-6">
-            <ngx-number-spinner class="Brojac"
+            <ngx-number-spinner class="Brojac" 
               [value]="trenutniBrojSkrivenihSlojeva.value"
-              (change)="change($event,-1)"
+              (change)="change($event,-2)"
               [min]="minBrojSkrivenihSlojeva"
               [max]="maxBrojSkrivenihSlojeva">
             </ngx-number-spinner>

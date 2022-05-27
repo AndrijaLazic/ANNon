@@ -141,7 +141,7 @@ export class IzborParametaraComponent implements OnInit {
 
 
     change(value: any,id:any): void {
-      var pomBrojSlojeva=parseInt(this.trenutniBrojSkrivenihSlojeva.value)
+      
       // if(value==null){
       //   this.forma2.controls['trenutniBrojSkrivenihSlojeva'].setValue(value);
       //   return
