@@ -27,7 +27,7 @@ namespace Projekat.Ostalo
             return false;
         }
 
-        public static async Task<string> UpisiFajl(IFormFile fajl)
+        public static async Task<string> UpisiFajl(IFormFile fajl,string userID)
         {
             string imeFajla;
             try
@@ -45,7 +45,7 @@ namespace Projekat.Ostalo
                     Directory.CreateDirectory(pathBuilt);
                 }
 
-                var path = Path.Combine(Directory.GetCurrentDirectory(), "Upload\\csvFajlovi", imeFajla);
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "Upload\\csvFajlovi", userID+"_"+imeFajla);
 
                 using (var stream = new FileStream(path, FileMode.Create))
                 {

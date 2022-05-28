@@ -10,6 +10,9 @@
               <mat-option value="regresija" [disabled]="regresija">
                 Regresija
               </mat-option>
+              <mat-option value="binarna_klasifikacija" [disabled]="binarna_klasifikacija">
+                Binarna klasifikacija
+              </mat-option>
               <mat-option value="klasifikacija" [disabled]="klasifikacija">
                 Klasifikacija
               </mat-option>
@@ -23,13 +26,22 @@
             <mat-label>Metrika gubitka</mat-label>
             <mat-select formControlName="MeraGreske">
               <mat-option value="mean_squared_error">
-                srednja kvadratna greška
+                Srednja kvadratna greška
               </mat-option>
               <mat-option value="mean_absolute_percentage_error">
-                srednja apsolutna procentna greška
+                Srednja apsolutna procentna greška
               </mat-option>
               <mat-option value="mean_absolute_error">
-                srednja apsolutna greška
+                Srednja apsolutna greška
+              </mat-option>
+              <mat-option value="mean_squared_logarithmic_error">
+                Srednja kvadratna logaritamska greška
+              </mat-option>
+              <mat-option value="huber">
+                Huber
+              </mat-option>
+              <mat-option value="log_cosh">
+                Log-Cosh
               </mat-option>
             </mat-select>
             <mat-error *ngIf="MeraGreske && MeraGreske.invalid">Izaberite tip problema</mat-error>
@@ -40,32 +52,70 @@
             <mat-label>Dodatna metrika</mat-label>
             <mat-select formControlName="MeraUspeha">
               <mat-option value="mean_squared_error">
-                srednja kvadratna greška
+                Srednja kvadratna greška
               </mat-option>
               <mat-option value="mean_absolute_percentage_error">
-                srednja apsolutna procentna greška
+                Srednja apsolutna procentna greška
               </mat-option>
-              <mat-option value="cosine_similarity">
-                kosinusna sličnost
+              <mat-option value="mean_absolute_error">
+                Srednja apsolutna greška
+              </mat-option>
+              <mat-option value="mean_squared_logarithmic_error">
+                Srednja kvadratna logaritamska greška
+              </mat-option>
+              <mat-option value="log_cosh">
+                Log-Cosh
               </mat-option>
             </mat-select>
             <mat-error *ngIf="MeraUspeha && MeraUspeha.invalid">Izaberite tip problema</mat-error>
           </mat-form-field>
         </div>
 
-        <!-- Ako je klasifikacija -->
-        <div class="col-md-auto" *ngIf="TipProblema.value=='klasifikacija'">
+        <!-- Ako je  binarna klasifikacija -->
+        <div class="col-md-auto" *ngIf="TipProblema.value=='binarna_klasifikacija'">
           <mat-form-field appearance="fill" class="selektorAktivacioneFje">
             <mat-label>Metrika gubitka</mat-label>
             <mat-select formControlName="MeraGreske">
               <mat-option value="binary_crossentropy">
-                binarna krosentropija
+                Binarna krosentropija
               </mat-option>
+              <mat-option value="kl_divergence">
+                K-L divergencija
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="MeraGreske && MeraGreske.invalid">Izaberite tip problema</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-auto" *ngIf="TipProblema.value=='binarna_klasifikacija'">
+          <mat-form-field appearance="fill" class="selektorAktivacioneFje">
+            <mat-label>Dodatna metrika</mat-label>
+            <mat-select formControlName="MeraUspeha">
+              <mat-option value="accuracy">
+                Tačnost
+              </mat-option>
+              <mat-option value="binary_accuracy">
+                Binarna tačnost
+              </mat-option>
+              <mat-option value="binary_crossentropy">
+                Binarna krosentropija
+              </mat-option>
+              <mat-option value="kl_divergence">
+                K-L divergencija
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="MeraUspeha && MeraUspeha.invalid">Izaberite tip problema</mat-error>
+          </mat-form-field>
+        </div>
+        <!-- Ako je  viseklasna klasifikacija -->
+        <div class="col-md-auto" *ngIf="TipProblema.value=='klasifikacija'">
+          <mat-form-field appearance="fill" class="selektorAktivacioneFje">
+            <mat-label>Metrika gubitka</mat-label>
+            <mat-select formControlName="MeraGreske">
               <mat-option value="categorical_crossentropy">
-                kategorijska krosentropija
+                Kategorijska krosentropija
               </mat-option>
-              <mat-option value="poisson">
-                poasonov gubitak
+              <mat-option value="kl_divergence">
+                K-L divergencija
               </mat-option>
             </mat-select>
             <mat-error *ngIf="MeraGreske && MeraGreske.invalid">Izaberite tip problema</mat-error>
@@ -75,14 +125,17 @@
           <mat-form-field appearance="fill" class="selektorAktivacioneFje">
             <mat-label>Dodatna metrika</mat-label>
             <mat-select formControlName="MeraUspeha">
-              <mat-option value="binary_accuracy">
-                binarna tačnost
+              <mat-option value="accuracy">
+                Tačnost
               </mat-option>
               <mat-option value="categorical_accuracy">
-                kategorijska tačnost
+                Kategorijska tačnost
               </mat-option>
-              <mat-option value="top_k_categorical_accuracy">
-                kategorijska tačnost prvih k
+              <mat-option value="categorical_crossentropy">
+                Kategorijska krosentropija
+              </mat-option>
+              <mat-option value="kl_divergence">
+                K-L divergencija
               </mat-option>
             </mat-select>
             <mat-error *ngIf="MeraUspeha && MeraUspeha.invalid">Izaberite tip problema</mat-error>
@@ -106,7 +159,7 @@
       </div>
     </div>
     <div class="row justify-content-center">
-      <div class="col-md-5" style="background: #01315d6e;padding: 10px;">
+      <div class="col-md-5" id="ProcenatPodataka">
         <h4 style="text-align: center;color: white;">Procenat podataka za testiranje</h4>
         <ngx-slider [(value)]="value" [options]="options" id="slajderZaPodatke" formControlName="odnosPodataka"></ngx-slider>
       </div>
@@ -116,26 +169,44 @@
     <div class="row justify-content-center" style="margin-top: 10px;">
       <div class="col-md-auto" id="BrojSkrivenihSlojevaSelektor">
         <label>Izaberi broj skrivenih slojeva</label>
-        <ngx-number-spinner class="Brojac"
-            [value]="trenutniBrojSkrivenihSlojeva"
-            (change)="change($event,-1)"
-            [min]="0"
-            [max]="5">
-        </ngx-number-spinner>
+        <div class="row justify-content-center" id="RedZaBrojac">
+          <div class="col-6">
+            <ngx-number-spinner class="Brojac" 
+              [value]="trenutniBrojSkrivenihSlojeva.value"
+              (change)="change($event,-2)"
+              [min]="minBrojSkrivenihSlojeva"
+              [max]="maxBrojSkrivenihSlojeva">
+            </ngx-number-spinner>
+          </div>
+          <div class="col-6" id="brojSkrivenihSlojeva" [formGroup]="forma2">
+            <input matInput type="number" [value]="trenutniBrojSkrivenihSlojeva.value" formControlName="trenutniBrojSkrivenihSlojeva" [min]="minBrojSkrivenihSlojeva"
+            [max]="maxBrojSkrivenihSlojeva" (ngModelChange)="change($event,-1)">
+          </div>
+        </div>
+        
       </div>
     </div>
 
-    <div class="row justify-content-center gx-5" id="TreciRed" formArrayName="ListaSkrivenihSlojeva">
-      <div class="col-md-2" *ngFor="let item of ListaSkrivenihSlojeva.controls ;index as i;" >
+    <div class="row justify-content-center" id="TreciRed" formArrayName="ListaSkrivenihSlojeva">
+      <div id="Sloj" class="col-lg-15 col-md-auto m-1" *ngFor="let item of ListaSkrivenihSlojeva.controls ;index as i;" >
         <div [formGroupName]="i">
           <div class="row justify-content-center">
-            <label>Broj neurona za {{i+1}}. sloj</label> 
-              <ngx-number-spinner class="Brojac" formControlName="BrojNeurona"
-                    [value]='item.value.BrojNeurona' 
-                    (change)='change($event,i)' 
-                    [min]='0' 
-                    [max]='8'> 
-              </ngx-number-spinner> 
+            <label>Sloj {{i+1}}</label> 
+            <div class="row justify-content-center" style="margin-top: 10px;">
+              <div class="col-6">
+                <ngx-number-spinner class="Brojac" formControlName="BrojNeurona"
+                  [value]="item.value.BrojNeurona"
+                  (change)="change($event,i)"
+                  [min]="0"
+                  [max]="8">
+                </ngx-number-spinner>
+              </div>
+              <div class="col-6" id="brojSkrivenihSlojeva">
+                <input matInput type="number" formControlName="BrojNeurona" [min]="0" [value]="item.value.BrojNeurona"
+                [max]="8" (ngModelChange)="change($event,i)">
+              </div>
+            </div>
+              
           </div>
           <div class="row justify-content-center">
             <div class="col-md-auto">
@@ -143,14 +214,32 @@
                 <mat-label>Aktivaciona funkcija</mat-label>
                 <mat-select formControlName="AktivacionaFunkcija">
                   <mat-option value="relu">
-                    relu
+                    Relu
                   </mat-option>
                   <mat-option value="linear">
-                    linear
+                    Linear
                     </mat-option>
                     <mat-option value="tanh">
-                      tanh
+                      Tanh
                   </mat-option >
+                  <mat-option value="elu">
+                    Elu
+                  </mat-option>
+                  <mat-option value="exponential">
+                    Exponential
+                    </mat-option>
+                    <mat-option value="softmax">
+                      Softmax
+                  </mat-option >
+                  <mat-option value="sigmoid">
+                    Sigmoid
+                    </mat-option>
+                    <mat-option value="softsign">
+                      Softsign
+                  </mat-option >
+                  <mat-option value="selu">
+                    Selu
+                  </mat-option>
                 </mat-select>
               </mat-form-field>
               <!-- {{SelektovanaVrednost}} -->

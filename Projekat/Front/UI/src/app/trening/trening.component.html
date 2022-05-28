@@ -39,18 +39,40 @@
 <div class="row h-auto pb-3 m-0 current-page text-center w-100">
   <div class="col">
       <button id="custom-tooltip" mat-raised-button matTooltip=
-        "Ukoliko želite da isprobate aplikaciju igrANNONica i prođete kroz sve korake treniranja neuronske mreže prvi korak ka tome je unošenje CSV fajla."
+        "Na trenutnoj stranici korisnik ima mogućnost biranja parametara koji su neophodni za treniranje neuronske mreže. Svi parametri su već unapred podešeni kako bi 
+        početnici mogli uspešno trenirati mrežu bez mnogo predznanja, dok napredniji korisnici mogu sami menjati parametre u zavisnosti od njihove potrebe. Klikom na dugme
+        'Počni sa treniranjem' korisnik pokreće proces treniranja neuronske mreže i u realnom vremenu na grafiku ima uvid u proces treniranja. Po završetku treniranja korisnik ima
+        mogućnost da sačuva model(ako ima napravljen nalog može sačuvati model na nalogu, dok ukoliko nema nalog njegov model može preuzeti i čuvati na vlastitoj mašini.).
+        Klikom na dugme 'Uporedi model' korisnik prelazi na sledeći korak."
             matTooltipPosition="below">
         Izbor parametara i treniranje neuronske mreže<img src="assets/image/info_icon.png">
     </button>
   </div>
+
 </div>
+
+<div class="row">
+  
+  <div class="col-1 position-relative">
+    <div class="fixed position-fixed h-100">
+    <div class="wrapper-arrow wrapper-left" (click)="previous()">
+      <svg width="18px" height="17px" viewBox="0 0 18 17" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+          <g id="prev" transform="translate(8.500000, 8.500000) scale(-1, 1) translate(-8.500000, -8.500000)">
+              <polygon class="arrow" points="16.3746667 8.33860465 7.76133333 15.3067621 6.904 14.3175671 14.2906667 8.34246869 6.908 2.42790698 7.76 1.43613596"></polygon>
+              <polygon class="arrow-fixed" points="16.3746667 8.33860465 7.76133333 15.3067621 6.904 14.3175671 14.2906667 8.34246869 6.908 2.42790698 7.76 1.43613596"></polygon>
+              <path d="M-1.48029737e-15,0.56157424 L-1.48029737e-15,16.1929159 L9.708,8.33860465 L-2.66453526e-15,0.56157424 L-1.48029737e-15,0.56157424 Z M1.33333333,3.30246869 L7.62533333,8.34246869 L1.33333333,13.4327013 L1.33333333,3.30246869 L1.33333333,3.30246869 Z"></path>
+          </g>
+      </svg>
+    </div> 
+  </div>
+  </div>
+  <div class="col-10">
 <div class="container" id="Container1">
     <app-izbor-parametara (newItemEvent)="ispis($event)"></app-izbor-parametara>
     
     <div class="container" style="margin-top: 20px;" >
         <div class="row justify-content-center">
-            <div class="col-md-9 m-1" style="height: 400px;background-color: #16355D;">
+            <div class="col-md-9 m-1" id="grafik">
                 <ngx-charts-line-chart
                     [results]="signalR.podaciZaGrafik"
                     [legend]="legenda"
@@ -92,7 +114,7 @@
         <div class="row m-auto w-100 d-flex justify-content-center">
         <div class="col-md-auto justify-content-center" *ngIf="!StanjeDugmeta2" [formGroup]="forma" id="tabela">
           <ag-grid-angular id="agTabela" class="ag-theme-alpine-dark" [rowData]="RedoviPodaci"
-              [columnDefs]="KoloneDef" [pagination]="false" [paginationPageSize]="brojElemenataNaStrani"
+              [columnDefs]="KoloneDef" [pagination]="true" [paginationPageSize]="brojElemenataNaStrani"
               [rowSelection]="rowSelection" [animateRows]="true" (gridReady)="onGridReady($event)"
               (gridColumnsChanged)="onGridColumnsChanged($event)"
               [suppressDragLeaveHidesColumns]="true">
@@ -112,4 +134,9 @@
             </div> 
         </div>
     </div>
+</div>
+</div>
+<div class="col-1 position-relative">
+  
+</div>
 </div>

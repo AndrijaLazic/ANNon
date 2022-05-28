@@ -18,9 +18,12 @@ import { CookieService } from 'ngx-cookie-service';
 export class IzborParametaraComponent implements OnInit {
   klasifikacija:boolean=false;
   regresija:boolean=false;
+  binarna_klasifikacija:boolean=false;
   MinBrojEpoha=5;
   MaxBrojEpoha=300;
   //slajder
+  minBrojSkrivenihSlojeva:number=1;
+  maxBrojSkrivenihSlojeva:number=12;
   value: number = 12;
   options: Options = {
     floor: 10,
@@ -66,8 +69,7 @@ export class IzborParametaraComponent implements OnInit {
     MeraUspeha:new FormControl('',[Validators.required]),
     BrojEpoha:new FormControl(5,[Validators.required,Validators.min(this.MinBrojEpoha),Validators.max(this.MaxBrojEpoha)]),
     odnosPodataka:new FormControl(),
-    ListaSkrivenihSlojeva:this.fb.array([
-    ])
+    ListaSkrivenihSlojeva:this.fb.array([])
   })
   get TipProblema(){
     return this.forma.get('TipProblema');
@@ -85,10 +87,18 @@ export class IzborParametaraComponent implements OnInit {
     return this.forma.get('BrojEpoha');
   }
 
+  
 
+
+  forma2=new FormGroup({
+    trenutniBrojSkrivenihSlojeva:new FormControl(1,[Validators.required])
+  })
+  get trenutniBrojSkrivenihSlojeva(){
+    return this.forma2.get('trenutniBrojSkrivenihSlojeva');
+  }
 
   constructor(private fb: FormBuilder,private cookie:CookieService) { }
-  trenutniBrojSkrivenihSlojeva=0;
+  
 
   
 
@@ -107,20 +117,43 @@ export class IzborParametaraComponent implements OnInit {
                 odnosPodataka:25
               });
               this.klasifikacija=true;
+              this.binarna_klasifikacija=true;
           }
           else
           {
-            this.forma.patchValue({
-              TipProblema:'klasifikacija',
-              MeraGreske:'binary_crossentropy',
-              MeraUspeha:'binary_accuracy',
-              odnosPodataka:25
-            });
-            this.regresija=true;
+            let pom2=JSON.parse(localStorage.getItem("statistic"))
+            for(let j=0;j<pom2['kategoricke_kolone'].length;j++)
+            {
+              if(pom2["kategoricke_kolone"][j]["ime_kolone"]==pom["izlazna"])
+              {
+                if(pom2["kategoricke_kolone"][j]["broj_jedinstvenih_polja"]>2)
+                {
+                  this.forma.patchValue({
+                    TipProblema:'klasifikacija',
+                    MeraGreske:'categorical_crossentropy',
+                    MeraUspeha:'accuracy',
+                    odnosPodataka:25
+                  });
+                  this.regresija=true;
+                  this.binarna_klasifikacija=true;
+                }
+                else{
+                  this.forma.patchValue({
+                    TipProblema:'binarna_klasifikacija',
+                    MeraGreske:'binary_crossentropy',
+                    MeraUspeha:'accuracy',
+                    odnosPodataka:25
+                  });
+                  this.regresija=true;
+                  this.klasifikacija=true;
+                }
+              }
+            }
+            
           }
-          this.trenutniBrojSkrivenihSlojeva=1;
+          this.forma2.controls['trenutniBrojSkrivenihSlojeva'].setValue(1);
           this.ListaSkrivenihSlojeva.push(this.fb.group({
-            BrojNeurona: [1],
+            BrojNeurona: [1,[Validators.required,Validators.min(0),Validators.max(8)]],
             AktivacionaFunkcija: ['relu', Validators.required]
         }))
           return;
@@ -132,35 +165,100 @@ export class IzborParametaraComponent implements OnInit {
 
 
     change(value: any,id:any): void {
+      
+      // if(value==null){
+      //   this.forma2.controls['trenutniBrojSkrivenihSlojeva'].setValue(value);
+      //   return
+      // }
+
+      value=parseInt(value);
       interface SkriveniSloj{
         brojNeurona:number;
         aktivacionaFunkcija:string;
       }
       
+      if(id==-2){
+        this.forma2.controls['trenutniBrojSkrivenihSlojeva'].setValue(value);
+        return;
+      }
+
+      
       if(id==-1){
-        if(value>this.trenutniBrojSkrivenihSlojeva){
-          this.trenutniBrojSkrivenihSlojeva=value;
+        if(value>this.maxBrojSkrivenihSlojeva){
+          value=this.maxBrojSkrivenihSlojeva;
+          this.forma2.controls['trenutniBrojSkrivenihSlojeva'].setValue(value);
+        }
+        else if(value<this.minBrojSkrivenihSlojeva){
+          value=this.minBrojSkrivenihSlojeva;
+          this.forma2.controls['trenutniBrojSkrivenihSlojeva'].setValue(value);
+        }
+
+
+        if(value>this.ListaSkrivenihSlojeva.length){
           var pom = {} as SkriveniSloj;
           pom.brojNeurona=1;
+          for(let i=this.ListaSkrivenihSlojeva.length;i<value;i++){
+            this.ListaSkrivenihSlojeva.push(this.fb.group({
+              BrojNeurona: [1,[Validators.required,Validators.min(0),Validators.max(8)]],
+              AktivacionaFunkcija: ['relu', Validators.required]
+            }))
+          }
           
-          this.ListaSkrivenihSlojeva.push(this.fb.group({
-                                                                    BrojNeurona: [1],
-                                                                    AktivacionaFunkcija: ['relu', Validators.required]
-                                                                }))
         }
-        else{
-          this.trenutniBrojSkrivenihSlojeva=value;
+        else if(value<this.ListaSkrivenihSlojeva.length){
           
-          this.ListaSkrivenihSlojeva.removeAt(this.ListaSkrivenihSlojeva.length-1);
+          for(let i=this.ListaSkrivenihSlojeva.length;i>value;i--){
+            this.ListaSkrivenihSlojeva.removeAt(this.ListaSkrivenihSlojeva.length-1);
+          }
+          
         }
         
         
         return;
       }
+      
+
+
+      //za pojedinacne selektore
       if(value==0){
         
         this.ListaSkrivenihSlojeva.removeAt(id);
-        this.trenutniBrojSkrivenihSlojeva=this.trenutniBrojSkrivenihSlojeva-1;
+        this.forma2.controls['trenutniBrojSkrivenihSlojeva'].setValue(this.ListaSkrivenihSlojeva.length);
+        return;
+      }
+
+      if(id>=0){
+        
+        if(!value){
+          const particularsList = this.ListaSkrivenihSlojeva;
+          const particularGroup = particularsList.controls[id] as FormGroup;
+
+          const quantity = particularGroup.get('BrojNeurona');
+          quantity?.setValue(1);
+          
+          return;
+        }
+      }
+
+
+      
+
+      if(value>8){
+        value=8;
+        const particularsList = this.ListaSkrivenihSlojeva;
+        const particularGroup = particularsList.controls[id] as FormGroup;
+
+        const quantity = particularGroup.get('BrojNeurona');
+        quantity?.setValue(8);
+        
+      }
+      else if(value<0){
+        value=1;
+        const particularsList = this.ListaSkrivenihSlojeva;
+        const particularGroup = particularsList.controls[id] as FormGroup;
+
+        const quantity = particularGroup.get('BrojNeurona');
+        quantity?.setValue(1);
       }
       
       

@@ -26,6 +26,12 @@
 ::ng-deep #BrojSkrivenihSlojevaSelektor{
     margin: auto;
     color: white;  
+    padding: 10px;
+    background: #0052D4; 
+    background: -webkit-linear-gradient(to right, #6FB1FC, #4364F7, #0052D4);  
+    background: linear-gradient(to right, #391de3, #2322b4, #0052D4);
+
+    border-radius: 10px;
 }
 #TreciRed{
     margin-top: 10px;
@@ -42,4 +48,163 @@
 
 ::ng-deep #selektorBrojEpoha mat-form-field{
     background-color: white;
+}
+
+
+
+#Sloj label{
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 500;
+    
+}
+
+#Sloj{
+    background: #0052D4; 
+    background: -webkit-linear-gradient(to right, #6FB1FC, #4364F7, #0052D4);  
+    background: linear-gradient(to right, #391de3, #2322b4, #0052D4);
+
+    border-radius: 10px;
+}
+
+
+#ProcenatPodataka{
+    padding: 10px;
+    border-radius: 10px 10px 0px 0px;
+    background: #0052D4; 
+    background: -webkit-linear-gradient(to right, #6FB1FC, #4364F7, #0052D4);  
+    background: linear-gradient(to right, #391de3, #2322b4, #0052D4);
+}
+
+
+#BrojSkrivenihSlojevaSelektor ::ng-deep .wrapper.horizontal-wrapper{
+    width: fit-content;
+    margin: auto;
+}
+
+#BrojSkrivenihSlojevaSelektor ::ng-deep .wrapper div{
+    display: none;
+    width: 0px;
+}
+
+
+#BrojSkrivenihSlojevaSelektor label{
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 500;
+    
+}
+
+#brojSkrivenihSlojeva input{
+    width: 80%;
+    height: 100%;
+    text-align: center; 
+    font-weight: 600;
+    background-color: white;
+    color: black;
+    margin-left: 5px;
+}
+#BrojSkrivenihSlojevaSelektor label{
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 500;
+    width: 100%;
+}
+
+#brojSkrivenihSlojeva{
+    text-align:center;
+}
+
+
+#BrojSkrivenihSlojevaSelektor input::-webkit-outer-spin-button,
+#BrojSkrivenihSlojevaSelektor input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+#BrojSkrivenihSlojevaSelektor input[type=number] {
+  -moz-appearance: textfield;
+}
+
+
+
+#Sloj input::-webkit-outer-spin-button,
+#Sloj input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+#Sloj input[type=number] {
+  -moz-appearance: textfield;
+}
+
+
+#Sloj ::ng-deep .wrapper.horizontal-wrapper{
+    width: fit-content;
+    margin: auto;
+}
+
+#Sloj ::ng-deep .wrapper div{
+    display: none;
+    width: 0px;
+}
+
+
+
+#RedZaBrojac{
+    margin-left: 15%;margin-right: 15%;margin-top: 10px;
+}
+
+@media (max-width:767px) {
+    #RedZaBrojac{
+        margin: 0px;
+    }
+
+
+}
+
+
+
+
+
+
+
+.col-xs-15,
+.col-sm-15,
+.col-md-15,
+.col-lg-15 {
+    position: relative;
+    min-height: 1px;
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+
+.col-xs-15 {
+    width: 18%;
+    float: left;
+    
+}
+@media (min-width: 768px) {
+.col-sm-15 {
+        width: 18%;
+        float: left;
+        
+    }
+}
+@media (min-width: 992px) {
+    .col-md-15 {
+        width: 18%;
+        float: left;
+        
+    }
+}
+@media (min-width: 1300px) {
+    .col-lg-15 {
+        width: 18%;
+        float: left;
+        
+    }
 }

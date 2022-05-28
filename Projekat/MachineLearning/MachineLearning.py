@@ -8,18 +8,18 @@ from requests.models import Response
 from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect,HTTPException
 from fastapi.responses import HTMLResponse
 from fastapi import Body
-import statistics as stats
 import pandas as pd
 from pydantic import BaseModel, Json
 from requests.api import request
 from asgiref.sync import sync_to_async
 import requests
-import statistics as stats
+from statistika import getStats, getCorrelationMatrix
 from mreza import *
 import model_handling
 #vazno!!!!!!
 #pokretanje aplikacije komanda
 #uvicorn MachineLearning:app --reload
+
 
 
 class UploadedFile(BaseModel):
@@ -126,7 +126,7 @@ async def update_item(
         raise HTTPException(status_code=404, detail="Fajl ne postoji")
     
     await manager.addFilePath(model.userID,Konfiguracija['KonfiguracijaServera']['backURL']+'api/FajlKontroler/DajFajl?NazivFajla='+model.FileName+'&imeKorisnika=Korisnik')
-    Statistic=stats.getStats(fajl)
+    Statistic= getStats(fajl)
     return ResponseModel(0,Statistic).toJSON()
 
 @app.websocket("/test/{client_id}")
@@ -154,8 +154,8 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str):
                 kolone)
             if hiperparametri.tip_problema == 'regresija':
                 model,train,val,test=await sync_to_async(make_regression_model,thread_sensitive=False)(fajl,hiperparametri)
-            elif hiperparametri.tip_problema == 'klasifikacija':
-                model,train,val,test=make_classification_model(fajl,hiperparametri)
+            else:
+                model,train,val,test=await sync_to_async(make_classification_model,thread_sensitive=False)(fajl,hiperparametri)
             await manager.addTestSet(client_id,test,hiperparametri.izlazna_kolona)
             history=await sync_to_async(train_model,thread_sensitive=False)(model,train,val,client_id,hiperparametri.broj_epoha)
             await manager.addHistory(client_id,history)
@@ -217,6 +217,22 @@ async def getParams(req:ModelRequest):
         return ResponseModel(0,params)
     except Exception as e:
         print(e)
-        return ResponseModel(1,"Greska pri vracanju parametara")        
+        return ResponseModel(1,"Greska pri vracanju parametara")  
+
+@app.post("/getCorrMatrix")
+async def getCorrMatrix(req:Request):
+    try:
+        response=await req.json()
+        id=response["sessionID"]
+        s=requests.get(await manager.getFilePath(id),verify=False).content
+        fajl=pd.read_csv(io.StringIO(s.decode('utf-8')),sep='|')
+        if(fajl.empty):
+            raise HTTPException(status_code=404, detail="Fajl ne postoji") 
+        matrica= getCorrelationMatrix(fajl)
+        return ResponseModel(0,matrica).toJSON()
+    except Exception as e:
+        return ResponseModel(1,e.__str__())
+    
+
 
     

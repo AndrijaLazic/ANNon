@@ -61,30 +61,26 @@ namespace Projekat.Clients
             string imeFajla;
             try
             {
-                if (uploadedFile.Length > 0)
-                {
-                    if (RadSaFajlovima.ProveriAkoJeCsvFajl(uploadedFile))
-                    {
-                        if ((imeFajla = await RadSaFajlovima.UpisiFajl(uploadedFile))!=null)
-                        {
-                            DataModel dataModel = new DataModel
-                            {
-                                userID = userID,
-                                FileName = imeFajla,
-                                Putanja = "put",
-                                VremeUploada= DateTime.Now.ToString("h:mm:ss tt")
-                        };
-                            _context.Files.Add(dataModel);
-                            await _context.SaveChangesAsync();
-                            return Ok(true);
-                        }
-                        return BadRequest("Greška pri čuvanju fajla");
-                    }
-                    return BadRequest("Uneti fajl nije u CSV formatu");
-
-                }
-                else
+                if (uploadedFile.Length <= 0)
                     return BadRequest("Fajl ne postoji");
+                
+                if (!RadSaFajlovima.ProveriAkoJeCsvFajl(uploadedFile))
+                    return BadRequest("Uneti fajl nije u CSV formatu"); 
+                if ((imeFajla = await RadSaFajlovima.UpisiFajl(uploadedFile,userID))==null)
+                    return BadRequest("Greška pri čuvanju fajla");  
+                     
+                DataModel dataModel = new DataModel
+                {
+                    userID = userID,
+                    FileName = userID+"_"+imeFajla,
+                    Putanja = "put",
+                    VremeUploada= DateTime.Now.ToString("h:mm:ss tt")
+                    };
+                _context.Files.Add(dataModel);
+                await _context.SaveChangesAsync();
+                return Ok(true);
+                        
+                        
             }
             catch (Exception ex)
             {
@@ -113,7 +109,7 @@ namespace Projekat.Clients
                     var jsonObject = JsonConvert.SerializeObject(model);
                     var answer = await _iCustomClient.sendData(jsonObject);
                     var statistic = JsonConvert.DeserializeObject<ResponseModel>(answer);
-                    Console.WriteLine(statistic);
+
                     if (statistic.Status == 1)
                     {
                         _context.Entry(model).State = EntityState.Deleted;
@@ -149,11 +145,31 @@ namespace Projekat.Clients
                 return BadRequest(jsonToObject.Content);
 
             return Ok(jsonToObject.Content);
-                     
 
+        }
+        [HttpPost("getCorrelationMatrix")]
+        public async Task<ActionResult<string>> GetCorrelationMatrix([FromForm] string sessionID)
+        {
+            try
+            {
+                var obj = new {sessionID = sessionID };
+                string dataToSend = JsonConvert.SerializeObject(obj);
+                var response = await _iCustomClient.GetCorrelationMatrix(dataToSend);
 
+                ResponseModel answer = JsonConvert.DeserializeObject<ResponseModel>(response);
+                if (answer.Status == 1)
+                    return BadRequest("Greska");
 
+                //string sendToFront = JsonConvert.SerializeObject(answer.Content);
 
+                return Ok(answer.Content);
+                
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
         }
 
 

@@ -33,7 +33,7 @@ const routes: Routes = [
       component:MojNalogComponent
     },
   {
-    path:'igrannonica',component:PocetnastranaComponent
+    path:'fileUpload',component:PocetnastranaComponent
   },
   {
     path:'sacuvaniModeli',component:SacuvaniModeliComponent
