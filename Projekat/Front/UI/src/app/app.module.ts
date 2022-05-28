@@ -49,6 +49,8 @@ import { MojNalogComponent } from './moj-nalog/moj-nalog.component';
 import { PoredjenjeModelaComponent } from './poredjenje-modela/poredjenje-modela.component';
 
 import {MatTooltipModule} from '@angular/material/tooltip';
+import { SacuvaniModeliComponent } from './sacuvani-modeli/sacuvani-modeli.component';
+import { MycellrenderComponent } from './sacuvani-modeli/mycellrender/mycellrender.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -68,7 +70,9 @@ import {MatTooltipModule} from '@angular/material/tooltip';
     ClickOutsideDirective,
     TeamComponent,
     MojNalogComponent,
-    PoredjenjeModelaComponent
+    PoredjenjeModelaComponent,
+    SacuvaniModeliComponent,
+    MycellrenderComponent
     
   ],
   imports: [

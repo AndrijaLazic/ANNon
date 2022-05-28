@@ -17,6 +17,7 @@ import { PocetnatestComponent } from './pocetnatest/pocetnatest.component';
 import { TeamComponent } from './team/team.component';
 import { MojNalogComponent } from './moj-nalog/moj-nalog.component';
 import { PoredjenjeModelaComponent } from './poredjenje-modela/poredjenje-modela.component';
+import { SacuvaniModeliComponent } from './sacuvani-modeli/sacuvani-modeli.component';
 const routes: Routes = [
   {
     path:'',
@@ -33,6 +34,9 @@ const routes: Routes = [
     },
   {
     path:'igrannonica',component:PocetnastranaComponent
+  },
+  {
+    path:'sacuvaniModeli',component:SacuvaniModeliComponent
   },
   {
     path:'success-login',component:LoginParentComponent,canActivate:[AuthGuard]
