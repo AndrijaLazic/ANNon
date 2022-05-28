@@ -195,8 +195,12 @@ def make_model(all_inputs,encoded_features,layers:List[Sloj],loss_metric,success
   values = [initial_learning_rate, 0.5*initial_learning_rate, 0.1*initial_learning_rate]
   lr_schedule = tf.keras.optimizers.schedules.PiecewiseConstantDecay(
       boundaries, values)
-
-  model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=lr_schedule),
+  #optimizer=tf.keras.optimizers.Adam(learning_rate=lr_schedule)
+  if loss_metric=="kl_divergence" or success_metric=="kl_divergence":
+    opt="sgd"
+  else:
+    opt="adam"
+  model.compile(optimizer=opt,
                 loss=loss_metric,
                 metrics=success_metric)
   return model

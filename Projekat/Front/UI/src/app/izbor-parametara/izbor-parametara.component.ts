@@ -18,6 +18,7 @@ import { CookieService } from 'ngx-cookie-service';
 export class IzborParametaraComponent implements OnInit {
   klasifikacija:boolean=false;
   regresija:boolean=false;
+  binarna_klasifikacija:boolean=false;
   MinBrojEpoha=5;
   MaxBrojEpoha=300;
   //slajder
@@ -116,16 +117,39 @@ export class IzborParametaraComponent implements OnInit {
                 odnosPodataka:25
               });
               this.klasifikacija=true;
+              this.binarna_klasifikacija=true;
           }
           else
           {
-            this.forma.patchValue({
-              TipProblema:'klasifikacija',
-              MeraGreske:'binary_crossentropy',
-              MeraUspeha:'binary_accuracy',
-              odnosPodataka:25
-            });
-            this.regresija=true;
+            let pom2=JSON.parse(localStorage.getItem("statistic"))
+            for(let j=0;j<pom2['kategoricke_kolone'].length;j++)
+            {
+              if(pom2["kategoricke_kolone"][j]["ime_kolone"]==pom["izlazna"])
+              {
+                if(pom2["kategoricke_kolone"][j]["broj_jedinstvenih_polja"]>2)
+                {
+                  this.forma.patchValue({
+                    TipProblema:'klasifikacija',
+                    MeraGreske:'categorical_crossentropy',
+                    MeraUspeha:'accuracy',
+                    odnosPodataka:25
+                  });
+                  this.regresija=true;
+                  this.binarna_klasifikacija=true;
+                }
+                else{
+                  this.forma.patchValue({
+                    TipProblema:'binarna_klasifikacija',
+                    MeraGreske:'binary_crossentropy',
+                    MeraUspeha:'accuracy',
+                    odnosPodataka:25
+                  });
+                  this.regresija=true;
+                  this.klasifikacija=true;
+                }
+              }
+            }
+            
           }
           this.forma2.controls['trenutniBrojSkrivenihSlojeva'].setValue(1);
           this.ListaSkrivenihSlojeva.push(this.fb.group({
