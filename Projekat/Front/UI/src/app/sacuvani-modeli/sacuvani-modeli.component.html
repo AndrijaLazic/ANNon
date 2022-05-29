@@ -1,0 +1,33 @@
+<div>
+<app-mycell-render (event1)="pomocnaFunkcija($event)"></app-mycell-render>
+
+</div>
+
+
+<ng-template #content2 let-modal class="modal-content">
+    <div class="modal-header">
+      <h4 class="modal-title">Obaveštenje</h4>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click');ispisTabele1()"></button>
+    </div>
+    <div class="modal-body">
+      <p>Da li ste sigurni da želite da obrišete odabrani model?</p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" id="preuzmiModel" class="dugme dugmeAnimacija" mat-raised-button color="primary" (click)="modal.close('Close click');">DA</button>
+      <button type="button" class="dugme dugmeAnimacija" mat-raised-button color="primary" (click)="modal.close('Close click');ispisTabele1()">NE</button>
+    </div>
+  </ng-template> 
+
+<div class="col-md-auto justify-content-center" [hidden]="modeliZaUlogovanogKorisnika.length==0" [formGroup]="forma" id="tabela">
+    <ag-grid-angular id="agTabela" class="ag-theme-alpine-dark" [rowData]="RedoviPodaci1"
+        [columnDefs]="KoloneDef1" [pagination]="true" [paginationPageSize]="brojElemenataNaStrani1"
+        [rowSelection]="rowSelection1" [animateRows]="true" (gridReady)="onGridReady1($event)"
+        (gridColumnsChanged)="onGridColumnsChanged1($event)">
+    </ag-grid-angular>
+</div>
+
+<div id="nemaModel" [hidden]="!(modeliZaUlogovanogKorisnika.length==0)">
+  <h1>Nemate nijedan sačuvan model na nalogu!</h1>
+</div>
+
+
