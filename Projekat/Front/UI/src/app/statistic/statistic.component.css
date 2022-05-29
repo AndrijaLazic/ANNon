@@ -187,14 +187,15 @@ input[type=checkbox] {
 #dialog{
   position: relative;
   float: right;
-  max-width: 10%;
   max-height: 10%;
   text-align: center;
+  right: 0%;
 }
 #korelText{
   position: relative;
   float: left;
   font-size: 20px;
+  font: bold;
 }
 #napusti{
   max-width: 14%;
@@ -206,5 +207,11 @@ input[type=checkbox] {
   max-height: 90%;
   width: 100%;
 }
+::ng-deep .modal-content{
+  
+  max-width: 100%;
+}
+
+
 
 

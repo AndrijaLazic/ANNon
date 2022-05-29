@@ -1,4 +1,4 @@
-
+<div>
 <ng-template #content2 let-modal class="modal-content">
                         <div class="modal-body table-responsive">
                           <table id="korel" class="table m-0 table-condensed">
@@ -16,12 +16,16 @@
                                       {{cell}}
                                     </td>
                                 </tr>
+
+                                
                             </tbody>
                             
                         </table>
-                        <button class="dugme prikaz" id="napusti" mat-raised-button color="primary" (click)="modal.close('Close click')">Napusti</button>
+                        
+                        <button class="dugme dugmeAnimacija" id="napusti" mat-raised-button color="primary" (click)="modal.close('Close click')">Napusti</button>
                         </div>
 </ng-template> 
+
 
 
   
@@ -169,15 +173,15 @@
       
     </div>
   </div>
-  <div class="col-lg-4 col-md-5 col-sm-12 correlation-matrix table-responsive kortable" [hidden]="!VidljivostKorMatrice"> <!-- -->
+  <div class="col-lg-4 col-md-5 col-sm-12 correlation-matrix table-responsive kortable" [hidden]="!VidljivostKorMatrice"> <!--  -->
     <p id="korelText">Korelaciona matrica</p>
-    <button class="dugme prikaz" mat-raised-button color="primary" id="dialog"  (click)="openModalDialogCustomClass(content2)" >Prikaži</button>
+    <button class="dugme dugmeAnimacija" id="dialog" mat-raised-button color="primary" (click)="openXl(content2)" >Prikaži celu</button>
+    
     <table id="korel2" class="table m-0 table-condensed ">
       <tbody>
           <tr>
             <th> </th>
             <th class="header-cell" >{{headers[0]}}</th>
-            <th class="header-cell" >{{headers[1]}}</th>
             
           </tr>
           <tr *ngFor="let row of matricaZaKor;index as i">
@@ -187,10 +191,9 @@
             <td  [ngStyle]="{'background-color': dajBoju(matricaZaKor[i][0])}">
               {{matricaZaKor[i][0]}}
             </td>
-            <td  [ngStyle]="{'background-color': dajBoju(matricaZaKor[i][1])}">
-              {{matricaZaKor[i][1]}}
-            </td>
         </tr>
+        
+        
       </tbody>
       
   </table>
@@ -203,7 +206,7 @@
                     <tr>
                         
                         <th>Naziv kolone</th>
-                        <th>Tip podataka</th>
+                        <th colspan="2" style="text-align:center">Tip podataka</th>
                         <th>Broj praznih polja</th>
                         <th>Ulazne kolone:</th>
                         <th>Izlazna kolona:</th>
@@ -213,8 +216,8 @@
                 <tbody *ngFor="let pr of prazna;let tip of kategorije;let item of kolone;index as i">
                     <tr>
                         <td class="veciFont" style="color:white">{{kolone[i]}}</td>
-                        <td>
-                          <div class="col-md-auto" >
+                        <td  *ngIf="kategorije[i]=='Numericki'">
+                          <div class="col-md-auto" id="tip">
                               <mat-form-field appearance="fill" class="TipEnkodiranjaSelektor2">
                                 <mat-select  id="TipEnkodiranjaSelektor" [(value)]="kategorije[i]" placeholder="Mode">
                                   <mat-option  value="Numericki">
@@ -227,22 +230,41 @@
                               </mat-form-field>
                               <!-- {{SelektovanaVrednost}} -->
                             </div>
-                            <div class="col-md-auto" *ngIf="kategorije[i]=='Kategorijski'">
-                              <mat-form-field appearance="fill" class="TipEnkodiranjaSelektor2" >
-                                <mat-select  id="TipEnkodiranjaSelektor" [(value)]="selected[i]" >
-                                  <mat-option value="one_hot">
-                                      OneHot
+                          </td>
+                          <td  *ngIf="kategorije[i]=='Kategorijski'">
+                            <div class="col-md-auto">
+                              <mat-form-field appearance="fill" class="TipEnkodiranjaSelektor2">
+                                <mat-select  id="TipEnkodiranjaSelektor" [(value)]="kategorije[i]" placeholder="Mode">
+                                  <mat-option  value="Numericki">
+                                      Numerički
                                   </mat-option>
-                                  <mat-option  value="multi_hot">
-                                      MultiHot
+                                  <mat-option value="Kategorijski">
+                                    Kategorijski
                                     </mat-option>
-                                    <mat-option  value="count">
-                                      Count
-                                  </mat-option >
                                 </mat-select>
                               </mat-form-field>
                               <!-- {{SelektovanaVrednost}} -->
                             </div>
+                            
+                      </td>
+                      <td>
+                        <div class="col-md-auto" id="encode" *ngIf="kategorije[i]=='Kategorijski'">
+                          <mat-form-field appearance="fill" class="TipEnkodiranjaSelektor2" >
+                            <mat-select  id="TipEnkodiranjaSelektor" [(value)]="selected[i]" >
+                              <mat-option value="one_hot">
+                                  OneHot
+                              </mat-option>
+                              <mat-option  value="multi_hot">
+                                  MultiHot
+                                </mat-option>
+                                <mat-option  value="count">
+                                  Count
+                              </mat-option >
+                            </mat-select>
+                          </mat-form-field>
+                          <!-- {{SelektovanaVrednost}} -->
+                        </div>
+
                       </td>
                         <td class="veciFont" style="color:white">{{prazna[i]}}</td>
                         <td><mat-slide-toggle id={{i}} (change)="dajUlazne(i,$event)" [checked]="cekiranaUlazna[i]" ></mat-slide-toggle></td>

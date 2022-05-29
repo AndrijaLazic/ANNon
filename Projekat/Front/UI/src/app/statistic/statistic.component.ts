@@ -463,11 +463,7 @@ ngAfterViewInit(): void {
   }
   previous()
   {
-    if(window.confirm('Da li ste sigurni da zelite da se vratite na prethodnu stranu?'))
-    {
-        this.route.navigate(['./fileUpload']);
-    }
-    
+    this.route.navigate(['./fileUpload']);  
   }
   next()
   {
@@ -602,6 +598,11 @@ ngAfterViewInit(): void {
     openModalDialogCustomClass(content) {
         this.modalService.open(content);
       }
+
+      openXl(content) {
+        this.modalService.open(content, { size:'xl',scrollable:true});
+      }
+      
 
 
     dajUlazne(event:any,event2:any){ 
