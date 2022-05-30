@@ -106,73 +106,122 @@ export class IzborParametaraComponent implements OnInit {
     return this.forma2.get('trenutniBrojSkrivenihSlojeva');
   }
 
-  constructor(private fb: FormBuilder,private cookie:CookieService) { }
+  constructor(private fb: FormBuilder,private cookie:CookieService,private cookieService:CookieService) {
+    
+   }
   
 
   
 
     ngOnInit(){ 
       let pom=JSON.parse(this.cookie.get('params'));
-      this.forma.controls["StopaUcenja"].setValue("0.001");
-      this.forma.controls["VelicinaBatch"].setValue("32");
-      for(let i=0;i<pom['nizIzabranihIzlaza'].length;i++)
+      this.Provera();
+      //napraviti Funkciju!!
+      if(localStorage.getItem('izabrani-parametri-za-istreniran-model'))
       {
-        if(pom['nizIzabranihIzlaza'][i])
+        let pom1=JSON.parse(localStorage.getItem('izabrani-parametri-za-istreniran-model'))
+        this.forma.controls["StopaUcenja"].setValue(pom1['StopaUcenja']);
+        this.forma.controls["VelicinaBatch"].setValue(pom1['VelicinaBatch']);
+        if(pom1['TipProblema']=="regresija")
         {
-          if(pom['kategorije'][i]=="Numericki")
+            this.novaMeraGreskeEvent.emit("Srednja kvadratna greška");
+            this.klasifikacija=true;
+            this.binarna_klasifikacija=true;
+        }
+        if(pom1['TipProblema']=="klasifikacija")
+        {
+            this.novaMeraGreskeEvent.emit("Kategorijska krosentropija");
+            this.regresija=true;
+            this.binarna_klasifikacija=true;
+        }
+        if(pom1['TipProblema']=="binarna_klasifikacija")
+        {
+            this.novaMeraGreskeEvent.emit("Binarna krosentropija");
+            this.regresija=true;
+            this.klasifikacija=true;
+        }
+        this.forma.patchValue({
+          TipProblema:pom1['TipProblema'],
+          MeraGreske:pom1['MeraGreske'],
+          MeraUspeha:pom1['MeraUspeha'],
+          odnosPodataka:pom1['odnosPodataka'],
+          BrojEpoha:pom1['BrojEpoha']
+        });
+        this.forma2.controls['trenutniBrojSkrivenihSlojeva'].setValue(pom1['BrojSlojeva']);
+        for(let i=0;i<pom1['ListaSkrivenihSlojeva'].length;i++)
+        {
+          this.ListaSkrivenihSlojeva.push(this.fb.group({
+            BrojNeurona: [pom1['ListaSkrivenihSlojeva'][i]['BrojNeurona'],[Validators.required,Validators.min(0),Validators.max(8)]],
+            AktivacionaFunkcija: [pom1['ListaSkrivenihSlojeva'][i]['AktivacionaFunkcija'], Validators.required]
+        }))
+        }
+        
+      }
+
+      else
+      {
+        this.forma.controls["StopaUcenja"].setValue("0.001");
+        this.forma.controls["VelicinaBatch"].setValue("32");
+        for(let i=0;i<pom['nizIzabranihIzlaza'].length;i++)
+        {
+          if(pom['nizIzabranihIzlaza'][i])
           {
-              this.forma.patchValue({
-                TipProblema:'regresija',
-                MeraGreske:'mean_squared_error',
-                MeraUspeha:'mean_squared_error',
-                odnosPodataka:25
-              });
-              this.novaMeraGreskeEvent.emit("Srednja kvadratna greška");
-              this.klasifikacija=true;
-              this.binarna_klasifikacija=true;
-          }
-          else
-          {
-            let pom2=JSON.parse(localStorage.getItem("statistic"))
-            for(let j=0;j<pom2['kategoricke_kolone'].length;j++)
+            if(pom['kategorije'][i]=="Numericki")
             {
-              if(pom2["kategoricke_kolone"][j]["ime_kolone"]==pom["izlazna"])
+                this.forma.patchValue({
+                  TipProblema:'regresija',
+                  MeraGreske:'mean_squared_error',
+                  MeraUspeha:'mean_squared_error',
+                  odnosPodataka:25
+                });
+                this.novaMeraGreskeEvent.emit("Srednja kvadratna greška");
+                this.klasifikacija=true;
+                this.binarna_klasifikacija=true;
+            }
+            else
+            {
+              let pom2=JSON.parse(localStorage.getItem("statistic"))
+              for(let j=0;j<pom2['kategoricke_kolone'].length;j++)
               {
-                if(pom2["kategoricke_kolone"][j]["broj_jedinstvenih_polja"]>2)
+                if(pom2["kategoricke_kolone"][j]["ime_kolone"]==pom["izlazna"])
                 {
-                  this.forma.patchValue({
-                    TipProblema:'klasifikacija',
-                    MeraGreske:'categorical_crossentropy',
-                    MeraUspeha:'accuracy',
-                    odnosPodataka:25
-                  });
-                  this.novaMeraGreskeEvent.emit("Kategorijska krosentropija");
-                  this.regresija=true;
-                  this.binarna_klasifikacija=true;
-                }
-                else{
-                  this.forma.patchValue({
-                    TipProblema:'binarna_klasifikacija',
-                    MeraGreske:'binary_crossentropy',
-                    MeraUspeha:'accuracy',
-                    odnosPodataka:25
-                  });
-                  this.novaMeraGreskeEvent.emit("Binarna krosentropija");
-                  this.regresija=true;
-                  this.klasifikacija=true;
+                  if(pom2["kategoricke_kolone"][j]["broj_jedinstvenih_polja"]>2)
+                  {
+                    this.forma.patchValue({
+                      TipProblema:'klasifikacija',
+                      MeraGreske:'categorical_crossentropy',
+                      MeraUspeha:'accuracy',
+                      odnosPodataka:25
+                    });
+                    this.novaMeraGreskeEvent.emit("Kategorijska krosentropija");
+                    this.regresija=true;
+                    this.binarna_klasifikacija=true;
+                  }
+                  else{
+                    this.forma.patchValue({
+                      TipProblema:'binarna_klasifikacija',
+                      MeraGreske:'binary_crossentropy',
+                      MeraUspeha:'accuracy',
+                      odnosPodataka:25
+                    });
+                    this.novaMeraGreskeEvent.emit("Binarna krosentropija");
+                    this.regresija=true;
+                    this.klasifikacija=true;
+                  }
                 }
               }
+              
             }
-            
+            this.forma2.controls['trenutniBrojSkrivenihSlojeva'].setValue(1);
+            this.ListaSkrivenihSlojeva.push(this.fb.group({
+              BrojNeurona: [1,[Validators.required,Validators.min(0),Validators.max(8)]],
+              AktivacionaFunkcija: ['relu', Validators.required]
+          }))
+            return;
           }
-          this.forma2.controls['trenutniBrojSkrivenihSlojeva'].setValue(1);
-          this.ListaSkrivenihSlojeva.push(this.fb.group({
-            BrojNeurona: [1,[Validators.required,Validators.min(0),Validators.max(8)]],
-            AktivacionaFunkcija: ['relu', Validators.required]
-        }))
-          return;
         }
       }
+      
       
       
     }
@@ -296,6 +345,40 @@ export class IzborParametaraComponent implements OnInit {
 
     public updateMeraGreske(event: MatSelectChange){
       this.novaMeraGreskeEvent.emit(event.source.triggerValue);
+    }
+
+    Provera()
+    {
+      if(localStorage.getItem('izabrani-parametri-za-istreniran-model'))
+      {
+        let parametri=JSON.parse(this.cookieService.get('params'))
+        let brojac=0;
+        let parametriSacuvani=JSON.parse(localStorage.getItem('izabrani-parametri-za-istreniran-model'));
+        if(parametriSacuvani['IzlaznaKolona']==parametri['izlazna'])
+        {
+          if(parametriSacuvani['UlazneKolone'].length==parametri['nizUlaznih'].length)
+          {
+            for(let i=0;i<parametriSacuvani['UlazneKolone'].length;i++)
+            {
+              if(parametriSacuvani['UlazneKolone'][i]!=parametri['nizUlaznih'][i])
+              {
+                localStorage.removeItem('izabrani-parametri-za-istreniran-model');
+                return;
+              }
+            }
+          }
+          else
+          {
+            localStorage.removeItem('izabrani-parametri-za-istreniran-model');
+            return;
+          }
+        }
+        else
+        {
+          localStorage.removeItem('izabrani-parametri-za-istreniran-model');
+          return;
+        }
+      }
     }
     
 }

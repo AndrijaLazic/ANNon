@@ -18,6 +18,7 @@ export class ObjekatZaSlanje {
     loss=[];
     ImeFajla: string;
     Naziv: string;
+    MeraGreskeNaziv:string;
 }
 
 export interface ListaSkrivenihSlojeva {

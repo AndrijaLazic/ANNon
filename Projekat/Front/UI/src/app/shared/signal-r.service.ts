@@ -58,6 +58,7 @@ export class SignalRService {
         this.data=res.replaceAll("'", '"');
         this.data=JSON.parse(this.data);
         
+        
         this.podaciZaGrafik[0].dodajSeries(new vrednostiZaGrafikKlasa(this.data.loss,this.brojEpoha.toString()));
         this.podaciZaGrafik[1].dodajSeries(new vrednostiZaGrafikKlasa(this.data.val_loss,this.brojEpoha.toString()));
         
@@ -70,6 +71,23 @@ export class SignalRService {
 
         
       })
+    }
+
+    nacrtajGrafik(MeraGreske:string)
+    {
+      let pom1=JSON.parse(localStorage.getItem('izabrani-parametri-za-istreniran-model'))
+      this.podaciZaGrafik.push(new podatakZaGrafikKlasa(MeraGreske+"na trening skupu"));
+      this.podaciZaGrafik.push(new podatakZaGrafikKlasa(MeraGreske+"na test skupu"));
+      for(var i=0;i<pom1['BrojEpoha'];i++){
+          this.podaciZaGrafik[0].dodajSeries(new vrednostiZaGrafikKlasa(pom1['loss'][i],(i+1).toString()));
+          //this.podaciZaGrafik=[...this.podaciZaGrafik];
+      }
+      for(var i=0;i<pom1['BrojEpoha'];i++){
+          this.podaciZaGrafik[1].dodajSeries(new vrednostiZaGrafikKlasa(pom1['val_loss'][i],(i+1).toString()));
+          //this.podaciZaGrafik=[...this.podaciZaGrafik];
+      }
+      
+        
     }
   
     

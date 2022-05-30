@@ -17,6 +17,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import e from 'express';
 @Component({
   selector: 'app-trening',
   templateUrl: './trening.component.html',
@@ -51,6 +52,7 @@ export class TreningComponent implements OnInit {
   opis:any;
   p:number=1;
   MeraGreske:string="";
+  podacizaGrafik=[];
   @ViewChild(IzborParametaraComponent, {static : true}) child : IzborParametaraComponent;
   linija=shape.curveBasis;
   readonly osnovniUrl=Konfiguracija.KonfiguracijaServera.osnovniURL;
@@ -63,6 +65,7 @@ export class TreningComponent implements OnInit {
   }
 
   constructor(private modalService: NgbModal,private spinner:NgxSpinnerService,public signalR:SignalRService, private http: HttpClient,private cookieService:CookieService,private route:Router,private toastr:ToastrService) { 
+
   }
 
   
@@ -71,6 +74,15 @@ export class TreningComponent implements OnInit {
    
     sessionStorage.setItem("redirectTo",this.route.url);
     this.signalR.podaciZaGrafik=[];
+    this.Provera();
+    if(localStorage.getItem('izabrani-parametri-za-istreniran-model'))
+    {
+      let pom1=JSON.parse(localStorage.getItem('izabrani-parametri-za-istreniran-model'));
+      this.izabraniParametri=pom1;
+      this.signalR.nacrtajGrafik(pom1['MeraGreskeNaziv']);
+      this.sacuvajRezultateTreninga();
+      this.StanjeDugmeta2=false;
+    }
     if(!this.cookieService.check('params')){
       this.route.navigate(["./statistic"]);
     }
@@ -108,19 +120,8 @@ export class TreningComponent implements OnInit {
     //   res => console.log(res),
     //   err => console.log(err)
     // )
-    for(let i=0;i<this.signalR.podaciZaGrafik.length-1;i++)
-    {
-      for(let j=0;j<this.signalR.podaciZaGrafik[i].series.length;j++)
-      {
-          let loss=this.signalR.podaciZaGrafik[i].series[j].value;
-          this.izabraniParametri.loss.push(loss);
-          let val_loss=this.signalR.podaciZaGrafik[i+1].series[j].value;
-          this.izabraniParametri.val_loss.push(val_loss);
-        
-      }
-
-    }
-    this.izabraniParametri.ImeFajla=sessionStorage.getItem("imeFajla");
+    
+    console.log(JSON.stringify(this.izabraniParametri))
     localStorage.setItem('izabrani-parametri',JSON.stringify(this.izabraniParametri));
     this.route.navigate (['poredjenjeModela']);
 
@@ -177,20 +178,8 @@ export class TreningComponent implements OnInit {
 
   preuzmiModel()
   {
-    console.log(this.signalR.podaciZaGrafik);
-      for(let i=0;i<this.signalR.podaciZaGrafik.length-1;i++)
-      {
-        for(let j=0;j<this.signalR.podaciZaGrafik[i].series.length;j++)
-        {
-            let loss=this.signalR.podaciZaGrafik[i].series[j].value;
-            this.izabraniParametri.loss.push(loss);
-            let val_loss=this.signalR.podaciZaGrafik[i+1].series[j].value;
-            this.izabraniParametri.val_loss.push(val_loss);
-          
-        }
-        
-      }
-      this.izabraniParametri.ImeFajla=sessionStorage.getItem("imeFajla");
+   
+      //this.izabraniParametri.ImeFajla=sessionStorage.getItem("imeFajla");
       //this.moj.push(this.izabraniParametri);
       console.log(this.izabraniParametri);
       var saveData = (function () {
@@ -264,10 +253,16 @@ export class TreningComponent implements OnInit {
     {
       let loss=this.signalR.podaciZaGrafik[0].series[j].value;
       this.loss.push(loss);
+      this.izabraniParametri.loss.push(loss)
       let val_loss=this.signalR.podaciZaGrafik[1].series[j].value;
-      this.val_loss.push(val_loss);
+      this.val_loss.push(val_loss)
+      this.izabraniParametri.val_loss.push(val_loss);
           
     }   
+    this.izabraniParametri.ImeFajla=sessionStorage.getItem("imeFajla");
+    this.izabraniParametri.MeraGreskeNaziv=this.MeraGreske;
+    console.log(JSON.stringify(this.izabraniParametri))
+    localStorage.setItem('izabrani-parametri-za-istreniran-model',JSON.stringify(this.izabraniParametri));
     this.IspisTabele();
   }
 
@@ -335,6 +330,54 @@ export class TreningComponent implements OnInit {
 
   novaMeraGreske(naziv:string){
     this.MeraGreske=naziv;
+  }
+
+  sacuvajRezultateTreninga()
+  {
+    let pom1=JSON.parse(localStorage.getItem('izabrani-parametri-za-istreniran-model'))
+    this.loss=[];
+    this.val_loss=[];
+    for(let j=0;j<pom1['BrojEpoha'];j++)
+    {
+      this.loss.push(pom1['loss'][j]);
+      this.val_loss.push(pom1['val_loss'][j]);
+        
+    }
+    this.IspisTabele();
+  }
+
+  Provera()
+  {
+      if(localStorage.getItem('izabrani-parametri-za-istreniran-model'))
+      {
+        let parametri=JSON.parse(this.cookieService.get('params'))
+        let brojac=0;
+        let parametriSacuvani=JSON.parse(localStorage.getItem('izabrani-parametri-za-istreniran-model'));
+        if(parametriSacuvani['IzlaznaKolona']==parametri['izlazna'])
+        {
+          if(parametriSacuvani['UlazneKolone'].length==parametri['nizUlaznih'].length)
+          {
+            for(let i=0;i<parametriSacuvani['UlazneKolone'].length;i++)
+            {
+              if(parametriSacuvani['UlazneKolone'][i]!=parametri['nizUlaznih'][i])
+              {
+                localStorage.removeItem('izabrani-parametri-za-istreniran-model');
+                return;
+              }
+            }
+          }
+          else
+          {
+            localStorage.removeItem('izabrani-parametri-za-istreniran-model');
+            return;
+          }
+        }
+        else
+        {
+          localStorage.removeItem('izabrani-parametri-za-istreniran-model');
+          return;
+        }
+      }
   }
 }
 

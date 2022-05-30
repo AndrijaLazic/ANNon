@@ -251,6 +251,10 @@ export class CsvTabelaComponent implements OnInit {
         // }
       }
     });
+    if(localStorage.getItem('izabrani-parametri-za-istreniran-model'))
+    {
+      localStorage.removeItem('izabrani-parametri-za-istreniran-model');
+    }
   }
   getStatistic()
   {
