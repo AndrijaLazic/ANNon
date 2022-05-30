@@ -11,7 +11,8 @@ export class ObjekatZaSlanje {
     odnosPodataka:number;
     NizPromena:Array<Model>;
     BrojEpoha:number;
-
+    StopaUcenja:number;
+    VelicinaBatch:number;
     //niz val_loss i lo
     val_loss=[];
     loss=[];

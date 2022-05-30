@@ -53,11 +53,7 @@ export class SignalRService {
     public addTransferChartDatalistener=()=>{
       
       this.hubConnection.on('sendResults',(res)=>{
-        if(this.podaciZaGrafik.length==0){
-          this.podaciZaGrafik.push(new podatakZaGrafikKlasa("loss"));
-          this.podaciZaGrafik.push(new podatakZaGrafikKlasa("val_loss"));
-          this.brojEpoha=1;
-        }
+        
         
         this.data=res.replaceAll("'", '"');
         this.data=JSON.parse(this.data);

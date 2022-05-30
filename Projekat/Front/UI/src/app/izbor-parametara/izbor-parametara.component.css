@@ -151,17 +151,27 @@
     width: 0px;
 }
 
-
+#Sloj .selektorAktivacioneFje{
+    margin-top: 10px;
+}
 
 #RedZaBrojac{
     margin-left: 15%;margin-right: 15%;margin-top: 10px;
 }
 
+#prviRedParametara{
+    margin-left: 13%;margin-right: 13%;
+}
+
+
 @media (max-width:767px) {
     #RedZaBrojac{
         margin: 0px;
     }
-
+    #prviRedParametara{
+        margin-left: 0%;margin-right: 0%;
+    }
+    
 
 }
 

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
-import { MatSelectModule } from '@angular/material/select';
+import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { FullWidth } from 'ag-grid-community/dist/lib/components/framework/componentTypes';
 import { SharedService } from '../shared-statistic/shared.service';
 import { FormGroup,FormControl,Validators, FormBuilder, FormArray } from '@angular/forms';
@@ -23,7 +23,7 @@ export class IzborParametaraComponent implements OnInit {
   MaxBrojEpoha=300;
   //slajder
   minBrojSkrivenihSlojeva:number=1;
-  maxBrojSkrivenihSlojeva:number=12;
+  maxBrojSkrivenihSlojeva:number=10;
   value: number = 12;
   options: Options = {
     floor: 10,
@@ -61,6 +61,7 @@ export class IzborParametaraComponent implements OnInit {
 
   //forma
   @Output() newItemEvent = new EventEmitter<ObjekatZaSlanje>();
+  @Output() novaMeraGreskeEvent = new EventEmitter<string>();
   @ViewChild('FormaZaHParametre') FormaZaHParametre;
 
   forma=new FormGroup({
@@ -69,7 +70,9 @@ export class IzborParametaraComponent implements OnInit {
     MeraUspeha:new FormControl('',[Validators.required]),
     BrojEpoha:new FormControl(5,[Validators.required,Validators.min(this.MinBrojEpoha),Validators.max(this.MaxBrojEpoha)]),
     odnosPodataka:new FormControl(),
-    ListaSkrivenihSlojeva:this.fb.array([])
+    ListaSkrivenihSlojeva:this.fb.array([]),
+    StopaUcenja:new FormControl(1,[Validators.required]),
+    VelicinaBatch:new FormControl(1,[Validators.required])
   })
   get TipProblema(){
     return this.forma.get('TipProblema');
@@ -85,6 +88,12 @@ export class IzborParametaraComponent implements OnInit {
   }
   get BrojEpoha() {
     return this.forma.get('BrojEpoha');
+  }
+  get StopaUcenja() {
+    return this.forma.get('StopaUcenja');
+  }
+  get VelicinaBatch() {
+    return this.forma.get('VelicinaBatch');
   }
 
   
@@ -104,6 +113,8 @@ export class IzborParametaraComponent implements OnInit {
 
     ngOnInit(){ 
       let pom=JSON.parse(this.cookie.get('params'));
+      this.forma.controls["StopaUcenja"].setValue("0.001");
+      this.forma.controls["VelicinaBatch"].setValue("32");
       for(let i=0;i<pom['nizIzabranihIzlaza'].length;i++)
       {
         if(pom['nizIzabranihIzlaza'][i])
@@ -116,6 +127,7 @@ export class IzborParametaraComponent implements OnInit {
                 MeraUspeha:'mean_squared_error',
                 odnosPodataka:25
               });
+              this.novaMeraGreskeEvent.emit("Srednja kvadratna greška");
               this.klasifikacija=true;
               this.binarna_klasifikacija=true;
           }
@@ -134,6 +146,7 @@ export class IzborParametaraComponent implements OnInit {
                     MeraUspeha:'accuracy',
                     odnosPodataka:25
                   });
+                  this.novaMeraGreskeEvent.emit("Kategorijska krosentropija");
                   this.regresija=true;
                   this.binarna_klasifikacija=true;
                 }
@@ -144,6 +157,7 @@ export class IzborParametaraComponent implements OnInit {
                     MeraUspeha:'accuracy',
                     odnosPodataka:25
                   });
+                  this.novaMeraGreskeEvent.emit("Binarna krosentropija");
                   this.regresija=true;
                   this.klasifikacija=true;
                 }
@@ -279,5 +293,9 @@ export class IzborParametaraComponent implements OnInit {
 
     }
     
+
+    public updateMeraGreske(event: MatSelectChange){
+      this.novaMeraGreskeEvent.emit(event.source.triggerValue);
+    }
     
 }

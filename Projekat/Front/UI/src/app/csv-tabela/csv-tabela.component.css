@@ -203,10 +203,16 @@
     background-color: white;
     width: fit-content;
     color: black; 
-    text-align:center
+    text-align:center;
 }
 
 
+#brojacStrane input[type=number]::-webkit-inner-spin-button, 
+#brojacStrane input[type=number]::-webkit-outer-spin-button {  
+
+   opacity: 1;
+
+}
 #tabela ::ng-deep .ag-theme-alpine-dark .ag-root-wrapper{
     background-color: #00294c;
 }

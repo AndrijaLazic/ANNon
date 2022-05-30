@@ -30,7 +30,7 @@ export class TreningComponent implements OnInit {
   prikaziXlabel=true;
   prikaziYlabel=true;
   xLabela='epoha';
-  yLabela='vrednost'
+  yLabela=''
   yOsa=true;
   xOsa=true;
   BrojEpoha=0;
@@ -50,6 +50,7 @@ export class TreningComponent implements OnInit {
   maxStrana=0;
   opis:any;
   p:number=1;
+  MeraGreske:string="";
   @ViewChild(IzborParametaraComponent, {static : true}) child : IzborParametaraComponent;
   linija=shape.curveBasis;
   readonly osnovniUrl=Konfiguracija.KonfiguracijaServera.osnovniURL;
@@ -138,6 +139,9 @@ export class TreningComponent implements OnInit {
   }
   ispis(item:ObjekatZaSlanje){
     this.signalR.podaciZaGrafik=[];
+    this.signalR.podaciZaGrafik.push(new podatakZaGrafikKlasa(this.MeraGreske+"na trening skupu"));
+    this.signalR.podaciZaGrafik.push(new podatakZaGrafikKlasa(this.MeraGreske+"na test skupu"));
+    this.signalR.brojEpoha=1;
     if(item){
       this.spinner.show("Spiner1");
       var formData = new FormData();
@@ -327,6 +331,10 @@ export class TreningComponent implements OnInit {
   next()
   {
     this.route.navigate(["poredjenjeModela"]);
+  }
+
+  novaMeraGreske(naziv:string){
+    this.MeraGreske=naziv;
   }
 }
 

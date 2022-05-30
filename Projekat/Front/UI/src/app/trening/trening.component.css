@@ -89,13 +89,21 @@
     background: #002546;
   }
 
-
+#tabela{
+    margin-top: 10px;
+}
 
 #grafik{
-    height: 400px;
-    
+    min-height: 400px;
+    height: 60vh;
     background-color: #000428ed;
 
     border-radius: 10px;
+}
+
+@media (max-width:767px) {
+    #grafik{
+        height: 40vh;
+    }
 }
 

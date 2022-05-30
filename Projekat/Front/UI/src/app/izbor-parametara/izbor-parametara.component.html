@@ -1,7 +1,7 @@
 
 <div class="container">
   <form [formGroup]="forma" #FormaZaHParametre>
-    <div class="row justify-content-center">
+    <div class="row justify-content-center" id="prviRedParametara"> 
       
         <div class="col-md-auto">
           <mat-form-field appearance="fill" class="selektorAktivacioneFje">
@@ -110,7 +110,7 @@
         <div class="col-md-auto" *ngIf="TipProblema.value=='klasifikacija'">
           <mat-form-field appearance="fill" class="selektorAktivacioneFje">
             <mat-label>Metrika gubitka</mat-label>
-            <mat-select formControlName="MeraGreske">
+            <mat-select formControlName="MeraGreske" (selectionChange)="updateMeraGreske($event)">
               <mat-option value="categorical_crossentropy">
                 Kategorijska krosentropija
               </mat-option>
@@ -141,6 +141,88 @@
             <mat-error *ngIf="MeraUspeha && MeraUspeha.invalid">Izaberite tip problema</mat-error>
           </mat-form-field>
         </div>
+
+        <div class="col-md-auto">
+          <mat-form-field appearance="fill" class="selektorAktivacioneFje">
+            <mat-label>Stopa učenja</mat-label>
+            <mat-select formControlName="StopaUcenja">
+              <mat-option value="0.00001">
+                0.00001
+              </mat-option>
+              <mat-option value="0.0001">
+                0.0001
+              </mat-option>
+              <mat-option value="0.001">
+                0.001
+              </mat-option>
+              <mat-option value="0.003">
+                0.003
+              </mat-option>
+              <mat-option value="0.01">
+                0.01
+              </mat-option>
+              <mat-option value="0.03">
+                0.03
+              </mat-option>
+              <mat-option value="0.1">
+                0.1
+              </mat-option>
+              <mat-option value="0.3">
+                0.3
+              </mat-option>
+              <mat-option value="1">
+                1
+              </mat-option>
+              <mat-option value="3">
+                3
+              </mat-option>
+              <mat-option value="10">
+                10
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="StopaUcenja && StopaUcenja.invalid">Izaberite stopu učenja</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-md-auto">
+          <mat-form-field appearance="fill" class="selektorAktivacioneFje">
+            <mat-label>Stopa učenja</mat-label>
+            <mat-select formControlName="VelicinaBatch">
+              <mat-option value="1">
+               1
+              </mat-option>
+              <mat-option value="2">
+                2
+              </mat-option>
+              <mat-option value="4">
+                4
+              </mat-option>
+              <mat-option value="8">
+                8
+              </mat-option>
+              <mat-option value="16">
+                16
+              </mat-option>
+              <mat-option value="32">
+                32
+              </mat-option>
+              <mat-option value="64">
+                64
+              </mat-option>
+              <mat-option value="128">
+                128
+              </mat-option>
+              <mat-option value="256">
+                256
+              </mat-option>
+              <mat-option value="512">
+                512
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="StopaUcenja && StopaUcenja.invalid">Izaberite stopu učenja</mat-error>
+          </mat-form-field>
+        </div>
+
         <div class="col-md-auto">
           <mat-form-field appearance="fill" class="selektorAktivacioneFje">
             <mat-label>Broj epoha</mat-label>
@@ -156,7 +238,7 @@
             </mat-error>
             
           </mat-form-field>
-      </div>
+        </div>
     </div>
     <div class="row justify-content-center">
       <div class="col-md-5" id="ProcenatPodataka">
