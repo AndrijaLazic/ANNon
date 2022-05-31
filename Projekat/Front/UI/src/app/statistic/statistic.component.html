@@ -1,4 +1,18 @@
-<div>
+
+<ng-template #content let-modal class="modal-content">
+
+                          <div class="modal-header">
+                            <h4 class="modal-title">Upozorenje</h4>
+                          </div>
+                          <div class="modal-body">
+                            <p style="text-align: justify;">Ukoliko promenite tip podatka, treniranje možda neće raditi ako numerička kolona nije stvarno kategorijska.</p>
+                          </div>
+                          <div class="modal-footer">
+                            <button class="dugme dugmeAnimacija" mat-raised-button color="primary" (click)="modal.close('Close click')">U redu</button>
+                          </div>
+</ng-template> 
+  
+
 <ng-template #content2 let-modal class="modal-content">
                         <div class="modal-body table-responsive">
                           <table id="korel" class="table m-0 table-condensed">
@@ -217,9 +231,9 @@
                     <tr>
                         <td class="veciFont" style="color:white">{{kolone[i]}}</td>
                         <td  *ngIf="kategorije[i]=='Numericki'">
-                          <div class="col-md-auto" id="tip">
-                              <mat-form-field appearance="fill" class="TipEnkodiranjaSelektor2">
-                                <mat-select  id="TipEnkodiranjaSelektor" [(value)]="kategorije[i]" placeholder="Mode">
+                          <div (click)="openModalDialogCustomClass(content)" class="col-md-auto" id="tip">
+                              <mat-form-field   appearance="fill" class="TipEnkodiranjaSelektor2">
+                                <mat-select  id="TipEnkodiranjaSelektor"  [(value)]="kategorije[i]" placeholder="Mode">
                                   <mat-option  value="Numericki">
                                       Numerički
                                   </mat-option>

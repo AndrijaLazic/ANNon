@@ -55,6 +55,7 @@ export class StatisticComponent implements OnInit, AfterViewInit {
   headers=[];
   redMatrice=[];
   matricaZaKor=[];
+  kat='Numericki';
   dropdownSettings2={};
   statistika:Object;
   correlationMatrix:Object;
@@ -302,8 +303,9 @@ ngAfterViewInit(): void {
     for(let i=0;i<this.kolone.length;i++)
         this.iscrtajGraf(this.kolone[i]);
   }
+
   ngOnInit(): void {
-    //this.getCorrelationMatrix();
+
     var corr2=this.cookie.get("correlationMatrix");
     
     if(corr2)
@@ -314,10 +316,7 @@ ngAfterViewInit(): void {
     }    
     else
         this.getCorrelationMatrix();
-    console.log(corr2);
-    
-    
-    //this.drawCorrelationMatrix();
+
     this.statistika=JSON.parse(localStorage.getItem("statistic"));
     sessionStorage.setItem("redirectTo",this.route.url);
     if(this.statistika){
@@ -347,7 +346,7 @@ ngAfterViewInit(): void {
         
     
         this.selectChangeHandler();
-        //this.podaciZaMatricu();
+
         this.dajNebitna();
         this.dajOgranicenjeZaKat();
 
@@ -614,7 +613,7 @@ ngAfterViewInit(): void {
     }
 
     openModalDialogCustomClass(content) {
-        this.modalService.open(content);
+        this.modalService.open(content, { size:'sm'});
       }
 
       openXl(content) {
@@ -667,38 +666,12 @@ ngAfterViewInit(): void {
         );
     }
 
-    /*drawCorrelationMatrix()
-    {
-        var getMatrix = sessionStorage.getItem("correlationMatrix");
-
-        this.correlationMatrix = JSON.parse(getMatrix) as object
-        var headers = Object.keys(correlationMatrix);
-        for(let i = 0; i < headers.length; i++)
-        {
-            console.log(headers[i])
-            for(let j = 0; j < headers.length; j++)
-            {
-                if(i == 0)
-                    console.log(headers[j]);
-                else
-                {
-                    console.log(correlationMatrix[headers[i]][headers[j]]);
-                }
-            }
-            
-        }
-
-        console.log(getMatrix);
-        
-    }*/
     podaciZaMatricu()
     {
         this.headers=Object.keys(this.correlationMatrix);
-        //console.log(Object.keys(this.correlationMatrix));
+
         for(let i=0;i<this.headers.length;i++)
         {
-            //console.log(Object.values(this.correlationMatrix[Object.keys(this.correlationMatrix)[i]]));
-            //this.redMatrice.push(Object.keys(this.correlationMatrix)[i]);
             for(let j=0;j<Object.values(this.correlationMatrix[Object.keys(this.correlationMatrix)[i]]).length;j++){
                 var number = Object.values(this.correlationMatrix[Object.keys(this.correlationMatrix)[i]])[j] as number;
                 this.redMatrice.push(number.toFixed(3));
@@ -707,7 +680,6 @@ ngAfterViewInit(): void {
             this.matricaZaKor.push(this.redMatrice);
             this.redMatrice=[];
         }
-        console.log(this.matricaZaKor);
         
         
     }
@@ -731,7 +703,7 @@ ngAfterViewInit(): void {
     dajNebitna(){
         for(let i=0;i<Object.keys(this.statistika['kategoricke_kolone']).length;i++)
         {
-            if(this.statistika['kategoricke_kolone'][i]['broj_jedinstvenih_polja']>=50)
+            if(this.statistika['kategoricke_kolone'][i]['broj_jedinstvenih_polja']>=100)
             {
                 this.nebitna[this.statistika['numericke_kolone'].length+i]=true;
                 if(this.cekiranaIzlazna[this.statistika['numericke_kolone'].length+i])
@@ -744,8 +716,8 @@ ngAfterViewInit(): void {
                 this.cekiranaUlazna[this.statistika['numericke_kolone'].length+i]=false;
             }
         }
-        console.log(typeof(this.statistika['kategoricke_kolone'][0]['broj_jedinstvenih_polja'])=='number');
     }
+    
     dajOgranicenjeZaKat(){
         for(let i=0;i<Object.keys(this.statistika['kategoricke_kolone']).length;i++)
         {
