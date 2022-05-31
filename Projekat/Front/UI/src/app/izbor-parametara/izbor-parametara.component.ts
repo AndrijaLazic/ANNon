@@ -181,10 +181,12 @@ export class IzborParametaraComponent implements OnInit {
             else
             {
               let pom2=JSON.parse(localStorage.getItem("statistic"))
+              let nadjeno=false;
               for(let j=0;j<pom2['kategoricke_kolone'].length;j++)
               {
                 if(pom2["kategoricke_kolone"][j]["ime_kolone"]==pom["izlazna"])
                 {
+                  nadjeno=true;
                   if(pom2["kategoricke_kolone"][j]["broj_jedinstvenih_polja"]>2)
                   {
                     this.forma.patchValue({
@@ -208,9 +210,21 @@ export class IzborParametaraComponent implements OnInit {
                     this.regresija=true;
                     this.klasifikacija=true;
                   }
+                  break;
                 }
               }
-              
+              if(!nadjeno)
+              {
+                this.forma.patchValue({
+                  TipProblema:'klasifikacija',
+                  MeraGreske:'categorical_crossentropy',
+                  MeraUspeha:'accuracy',
+                  odnosPodataka:25
+                });
+                this.novaMeraGreskeEvent.emit("Kategorijska krosentropija");
+                this.regresija=true;
+                this.binarna_klasifikacija=true;
+              }
             }
             this.forma2.controls['trenutniBrojSkrivenihSlojeva'].setValue(1);
             this.ListaSkrivenihSlojeva.push(this.fb.group({

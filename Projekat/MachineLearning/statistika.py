@@ -11,7 +11,7 @@ def determine_variable_types1(data):
     numerical = []
     dnu = dict(nunique)
     for key in dnu:
-        if nunique[key] <= 20 and count>50:
+        if nunique[key] <= min(20, count//5):
             categorical.append(key)
         elif (dtypes[key] != object):
             numerical.append(key)
