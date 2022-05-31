@@ -13,6 +13,8 @@
         public string MeraUspeha { get; set; }
         public int odnosPodataka { get; set; }
         public List<ListaSkrivenihSlojeva> ListaSkrivenihSlojeva { get; set; }
+        public string StopaUcenja { get; set; }
+        public string VelicinaBatch { get; set; }
         public int BrojSlojeva { get; set; }
         public List<Model> NizPromena { get; set; }
         public List<string> UlazneKolone { get; set; }

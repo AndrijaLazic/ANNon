@@ -151,6 +151,8 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str):
                 model["BrojEpoha"],
                 model["UlazneKolone"],
                 model["IzlaznaKolona"],
+                float(model["StopaUcenja"]),
+                int(model["VelicinaBatch"]),
                 kolone)
             if hiperparametri.tip_problema == 'regresija':
                 model,train,val,test=await sync_to_async(make_regression_model,thread_sensitive=False)(fajl,hiperparametri)
@@ -173,7 +175,6 @@ async def post_data(request:Request):
     print("salje zahteve "+result["to_send"])
     await manager.send_text(result['to_send'],str(result))
     await manager.receive_text(result['to_send'])
-    print(result)
 
 @app.post("/compare")
 async def start_testing(
@@ -207,7 +208,6 @@ async def loadModel(req:ModelRequest):
         await manager.addModel(req.userID,model)
         return ResponseModel(0,params)
     except Exception as e:
-        print(e)
         return ResponseModel(1,"Greska pri ucitavanju modela")
 
 @app.post("/getParams")
@@ -216,7 +216,6 @@ async def getParams(req:ModelRequest):
         params=model_handling.get_params(req.modelName)
         return ResponseModel(0,params)
     except Exception as e:
-        print(e)
         return ResponseModel(1,"Greska pri vracanju parametara")  
 
 @app.post("/getCorrMatrix")
