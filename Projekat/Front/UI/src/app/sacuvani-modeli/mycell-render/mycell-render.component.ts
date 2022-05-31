@@ -45,14 +45,23 @@ export class MycellRenderComponent implements OnInit {
 
       let form=new FormData();
       form.append("modelID",this.params.value);
-      if(this.buttonText=="Učitaj model")
+      if(this.buttonText=="Uporedi model" || this.buttonText=="Učitaj model")
       {
           form.append("token",this.cookieService.get('token'));
           form.append("userID",sessionStorage.getItem('userId'));
           this.http.post(this.osnovniUrl+"api/KontrolerAutorizacije/"+`${this.cookieService.get('token')}`+'/getmodelbyid',form).subscribe(
             res=>{
-              localStorage.setItem('izabrani-parametri',res as string);
-              this.route.navigate (['poredjenjeModela']);
+              if(this.buttonText=="Uporedi model")
+              {
+                localStorage.setItem('izabrani-parametri',res as string);
+                this.route.navigate (['poredjenjeModela']);
+              }
+              else
+              {
+                localStorage.setItem('izabrani-parametri-za-istreniran-model',res as string);
+                this.route.navigate (['training']);
+              }
+              
             },
             err=>{
               console.log(err);
@@ -60,6 +69,7 @@ export class MycellRenderComponent implements OnInit {
           )
 
       }
+      
 
     else
     {

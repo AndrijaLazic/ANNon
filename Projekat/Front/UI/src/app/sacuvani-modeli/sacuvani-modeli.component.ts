@@ -30,7 +30,7 @@ export class SacuvaniModeliComponent implements OnInit {
 
     ngOnInit(): void {
     
-      
+      sessionStorage.setItem("redirectTo",this.route.url);
       if(this.loginService.isLoggeidin())
       {
         this.http.get(this.osnovniUrl+"api/KontrolerAutorizacije/"+`${this.cookieService.get('token')}`+'/getAllModels').subscribe(
@@ -96,7 +96,7 @@ export class SacuvaniModeliComponent implements OnInit {
 
 
       col={
-        field:"Učitaj modele",
+        field:"Poredi modele",
         flex: 1,
         sortable: true,
         filter: true,
@@ -105,7 +105,7 @@ export class SacuvaniModeliComponent implements OnInit {
         minWidth: 100,
         cellRenderer:MycellRenderComponent,
         cellRendererParams:{
-          buttonText:'Učitaj model'
+          buttonText:'Uporedi model'
         }
         
       }
@@ -132,11 +132,31 @@ export class SacuvaniModeliComponent implements OnInit {
       }
 
       this.KoloneDef1.push(col);
+
+      col={
+        field:"Učitaj modele",
+        flex: 1,
+        sortable: true,
+        filter: true,
+        editable: false,
+        resizable:true,
+        minWidth: 100,
+        cellRenderer:MycellRenderComponent,
+        cellRendererParams:{
+          buttonText:"Učitaj model",
+          clicked:function(field:any){
+            this.modelId=field;
+            this.pomocnaFunkcija(this.modelId as string);
+          }
+        }
+        
+      }
+      this.KoloneDef1.push(col);
       var jsonString:string;
       let obj: any;
       for(let i=0;i<this.modeliZaUlogovanogKorisnika.length;i++)
       {
-        jsonString='{"'+this.KoloneDef1[0].field+'":"'+this.modeliZaUlogovanogKorisnika[i].ModelName+'","'+this.KoloneDef1[1].field+'":"'+this.modeliZaUlogovanogKorisnika[i].DateSaved+'","'+this.KoloneDef1[2].field+'":"'+this.modeliZaUlogovanogKorisnika[i].ModelID+'","'+this.KoloneDef1[3].field+'":"'+this.modeliZaUlogovanogKorisnika[i].ModelID+'"}'
+        jsonString='{"'+this.KoloneDef1[0].field+'":"'+this.modeliZaUlogovanogKorisnika[i].ModelName+'","'+this.KoloneDef1[1].field+'":"'+this.modeliZaUlogovanogKorisnika[i].DateSaved+'","'+this.KoloneDef1[2].field+'":"'+this.modeliZaUlogovanogKorisnika[i].ModelID+'","'+this.KoloneDef1[3].field+'":"'+this.modeliZaUlogovanogKorisnika[i].ModelID+'","'+this.KoloneDef1[4].field+'":"'+this.modeliZaUlogovanogKorisnika[i].ModelID+'"}'
 
           obj= JSON.parse(jsonString);
           

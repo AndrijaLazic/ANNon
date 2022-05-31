@@ -71,10 +71,12 @@ export class TreningComponent implements OnInit {
   
 
   ngOnInit(): void {
-   
+    if(sessionStorage.getItem('redirectTo')=="/statistic")
+    {
+      this.Provera();
+    }
     sessionStorage.setItem("redirectTo",this.route.url);
     this.signalR.podaciZaGrafik=[];
-    this.Provera();
     if(localStorage.getItem('izabrani-parametri-za-istreniran-model'))
     {
       let pom1=JSON.parse(localStorage.getItem('izabrani-parametri-za-istreniran-model'));
@@ -351,6 +353,7 @@ export class TreningComponent implements OnInit {
       if(localStorage.getItem('izabrani-parametri-za-istreniran-model'))
       {
         let parametri=JSON.parse(this.cookieService.get('params'))
+        console.log(parametri)
         let brojac=0;
         let parametriSacuvani=JSON.parse(localStorage.getItem('izabrani-parametri-za-istreniran-model'));
         if(parametriSacuvani['IzlaznaKolona']==parametri['izlazna'])

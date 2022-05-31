@@ -115,7 +115,10 @@ export class IzborParametaraComponent implements OnInit {
 
     ngOnInit(){ 
       let pom=JSON.parse(this.cookie.get('params'));
-      this.Provera();
+      if(sessionStorage.getItem('redirectTo')=="/statistic")
+      {
+        this.Provera();
+      }
       //napraviti Funkciju!!
       if(localStorage.getItem('izabrani-parametri-za-istreniran-model'))
       {
