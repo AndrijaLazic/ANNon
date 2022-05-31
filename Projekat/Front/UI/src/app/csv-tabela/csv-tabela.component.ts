@@ -143,6 +143,7 @@ export class CsvTabelaComponent implements OnInit {
   IspisTabele()
   {
     this.cookie.delete('params');
+    this.cookie.delete('correlationMatrix');
     
     
 

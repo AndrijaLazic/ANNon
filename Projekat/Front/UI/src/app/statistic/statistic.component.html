@@ -234,7 +234,7 @@
                           <td  *ngIf="kategorije[i]=='Kategorijski'">
                             <div class="col-md-auto">
                               <mat-form-field appearance="fill" class="TipEnkodiranjaSelektor2">
-                                <mat-select  id="TipEnkodiranjaSelektor" [(value)]="kategorije[i]" placeholder="Mode">
+                                <mat-select  id="TipEnkodiranjaSelektor" [(value)]="kategorije[i]" [disabled]="ogranicenjeKategorijske[i-statistika['numericke_kolone'].length]" placeholder="Mode">
                                   <mat-option  value="Numericki">
                                       Numerički
                                   </mat-option>
@@ -267,8 +267,8 @@
 
                       </td>
                         <td class="veciFont" style="color:white">{{prazna[i]}}</td>
-                        <td><mat-slide-toggle id={{i}} (change)="dajUlazne(i,$event)" [checked]="cekiranaUlazna[i]" ></mat-slide-toggle></td>
-                        <td><mat-slide-toggle id="izlazna{{i}}" (change)="dajIzlaznu(i,$event)" [checked]="cekiranaIzlazna[i]"></mat-slide-toggle></td>
+                        <td><mat-slide-toggle id={{i}} (change)="dajUlazne(i,$event)" [checked]="cekiranaUlazna[i]" [disabled]="nebitna[i]"></mat-slide-toggle></td>
+                        <td><mat-slide-toggle id="izlazna{{i}}" (change)="dajIzlaznu(i,$event)" [checked]="cekiranaIzlazna[i]" [disabled]="nebitna[i]"></mat-slide-toggle></td>
                     </tr>
                     
             </tbody>

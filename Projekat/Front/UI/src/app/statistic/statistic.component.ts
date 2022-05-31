@@ -27,6 +27,8 @@ export class StatisticComponent implements OnInit, AfterViewInit {
 
   cekiranaUlazna=new Array();
   cekiranaIzlazna=new Array();
+  nebitna=new Array();
+  ogranicenjeKategorijske=new Array();
   prazna=new Array();
   collapse=new Array();
   strStat:string;
@@ -231,8 +233,8 @@ export class StatisticComponent implements OnInit, AfterViewInit {
         {
             "ime_kolone": "Cut",
             "broj_praznih_polja": 0,
-            "broj_jedinstvenih_polja": 5,
-            "najcesca_vrednost": "Ideal",
+            "broj_jedinstvenih_polja": 50,
+            "najcesca_vrednost": 5,
             "najveci_broj_ponavljanja": 21551,
             "column_chart_data": {
                 "Ideal": 21551,
@@ -275,10 +277,10 @@ export class StatisticComponent implements OnInit, AfterViewInit {
             }
         }
     ]
-};
+}; 
 
   
-  correlationMatrix={"carat":{"carat":1,"depth":0.0282243143,"table":0.1816175465,"price":0.9215913012,"x":0.9750942267,"y":0.951722199,"z":0.9533873806},
+  correlationMatrix2={"carat":{"carat":1,"depth":0.0282243143,"table":0.1816175465,"price":0.9215913012,"x":0.9750942267,"y":0.951722199,"z":0.9533873806},
   "depth":{"carat":0.0282243143,"depth":1,"table":-0.2957785215,"price":-0.0106474046,"x":-0.025289247,"y":-0.0293406707,"z":0.0949238824},
   "table":{"carat":0.1816175465,"depth":-0.2957785215,"table":1,"price":0.1271339021,"x":0.195344281,"y":0.1837601471,"z":0.1509286916},
   "price":{"carat":0.9215913012,"depth":-0.0106474046,"table":0.1271339021,"price":1,"x":0.884435161,"y":0.8654208979,"z":0.8612494439},
@@ -301,7 +303,18 @@ ngAfterViewInit(): void {
         this.iscrtajGraf(this.kolone[i]);
   }
   ngOnInit(): void {
-    this.getCorrelationMatrix();
+    //this.getCorrelationMatrix();
+    var corr2=this.cookie.get("correlationMatrix");
+    
+    if(corr2)
+    {
+        this.correlationMatrix = JSON.parse(corr2);
+        this.VidljivostKorMatrice=true;
+        this.podaciZaMatricu();
+    }    
+    else
+        this.getCorrelationMatrix();
+    console.log(corr2);
     
     
     //this.drawCorrelationMatrix();
@@ -335,6 +348,8 @@ ngAfterViewInit(): void {
     
         this.selectChangeHandler();
         //this.podaciZaMatricu();
+        this.dajNebitna();
+        this.dajOgranicenjeZaKat();
 
         var id=0;
         interface Kolona {
@@ -381,6 +396,7 @@ ngAfterViewInit(): void {
                 this.prazna.push(this.statistika['numericke_kolone'][i]['broj_praznih_polja']);
                 this.collapse.push(0);
                 this.selected.push('one_hot');
+                this.nebitna.push(false);
 
                 }
 
@@ -396,6 +412,8 @@ ngAfterViewInit(): void {
             this.prazna.push(this.statistika['kategoricke_kolone'][i]['broj_praznih_polja']);
             this.collapse.push(0);
             this.selected.push('one_hot');
+            this.nebitna.push(false);
+            this.ogranicenjeKategorijske.push(false);
         }
       }
     }
@@ -640,9 +658,9 @@ ngAfterViewInit(): void {
         formData.append("sessionID",sessionStorage.getItem("userId"));
         this.http.post(this.baseUrl+"api/MachineLearning/getCorrelationMatrix",formData).subscribe(
             res => {
-                sessionStorage.setItem("correlationMatrix",JSON.stringify(res))
+                this.cookie.set('correlationMatrix',JSON.stringify(res));
                 this.VidljivostKorMatrice=true;
-                this.correlationMatrix = JSON.parse(sessionStorage.getItem("correlationMatrix"));
+                this.correlationMatrix = JSON.parse(this.cookie.get("correlationMatrix"));
                 this.podaciZaMatricu();
         },
             err => this.toastr.error("Greška pri izračunavanju korelacione matrice","Greška")
@@ -708,6 +726,34 @@ ngAfterViewInit(): void {
             return '#557CFF';
         
 
+
+    }
+    dajNebitna(){
+        for(let i=0;i<Object.keys(this.statistika['kategoricke_kolone']).length;i++)
+        {
+            if(this.statistika['kategoricke_kolone'][i]['broj_jedinstvenih_polja']>=50)
+            {
+                this.nebitna[this.statistika['numericke_kolone'].length+i]=true;
+                if(this.cekiranaIzlazna[this.statistika['numericke_kolone'].length+i])
+                {
+                    this.cekiranaIzlazna[this.statistika['numericke_kolone'].length+i]=false;
+                    this.cekiranaIzlazna[this.statistika['numericke_kolone'].length+i-1]=true;
+                    this.cekiranaUlazna[this.statistika['numericke_kolone'].length+i-1]=false;
+                    this.dajNebitna();
+                }
+                this.cekiranaUlazna[this.statistika['numericke_kolone'].length+i]=false;
+            }
+        }
+        console.log(typeof(this.statistika['kategoricke_kolone'][0]['broj_jedinstvenih_polja'])=='number');
+    }
+    dajOgranicenjeZaKat(){
+        for(let i=0;i<Object.keys(this.statistika['kategoricke_kolone']).length;i++)
+        {
+            if(typeof(this.statistika['kategoricke_kolone'][i]['najcesca_vrednost'])!='number')
+            {
+                this.ogranicenjeKategorijske[i]=true;
+            }
+        }
 
     }
 
