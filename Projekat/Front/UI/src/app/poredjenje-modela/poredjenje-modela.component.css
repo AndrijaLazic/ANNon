@@ -117,8 +117,7 @@
 
 .grafik{
     background-image: linear-gradient(to bottom right, #023E8A, #002e4c);
-    min-height: 360px;
-    margin-top: 20px;
+    min-height: 400px;
     height: 60vh;
     max-height: 800px;
     width: 100%;
@@ -126,10 +125,9 @@
 
 #OpcijeZaGrafikDiv{
     background-color: #16355D;
-    
+    height: 100%;
     
     padding: 10px;
-    margin-top: 16px;
 }
 #OpcijeZaGrafikDiv div{
     padding: 3px; 

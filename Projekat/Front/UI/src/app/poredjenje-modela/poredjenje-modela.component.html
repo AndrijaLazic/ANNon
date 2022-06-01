@@ -90,7 +90,7 @@
       </div>
 
 
-      <div class="row justify-content-center">
+      <div class="row justify-content-center m-3 gy-5">
         <div class="col-xxl-9" *ngIf="podaciZaGrafik.length>0">
           <div class="grafik">
             <ngx-charts-line-chart [results]="podaciZaGrafik" [legend]="legenda" [showXAxisLabel]="prikaziXlabel"
@@ -99,7 +99,7 @@
             </ngx-charts-line-chart>
           </div>
         </div>
-        <div class="col-xxl-2 m-1" *ngIf="podaciZaGrafik.length>0">
+        <div class="col-xxl-auto rounded-sm" *ngIf="podaciZaGrafik.length>0">
           <div id="OpcijeZaGrafikDiv">
             <div class="col-md-auto">
               <label>Opcije za grafik</label>

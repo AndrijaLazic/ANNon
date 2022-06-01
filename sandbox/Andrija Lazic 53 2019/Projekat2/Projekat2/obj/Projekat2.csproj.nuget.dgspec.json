@@ -13,6 +13,9 @@
         "packagesPath": "C:\\Users\\kebab\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\kebab\\OneDrive\\Desktop\\Projekat SoftIn\\annon\\sandbox\\Andrija Lazic 53 2019\\Projekat2\\Projekat2\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
         "configFilePaths": [
           "C:\\Users\\kebab\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
