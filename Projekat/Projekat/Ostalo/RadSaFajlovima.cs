@@ -10,6 +10,7 @@ namespace Projekat.Ostalo
 {
     public class RadSaFajlovima
     {
+        public static readonly string PutanjaCsvFajlova=Path.Combine(Directory.GetCurrentDirectory(), "Upload\\csvFajlovi");
         public static bool ProveriAkoJeCsvFajl(IFormFile fajl)
         {
             var extension = "." + fajl.FileName.Split('.')[fajl.FileName.Split('.').Length - 1];
@@ -165,6 +166,25 @@ namespace Projekat.Ostalo
             }
             catch (Exception ex)
             {
+                return false;
+            }
+            return true;
+
+        }
+
+        public static bool IzbrisiFajl(string NazivFajla)
+        {
+            
+            if (!DaLiFajlPostoji(NazivFajla))
+                return false;
+            try
+            {
+                File.Delete(Path.Combine(PutanjaCsvFajlova, NazivFajla));
+                
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
                 return false;
             }
             return true;
