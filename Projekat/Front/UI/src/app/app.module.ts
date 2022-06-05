@@ -51,6 +51,26 @@ import { PoredjenjeModelaComponent } from './poredjenje-modela/poredjenje-modela
 import {MatTooltipModule} from '@angular/material/tooltip';
 import { SacuvaniModeliComponent } from './sacuvani-modeli/sacuvani-modeli.component';
 import { MycellRenderComponent } from './sacuvani-modeli/mycell-render/mycell-render.component';
+import { NgxIndexedDBModule, DBConfig } from 'ngx-indexed-db';
+
+// Ahead of time compiles requires an exported function for factories
+
+/*
+const dbConfig: DBConfig  = {
+  name: 'IgrannonicaDB',
+  version: 3,
+  objectStoresMeta: [{
+    store: 'files',
+    storeConfig: { keyPath: 'id', autoIncrement: true },
+    storeSchema: [
+      { name: 'fileName', keypath: 'name', options: { unique: false } },
+      { name: 'file', keypath: 'file', options: { unique: false } }
+    ]
+  }],
+
+};
+*/
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -101,7 +121,8 @@ import { MycellRenderComponent } from './sacuvani-modeli/mycell-render/mycell-re
     MatSlideToggleModule,
     MatIconModule,
     FilePickerModule,
-    MatTooltipModule
+    MatTooltipModule,
+    //NgxIndexedDBModule.forRoot(dbConfig)
   ],
   providers: [],
   bootstrap: [AppComponent],

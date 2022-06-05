@@ -64,6 +64,8 @@ export class TreningComponent implements OnInit {
     return this.forma.get('trenutnaStrana');
   }
 
+
+
   constructor(private modalService: NgbModal,private spinner:NgxSpinnerService,public signalR:SignalRService, private http: HttpClient,private cookieService:CookieService,private route:Router,private toastr:ToastrService) { 
 
   }
@@ -229,22 +231,17 @@ export class TreningComponent implements OnInit {
     formData.append("filename",this.nazivFajla);
     formData.append("description",this.opis);
     formData.append("parametars",localStorage.getItem('parametars'));
-    this.spinner.show("Spiner2");
     this.http.post(this.osnovniUrl+"api/KontrolerAutorizacije/"+`${this.cookieService.get('token')}`+'/save',formData).subscribe(
       res=>{
         console.log(res);
-        //this.spinner.hide("Spiner2");
       },
       err=>{
         if(err['status']==200)
         {
-          this.spinner.hide("Spiner2");
           this.toastr.success(err['error']['text']);
-          
         }
         else
         {
-          this.spinner.hide("Spiner2");
           this.toastr.error(err['error']['text'])
         }
       }
@@ -386,6 +383,34 @@ export class TreningComponent implements OnInit {
           return;
         }
       }
+  }
+
+  get MeraUspeha(){
+    return this.forma.get('MeraUspeha');
+  }
+
+  Testiranje()
+  {
+    var formData = new FormData();
+
+    formData.append('userID',sessionStorage.getItem('userId'));
+    formData.append('metric',this.MeraGreske);
+    console.log(this.MeraUspeha);
+    this.http.post(this.osnovniUrl+"api/MachineLearning/compare",formData).subscribe(
+      res=>{
+        console.log(res);
+      },
+      err=>{
+        if(err['status']==200)
+        {
+          this.toastr.success(err['error']['text']);
+        }
+        else
+        {
+          this.toastr.error(err['error']['text'])
+        }
+      }
+    );
   }
 }
 

@@ -182,7 +182,7 @@ async def start_testing(
 ):
     test,target=await manager.getTestSet(model.userID)
     model=await manager.getModel(model.userID)
-    result=test_model(model,test,target)
+    result=test_model(model,test)
     #ovako samo za regresiju
     recnik={"loss":result[0],"metric":result[1]}
     ret=ResponseModel(0,json.dumps(recnik)).toJSON()
