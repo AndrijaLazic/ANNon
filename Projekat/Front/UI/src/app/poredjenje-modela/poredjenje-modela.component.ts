@@ -21,6 +21,7 @@ import { stringify } from 'querystring';
   styleUrls: ['./poredjenje-modela.component.css']
 })
 export class PoredjenjeModelaComponent implements OnInit {
+  trenutnoIzbrisaniModeli:any[]=[];
   indikator5:boolean=true;
   IzborFajlova="Offline fajlovi"
   checked2=false;
@@ -64,16 +65,17 @@ export class PoredjenjeModelaComponent implements OnInit {
 
   constructor(private spinner:NgxSpinnerService,private http:HttpClient,private toastr:ToastrService,private route: Router,public loginService:LoginServiceService,private cookieService:CookieService){
     
-    if(localStorage.getItem('izabrani-parametri')!=null){
-      this.dodajModel(JSON.parse(localStorage.getItem('izabrani-parametri')))
-    }
+    
     if(this.loginService.isLoggeidin())
     {
       this.http.get(this.osnovniUrl+"api/KontrolerAutorizacije/"+`${this.cookieService.get('token')}`+'/getAllModels').subscribe(
         res=>{
           
-          this.modeliZaUlogovanogKorisnika=res;
+          this.modeliZaUlogovanogKorisnika=res as ObjekatZaSlanje;
           this.mojaFunkcija();
+          if(localStorage.getItem('izabrani-parametri')!=null){
+            this.dodajModel(JSON.parse(localStorage.getItem('izabrani-parametri')))
+          }
         },
         err=>{
           console.log(err)
@@ -81,16 +83,22 @@ export class PoredjenjeModelaComponent implements OnInit {
       )
     }
 
+    
+    
+    
+
   }
   public adapter = new DemoFilePickerAdapter(this.http,this.spinner,this.toastr);
   ngOnInit(): void {
     
-    sessionStorage.setItem("redirectTo",this.route.url)
+    sessionStorage.setItem("redirectTo",this.route.url);
+
+    
 
     var pomLista=[];
     
     if(sessionStorage.getItem('PoredjenjeModelaKolac')){
-      console.log("brzi jge")
+     
       this.modeliZaPoredjenje=[];
       pomLista=JSON.parse(sessionStorage.getItem('PoredjenjeModelaKolac'));
       
@@ -131,8 +139,18 @@ export class PoredjenjeModelaComponent implements OnInit {
       }
       k=k+2;
     }
+    
     if(pom!=null)
     {
+      for(let i=0;i<this.modeliZaUlogovanogKorisnika.length;i++)
+      {
+        if(this.modeliZaUlogovanogKorisnika[i]['ModelID']==pom.ModelId)
+        {
+          this.trenutnoIzbrisaniModeli.push(this.modeliZaUlogovanogKorisnika[i]);
+          this.modeliZaUlogovanogKorisnika.splice(i,1);
+          break;
+        }
+      }
       this.IspisTabele();
     }
     else
@@ -386,8 +404,25 @@ cekiranPrikazGridLinije(value:any){
   
   mojaFunkcija()
   {
-  
-    this.ispisTabele1();
+    if(localStorage.getItem('izabrani-parametri'))
+    {
+      let pom=JSON.parse(localStorage.getItem('izabrani-parametri'));
+      for(let i=0;i<this.modeliZaUlogovanogKorisnika.length;i++)
+      {
+        if(this.modeliZaUlogovanogKorisnika[i]['ModelID']==pom['ModelId'])
+        {
+          this.trenutnoIzbrisaniModeli.push(this.modeliZaUlogovanogKorisnika[i]);
+          this.modeliZaUlogovanogKorisnika.splice(i,1);
+          break;
+        }
+      }
+      
+    }
+    
+    
+      this.ispisTabele1();
+    
+    
   }
   //tabela2
   RedoviPodaci1:any = [];
@@ -445,9 +480,7 @@ cekiranPrikazGridLinije(value:any){
           resizable:true,
           minWidth: 100
         }
-        if(this.zaglavlja1[i]=="Opis modela"){
-          col.hide=true;
-        }
+        
       }
       
       this.KoloneDef1.push(col);
@@ -482,19 +515,16 @@ cekiranPrikazGridLinije(value:any){
     if(event.node.isSelected())
     {
       let form=new FormData();
-      
       form.append("token",this.cookieService.get('token'));
       form.append("modelID",event.data.ModelID)
       form.append("userID",sessionStorage.getItem('userId'));
       this.http.post(this.osnovniUrl+"api/KontrolerAutorizacije/"+`${this.cookieService.get('token')}`+'/getmodelbyid',form).subscribe(
         res=>{
-          let pom=JSON.parse(res as string);
-          
-          let objekat=pom as ObjekatZaSlanje;
-          objekat.Naziv=event.data['Naziv modela'];
-          //console.log(res);
-          //console.log(JSON.stringify(res))
-          this.dodajModel(objekat);
+          var ParametriZaSlanje=new ObjekatZaSlanje(); 
+          ParametriZaSlanje=Object.assign(new ObjekatZaSlanje(), JSON.parse(res['parametars']));
+          ParametriZaSlanje.Naziv=res['model']['ModelName'];
+          ParametriZaSlanje.ModelId=res['model']['ModelID'];
+          this.dodajModel(ParametriZaSlanje);
         },
         err=>{
           console.log(err);
@@ -511,14 +541,23 @@ cekiranPrikazGridLinije(value:any){
         let pom=event.data as ObjekatZaSlanje;
         if(this.modeliZaPoredjenje[i].Naziv==event.data['Naziv modela'])
         {
-          //console.log(this.modeliZaPoredjenje[i]);
-          
+          for(let j=0;j<this.trenutnoIzbrisaniModeli.length;j++)
+          {
+            if(this.trenutnoIzbrisaniModeli[j]['ModelID']==this.modeliZaPoredjenje[i].ModelId)
+            {
+              this.modeliZaUlogovanogKorisnika.push(this.trenutnoIzbrisaniModeli[i])
+              this.trenutnoIzbrisaniModeli.splice(i,1);
+              break;
+            }
+          }
           this.modeliZaPoredjenje.splice(i,1);
           
           this.dodajModel(null);
+          this.tabelaRenderovana=false;
           return;
         }
       }
+
     }
   
   }
@@ -543,18 +582,20 @@ cekiranPrikazGridLinije(value:any){
   {
     this.route.navigate(["training"]);
   }
-  ObrisiModele()
+  ObrisiModele(id:number)
   {
-    if(sessionStorage.getItem('PoredjenjeModelaKolac')){
-      sessionStorage.removeItem('PoredjenjeModelaKolac');
+    for(let i=0;i<this.trenutnoIzbrisaniModeli.length;i++)
+    {
+      if(this.trenutnoIzbrisaniModeli[i]['ModelID']==this.modeliZaPoredjenje[id].ModelId)
+      {
+        this.modeliZaUlogovanogKorisnika.push(this.trenutnoIzbrisaniModeli[i])
+        this.trenutnoIzbrisaniModeli.splice(i,1);
+      }
     }
-    if(localStorage.getItem('izabrani-parametri')!=null){
-      localStorage.removeItem('izabrani-parametri');
-    }
-    let currentUrl = this.route.url;
-    this.route.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-        this.route.navigate([currentUrl]);
-    });
+    this.modeliZaPoredjenje.splice(id,1);
+    this.tabelaRenderovana=false;
+    this.dodajModel(null);
+    this.IspisTabele();
   }
 }
 

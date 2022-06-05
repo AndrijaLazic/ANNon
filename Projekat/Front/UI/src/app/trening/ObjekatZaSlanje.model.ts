@@ -19,6 +19,7 @@ export class ObjekatZaSlanje {
     ImeFajla: string;
     Naziv: string;
     MeraGreskeNaziv:string;
+    ModelId:string;
 }
 
 export interface ListaSkrivenihSlojeva {

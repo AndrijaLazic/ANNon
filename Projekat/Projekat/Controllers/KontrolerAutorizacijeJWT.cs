@@ -333,6 +333,11 @@ namespace Projekat.Controllers
                Korisnik korisnik = _context.Korisnici.Where(x => x.Username.Equals(currentUser)).FirstOrDefault();
                if (korisnik == null)
                    return BadRequest("Korisnik nije pronadjen!");
+               SavedModelsModel savedModel=_context.SavedModels.Where(x=>x.UserID.Equals(korisnik.ID) && x.ModelName.Equals(fileName)).FirstOrDefault();
+                if(savedModel!=null)
+                {
+                    return BadRequest("Model sa datim imenom već postoji!");
+                }
 
                SavedModelsModel saveModel = new SavedModelsModel
                {
@@ -421,9 +426,9 @@ namespace Projekat.Controllers
             if (response.Status == 1)
                 return BadRequest("Doslo je do greske prilikom pronalazenja modela!");
 
-            //var obj = new { parametars = response.Content, model = model };
+            var obj = new { parametars = response.Content, model = model };
 
-            var dataToSend = JsonConvert.SerializeObject(response.Content);
+            var dataToSend = JsonConvert.SerializeObject(obj);
             return Ok(dataToSend);
         }
         [HttpPut("updatepassword")]

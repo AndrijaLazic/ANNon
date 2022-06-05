@@ -6,7 +6,10 @@ import { ICellRendererParams } from 'ag-grid-community';
 import { CookieService } from 'ngx-cookie-service';
 import { ToastrService } from 'ngx-toastr';
 import { LoginServiceService } from 'src/app/shared/login-service.service';
+import { ObjekatZaSlanje } from 'src/app/trening/ObjekatZaSlanje.model';
 import { default as Konfiguracija } from '../../../../KonfiguracioniFajl.json';
+import { v4 as uuidv4 } from 'uuid';
+
 
 export interface myCellParams{
   buttonText?:string;
@@ -53,12 +56,22 @@ export class MycellRenderComponent implements OnInit {
             res=>{
               if(this.buttonText=="Uporedi model")
               {
-                localStorage.setItem('izabrani-parametri',res as string);
+                var ParametriZaSlanje=new ObjekatZaSlanje(); 
+                ParametriZaSlanje=Object.assign(new ObjekatZaSlanje(), JSON.parse(res['parametars']));
+                ParametriZaSlanje.Naziv=res['model']['ModelName'];
+                ParametriZaSlanje.ModelId=res['model']['ModelID'];
+                localStorage.setItem('izabrani-parametri',JSON.stringify(ParametriZaSlanje));
                 this.route.navigate (['poredjenjeModela']);
               }
               else
               {
-                localStorage.setItem('izabrani-parametri-za-istreniran-model',res as string);
+                if(!sessionStorage.getItem('UserId'))
+                {
+                  sessionStorage.setItem('userId',uuidv4());
+                }
+                var ParametriZaSlanje=new ObjekatZaSlanje(); 
+                ParametriZaSlanje=Object.assign(new ObjekatZaSlanje(), JSON.parse(res['parametars']));
+                localStorage.setItem('izabrani-parametri-za-istreniran-model',JSON.stringify(ParametriZaSlanje));
                 this.route.navigate (['training']);
               }
               
@@ -96,6 +109,7 @@ export class MycellRenderComponent implements OnInit {
     
     //this.params.clicked(this.params.value);
   }
+
 
 
 }

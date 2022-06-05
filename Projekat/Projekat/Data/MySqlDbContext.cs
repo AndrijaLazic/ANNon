@@ -13,7 +13,7 @@ namespace Projekat.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<DataModel>().HasKey(model => new { model.userID, model.FileName });
-            modelBuilder.Entity<SavedModelsModel>().HasKey(model => new { model.UserID, model.ModelID, model.DateSaved });
+            modelBuilder.Entity<SavedModelsModel>().HasKey(model => new { model.UserID, model.ModelID, model.ModelName });
         }
 
         

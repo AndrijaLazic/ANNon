@@ -215,7 +215,7 @@ export class TreningComponent implements OnInit {
   {
     if(!this.nazivFajla)
     {
-      this.toastr.error("Niste uneli naziv fajla");
+      this.toastr.error("Niste uneli naziv modela");
       return;
     }
     if(!this.opis)
@@ -245,7 +245,7 @@ export class TreningComponent implements OnInit {
         else
         {
           this.spinner.hide("Spiner2");
-          this.toastr.error(err['error']['text'])
+          this.toastr.error(err['error'])
         }
       }
     );

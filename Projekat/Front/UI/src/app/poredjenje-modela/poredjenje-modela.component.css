@@ -221,7 +221,9 @@
     width: 15vw;
     border-radius: 20px;
 }
-
+.dugme{
+    padding: 10px;
+}
 
 @media (max-width:767px) {
     

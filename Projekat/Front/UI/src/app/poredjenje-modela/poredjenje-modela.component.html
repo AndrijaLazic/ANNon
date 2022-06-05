@@ -39,9 +39,15 @@
             (firstDataRendered)="onFirstDataRendered($event)" [suppressDragLeaveHidesColumns]="true"
             [defaultColDef]="defaultColDef">
           </ag-grid-angular>
-          <div [hidden]="indikator5">
-            <button class="dugme dugmeAnimacija" (click)="ObrisiModele()">Ukloni modele</button>
+          <div class="row justify-content-center" style="margin-top: 20px;">
+            <div class="col-md-auto " [hidden]="!(modeliZaPoredjenje.length>=1)">
+              <button class="dugme dugmeAnimacija" (click)="ObrisiModele(0)">Ukloni model 1</button>
+            </div>
+            <div class="col-md-auto " [hidden]="!(modeliZaPoredjenje.length==2)">
+              <button class="dugme dugmeAnimacija" (click)="ObrisiModele(1)">Ukloni model 2</button>
+            </div>
           </div>
+          
           
         </div>
         <div class="col-md-auto justify-content-center" [hidden]="!(modeliZaPoredjenje.length!=2)">

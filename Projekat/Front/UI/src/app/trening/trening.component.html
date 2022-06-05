@@ -18,8 +18,8 @@
     <button type="button" class="btn-close" aria-label="Close" (click)="modal1.dismiss('Cross click')"></button>
   </div>
   <div class="modal-body" id="unosFajla">
-   Naziv fajla<input type="text" [(ngModel)]="nazivFajla" id="dugmeSpecijalno"><br>
-   <p class="mb-0">Opis</p><textarea cols="25" rows="5" [(ngModel)]="opis"></textarea >
+   Naziv modela<input type="text" [(ngModel)]="nazivFajla" id="dugmeSpecijalno"><br>
+   <p class="mb-0">Opis modela</p><textarea cols="25" rows="5" [(ngModel)]="opis"></textarea >
   </div>
   <div class="modal-footer">
     <button type="button" class="dugme dugmeAnimacija" mat-raised-button color="primary" (click)="modal1.dismiss('Cross click');cuvajModelNaNalogu2()">Sačuvaj</button>
