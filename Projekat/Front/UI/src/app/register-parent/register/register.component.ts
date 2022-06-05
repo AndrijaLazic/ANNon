@@ -49,8 +49,14 @@ export class RegisterComponent implements OnInit {
         this.route.navigate(['success-register'])
       },
       err=>{
+        if(err["status"]==0){
+          this.toastr.error("Greska pri komunikaciji sa serverom")
+        }
+        else{
+          this.toastr.error(err["error"])
+        }
         this.spinner.hide("Spiner1");
-        this.toastr.error(err['error'])
+        
       }
     )
   }
@@ -104,6 +110,13 @@ export class RegisterComponent implements OnInit {
   public cropperOptions = {
     minContainerWidth: '300',
     minContainerHeight: '300',
+    dragMode: 'crop',
+    aspectRatio: 1,
+    autoCrop: true,
+    movable: true,
+    zoomable: true,
+    autoCropArea: 0.8
+
   };
 
   public onValidationError(error: ValidationError): void {

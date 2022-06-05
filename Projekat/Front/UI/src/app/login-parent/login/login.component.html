@@ -22,7 +22,7 @@
         <div class="col-md-auto FormaZaIzmenuPodatakaOKorisniku">
             <label class="form-label">Korisničko ime</label>
             <input type="text" class="form-control" name="username" #username="ngModel" [(ngModel)]="service.formData.username"
-            required pattern="^[a-zA-Z][a-zA-Z0-9\.]*" [class.invalid]="username.invalid && username.touched" placeholder="example:user123" minlength="5" maxlength="25">
+            required pattern="^[a-zA-Z][a-zA-Z0-9\.]*" [class.invalid]="username.invalid && username.touched" placeholder="primer:pera123" minlength="5" maxlength="25">
             <div *ngIf="username.invalid && username.touched"
                   class="alert">
 
@@ -58,7 +58,7 @@
         <div class="col-md-auto">
           <div id="akaunt">
             <button type="submit" id="dugme" class="btn btn-primary " [disabled]="form.invalid">Prijava</button><br>
-            <a routerLink="/signup">Zaboravili ste šifru?</a><br>
+            <!-- <a routerLink="/signup">Zaboravili ste šifru?</a><br> -->
           </div>
         </div>
       </div>

@@ -62,6 +62,7 @@ export class IzborParametaraComponent implements OnInit {
   //forma
   @Output() newItemEvent = new EventEmitter<ObjekatZaSlanje>();
   @Output() novaMeraGreskeEvent = new EventEmitter<string>();
+  @Output() novaDodatnaMetrika = new EventEmitter<string>();
   @ViewChild('FormaZaHParametre') FormaZaHParametre;
 
   forma=new FormGroup({

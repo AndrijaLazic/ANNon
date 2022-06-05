@@ -24,7 +24,7 @@
         <div class="col-md-auto" *ngIf="TipProblema.value=='regresija'">
           <mat-form-field appearance="fill" class="selektorAktivacioneFje">
             <mat-label>Metrika gubitka</mat-label>
-            <mat-select formControlName="MeraGreske">
+            <mat-select formControlName="MeraGreske" (selectionChange)="updateMeraGreske($event)">
               <mat-option value="mean_squared_error">
                 Srednja kvadratna greška
               </mat-option>
@@ -75,7 +75,7 @@
         <div class="col-md-auto" *ngIf="TipProblema.value=='binarna_klasifikacija'">
           <mat-form-field appearance="fill" class="selektorAktivacioneFje">
             <mat-label>Metrika gubitka</mat-label>
-            <mat-select formControlName="MeraGreske">
+            <mat-select formControlName="MeraGreske" (selectionChange)="updateMeraGreske($event)">
               <mat-option value="binary_crossentropy">
                 Binarna krosentropija
               </mat-option>

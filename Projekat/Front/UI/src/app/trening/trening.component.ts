@@ -18,6 +18,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import e from 'express';
+import { MatSelectChange } from '@angular/material/select';
 @Component({
   selector: 'app-trening',
   templateUrl: './trening.component.html',
@@ -64,6 +65,8 @@ export class TreningComponent implements OnInit {
     return this.forma.get('trenutnaStrana');
   }
 
+
+
   constructor(private modalService: NgbModal,private spinner:NgxSpinnerService,public signalR:SignalRService, private http: HttpClient,private cookieService:CookieService,private route:Router,private toastr:ToastrService) { 
 
   }
@@ -79,11 +82,16 @@ export class TreningComponent implements OnInit {
     this.signalR.podaciZaGrafik=[];
     if(localStorage.getItem('izabrani-parametri-za-istreniran-model'))
     {
+      
       let pom1=JSON.parse(localStorage.getItem('izabrani-parametri-za-istreniran-model'));
+      console.log(pom1.MeraUspeha)
+      this.setujMeruUspeha(pom1.MeraUspeha);
+      this.setujMeruGreske(pom1.MeraGreske);
       this.izabraniParametri=pom1;
       this.signalR.nacrtajGrafik(pom1['MeraGreskeNaziv']);
       this.sacuvajRezultateTreninga();
       this.StanjeDugmeta2=false;
+      this.Testiranje();
     }
     if(!this.cookieService.check('params')){
       this.route.navigate(["./statistic"]);
@@ -95,9 +103,11 @@ export class TreningComponent implements OnInit {
       .subscribe(
         poruka=>{
           if(poruka==this.BrojEpoha){
+            
             this.StanjeDugmeta=false;
             this.StanjeDugmeta2=false;
             this.pomocnaFunkcija();
+            this.Testiranje();
             return;
           }
           this.spinner.hide("Spiner1");
@@ -142,10 +152,13 @@ export class TreningComponent implements OnInit {
   }
   ispis(item:ObjekatZaSlanje){
     this.signalR.podaciZaGrafik=[];
-    this.signalR.podaciZaGrafik.push(new podatakZaGrafikKlasa(this.MeraGreske+"na trening skupu"));
-    this.signalR.podaciZaGrafik.push(new podatakZaGrafikKlasa(this.MeraGreske+"na test skupu"));
-    this.signalR.brojEpoha=1;
+    this.Metrika=null;
     if(item){
+      this.setujMeruUspeha(item.MeraUspeha);
+      this.setujMeruGreske(item.MeraGreske);
+      this.signalR.podaciZaGrafik.push(new podatakZaGrafikKlasa(this.MeraGreske+"na trening skupu"));
+      this.signalR.podaciZaGrafik.push(new podatakZaGrafikKlasa(this.MeraGreske+"na test skupu"));
+      this.signalR.brojEpoha=1;
       this.spinner.show("Spiner1");
       var formData = new FormData();
       var pom=new statisticModel();
@@ -177,6 +190,102 @@ export class TreningComponent implements OnInit {
     
     
   }
+
+
+  setujMeruUspeha(metrika:string){
+    console.log("Izmeni"+metrika)
+    if(metrika=='mean_squared_error'){
+      this.MeraUspeha="Srednja kvadratna greška";
+      return;
+    }
+    if(metrika=='mean_absolute_percentage_error'){
+      this.MeraUspeha="Srednja apsolutna procentna greška";
+      return;
+    }
+    if(metrika=='mean_absolute_error'){
+      this.MeraUspeha="Srednja apsolutna greška";
+      return;
+    }
+    if(metrika=='mean_squared_logarithmic_error'){
+      this.MeraUspeha="Srednja kvadratna logaritamska greška";
+      return;
+    }
+    if(metrika=='log_cosh'){
+      this.MeraUspeha="Srednja kvadratna logaritamska greška";
+      return;
+    }
+    if(metrika=='accuracy'){
+      this.MeraUspeha="Tačnost";
+      return;
+    }
+    if(metrika=='binary_accuracy'){
+      this.MeraUspeha="Binarna tačnost";
+      return;
+    }
+    if(metrika=='binary_crossentropy'){
+      this.MeraUspeha="Binarna krosentropija";
+      return;
+    }
+    if(metrika=='kl_divergence'){
+      this.MeraUspeha="K-L divergencija";
+      return;
+    }
+    if(metrika=='categorical_accuracy'){
+      this.MeraUspeha="Kategorijska tačnost";
+      return;
+    }
+    if(metrika=='categorical_crossentropy'){
+      this.MeraUspeha="Kategorijska krosentropija";
+      return;
+    }
+  }
+
+  setujMeruGreske(metrika:string){
+    console.log("Izmeni"+metrika)
+    if(metrika=='mean_squared_error'){
+      this.MeraGreske="Srednja kvadratna greška";
+      return;
+    }
+    if(metrika=='mean_absolute_percentage_error'){
+      this.MeraGreske="Srednja apsolutna procentna greška";
+      return;
+    }
+    if(metrika=='mean_absolute_error'){
+      this.MeraGreske="Srednja apsolutna greška";
+      return;
+    }
+    if(metrika=='mean_squared_logarithmic_error'){
+      this.MeraGreske="Srednja kvadratna logaritamska greška";
+      return;
+    }
+    if(metrika=='huber'){
+      this.MeraGreske="Huber";
+      return;
+    }
+    if(metrika=='log_cosh'){
+      this.MeraGreske="Srednja kvadratna logaritamska greška";
+      return;
+    }
+
+    if(metrika=='binary_crossentropy'){
+      this.MeraGreske="Binarna krosentropija";
+      return;
+    }
+    if(metrika=='kl_divergence'){
+      this.MeraGreske="K-L divergencija";
+      return;
+    }
+    if(metrika=='categorical_crossentropy'){
+      this.MeraGreske="Kategorijska krosentropija";
+      return;
+    }
+    
+
+  }
+
+
+
+
 
   preuzmiModel()
   {
@@ -229,18 +338,14 @@ export class TreningComponent implements OnInit {
     formData.append("filename",this.nazivFajla);
     formData.append("description",this.opis);
     formData.append("parametars",localStorage.getItem('parametars'));
-    this.spinner.show("Spiner2");
     this.http.post(this.osnovniUrl+"api/KontrolerAutorizacije/"+`${this.cookieService.get('token')}`+'/save',formData).subscribe(
       res=>{
         console.log(res);
-        //this.spinner.hide("Spiner2");
       },
       err=>{
         if(err['status']==200)
         {
-          this.spinner.hide("Spiner2");
           this.toastr.success(err['error']['text']);
-          
         }
         else
         {
@@ -386,6 +491,59 @@ export class TreningComponent implements OnInit {
           return;
         }
       }
+  }
+
+  MeraUspeha:any;
+
+  Metrika:any;
+  Testiranje()
+  {
+    var formData = new FormData();
+    
+    formData.append('userID',sessionStorage.getItem('userId'));
+    formData.append('metric',this.MeraGreske);
+    this.http.post(this.osnovniUrl+"api/MachineLearning/compare",formData).subscribe(
+      res=>{
+        console.log(res)
+        this.Metrika=res;
+      },
+      err=>{
+        if(err['status']==200)
+        {
+          this.toastr.success(err['error']['text']);
+        }
+        else
+        {
+          this.toastr.error(err['error']['text'])
+        }
+      }
+    );
+  }
+
+
+  prikazanaVrednost:number;
+  prikazanaVrednostPoslednjaEpohe:number;
+  PrikaziRezTestiranja(){
+    this.prikazanaVrednost=this.izabranaMetrikaZaPrikazVrednost;
+    this.prikazanaVrednostPoslednjaEpohe=this.poslednjaEpohaVrednost;
+  }
+
+
+  izabranaMetrikaZaPrikazNaziv:string;
+  izabranaMetrikaZaPrikazVrednost:number;
+  poslednjaEpohaVrednost:number;
+  promenaMetrike(event: MatSelectChange){
+    this.poslednjaEpohaVrednost=this.signalR.podaciZaGrafik[event.value].series[(this.signalR.podaciZaGrafik[event.value].series).length-1].value.toFixed(3)
+
+    if(event.value==0){
+      this.izabranaMetrikaZaPrikazVrednost=this.Metrika.loss;
+    }
+    else{
+      this.izabranaMetrikaZaPrikazVrednost=this.Metrika.metric;
+    }
+    
+    
+    this.izabranaMetrikaZaPrikazNaziv=event.source.triggerValue;
   }
 }
 

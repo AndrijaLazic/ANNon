@@ -16,6 +16,9 @@ import { catchError, delay, map, Observable, of } from 'rxjs';
 import { UploadFajlServisService } from './upload-fajl-servis.service';
 import { HttpResponse } from '@angular/common/http';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {NgxIndexedDBService} from 'ngx-indexed-db';
+import { json } from 'express';
+
 
 export class DataModel
 {
@@ -63,10 +66,11 @@ export class CsvTabelaComponent implements OnInit {
 
   
   constructor(public servisZaSlanjeFajla:UploadFajlServisService,private cookie:CookieService,private spinner:NgxSpinnerService,private papa:Papa,private http:HttpClient,private toastr:ToastrService,private route:Router,private shared: SharedService 
-    ) {
+    /*,private dbService: NgxIndexedDBService*/) {
       this.model = new DataModel();
       this.spinner.hide("Spiner1");
      }
+
   
   readonly baseURL=Konfiguracija.KonfiguracijaServera.osnovniURL
   KoloneDef: ColDef[] = [];
@@ -89,6 +93,7 @@ export class CsvTabelaComponent implements OnInit {
   setSession()
   {
     sessionStorage.setItem('userId',uuidv4());
+
   }
   deleteSessionStorage()
   {
@@ -133,13 +138,29 @@ export class CsvTabelaComponent implements OnInit {
         complete: (results) =>
         {
           this.podaci = results.data
+
+
+          //this.saveFileInDB("test",this.podaci);
+
           this.IspisTabele()
           
         }
       });
     }
   }
+  /*
+  saveFileInDB(fileName:string, data:any)
+  {
+    
+    this.dbService.add('files', {
+      name: fileName,
+      file:JSON.stringify(data)
+    }).subscribe();
+   
+    this.dbService.getAll('files').subscribe((file) => console.log(file));
 
+  }
+*/
   IspisTabele()
   {
     this.cookie.delete('params');
