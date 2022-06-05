@@ -68,7 +68,7 @@
   </div>
   <div class="col-10">
 <div class="container" id="Container1">
-    <app-izbor-parametara (newItemEvent)="ispis($event)" (novaMeraGreskeEvent)="novaMeraGreske($event)"></app-izbor-parametara>
+    <app-izbor-parametara (newItemEvent)="ispis($event)"></app-izbor-parametara>
     
     <div class="container" style="margin-top: 20px;" >
         <div class="row justify-content-center">
@@ -109,8 +109,32 @@
                         </mat-select>
                       </mat-form-field>
                 </div>
-
-                <button class="dugme dugmeAnimacija" mat-raised-button color="primary" (click)=Testiranje() [disabled]="StanjeDugmeta">Test</button>
+                <div class="col-md-auto" *ngIf="Metrika">
+                  <mat-form-field appearance="fill" class="selektorAktivacioneFje">
+                      <mat-label>Izaberi metriku</mat-label>
+                      <mat-select (selectionChange)="promenaMetrike($event)">
+                        <mat-option value="0">
+                          {{MeraGreske}}
+                        </mat-option>
+                        <mat-option value="1">
+                          {{MeraUspeha}}
+                        </mat-option>
+                      </mat-select>
+                   </mat-form-field>
+                </div>
+                <div class="col-md-auto" *ngIf="prikazanaVrednost">
+                  <div class="row justify-content-center">
+                    <div class="col-md-auto" style="color: white;">
+                      {{this.prikazanaVrednost.toFixed(3)}}/{{prikazanaVrednostPoslednjaEpohe}}
+                    </div>
+                    
+                  </div>
+                  
+                </div>
+                <div class="col-md-auto text-center" *ngIf="Metrika" >
+                  <button class="dugme dugmeAnimacija"mat-raised-button color="primary" (click)=PrikaziRezTestiranja() [disabled]="StanjeDugmeta">Test</button>
+                </div>
+                
 
             </div>
         </div> 
