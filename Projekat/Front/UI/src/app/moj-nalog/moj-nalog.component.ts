@@ -216,6 +216,13 @@ export class MojNalogComponent implements OnInit {
   public cropperOptions = {
     minContainerWidth: '300',
     minContainerHeight: '300',
+    dragMode: 'crop',
+    aspectRatio: 1,
+    autoCrop: true,
+    movable: true,
+    zoomable: true,
+    autoCropArea: 0.8
+
   };
 
   public onValidationError(error: ValidationError): void {

@@ -172,21 +172,26 @@
 }
 
 #kolonaZaSliku{
-    padding-top: 100%; /* 1:1 Aspect Ratio */
+    
     position: relative;
     border-radius: 9999px;
     border: #008ab9 3px solid;
     overflow: hidden;
-    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 10vw;
+    width: 10vw;
+    min-width: 265px;
+    min-height: 265px;
+    padding: 0px;
 }
 #kolonaZaSliku #KorisnickaSlika{
-    position: absolute;
+    
     top: 0;
     left: 0;
     bottom: 0;
     right: 0;
-    width: 100%;
-    
 }
 
 .kolona{
