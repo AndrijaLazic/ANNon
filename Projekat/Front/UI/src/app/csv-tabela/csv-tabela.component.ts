@@ -66,7 +66,7 @@ export class CsvTabelaComponent implements OnInit {
 
   
   constructor(public servisZaSlanjeFajla:UploadFajlServisService,private cookie:CookieService,private spinner:NgxSpinnerService,private papa:Papa,private http:HttpClient,private toastr:ToastrService,private route:Router,private shared: SharedService 
-    ,private dbService: NgxIndexedDBService) {
+    /*,private dbService: NgxIndexedDBService*/) {
       this.model = new DataModel();
       this.spinner.hide("Spiner1");
      }
