@@ -39,6 +39,10 @@
             (firstDataRendered)="onFirstDataRendered($event)" [suppressDragLeaveHidesColumns]="true"
             [defaultColDef]="defaultColDef">
           </ag-grid-angular>
+          <div [hidden]="indikator5">
+            <button class="dugme dugmeAnimacija" (click)="ObrisiModele()">Ukloni modele</button>
+          </div>
+          
         </div>
         <div class="col-md-auto justify-content-center" [hidden]="!(modeliZaPoredjenje.length!=2)">
           <div class="row justify-content-center" style="margin-top: 0px;">
@@ -76,19 +80,21 @@
                 [rowSelection]="rowSelection1" [animateRows]="true" (gridReady)="onGridReady1($event)"
                 (gridColumnsChanged)="onGridColumnsChanged1($event)" (rowSelected)="onRowSelected($event)">
               </ag-grid-angular>
+              
             </div>
             <div class="col-md-auto justify-content-center dugme"
               [hidden]="!(loginService.isLoggeidin()==false && checked2==true)" style="padding: 5%;" id="prijaviSe">
               <p>Niste prijavljeni</p>
               <button class="dugme2 dugmeAnimacija dugmeZaPrijavu" mat-raised-button color="primary"
                 (click)="predjiNaPrijavu()">Prijavi se</button>
+                
             </div>
           </div>
         </div>
 
 
       </div>
-
+      
 
       <div class="row justify-content-center m-3 gy-5">
         <div class="col-xxl-9" *ngIf="podaciZaGrafik.length>0">

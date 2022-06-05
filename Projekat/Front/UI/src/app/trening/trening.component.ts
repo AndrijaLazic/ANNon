@@ -229,17 +229,22 @@ export class TreningComponent implements OnInit {
     formData.append("filename",this.nazivFajla);
     formData.append("description",this.opis);
     formData.append("parametars",localStorage.getItem('parametars'));
+    this.spinner.show("Spiner2");
     this.http.post(this.osnovniUrl+"api/KontrolerAutorizacije/"+`${this.cookieService.get('token')}`+'/save',formData).subscribe(
       res=>{
         console.log(res);
+        //this.spinner.hide("Spiner2");
       },
       err=>{
         if(err['status']==200)
         {
+          this.spinner.hide("Spiner2");
           this.toastr.success(err['error']['text']);
+          
         }
         else
         {
+          this.spinner.hide("Spiner2");
           this.toastr.error(err['error']['text'])
         }
       }

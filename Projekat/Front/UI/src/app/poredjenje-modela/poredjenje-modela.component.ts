@@ -21,6 +21,7 @@ import { stringify } from 'querystring';
   styleUrls: ['./poredjenje-modela.component.css']
 })
 export class PoredjenjeModelaComponent implements OnInit {
+  indikator5:boolean=true;
   IzborFajlova="Offline fajlovi"
   checked2=false;
   MaksBrojFajlova=2;
@@ -62,6 +63,7 @@ export class PoredjenjeModelaComponent implements OnInit {
   readonly osnovniUrl=Konfiguracija.KonfiguracijaServera.osnovniURL;
 
   constructor(private spinner:NgxSpinnerService,private http:HttpClient,private toastr:ToastrService,private route: Router,public loginService:LoginServiceService,private cookieService:CookieService){
+    
     if(localStorage.getItem('izabrani-parametri')!=null){
       this.dodajModel(JSON.parse(localStorage.getItem('izabrani-parametri')))
     }
@@ -84,6 +86,7 @@ export class PoredjenjeModelaComponent implements OnInit {
   ngOnInit(): void {
     
     sessionStorage.setItem("redirectTo",this.route.url)
+
     var pomLista=[];
     
     if(sessionStorage.getItem('PoredjenjeModelaKolac')){
@@ -128,8 +131,15 @@ export class PoredjenjeModelaComponent implements OnInit {
       }
       k=k+2;
     }
+    if(pom!=null)
+    {
+      this.IspisTabele();
+    }
+    else
+    {
+      this.ispisTabele1();
+    }
     
-    this.IspisTabele();
   }
 
 
@@ -334,6 +344,7 @@ cekiranPrikazGridLinije(value:any){
         this.RedoviPodaci.push(obj);
         j++;
       }
+     
     }
 
     if(this.modeliZaPoredjenje.length==2){
@@ -356,6 +367,8 @@ cekiranPrikazGridLinije(value:any){
         this.RedoviPodaci.push(obj);
         j++;
       }
+      this.indikator5=false;
+
     }
     
     
@@ -373,6 +386,7 @@ cekiranPrikazGridLinije(value:any){
   
   mojaFunkcija()
   {
+  
     this.ispisTabele1();
   }
   //tabela2
@@ -406,7 +420,7 @@ cekiranPrikazGridLinije(value:any){
          col = {
           flex: 1,
           field: this.zaglavlja1[i],
-          headerCheckboxSelection: true,
+          headerCheckboxSelection: false,
           headerCheckboxSelectionFilteredOnly: true,
           checkboxSelection: true,
           sortable: true,
@@ -528,6 +542,19 @@ cekiranPrikazGridLinije(value:any){
   previous()
   {
     this.route.navigate(["training"]);
+  }
+  ObrisiModele()
+  {
+    if(sessionStorage.getItem('PoredjenjeModelaKolac')){
+      sessionStorage.removeItem('PoredjenjeModelaKolac');
+    }
+    if(localStorage.getItem('izabrani-parametri')!=null){
+      localStorage.removeItem('izabrani-parametri');
+    }
+    let currentUrl = this.route.url;
+    this.route.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+        this.route.navigate([currentUrl]);
+    });
   }
 }
 
