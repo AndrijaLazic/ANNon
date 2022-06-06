@@ -174,7 +174,7 @@ def make_model(all_inputs,encoded_features,layers:List[Sloj],loss_metric,success
 
   model = tf.keras.Model(all_inputs, output)
 
-  if loss_metric=="kl_divergence" or success_metric=="kl_divergence":
+  if loss_metric=="kl_divergence" or success_metric=="kullback_leibler_divergence":
     opt = tf.keras.optimizers.SGD(learning_rate=learning_rate)
   else:
     opt = tf.keras.optimizers.Adam(learning_rate=learning_rate)

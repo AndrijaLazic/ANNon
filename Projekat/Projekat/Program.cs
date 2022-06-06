@@ -68,12 +68,13 @@ app.UseCors("CorsPolicy");
 /*
  * za server
  * migracija pri pokretanju
+ * */
 using (var scope = app.Services.CreateScope())
 {
     var dataContext = scope.ServiceProvider.GetRequiredService<MySqlDbContext>();
     dataContext.Database.Migrate();
 }
-*/
+
 app.UseEndpoints(endpoints => {
     app.MapControllers();
     endpoints.MapHub<EpochHub>("/hub");
