@@ -26,7 +26,7 @@ export class SignalRService {
   private poruka=new Subject<number>();
   izabraniParametri:ObjekatZaSlanje;
   porukaObservable$=this.poruka.asObservable();
-
+  poslednjaEpoha:any;
   constructor(private http: HttpClient, private toastr: ToastrService) { }
 
 
@@ -61,7 +61,7 @@ export class SignalRService {
         
         this.podaciZaGrafik[0].dodajSeries(new vrednostiZaGrafikKlasa(this.data.loss,this.brojEpoha.toString()));
         this.podaciZaGrafik[1].dodajSeries(new vrednostiZaGrafikKlasa(this.data.val_loss,this.brojEpoha.toString()));
-        
+        this.poslednjaEpoha=res;
         this.podaciZaGrafik=[...this.podaciZaGrafik];
         
         this.poruka.next(this.brojEpoha);

@@ -87,6 +87,7 @@ export class TreningComponent implements OnInit {
       console.log(pom1.MeraUspeha)
       this.setujMeruUspeha(pom1.MeraUspeha);
       this.setujMeruGreske(pom1.MeraGreske);
+      this.setujZaglavlje();
       this.izabraniParametri=pom1;
       this.signalR.nacrtajGrafik(pom1['MeraGreskeNaziv']);
       this.sacuvajRezultateTreninga();
@@ -103,7 +104,7 @@ export class TreningComponent implements OnInit {
       .subscribe(
         poruka=>{
           if(poruka==this.BrojEpoha){
-            
+            localStorage.setItem("poslednjaEpoha",this.signalR.poslednjaEpoha)
             this.StanjeDugmeta=false;
             this.StanjeDugmeta2=false;
             this.pomocnaFunkcija();
@@ -117,12 +118,20 @@ export class TreningComponent implements OnInit {
         }
       );
   }
+
+  setujZaglavlje(){
+    this.zaglavlja[1] = this.MeraGreske+" na trening skupu";
+    this.zaglavlja[2] = this.MeraGreske+" na validacionom skupu";
+  }
+
   SendtoBack()
   {
+    this.Metrika=null;
+    this.prikazanaVrednost=null;
     this.child.dajParametre();
     var params = JSON.parse(localStorage.getItem("parametars"));
-    this.zaglavlja[1] = params["MeraGreske"];
-    this.zaglavlja[2] = params["MeraUspeha"];
+    this.setujZaglavlje();
+
   }
   uporediModele()
   {
@@ -195,9 +204,9 @@ export class TreningComponent implements OnInit {
     
   }
 
-
+  metrikaUspeha:any;
   setujMeruUspeha(metrika:string){
-    console.log("Izmeni"+metrika)
+    this.metrikaUspeha=metrika;
     if(metrika=='mean_squared_error'){
       this.MeraUspeha="Srednja kvadratna greška";
       return;
@@ -244,7 +253,9 @@ export class TreningComponent implements OnInit {
     }
   }
 
+  metrikaGreske:any;
   setujMeruGreske(metrika:string){
+    this.metrikaGreske=metrika;
     console.log("Izmeni"+metrika)
     if(metrika=='mean_squared_error'){
       this.MeraGreske="Srednja kvadratna greška";
@@ -528,22 +539,33 @@ export class TreningComponent implements OnInit {
   prikazanaVrednost:number;
   prikazanaVrednostPoslednjaEpohe:number;
   PrikaziRezTestiranja(){
+    
     this.prikazanaVrednost=this.izabranaMetrikaZaPrikazVrednost;
     this.prikazanaVrednostPoslednjaEpohe=this.poslednjaEpohaVrednost;
+    console.log(this.prikazanaVrednostPoslednjaEpohe)
   }
 
 
   izabranaMetrikaZaPrikazNaziv:string;
   izabranaMetrikaZaPrikazVrednost:number;
   poslednjaEpohaVrednost:number;
+  pom2:any;
   promenaMetrike(event: MatSelectChange){
-    this.poslednjaEpohaVrednost=this.signalR.podaciZaGrafik[event.value].series[(this.signalR.podaciZaGrafik[event.value].series).length-1].value.toFixed(3)
-
+    
+    
+    //{'epoch': 4, 'to_send': 'f87c6c93-d899-4e0f-a716-5f49d4b1b254', 'loss': 1.847521424293518, 'accuracy': 0.2447017878293991, 'val_loss': 1.8512725830078125, 'val_accuracy': 0.22900055348873138}
+    this.pom2=localStorage.getItem("poslednjaEpoha");
+    var pom=this.pom2.replaceAll("'", '"');
+    
+    let obj = JSON.parse(pom) as object;
+    
     if(event.value==0){
       this.izabranaMetrikaZaPrikazVrednost=this.Metrika.loss;
+      this.poslednjaEpohaVrednost=obj['loss'];
     }
     else{
       this.izabranaMetrikaZaPrikazVrednost=this.Metrika.metric;
+      this.poslednjaEpohaVrednost=obj[this.metrikaUspeha];
     }
     
     
