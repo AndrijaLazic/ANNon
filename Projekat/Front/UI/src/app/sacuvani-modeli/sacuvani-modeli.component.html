@@ -17,15 +17,15 @@
       <button type="button" class="dugme dugmeAnimacija" mat-raised-button color="primary" (click)="modal.close('Close click');ispisTabele1()">NE</button>
     </div>
   </ng-template> 
-
-<div class="col-md-auto justify-content-center" [hidden]="modeliZaUlogovanogKorisnika.length==0" [formGroup]="forma" id="tabela">
+<div class="row m-auto justify-content-center align-items-center w-100 h-100">
+<div class="col-md-auto" [hidden]="modeliZaUlogovanogKorisnika.length==0" [formGroup]="forma" id="tabela">
     <ag-grid-angular id="agTabela" class="ag-theme-alpine-dark" [rowData]="RedoviPodaci1"
         [columnDefs]="KoloneDef1" [pagination]="true" [paginationPageSize]="brojElemenataNaStrani1"
         [rowSelection]="rowSelection1" [animateRows]="true" (gridReady)="onGridReady1($event)"
         (gridColumnsChanged)="onGridColumnsChanged1($event)">
     </ag-grid-angular>
 </div>
-
+</div>
 <div id="nemaModel" [hidden]="!(modeliZaUlogovanogKorisnika.length==0)">
   <h1>Nemate nijedan sačuvan model na nalogu!</h1>
 </div>

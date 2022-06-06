@@ -120,6 +120,9 @@ export class TreningComponent implements OnInit {
   SendtoBack()
   {
     this.child.dajParametre();
+    var params = JSON.parse(localStorage.getItem("parametars"));
+    this.zaglavlja[1] = params["MeraGreske"];
+    this.zaglavlja[2] = params["MeraUspeha"];
   }
   uporediModele()
   {
@@ -151,6 +154,7 @@ export class TreningComponent implements OnInit {
     this.signalR.PrikaziLinije=value.checked;
   }
   ispis(item:ObjekatZaSlanje){
+    console.log(item);
     this.signalR.podaciZaGrafik=[];
     this.Metrika=null;
     if(item){
